@@ -1,0 +1,11 @@
+{
+  "scripts": "function getConnectionList() {\n    const connection_list = Namespace.params.data.connection_list_1c;\n    const connections = connection_list ? JSON.parse(connection_list) : [];\n    return connections;\n}\nfunction getConnection(connection_name) {\n    if (!connection_name) {\n        throw new Error(\"Отсутствует название подключения\");\n    }\n    const connection_list = getConnectionList();\n    if (!connection_list || connection_list.length == 0) {\n        throw new Error(\"Не найдены записи подключений\");\n    }\n    const connection = connection_list.find(f => f.name === connection_name);\n    if (!connection) {\n        throw new Error(`Подключение \"${connection_name}\" не найдено`);\n    }\n    return connection;\n}\nasync function action() {\n    const connection = getConnection(Context.data.connection_name);\n    const request_options = {\n        method: Context.data.method ? Context.data.method : \"GET\",\n        headers: {\n            Authorization: `Basic ${btoa(`${connection.login}:${connection.password}`)}`,\n        },\n        body: Context.data.request_body,\n    };\n    const url = `${connection.url}/${Context.data.request_params}`;\n    try {\n        const response = await fetch(`${encodeURI(url)}`, request_options);\n        if (!response.ok) {\n            throw new Error(JSON.stringify(response));\n        }\n        const result = await response.json();\n        Context.data.response_1c_json = JSON.stringify(result);\n    }\n    catch (error) {\n        Context.data.error = JSON.stringify({\n            name: error.name,\n            message: error.message,\n            stack: error.stack,\n        });\n        throw new Error(error);\n    }\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

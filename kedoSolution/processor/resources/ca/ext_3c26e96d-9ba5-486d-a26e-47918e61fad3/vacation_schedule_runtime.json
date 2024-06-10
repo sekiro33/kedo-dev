@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    var _a, _b, _c;\n    if (!Context.data.vacation_schedule_data) {\n        throw new Error(\"Context.data.vacation_schedule_data is undefined\");\n    }\n    const vacation_data = JSON.parse(Context.data.vacation_data);\n    const current_date = new Datetime();\n    const schedule_table = vacation_data.map((line) => {\n        var _a;\n        return {\n            \"Сотрудник_Key\": line.staffId,\n            \"ФизическоеЛицо_Key\": line.staffPersonalId,\n            \"ВидОтпуска_Key\": line.vacationType,\n            \"ДатаНачала\": `${line.startDate}T00:00:00`,\n            \"ДатаОкончания\": `${line.endDate}T00:00:00`,\n            \"КоличествоДней\": line.duration,\n            \"Примечание\": (_a = line.comment) !== null && _a !== void 0 ? _a : \"\",\n        };\n    });\n    const body = {\n        \"Date\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n        \"Организация_Key\": (_a = Context.data.organization_id) !== null && _a !== void 0 ? _a : \"\",\n        \"ДатаСобытия\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n        \"Сотрудники\": schedule_table,\n        \"Комментарий\": (_b = Context.data.comment) !== null && _b !== void 0 ? _b : \"\",\n    };\n    const accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n    const integration_app = Namespace.params.fields.integration_app.app.create();\n    integration_app.data.__name = \"График отпусков\";\n    integration_app.data.document_odata_name = \"Document_ГрафикОтпусков\";\n    integration_app.data.accounting_systems = accounting1c;\n    integration_app.data.document_creation_data = JSON.stringify(body);\n    integration_app.data.additional_info = (_c = Context.data.additional_info) !== null && _c !== void 0 ? _c : \"\";\n    integration_app.data.base_1c_name = Context.data.connection_name;\n    await integration_app.save();\n    Context.data.integration_app_id = integration_app.data.__id;\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

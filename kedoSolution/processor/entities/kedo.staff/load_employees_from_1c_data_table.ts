@@ -1664,11 +1664,6 @@ async function createBaseEmployees(employees: any, persons: any, types: any = un
     for (let i = persons.length - 1; i >= 0; i--) {
         const person = persons[i].data
 
-        //проверка на папку
-        if (person["isFolder"] === true) {
-            continue;
-        } 
-
         if (types) {
 
             let found_accept_data = acceptData.filter((elem: any) => elem["ФизическоеЛицо"] === person["Ref"]);

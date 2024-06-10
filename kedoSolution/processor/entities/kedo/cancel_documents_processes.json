@@ -1,35 +1,61 @@
 {
-  "__id": "018f0a7a-b469-7561-aa00-dc278357e9b7",
+  "__id": "018fb8c1-cf14-7c35-80a2-3cef11261fbf",
   "namespace": "kedo",
   "code": "cancel_documents_processes",
   "category": "00000000-0000-0000-0000-000000000000",
   "__name": "Отмена документов и прерывание процессов",
   "type": "bpmn",
   "draft": false,
-  "version": 8,
+  "version": 5,
   "context": [
     {
-      "code": "other_documents",
-      "type": "REF_ITEM",
+      "code": "agreement_name_cancel",
+      "type": "STRING",
       "searchable": false,
       "indexed": false,
       "deleted": false,
-      "array": true,
+      "array": false,
       "required": false,
-      "single": false,
+      "single": true,
       "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
       "data": {},
       "view": {
-        "name": "Документы в заявке",
-        "data": {},
+        "name": "Отменяемое дополнительное соглашение (Наименование)",
+        "data": {
+          "additionalType": "string"
+        },
         "input": true,
         "output": true
       }
     },
     {
-      "code": "need_statement",
+      "code": "absences_enabled",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "absences_enabled",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "again_send",
       "type": "BOOLEAN",
       "searchable": false,
       "indexed": false,
@@ -42,7 +68,7 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Требуется заявление?",
+        "name": "Повторная отправка?",
         "data": {
           "additionalType": "radio",
           "noValue": "Нет",
@@ -53,29 +79,7 @@
       }
     },
     {
-      "code": "date_order",
-      "type": "DATETIME",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дата приказа",
-        "data": {
-          "additionalType": "date",
-          "defaultTimeType": "startOfDay",
-          "timeOptional": false
-        }
-      }
-    },
-    {
-      "code": "settings_kedo",
+      "code": "cancel_app",
       "type": "SYS_COLLECTION",
       "searchable": false,
       "indexed": false,
@@ -87,7 +91,7 @@
       "calcByFormula": false,
       "formula": "",
       "data": {
-        "code": "settings",
+        "code": "cancel_applications",
         "filter": {
           "value": {
             "tf": {}
@@ -100,10 +104,299 @@
         "linkedFieldCode": ""
       },
       "view": {
-        "name": "Настройки КЭДО",
+        "name": "Заявка на отмену",
+        "data": {}
+      }
+    },
+    {
+      "code": "cancel_additional_agreement_date_string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата отменяемого ДС (строка)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "kedo_status",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Статус",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "agreement_full_name_cancel",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемое дополнительное соглашение (Полное наименование)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "director_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель (Пользователь)",
+        "data": {}
+      }
+    },
+    {
+      "code": "boss_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель компании (Пользователь)",
         "data": {},
         "input": true,
         "output": true
+      }
+    },
+    {
+      "code": "approve",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласие",
+        "data": {}
+      }
+    },
+    {
+      "code": "integration_1c",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Интеграция с учетной системой",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "doc",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Заявление",
+        "data": {}
+      }
+    },
+    {
+      "code": "name_cancel_app_doc",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование заявления от отмене",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "resigning_order",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Повторное подписание Приказа",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signatory_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписант (Пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "status_ds",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Статус доп. соглашения",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_order_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование отменяемого приказа",
+        "data": {
+          "additionalType": "string"
+        }
       }
     },
     {
@@ -130,8 +423,52 @@
       }
     },
     {
-      "code": "signatory_app",
-      "type": "SYS_COLLECTION",
+      "code": "cancel_order_date_string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата отменяемого приказа (строка)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "statement_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Заявление/Служебная записка подписано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "other_document",
+      "type": "REF_ITEM",
       "searchable": false,
       "indexed": false,
       "deleted": false,
@@ -141,42 +478,34 @@
       "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
-      "data": {
-        "code": "staff",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
+      "data": {},
       "view": {
-        "name": "Подписант (Приложение)",
+        "name": "Документ в заявке",
         "data": {},
         "input": true,
         "output": true
       }
     },
     {
-      "code": "doc",
-      "type": "REF_ITEM",
+      "code": "status_order",
+      "type": "STRING",
       "searchable": false,
       "indexed": false,
       "deleted": true,
-      "array": true,
+      "array": false,
       "required": false,
-      "single": false,
+      "single": true,
       "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
       "data": {},
       "view": {
-        "name": "Заявление",
-        "data": {}
+        "name": "Статус приказа",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
       }
     },
     {
@@ -199,102 +528,6 @@
           "noValue": "Нет",
           "yesValue": "Да"
         },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "name_cancel_app_doc",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование заявления от отмене",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "hr_department",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Отдел кадров",
-        "data": {}
-      }
-    },
-    {
-      "code": "order_full_name_cancel",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Отменяемый приказ (Полное наименование)",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "office_manager",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Офис-менеджеры",
-        "data": {},
         "input": true,
         "output": true
       }
@@ -324,104 +557,7 @@
       }
     },
     {
-      "code": "cancel_agreement",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "cancel_agreements",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Дополнительное соглашение об отмене подписанного документа",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "additional_agreement",
-      "type": "REF_ITEM",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Доп. соглашение",
-        "data": {}
-      }
-    },
-    {
-      "code": "resigning_order",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Повторное подписание Приказа",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "length_array_documents",
-      "type": "FLOAT",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Количество найденных документов в заявке",
-        "data": {
-          "additionalType": "integer",
-          "showRowSeparator": true
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "other_documents_name",
+      "code": "number_order",
       "type": "STRING",
       "searchable": false,
       "indexed": false,
@@ -434,7 +570,59 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Наименование прочих документов",
+        "name": "Номер приказа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "cancel_memo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_memo",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Служебная записка на отмену документа",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signing_error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текст при неудачном подписании",
         "data": {
           "additionalType": "text"
         },
@@ -443,79 +631,23 @@
       }
     },
     {
-      "code": "application_order_signed",
-      "type": "BOOLEAN",
+      "code": "order_full_name_cancel",
+      "type": "STRING",
       "searchable": false,
       "indexed": false,
       "deleted": false,
       "array": false,
       "required": false,
       "single": true,
-      "defaultValue": false,
+      "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
       "data": {},
       "view": {
-        "name": "В отменяемой заявке приказ подписан?",
+        "name": "Отменяемый приказ (Полное наименование)",
         "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
+          "additionalType": "string"
         },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "staff_user",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Сотрудник (пользователь)",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "signatory_user",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Подписант (Пользователь)",
-        "data": {},
         "input": true,
         "output": true
       }
@@ -567,657 +699,7 @@
       }
     },
     {
-      "code": "again_send",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Повторная отправка?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_additional_agreement_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование отменяемого ДС",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "business_trips_enabled",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "business_trips_enabled",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "order_generation_again",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Перегенерация приказа?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "name_cancel_app_order",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование приказа об отмене",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_app",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "cancel_applications",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Заявка на отмену",
-        "data": {}
-      }
-    },
-    {
-      "code": "date_agreement",
-      "type": "DATETIME",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дата дополнительного соглашения",
-        "data": {
-          "additionalType": "date",
-          "defaultTimeType": "startOfDay",
-          "timeOptional": false
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "number_order",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Номер приказа",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "exit_code",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Код выхода согласования заявления",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "cancel_memo",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "cancel_memo",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Служебная записка на отмену документа",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "note",
-      "type": "REF_ITEM",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Служебная записка",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "number_agreement",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Номер дополнительного соглашения",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "debug",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "debug",
-        "data": {
-          "additionalType": "text"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "additional_agreement_number",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Номер ДС",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "resigning_agreement",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Повторное подписание Доп. соглашения",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_order_date_string",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дата отменяемого приказа (строка)",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "cancel_additional_agreement_date_string",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дата отменяемого ДС (строка)",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "statement_signed",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Заявление/Служебная записка подписано?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "payment_made_vacation",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Выплата по отпуску была произведена?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_order",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Файл приказа",
-        "data": {}
-      }
-    },
-    {
-      "code": "status_ds",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Статус доп. соглашения",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "other_document",
-      "type": "REF_ITEM",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Документ в заявке",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "additional_agreement_date",
-      "type": "DATETIME",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дата ДС",
-        "data": {
-          "additionalType": "date",
-          "defaultTimeType": "startOfDay",
-          "timeOptional": false
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "kedo_status",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Статус",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "agreement_full_name_cancel",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Отменяемое дополнительное соглашение (Полное наименование)",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "memo_file",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Шаблон служебной записки на отмену",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_doc",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Файл заявления",
-        "data": {}
-      }
-    },
-    {
-      "code": "is_signed_paper",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Документы подписаны на бумаге?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "agreement_file",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Файл дополнительного соглашения",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "boss_user",
+      "code": "process_initiator_user",
       "type": "SYS_USER",
       "searchable": false,
       "indexed": false,
@@ -1237,34 +719,14 @@
         }
       },
       "view": {
-        "name": "Руководитель компании (Пользователь)",
+        "name": "Инициатор процесса (Пользователь)",
         "data": {},
         "input": true,
         "output": true
       }
     },
     {
-      "code": "additional_agreement_file",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Шаблон дополнительного соглашения об отмене",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "tickets_bought",
+      "code": "not_initiator_initiate",
       "type": "BOOLEAN",
       "searchable": false,
       "indexed": false,
@@ -1277,7 +739,7 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Билеты куплены?",
+        "name": "Допускается отмена не инициатору?",
         "data": {
           "additionalType": "radio",
           "noValue": "Нет",
@@ -1288,35 +750,11 @@
       }
     },
     {
-      "code": "need_approval",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Требуется согласование?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "approve",
+      "code": "other_documents",
       "type": "REF_ITEM",
       "searchable": false,
       "indexed": false,
-      "deleted": true,
+      "deleted": false,
       "array": true,
       "required": false,
       "single": false,
@@ -1325,171 +763,8 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Согласие",
-        "data": {}
-      }
-    },
-    {
-      "code": "cancel_note_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование отменяемой СЗ",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "settings_cancel_documents",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "settings_cancel_documents",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Настройки отмены документов",
+        "name": "Документы в заявке",
         "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_order_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование отменяемого приказа",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "cancel_order_date",
-      "type": "DATETIME",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дата отменяемого приказа",
-        "data": {
-          "additionalType": "date",
-          "defaultTimeType": "startOfDay",
-          "timeOptional": false
-        }
-      }
-    },
-    {
-      "code": "step",
-      "type": "FLOAT",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": 0,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "step",
-        "data": {
-          "additionalType": "integer",
-          "showRowSeparator": true
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "integration_1c",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Интеграция с учетной системой",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "signing_error",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Текст при неудачном подписании",
-        "data": {
-          "additionalType": "text"
-        },
         "input": true,
         "output": true
       }
@@ -1517,66 +792,6 @@
       }
     },
     {
-      "code": "cancel_order_number",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Номер отменяемого приказа",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "cancel_doc_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование отменяемого заявления",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "cancel_approve_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование отменяемого соглашения",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
       "code": "agreement_generation_again",
       "type": "BOOLEAN",
       "searchable": false,
@@ -1595,53 +810,6 @@
           "additionalType": "radio",
           "noValue": "Нет",
           "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "director_user",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Руководитель (Пользователь)",
-        "data": {}
-      }
-    },
-    {
-      "code": "agreement_name_cancel",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Отменяемое дополнительное соглашение (Наименование)",
-        "data": {
-          "additionalType": "string"
         },
         "input": true,
         "output": true
@@ -1702,7 +870,29 @@
       }
     },
     {
-      "code": "statement_file",
+      "code": "agreed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Заявление/Служебная записка согласовано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "additional_agreement_file",
       "type": "FILE",
       "searchable": false,
       "indexed": false,
@@ -1715,15 +905,39 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Шаблон заявления на отмену",
+        "name": "Шаблон дополнительного соглашения об отмене",
         "data": {},
         "input": true,
         "output": true
       }
     },
     {
-      "code": "absences_enabled",
+      "code": "need_approval",
       "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Требуется согласование?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_order_number",
+      "type": "STRING",
       "searchable": false,
       "indexed": false,
       "deleted": true,
@@ -1735,7 +949,47 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "absences_enabled",
+        "name": "Номер отменяемого приказа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "cancel_approve_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование отменяемого соглашения",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "is_signature_doc",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ подписан?",
         "data": {
           "additionalType": "radio",
           "noValue": "Нет",
@@ -1746,7 +1000,203 @@
       }
     },
     {
-      "code": "order",
+      "code": "agreement_is_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дополнительное соглашение подписано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "additional_agreement_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата ДС",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "is_signed_paper",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документы подписаны на бумаге?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "hr_department",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Отдел кадров",
+        "data": {}
+      }
+    },
+    {
+      "code": "office_manager",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Офис-менеджеры",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "length_array_documents",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество найденных документов в заявке",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудник (пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "name_cancel_app_order",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование приказа об отмене",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "note",
       "type": "REF_ITEM",
       "searchable": false,
       "indexed": false,
@@ -1759,8 +1209,321 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Приказ",
+        "name": "Служебная записка",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "tickets_bought",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Билеты куплены?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_note_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование отменяемой СЗ",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_doc_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование отменяемого заявления",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "settings_documents",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "statement",
+            "name": "Заявление",
+            "checked": false
+          },
+          {
+            "code": "memo",
+            "name": "Служебная записка",
+            "checked": false
+          },
+          {
+            "code": "not_documents",
+            "name": "Без документов",
+            "checked": false
+          },
+          {
+            "code": "cant",
+            "name": "Не может отменять",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Настройки запуска",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_agreement",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_agreements",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Дополнительное соглашение об отмене подписанного документа",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "application_order_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "В отменяемой заявке приказ подписан?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "xml_file_doc",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "XML файл заявления",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "test_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "vacations",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "absences",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Тестовое приложение",
         "data": {}
+      }
+    },
+    {
+      "code": "payment_made_vacation",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Выплата по отпуску была произведена?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "memo_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Шаблон служебной записки на отмену",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл дополнительного соглашения",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "settings_cancel_documents",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings_cancel_documents",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Настройки отмены документов",
+        "data": {},
+        "input": true,
+        "output": true
       }
     },
     {
@@ -1785,6 +1548,717 @@
         },
         "input": true,
         "output": true
+      }
+    },
+    {
+      "code": "full_doc_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование документа, номер документа и дата",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "additional_agreement_number",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер ДС",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_order",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл приказа",
+        "data": {}
+      }
+    },
+    {
+      "code": "cancel_doc",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл заявления",
+        "data": {}
+      }
+    },
+    {
+      "code": "app_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование заявки",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "cancel_order_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_orders",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приказ об отмене подписанного документа",
+        "data": {}
+      }
+    },
+    {
+      "code": "settings_kedo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Настройки КЭДО",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_additional_agreement_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование отменяемого ДС",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "date_agreement",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата дополнительного соглашения",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_order_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата отменяемого приказа",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "order",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Приказ",
+        "data": {}
+      }
+    },
+    {
+      "code": "app",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемая заявка",
+        "data": {}
+      }
+    },
+    {
+      "code": "cancel_additional_agreement_number",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер отменяемого ДС",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "order_name_cancel",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемый приказ (Наименование)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "additional_agreement",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Доп. соглашение",
+        "data": {}
+      }
+    },
+    {
+      "code": "number_agreement",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер дополнительного соглашения",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "director",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Руководитель",
+        "data": {}
+      }
+    },
+    {
+      "code": "xml_file_order",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "XML файл приказа",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "resigning_agreement",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Повторное подписание Доп. соглашения",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "step",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "step",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "date_order",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата приказа",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "signatory_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Подписант (Приложение)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "other_documents_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование прочих документов",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "business_trips_enabled",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "business_trips_enabled",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "order_generation_again",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Перегенерация приказа?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "statement_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Шаблон заявления на отмену",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "check_signature_ds",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "check_signature_ds",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "need_statement",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Требуется заявление?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "exit_code",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Код выхода согласования заявления",
+        "data": {
+          "additionalType": "string"
+        }
       }
     },
     {
@@ -1832,206 +2306,6 @@
       }
     },
     {
-      "code": "full_doc_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование документа, номер документа и дата",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "is_signature_doc",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Документ подписан?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "app",
-      "type": "REF_ITEM",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Отменяемая заявка",
-        "data": {}
-      }
-    },
-    {
-      "code": "agreement_is_signed",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дополнительное соглашение подписано?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "staff",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "staff",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Сотрудник",
-        "data": {}
-      }
-    },
-    {
-      "code": "status_order",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Статус приказа",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "director",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "staff",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Руководитель",
-        "data": {}
-      }
-    },
-    {
-      "code": "cancel_order_app",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "cancel_orders",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Приказ об отмене подписанного документа",
-        "data": {}
-      }
-    },
-    {
       "code": "check_signature",
       "type": "BOOLEAN",
       "searchable": false,
@@ -2051,66 +2325,6 @@
           "noValue": "Нет",
           "yesValue": "Да"
         }
-      }
-    },
-    {
-      "code": "app_name",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Наименование заявки",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "xml_file_order",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "XML файл приказа",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "xml_file_doc",
-      "type": "FILE",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "XML файл заявления",
-        "data": {},
-        "input": true,
-        "output": true
       }
     },
     {
@@ -2139,228 +2353,14 @@
         "input": true,
         "output": true
       }
-    },
-    {
-      "code": "check_signature_ds",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "check_signature_ds",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "agreed",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Заявление/Служебная записка согласовано?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        }
-      }
-    },
-    {
-      "code": "test_app",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "vacations",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "absences",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Тестовое приложение",
-        "data": {}
-      }
-    },
-    {
-      "code": "process_initiator_user",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Инициатор процесса (Пользователь)",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "cancel_additional_agreement_number",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": true,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Номер отменяемого ДС",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "settings_documents",
-      "type": "ENUM",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "enumItems": [
-          {
-            "code": "statement",
-            "name": "Заявление",
-            "checked": false
-          },
-          {
-            "code": "memo",
-            "name": "Служебная записка",
-            "checked": false
-          },
-          {
-            "code": "not_documents",
-            "name": "Без документов",
-            "checked": false
-          },
-          {
-            "code": "cant",
-            "name": "Не может отменять",
-            "checked": false
-          }
-        ]
-      },
-      "view": {
-        "name": "Настройки запуска",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "not_initiator_initiate",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": false,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Допускается отмена не инициатору?",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        },
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "order_name_cancel",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Отменяемый приказ (Наименование)",
-        "data": {
-          "additionalType": "string"
-        },
-        "input": true,
-        "output": true
-      }
     }
   ],
   "manualRun": true,
   "readonly": false,
   "__createdAt": "2023-12-14T13:43:39.38153248Z",
   "__createdBy": "1cf577b1-b6f3-4492-820a-785cebdb8132",
-  "__updatedAt": "2024-04-27T08:28:20.730378535Z",
-  "__updatedBy": "67181712-e1c5-405f-a988-3c40ec8ecbfb",
+  "__updatedAt": "2024-06-04T23:21:10.384095682Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
   "process": {
     "items": {
       "00000000-0000-0000-0000-000000000000": {
@@ -26431,7 +26431,7 @@
         "name": "Определение руководителя",
         "type": "call",
         "color": "#ffffff",
-        "exits": ["d2fc0077-0107-44b4-9f37-d6d309357a8b"],
+        "exits": ["15a62731-5e92-4672-98d8-3e7a9eff06f2"],
         "width": 80,
         "height": 64,
         "settings": {
@@ -28306,2807 +28306,6 @@
           "useFunc": false,
           "funcType": "STRING",
           "description": ""
-        }
-      },
-      "78737a19-e3c7-4803-9b64-943b1f5f1207": {
-        "x": 200,
-        "y": 624,
-        "id": "78737a19-e3c7-4803-9b64-943b1f5f1207",
-        "icon": "system",
-        "lane": "a3a9e6e5-adc8-4757-93c2-bc4c95e85cd8",
-        "name": "Получаем участников групп",
-        "type": "ca",
-        "color": "#20c997",
-        "exits": [
-          "7764b42d-adcb-43cd-a554-79b89a85b1b5",
-          "1e079436-02ff-4c46-a201-cf776d0e9caf"
-        ],
-        "width": 80,
-        "height": 64,
-        "settings": {
-          "code": "get_users",
-          "name": "",
-          "input": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "staff.organization"
-              },
-              "target": {
-                "kind": "context",
-                "value": "organization"
-              }
-            }
-          ],
-          "output": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "hr_department"
-              },
-              "target": {
-                "kind": "context",
-                "value": "hr_dep"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "accounting_department_user"
-              },
-              "target": {
-                "kind": "context",
-                "value": "accounting"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "matching_finance"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "office_manager"
-              },
-              "target": {
-                "kind": "context",
-                "value": "office_managers"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "signatories"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "boss_user"
-              },
-              "target": {
-                "kind": "context",
-                "value": "boss"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "boss_app"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "error"
-              }
-            }
-          ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
-          "escalation": {
-            "byTime": {
-              "limit": {
-                "days": 0,
-                "kind": "duration",
-                "hours": 0,
-                "minutes": 0,
-                "absolute": false
-              },
-              "action": {
-                "notify": false,
-                "interrupt": false,
-                "receivers": []
-              },
-              "enabled": false
-            },
-            "byError": {
-              "exit": "1e079436-02ff-4c46-a201-cf776d0e9caf",
-              "notify": true,
-              "interrupt": true,
-              "receivers": [
-                {
-                  "code": "administrators",
-                  "kind": "group",
-                  "multi": true,
-                  "namespace": "system"
-                }
-              ]
-            }
-          },
-          "bindingForm": {
-            "fieldValues": {
-              "boss": {
-                "kind": "Mapped",
-                "path": ["boss_user"]
-              },
-              "error": null,
-              "groups": null,
-              "hr_dep": {
-                "kind": "Mapped",
-                "path": ["hr_department"]
-              },
-              "boss_app": null,
-              "accounting": {
-                "kind": "Mapped",
-                "path": ["accounting_department_user"]
-              },
-              "signatories": null,
-              "_bindingData": {
-                "inputs": [
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "staff.organization"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "organization"
-                    }
-                  }
-                ],
-                "outputs": [
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "hr_department"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "hr_dep"
-                    }
-                  },
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "accounting_department_user"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "accounting"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "matching_finance"
-                    }
-                  },
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "office_manager"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "office_managers"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "signatories"
-                    }
-                  },
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "boss_user"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "boss"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "boss_app"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "error"
-                    }
-                  }
-                ],
-                "sources": [
-                  {
-                    "code": "__createdBy",
-                    "type": "SYS_USER",
-                    "view": {
-                      "name": "Инициатор",
-                      "system": true
-                    },
-                    "array": false,
-                    "single": true
-                  },
-                  {
-                    "code": "__name",
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Название",
-                      "system": true
-                    },
-                    "array": false,
-                    "single": true
-                  },
-                  {
-                    "code": "__comment",
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "Комментарий",
-                      "system": true
-                    },
-                    "array": false,
-                    "single": true
-                  },
-                  {
-                    "code": "again_send",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Повторная отправка?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "signing_error",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "Текст при неудачном подписании",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "payment_made_vacation",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Выплата по отпуску была произведена?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "office_manager",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Офис-менеджеры",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "xml_file_doc",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "XML файл заявления",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "need_approval",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Требуется согласование?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "accounting_department_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Бухгалтерия",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "other_documents_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "Наименование прочих документов",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_order",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Файл приказа"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "end_processing_documents",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Список документов обработан?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "not_initiator_initiate",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Допускается отмена не инициатору?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "doc",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Заявление"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_doc_app",
-                    "data": {
-                      "code": "cancel_docs",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Заявление об отмене подписанного документа"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_additional_agreement_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование отменяемого ДС",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "full_doc_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование документа, номер документа и дата",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "exit_code",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Код выхода согласования заявления"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "status_ds",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Статус доп. соглашения",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "order_is_signed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Приказ подписан?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_agreement",
-                    "data": {
-                      "code": "cancel_agreements",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Дополнительное соглашение об отмене подписанного документа",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "additional_agreement",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Доп. соглашение"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_memo",
-                    "data": {
-                      "code": "cancel_memo",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Служебная записка на отмену документа",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "name_cancel_app",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование заявки на отмену",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "note",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Служебная записка",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "resigning_order",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Повторное подписание Приказа",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "check_signature_ds",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "check_signature_ds",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "application_order_signed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "В отменяемой заявке приказ подписан?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "number_agreement",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Номер дополнительного соглашения",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "other_documents",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Документы в заявке",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "approve",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Согласие"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "other_document",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Документ в заявке",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_order_app",
-                    "data": {
-                      "code": "cancel_orders",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Приказ об отмене подписанного документа"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "is_signature_doc",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Документ подписан?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "agreed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Заявление/Служебная записка согласовано?"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_order_number",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Номер отменяемого приказа"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_doc_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование отменяемого заявления"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "staff_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Сотрудник (пользователь)",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "app",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Отменяемая заявка"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "length_array_documents",
-                    "data": {},
-                    "type": "FLOAT",
-                    "view": {
-                      "data": {
-                        "additionalType": "integer",
-                        "showRowSeparator": true
-                      },
-                      "name": "Количество найденных документов в заявке",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "additional_agreement_date",
-                    "data": {},
-                    "type": "DATETIME",
-                    "view": {
-                      "data": {
-                        "timeOptional": false,
-                        "additionalType": "date",
-                        "defaultTimeType": "startOfDay"
-                      },
-                      "name": "Дата ДС",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_note_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование отменяемой СЗ",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "debug",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "debug",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "memo_file",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Шаблон служебной записки на отмену",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "application_agreement_signed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "В отменяемой заявке доп. соглашение подписано?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_doc",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Файл заявления"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "kedo_status",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Статус"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "business_trips_enabled",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "business_trips_enabled",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "status_order",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Статус приказа",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "agreement_is_signed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Дополнительное соглашение подписано?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "settings_cancel_documents",
-                    "data": {
-                      "code": "settings_cancel_documents",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Настройки отмены документов",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "staff",
-                    "data": {
-                      "code": "staff",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Сотрудник"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "order_file",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Шаблон приказа об отмене",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "director",
-                    "data": {
-                      "code": "staff",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Руководитель"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_additional_agreement_date_string",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Дата отменяемого ДС (строка)",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_approve_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование отменяемого соглашения"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "statement_signed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Заявление/Служебная записка подписано?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "order_generation_again",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Перегенерация приказа?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "test_app",
-                    "data": {
-                      "code": "vacations",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "absences",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Тестовое приложение"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "name_cancel_app_order",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование приказа об отмене",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "check_signature",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Подписанный приказ?"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "additional_agreement_number",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Номер ДС",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "statement_file",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Шаблон заявления на отмену",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "agreement_generation_again",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Перегенерация Доп. соглашения?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "date_agreement",
-                    "data": {},
-                    "type": "DATETIME",
-                    "view": {
-                      "data": {
-                        "timeOptional": false,
-                        "additionalType": "date",
-                        "defaultTimeType": "startOfDay"
-                      },
-                      "name": "Дата дополнительного соглашения",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "process_initiator_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Инициатор процесса (Пользователь)",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "number_order",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Номер приказа"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "absences_enabled",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "absences_enabled",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "check_signature_order",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "check_signature_order",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "need_statement",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Требуется заявление?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "resigning_agreement",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Повторное подписание Доп. соглашения",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "is_signed_paper",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Документы подписаны на бумаге?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "agreement_file",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Файл дополнительного соглашения",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "step",
-                    "data": {},
-                    "type": "FLOAT",
-                    "view": {
-                      "data": {
-                        "additionalType": "integer",
-                        "showRowSeparator": true
-                      },
-                      "name": "step",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": 0,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "app_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование заявки"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "hr_department",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Отдел кадров"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_order_name",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование отменяемого приказа"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_app",
-                    "data": {
-                      "code": "cancel_applications",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Заявка на отмену"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "date_order",
-                    "data": {},
-                    "type": "DATETIME",
-                    "view": {
-                      "data": {
-                        "timeOptional": false,
-                        "additionalType": "date",
-                        "defaultTimeType": "startOfDay"
-                      },
-                      "name": "Дата приказа"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "settings_kedo",
-                    "data": {
-                      "code": "settings",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Настройки КЭДО",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "integration_1c",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Интеграция с учетной системой",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "director_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Руководитель (Пользователь)"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "order",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Приказ"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "name_cancel_app_doc",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Наименование заявления от отмене",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_order_date",
-                    "data": {},
-                    "type": "DATETIME",
-                    "view": {
-                      "data": {
-                        "timeOptional": false,
-                        "additionalType": "date",
-                        "defaultTimeType": "startOfDay"
-                      },
-                      "name": "Дата отменяемого приказа"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_order_date_string",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Дата отменяемого приказа (строка)"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "staff_process_initiator",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Инициатор процесса сотрудник?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "additional_agreement_file",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "Шаблон дополнительного соглашения об отмене",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "tickets_bought",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Билеты куплены?",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": false,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "xml_file_order",
-                    "data": {},
-                    "type": "FILE",
-                    "view": {
-                      "data": {},
-                      "name": "XML файл приказа",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "cancel_additional_agreement_number",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Номер отменяемого ДС",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": true,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "settings_documents",
-                    "data": {
-                      "enumItems": [
-                        {
-                          "code": "statement",
-                          "name": "Заявление",
-                          "checked": false
-                        },
-                        {
-                          "code": "memo",
-                          "name": "Служебная записка",
-                          "checked": false
-                        },
-                        {
-                          "code": "not_documents",
-                          "name": "Без документов",
-                          "checked": false
-                        },
-                        {
-                          "code": "cant",
-                          "name": "Не может отменять",
-                          "checked": false
-                        }
-                      ]
-                    },
-                    "type": "ENUM",
-                    "view": {
-                      "data": {},
-                      "name": "Настройки запуска",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "boss_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Руководитель компании (Пользователь)",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "start_event_date",
-                    "data": {},
-                    "type": "DATETIME",
-                    "view": {
-                      "data": {
-                        "additionalType": "datetime",
-                        "defaultTimeType": "startOfDay"
-                      },
-                      "name": "Дата начала кадрового события в заявке",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "signatory_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Подписант (Пользователь)",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "signatory_app",
-                    "data": {
-                      "code": "staff",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "namespace": "kedo"
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Подписант (Приложение)",
-                      "input": true,
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  }
-                ],
-                "targets": [
-                  {
-                    "code": "organization",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Организация",
-                      "input": true,
-                      "output": false
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": true,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "hr_dep",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Отдел кадров",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "accounting",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Бухгалтерия",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "matching_finance",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Ответственные за финансы ",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "office_managers",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Офис менеджеры",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "signatories",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Подписанты",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "boss",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Руководитель компании",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "boss_app",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Руководитель компании (app)",
-                      "input": false,
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "error",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "error",
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  }
-                ]
-              },
-              "organization": {
-                "kind": "Mapped",
-                "path": ["staff", "organization"]
-              },
-              "office_managers": {
-                "kind": "Mapped",
-                "path": ["office_manager"]
-              },
-              "matching_finance": null,
-              "__dynamic_binding": {}
-            }
-          },
-          "targetAppCode": "",
-          "dynamicBinding": {}
         }
       },
       "790d862b-3765-479c-9908-32851008ab66": {
@@ -41783,6 +38982,78 @@
           "description": ""
         }
       },
+      "f5c8d5b8-dfcf-4159-b640-e2d7cf85156f": {
+        "x": 200,
+        "y": 624,
+        "id": "f5c8d5b8-dfcf-4159-b640-e2d7cf85156f",
+        "lane": "a3a9e6e5-adc8-4757-93c2-bc4c95e85cd8",
+        "name": "Получаем участников групп",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["d3dcd095-495c-4ebf-80ff-7eaa6aeae124"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_group_members_workflow",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "hr_department"
+              },
+              "target": {
+                "kind": "context",
+                "value": "hr_dep"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "accounting_department_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "accounting"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "boss_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization_head"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "office_manager"
+              },
+              "target": {
+                "kind": "context",
+                "value": "office_managers"
+              }
+            }
+          ],
+          "namespace": "kedo.organization",
+          "subProcessTargetFieldCode": ""
+        }
+      },
       "f664375b-bbe8-4766-ac77-22278b453e70": {
         "x": 2872,
         "y": 640,
@@ -42698,6 +39969,38 @@
         },
         "nameShift": 0
       },
+      "15a62731-5e92-4672-98d8-3e7a9eff06f2": {
+        "id": "15a62731-5e92-4672-98d8-3e7a9eff06f2",
+        "name": "",
+        "path": [
+          {
+            "x": 184,
+            "y": 656
+          },
+          {
+            "x": 200,
+            "y": 656
+          }
+        ],
+        "type": "plain",
+        "source": "6335a510-6b7f-4345-be43-8fc4a99ff376",
+        "target": "f5c8d5b8-dfcf-4159-b640-e2d7cf85156f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
       "16b1e2fa-0b54-444e-a414-fc836cd0cdce": {
         "id": "16b1e2fa-0b54-444e-a414-fc836cd0cdce",
         "name": "Да",
@@ -42796,38 +40099,6 @@
               "conjunction": false
             }
           ],
-          "descritpion": ""
-        },
-        "nameShift": 0
-      },
-      "1e079436-02ff-4c46-a201-cf776d0e9caf": {
-        "id": "1e079436-02ff-4c46-a201-cf776d0e9caf",
-        "name": "",
-        "path": [
-          {
-            "x": 280,
-            "y": 672
-          },
-          {
-            "x": 296,
-            "y": 672
-          }
-        ],
-        "type": "error",
-        "source": "78737a19-e3c7-4803-9b64-943b1f5f1207",
-        "target": "14c9e614-0118-45ec-9882-53f9e4d2ce55",
-        "settings": {
-          "exit": {
-            "confirm": "none",
-            "interrupt": false,
-            "skipCheck": false,
-            "formFields": [],
-            "buttonClass": "default",
-            "confirmText": "",
-            "popoverSize": "md",
-            "formDescription": ""
-          },
-          "conditions": [],
           "descritpion": ""
         },
         "nameShift": 0
@@ -43997,38 +41268,6 @@
         "type": "plain",
         "source": "9b58d9c8-66dc-45bd-a44c-c670d311f803",
         "target": "5bd32274-a9c5-4592-a6b8-25fb938aa44f",
-        "settings": {
-          "exit": {
-            "confirm": "none",
-            "interrupt": false,
-            "skipCheck": false,
-            "formFields": [],
-            "buttonClass": "default",
-            "confirmText": "",
-            "popoverSize": "md",
-            "formDescription": ""
-          },
-          "conditions": [],
-          "descritpion": ""
-        },
-        "nameShift": 0
-      },
-      "7764b42d-adcb-43cd-a554-79b89a85b1b5": {
-        "id": "7764b42d-adcb-43cd-a554-79b89a85b1b5",
-        "name": "",
-        "path": [
-          {
-            "x": 280,
-            "y": 656
-          },
-          {
-            "x": 296,
-            "y": 656
-          }
-        ],
-        "type": "plain",
-        "source": "78737a19-e3c7-4803-9b64-943b1f5f1207",
-        "target": "14c9e614-0118-45ec-9882-53f9e4d2ce55",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -45464,22 +42703,22 @@
         },
         "nameShift": 0
       },
-      "d2fc0077-0107-44b4-9f37-d6d309357a8b": {
-        "id": "d2fc0077-0107-44b4-9f37-d6d309357a8b",
+      "d3dcd095-495c-4ebf-80ff-7eaa6aeae124": {
+        "id": "d3dcd095-495c-4ebf-80ff-7eaa6aeae124",
         "name": "",
         "path": [
           {
-            "x": 184,
+            "x": 280,
             "y": 656
           },
           {
-            "x": 200,
+            "x": 296,
             "y": 656
           }
         ],
         "type": "plain",
-        "source": "6335a510-6b7f-4345-be43-8fc4a99ff376",
-        "target": "78737a19-e3c7-4803-9b64-943b1f5f1207",
+        "source": "f5c8d5b8-dfcf-4159-b640-e2d7cf85156f",
+        "target": "14c9e614-0118-45ec-9882-53f9e4d2ce55",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -46637,7 +43876,7 @@
       "widget": {
         "draft": false,
         "deleted": false,
-        "version": 7
+        "version": 4
       },
       "content": {
         "[footer]": [
@@ -46872,7 +44111,7 @@
       "widget": {
         "draft": false,
         "deleted": false,
-        "version": 7
+        "version": 4
       },
       "content": {
         "[footer]": [

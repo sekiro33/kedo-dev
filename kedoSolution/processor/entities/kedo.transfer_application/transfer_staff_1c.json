@@ -1,0 +1,619 @@
+{
+  "__id": "018fd042-4321-78e2-a619-8ca3d77cddf1",
+  "namespace": "kedo.transfer_application",
+  "code": "transfer_staff_1c",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1C) Получить печатные формы из 1С (Перевод)",
+  "type": "bpmn",
+  "draft": false,
+  "version": 1,
+  "context": [
+    {
+      "code": "transfer_application",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "transfer_application",
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Заявка на перевод"
+      }
+    },
+    {
+      "code": "transfer_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "transfer_another_position",
+            "name": "Перевод в другое подразделение / должность",
+            "checked": false
+          },
+          {
+            "code": "work_condition_change",
+            "name": "Изменение условий труда",
+            "checked": false
+          },
+          {
+            "code": "change_of_schedule",
+            "name": "Изменение графика работы",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Вид перевода",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "hr_dep",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Отдел кадров",
+        "data": {}
+      }
+    },
+    {
+      "code": "transfer_table_counter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счетчик таблицы",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "transfer_data_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные по переводу сотрудника",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "additional_info",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дополнительная информация",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "integration_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "awaiting_documents_table_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Приложение интеграции",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "integration_apps",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "awaiting_documents_table_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Приложения интеграции (неск.)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-05-31T20:05:54.593973546Z",
+  "__createdBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__updatedAt": "2024-06-04T22:02:08.598062187Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "a9bbefb3-9bf3-4373-92d8-fcdf9ea35cdc",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["29bcb293-9d47-4d7a-a69d-970f635045af"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "(1C) Получить печатные формы из 1С (Перевод) ({$transfer_application})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "77203f09-e25e-4c20-882c-760b763834dc": {
+        "x": 456,
+        "y": 288,
+        "id": "77203f09-e25e-4c20-882c-760b763834dc",
+        "icon": "end",
+        "lane": "51f79fbe-7b5b-4c72-be9a-5ca9a93b6520",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "7c5b1722-e672-403c-979a-417cdee32b38": {
+        "x": 288,
+        "y": 272,
+        "id": "7c5b1722-e672-403c-979a-417cdee32b38",
+        "icon": "user",
+        "lane": "51f79fbe-7b5b-4c72-be9a-5ca9a93b6520",
+        "name": "Подготовить документы в учетной системе",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": ["354b48df-a7ac-4665-b3af-aac3edd99f14"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "notify": true,
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "isIgnoreSubstitutionTarget": "",
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "89c4f30b-49d5-44b4-9d99-c99f217afb58": {
+        "x": 80,
+        "y": 280,
+        "id": "89c4f30b-49d5-44b4-9d99-c99f217afb58",
+        "lane": "a9bbefb3-9bf3-4373-92d8-fcdf9ea35cdc",
+        "name": "Получить участников групп",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["16292528-8d7a-4485-b4e5-c7a225739edb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_group_members_workflow",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.organization",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "f01ee087-a079-42b5-aa92-64bb155580a3": {
+        "x": 80,
+        "y": 168,
+        "id": "f01ee087-a079-42b5-aa92-64bb155580a3",
+        "icon": "script",
+        "lane": "a9bbefb3-9bf3-4373-92d8-fcdf9ea35cdc",
+        "name": "Получить настройки КЭДО",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["1ec83969-f0b6-4778-899c-a9a789856ded"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getKedoSettings",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "51f79fbe-7b5b-4c72-be9a-5ca9a93b6520": {
+        "x": 232,
+        "y": 8,
+        "id": "51f79fbe-7b5b-4c72-be9a-5ca9a93b6520",
+        "name": "Отдел кадров",
+        "color": "#d6f0cc",
+        "width": 1292,
+        "height": 632,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "hr_dep",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      },
+      "a9bbefb3-9bf3-4373-92d8-fcdf9ea35cdc": {
+        "x": 8,
+        "y": 8,
+        "id": "a9bbefb3-9bf3-4373-92d8-fcdf9ea35cdc",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 632,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "16292528-8d7a-4485-b4e5-c7a225739edb": {
+        "id": "16292528-8d7a-4485-b4e5-c7a225739edb",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 312
+          },
+          {
+            "x": 280,
+            "y": 312
+          },
+          {
+            "x": 280,
+            "y": 304
+          },
+          {
+            "x": 288,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "89c4f30b-49d5-44b4-9d99-c99f217afb58",
+        "target": "7c5b1722-e672-403c-979a-417cdee32b38",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1ec83969-f0b6-4778-899c-a9a789856ded": {
+        "id": "1ec83969-f0b6-4778-899c-a9a789856ded",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 232
+          },
+          {
+            "x": 120,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "f01ee087-a079-42b5-aa92-64bb155580a3",
+        "target": "89c4f30b-49d5-44b4-9d99-c99f217afb58",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "29bcb293-9d47-4d7a-a69d-970f635045af": {
+        "id": "29bcb293-9d47-4d7a-a69d-970f635045af",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "f01ee087-a079-42b5-aa92-64bb155580a3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "354b48df-a7ac-4665-b3af-aac3edd99f14": {
+        "id": "354b48df-a7ac-4665-b3af-aac3edd99f14",
+        "name": "",
+        "path": [
+          {
+            "x": 368,
+            "y": 304
+          },
+          {
+            "x": 456,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "7c5b1722-e672-403c-979a-417cdee32b38",
+        "target": "77203f09-e25e-4c20-882c-760b763834dc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ntype StaffEmployment = ApplicationItem\u003cApplication$kedo$employment_directory$Data, Application$kedo$employment_directory$Params\u003e;\n\ninterface IStaffData {\n    name: string,\n    id_1c: string,\n    individual_id_1c: string,\n    organization_id: string,\n    position_id: string,\n    structural_subdivision_id: string,\n}\n\ninterface TransferData {\n    staff: IStaffData,\n    start_date: string,\n    end_date?: string,\n    reason: string,\n    base: string,\n    comment?: string,\n    work_place?: string,\n    remote_work?: boolean,\n    position_id?: string,\n    subdivison_id?: string,\n    work_schedule_id?: string,\n    temporary_transfer?: boolean,\n}\n\n/** Получить настройки КЭДО */\nasync function getKedoSettings(): Promise\u003cvoid\u003e {\n    \n}\n\n/** Получить данные о сотруднике. */\nasync function getStaffData(employment: StaffEmployment): Promise\u003cIStaffData\u003e {\n    if (!employment.data.staff) {\n        throw new Error(\"employment_place.data.staff is undefined\");\n    }\n\n    const staff = await employment.data.staff.fetch();\n\n    if (!employment.data.organization) {\n        throw new Error(\"employment.data.organization is undefined\");\n    }\n\n    if (!employment.data.position) {\n        throw new Error(\"employment.data.position is undefined\");\n    }\n\n    if (!employment.data.subdivision) {\n        throw new Error(\"employment.data.structural_subdivision is undefined\");\n    }\n\n    const [position, organization, structural_subdivision] = await Promise.all([\n        employment.data.position.fetch(),\n        employment.data.organization.fetch(),\n        employment.data.subdivision.fetch(),\n    ]);\n\n    const staff_data: IStaffData = {\n        name: staff.data.__name,\n        id_1c: employment.data.id_1c ?? \"\",\n        individual_id_1c: staff.data.individual_id_1c ?? \"\",\n        position_id: position.data.ref_key ?? \"\",\n        organization_id: organization.data.ref_key ?? \"\",\n        structural_subdivision_id: structural_subdivision.data.ref_key ?? \"\",\n    }\n\n    return staff_data;\n}\n\nasync function setTransferData(): Promise\u003cvoid\u003e {\n    if (!Context.data.transfer_application) {\n        throw new Error(\"Отсутствует заявка на перевод\");\n    }\n\n    if (!Context.data.transfer_type) {\n        throw new Error(\"Вид перевода не указан\");\n    }\n\n    const transfer_application = await Context.data.transfer_application.fetch();\n    const transfer_table = transfer_application.data.transfer_table;\n    const transfer_type = Context.data.transfer_type;\n\n    if (!transfer_table || transfer_table.length == 0) {\n        throw new Error(\"Таблица переводимых сотрудников в заявке не заполнена\");\n    }\n\n    const row_index = Context.data.transfer_table_counter ?? 0;\n\n    const transfer_row = transfer_table[row_index];\n\n    if (transfer_row.transfer_employment_place) {\n        throw new Error(`Место занятости переводимого сотрудника не заполнено (${row_index + 1} строка таблицы)`);\n    }\n\n    const staff_data = await getStaffData(transfer_row.transfer_employment_place);\n\n    if (!transfer_application.data.date_start) {\n        throw new Error(\"Не указана дата начала перевода\");\n    }\n\n    // Дата перевода с\n    const start_date = transfer_application.data.date_start;\n    // Дата перевода по\n    const end_date = transfer_application.data.date_end;\n    // Причина перевода\n    const transfer_reason = transfer_application.data.transfer_reason ?? \"\";\n    // Комментарий\n    const comment = transfer_application.data.comment ?? \"\";\n\n    // Куда переводим\n    // Позиция ШР, Организация, График работы\n    const [position, organization, subdivision, work_schedule] = await Promise.all(\n        [\n            transfer_application.data.new_position?.fetch(),\n            transfer_application.data.structural_subdivision?.fetch(),\n            transfer_application.data.organization?.fetch(),\n            transfer_application.data.schedule_work_new?.fetch(),\n        ]\n    );\n\n    const transfer_data: TransferData = {\n        staff: staff_data,\n        start_date: start_date.format(\"YYYY-MM-DDT00:00:00\"),\n        end_date: end_date?.format(\"YYYY-MM-DDT00:00:00\"),\n        reason: transfer_reason,\n        comment: comment,\n        base: \"Личное заявление сотрудника\",\n    };\n\n    switch (transfer_type.code) {\n        case \"transfer_another_position\": {\n            if (!position) {\n                throw new Error(\"Не указана позиция для перевода\");\n            }\n\n            if (!subdivision) {\n                throw new Error(\"У указаной позиции для перевода отсутсвует подразделение\");\n            }\n\n            if (!organization) {\n                throw new Error(\"У указаной позции для перевода не указана организация\");\n            }\n\n            if (!transfer_application.data.temporary_transfer) {\n                throw new Error(\"Не указн тип перевода (Временный или нет)\");\n            }\n\n            transfer_data.position_id = position.data.ref_key;\n            transfer_data.work_schedule_id = work_schedule?.data.id_1c;\n            transfer_data.subdivison_id = subdivision?.data.ref_key;\n            transfer_data.work_schedule_id = work_schedule?.data.id_1c;\n            transfer_data.temporary_transfer = transfer_application.data.temporary_transfer;\n\n            break;\n        }\n\n        case \"work_condition_change\": {\n            if (!work_schedule) {\n                throw new Error(\"Не указан новый график работы\");\n            }\n\n            transfer_data.work_schedule_id = work_schedule?.data.id_1c;\n            transfer_data.remote_work = transfer_application.data.remote_work;\n\n            break;\n        }\n\n        case \"change_of_schedule\": {\n            if (!work_schedule) {\n                throw new Error(\"Не указан новый график работы\");\n            }\n\n            transfer_data.work_schedule_id = work_schedule.data.id_1c;\n\n            break;\n        }\n\n        default: {\n            throw new Error(\"Неизвестный вид перевода\");\n        }\n    }\n\n    Context.data.transfer_data_json = JSON.stringify(transfer_data);\n}\n\nasync function addIntegrationApp(): Promise\u003cvoid\u003e {\n    const integration_apps = Context.data.integration_apps ?? [];\n\n    if (!Context.data.integration_app) {\n        throw new Error(\"Приложение интеграции отсуствует\");\n    }\n\n    integration_apps.push(Context.data.integration_app);\n\n    Context.data.integration_apps = integration_apps;\n    // Очищаем поле перед следующей итерацией\n    Context.data.integration_app = undefined;\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "transfer_application",
+          "data": {
+            "code": "transfer_application",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Заявка на перевод"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "transfer_application"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "transfer_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "additional_info": {
+        "enabled": false,
+        "conditions": []
+      },
+      "integration_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "integration_apps": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_data_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_table_counter": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

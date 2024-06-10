@@ -1,15 +1,15 @@
 {
-  "__id": "018c8757-193c-7f01-82ef-c3a897807dac",
+  "__id": "018fb8c1-cf14-7cab-9441-f6e10f7756b6",
   "namespace": "kedo.staff",
   "code": "load_employee_list",
   "category": "00000000-0000-0000-0000-000000000000",
   "__name": "(1С) Загрузка сотрудников из 1С",
   "type": "bpmn",
   "draft": false,
-  "version": 3,
+  "version": 5,
   "context": [
     {
-      "code": "current_count",
+      "code": "full_iteration_amount",
       "type": "FLOAT",
       "searchable": false,
       "indexed": false,
@@ -17,15 +17,77 @@
       "array": false,
       "required": false,
       "single": true,
-      "defaultValue": 0,
+      "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
       "data": {},
       "view": {
-        "name": "current_count",
+        "name": "Количество сотрудников",
         "data": {
           "additionalType": "integer",
           "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "is_employed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Трудоустроен",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "value_3",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "value_3",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "value_2",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "value_2",
+        "data": {
+          "additionalType": "string"
         }
       }
     },
@@ -51,7 +113,27 @@
       }
     },
     {
-      "code": "full_iteration_amount",
+      "code": "value_1",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "value_1",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "current_iteration",
       "type": "FLOAT",
       "searchable": false,
       "indexed": false,
@@ -64,7 +146,169 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Количество сотрудников",
+        "name": "Текущая итерация",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "is_there_connections",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Есть подключения (базы 1С)",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники"
+      }
+    },
+    {
+      "code": "entity",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "_my_companies",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "_system_catalogs",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Юридическое лицо",
+        "data": {}
+      }
+    },
+    {
+      "code": "positions",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Должности",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "numberOfEmployeesParams",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "URL Количество сотрудников",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "employeesParams",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "URL Сотрудники",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "current_count",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "current_count",
         "data": {
           "additionalType": "integer",
           "showRowSeparator": true
@@ -114,37 +358,8 @@
       }
     },
     {
-      "code": "staff",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "staff",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Сотрудники"
-      }
-    },
-    {
-      "code": "is_employed",
-      "type": "BOOLEAN",
+      "code": "employee_number_json",
+      "type": "STRING",
       "searchable": false,
       "indexed": false,
       "deleted": false,
@@ -156,32 +371,9 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Трудоустроен",
+        "name": "Количество сотрудников JSON",
         "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        }
-      }
-    },
-    {
-      "code": "batch_size",
-      "type": "FLOAT",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Размер пачки",
-        "data": {
-          "additionalType": "integer",
-          "showRowSeparator": true
+          "additionalType": "string"
         }
       }
     },
@@ -207,302 +399,6 @@
       }
     },
     {
-      "code": "personalInfoParams",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "URL Физическое лица",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "employee_number_json",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Количество сотрудников JSON",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "staff_member",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Кадровый сотрудник",
-        "data": {}
-      }
-    },
-    {
-      "code": "error",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Ошибка",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "value_1",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "value_1",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "docsParams",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "URL Документы",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "employees",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Сотрудники",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "entity",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "_my_companies",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "_system_catalogs",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Юридическое лицо",
-        "data": {}
-      }
-    },
-    {
-      "code": "personalInfo",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Физические лица",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "current_iteration",
-      "type": "FLOAT",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Текущая итерация",
-        "data": {
-          "additionalType": "integer",
-          "showRowSeparator": true
-        }
-      }
-    },
-    {
-      "code": "positions",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Должности",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "connection_object",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Объект подключений (базы 1С)",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "positionParams",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "URL Должности",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
-      "code": "value_3",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "value_3",
-        "data": {
-          "additionalType": "string"
-        }
-      }
-    },
-    {
       "code": "max_count",
       "type": "FLOAT",
       "searchable": false,
@@ -520,26 +416,6 @@
         "data": {
           "additionalType": "integer",
           "showRowSeparator": true
-        }
-      }
-    },
-    {
-      "code": "debug",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Дебаг",
-        "data": {
-          "additionalType": "string"
         }
       }
     },
@@ -793,7 +669,7 @@
       }
     },
     {
-      "code": "numberOfEmployeesParams",
+      "code": "employees",
       "type": "STRING",
       "searchable": false,
       "indexed": false,
@@ -806,14 +682,14 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "URL Количество сотрудников",
+        "name": "Сотрудники",
         "data": {
           "additionalType": "string"
         }
       }
     },
     {
-      "code": "employeesParams",
+      "code": "connection_object",
       "type": "STRING",
       "searchable": false,
       "indexed": false,
@@ -826,14 +702,14 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "URL Сотрудники",
+        "name": "Объект подключений (базы 1С)",
         "data": {
           "additionalType": "string"
         }
       }
     },
     {
-      "code": "docs",
+      "code": "positionParams",
       "type": "STRING",
       "searchable": false,
       "indexed": false,
@@ -846,14 +722,60 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Документы",
+        "name": "URL Должности",
         "data": {
           "additionalType": "string"
         }
       }
     },
     {
-      "code": "value_2",
+      "code": "batch_size",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Размер пачки",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "staff_member",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Кадровый сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
       "type": "STRING",
       "searchable": false,
       "indexed": false,
@@ -866,15 +788,15 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "value_2",
+        "name": "Ошибка",
         "data": {
           "additionalType": "string"
         }
       }
     },
     {
-      "code": "is_there_connections",
-      "type": "BOOLEAN",
+      "code": "docsParams",
+      "type": "STRING",
       "searchable": false,
       "indexed": false,
       "deleted": false,
@@ -886,11 +808,9 @@
       "formula": "",
       "data": {},
       "view": {
-        "name": "Есть подключения (базы 1С)",
+        "name": "URL Документы",
         "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
+          "additionalType": "string"
         }
       }
     },
@@ -923,14 +843,94 @@
         "name": "Сотрудники для подпроцесса",
         "data": {}
       }
+    },
+    {
+      "code": "personalInfoParams",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "URL Физическое лица",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "personalInfo",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Физические лица",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дебаг",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "docs",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документы",
+        "data": {
+          "additionalType": "string"
+        }
+      }
     }
   ],
   "manualRun": false,
   "readonly": false,
   "__createdAt": "2022-05-05T05:05:58.633842544Z",
   "__createdBy": "2e75c1aa-a65d-4049-bcd3-e4e4ac1127e8",
-  "__updatedAt": "2023-12-06T10:07:29.181985413Z",
-  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-06-04T21:14:41.238372225Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
   "process": {
     "items": {
       "00000000-0000-0000-0000-000000000000": {
@@ -1121,89 +1121,6 @@
           "messageHeader": "При создании сотрудников возникла ошибка"
         }
       },
-      "5e365315-9b06-4748-a2f8-03a4c76e7629": {
-        "x": 1520,
-        "y": 160,
-        "id": "5e365315-9b06-4748-a2f8-03a4c76e7629",
-        "icon": "system",
-        "lane": "d19ac117-ebdc-4ece-b5de-961cadfc0ce5",
-        "name": "Создание сотрудников",
-        "type": "ca",
-        "color": "#fde9a0",
-        "exits": [
-          "03296da2-7f0d-4c25-98e0-77a5f0a5994a",
-          "35f192de-8bef-4fe2-9b77-d5598c9758b0"
-        ],
-        "width": 80,
-        "height": 64,
-        "settings": {
-          "code": "create_employees_1c",
-          "name": "",
-          "input": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "batch_size"
-              },
-              "target": {
-                "kind": "context",
-                "value": "batch_size"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "iteration_number"
-              },
-              "target": {
-                "kind": "context",
-                "value": "skip_amount"
-              }
-            }
-          ],
-          "output": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "error"
-              },
-              "target": {
-                "kind": "context",
-                "value": "error"
-              }
-            }
-          ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
-          "escalation": {
-            "byTime": {
-              "limit": {
-                "days": 0,
-                "kind": "duration",
-                "hours": 0,
-                "minutes": 0,
-                "absolute": false
-              },
-              "action": {
-                "notify": false,
-                "interrupt": false,
-                "receivers": []
-              },
-              "enabled": false
-            },
-            "byError": {
-              "exit": "35f192de-8bef-4fe2-9b77-d5598c9758b0",
-              "notify": false,
-              "interrupt": true,
-              "receivers": []
-            }
-          },
-          "bindingForm": {
-            "fieldValues": {}
-          },
-          "targetAppCode": "",
-          "dynamicBinding": {}
-        }
-      },
       "5f80ebc5-df9b-47d1-aa44-b2b7aa972f27": {
         "x": 1088,
         "y": 272,
@@ -1253,45 +1170,39 @@
           }
         }
       },
-      "62ce3911-837f-4067-9211-db5a24f70884": {
-        "x": 568,
+      "685fbc04-b1f3-4dfc-8483-642cc141d227": {
+        "x": 944,
         "y": 256,
-        "id": "62ce3911-837f-4067-9211-db5a24f70884",
+        "id": "685fbc04-b1f3-4dfc-8483-642cc141d227",
         "icon": "system",
         "lane": "d19ac117-ebdc-4ece-b5de-961cadfc0ce5",
-        "name": "Получить количество сотрудников",
+        "name": "Запрос в 1С Должности",
         "type": "ca",
         "color": "#20c997",
         "exits": [
-          "db25ef5c-0430-417a-b70f-f0a3ea9c0259",
-          "fbe55c83-97d4-48db-bb1d-482e9a2cc2a3"
+          "3738b563-e7fd-4200-89b1-c8ccb24f8447",
+          "2548d39c-9168-4d9f-bc7b-a3cd22b78a7e"
         ],
         "width": 80,
         "height": 64,
         "settings": {
-          "code": "request_in_1c",
+          "code": "request_1c_data",
           "name": "",
           "input": [
             {
               "source": {
                 "kind": "context",
-                "value": "numberOfEmployeesParams"
+                "value": "positionParams"
               },
               "target": {
                 "kind": "context",
-                "value": "request_parameters"
+                "value": "request_params"
               }
             },
             {
               "target": {
                 "kind": "context",
-                "value": "request_body"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "request_type_string"
+                "value": "method"
               }
             },
             {
@@ -1302,6 +1213,12 @@
               "target": {
                 "kind": "context",
                 "value": "connection_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "body"
               }
             }
           ],
@@ -1319,7 +1236,7 @@
             {
               "source": {
                 "kind": "context",
-                "value": "employee_number_json"
+                "value": "positions"
               },
               "target": {
                 "kind": "context",
@@ -1327,7 +1244,7 @@
               }
             }
           ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
           "escalation": {
             "byTime": {
               "limit": {
@@ -1345,10 +1262,17 @@
               "enabled": false
             },
             "byError": {
-              "exit": "db25ef5c-0430-417a-b70f-f0a3ea9c0259",
-              "notify": false,
+              "exit": "2548d39c-9168-4d9f-bc7b-a3cd22b78a7e",
+              "notify": true,
               "interrupt": true,
-              "receivers": []
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
             }
           },
           "bindingForm": {
@@ -1358,23 +1282,23 @@
           "dynamicBinding": {}
         }
       },
-      "79071f0e-f5cb-4ca8-b490-d733da2c6626": {
-        "x": 112,
+      "6d8a6bc0-3201-4d49-a665-78b9c1d5937b": {
+        "x": 104,
         "y": 160,
-        "id": "79071f0e-f5cb-4ca8-b490-d733da2c6626",
+        "id": "6d8a6bc0-3201-4d49-a665-78b9c1d5937b",
         "icon": "system",
         "lane": "d19ac117-ebdc-4ece-b5de-961cadfc0ce5",
-        "name": "Получить объект всех подключений",
+        "name": "Получить доступные подключения 1С",
         "type": "ca",
         "color": "#20c997",
         "exits": [
-          "fb4c8fcf-858d-4957-8a48-41eb88c63f23",
-          "96c26bf8-9008-4fd4-8e3e-4be9e7736002"
+          "96c26bf8-9008-4fd4-8e3e-4be9e7736002",
+          "fb4c8fcf-858d-4957-8a48-41eb88c63f23"
         ],
         "width": 80,
         "height": 64,
         "settings": {
-          "code": "kedo_module_get_connections_object",
+          "code": "get_available_connections",
           "name": "",
           "input": [],
           "output": [
@@ -1385,7 +1309,7 @@
               },
               "target": {
                 "kind": "context",
-                "value": "connections_object"
+                "value": "connection_list"
               }
             },
             {
@@ -1395,11 +1319,11 @@
               },
               "target": {
                 "kind": "context",
-                "value": "connections_exist"
+                "value": "connection_list_exist"
               }
             }
           ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
           "escalation": {
             "byTime": {
               "limit": {
@@ -1418,9 +1342,16 @@
             },
             "byError": {
               "exit": "96c26bf8-9008-4fd4-8e3e-4be9e7736002",
-              "notify": false,
+              "notify": true,
               "interrupt": true,
-              "receivers": []
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
             }
           },
           "bindingForm": {
@@ -1609,55 +1540,43 @@
           "description": ""
         }
       },
-      "b13be646-fe5e-48b7-bdb4-caf368731738": {
-        "x": 960,
-        "y": 256,
-        "id": "b13be646-fe5e-48b7-bdb4-caf368731738",
+      "bab4fa2b-efb1-4b0b-9c4d-dddc18145630": {
+        "x": 1504,
+        "y": 160,
+        "id": "bab4fa2b-efb1-4b0b-9c4d-dddc18145630",
         "icon": "system",
         "lane": "d19ac117-ebdc-4ece-b5de-961cadfc0ce5",
-        "name": "Запрос в 1С Должности",
+        "name": "Получить сотрудников из 1С",
         "type": "ca",
         "color": "#20c997",
         "exits": [
-          "2548d39c-9168-4d9f-bc7b-a3cd22b78a7e",
-          "3738b563-e7fd-4200-89b1-c8ccb24f8447"
+          "35f192de-8bef-4fe2-9b77-d5598c9758b0",
+          "03296da2-7f0d-4c25-98e0-77a5f0a5994a"
         ],
         "width": 80,
         "height": 64,
         "settings": {
-          "code": "request_in_1c",
+          "code": "get_staff_1c",
           "name": "",
           "input": [
             {
               "source": {
                 "kind": "context",
-                "value": "positionParams"
+                "value": "batch_size"
               },
               "target": {
                 "kind": "context",
-                "value": "request_parameters"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "request_body"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "request_type_string"
+                "value": "batch_size"
               }
             },
             {
               "source": {
                 "kind": "context",
-                "value": "connection_name"
+                "value": "iteration_number"
               },
               "target": {
                 "kind": "context",
-                "value": "connection_name"
+                "value": "skip_amount"
               }
             }
           ],
@@ -1671,19 +1590,9 @@
                 "kind": "context",
                 "value": "error"
               }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "positions"
-              },
-              "target": {
-                "kind": "context",
-                "value": "response_1c_json"
-              }
             }
           ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
           "escalation": {
             "byTime": {
               "limit": {
@@ -1701,10 +1610,17 @@
               "enabled": false
             },
             "byError": {
-              "exit": "2548d39c-9168-4d9f-bc7b-a3cd22b78a7e",
-              "notify": false,
+              "exit": "35f192de-8bef-4fe2-9b77-d5598c9758b0",
+              "notify": true,
               "interrupt": true,
-              "receivers": []
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
             }
           },
           "bindingForm": {
@@ -1810,6 +1726,118 @@
               "receivers": []
             }
           }
+        }
+      },
+      "de94b1b8-829a-4714-b280-9ca78046c972": {
+        "x": 568,
+        "y": 256,
+        "id": "de94b1b8-829a-4714-b280-9ca78046c972",
+        "icon": "system",
+        "lane": "d19ac117-ebdc-4ece-b5de-961cadfc0ce5",
+        "name": "Получить количество сотрудников",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "fbe55c83-97d4-48db-bb1d-482e9a2cc2a3",
+          "db25ef5c-0430-417a-b70f-f0a3ea9c0259"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_1c_data",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "numberOfEmployeesParams"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_params"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "method"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "body"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "employee_number_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "db25ef5c-0430-417a-b70f-f0a3ea9c0259",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
         }
       },
       "e2134b0f-f4bc-4127-869b-695611242f3f": {
@@ -2023,7 +2051,7 @@
         "name": "",
         "path": [
           {
-            "x": 1600,
+            "x": 1584,
             "y": 192
           },
           {
@@ -2032,7 +2060,7 @@
           }
         ],
         "type": "plain",
-        "source": "5e365315-9b06-4748-a2f8-03a4c76e7629",
+        "source": "bab4fa2b-efb1-4b0b-9c4d-dddc18145630",
         "target": "c65f1dfe-151b-404c-823e-357d8fac2206",
         "settings": {
           "exit": {
@@ -2210,11 +2238,11 @@
         "name": "",
         "path": [
           {
-            "x": 1000,
+            "x": 984,
             "y": 320
           },
           {
-            "x": 1000,
+            "x": 984,
             "y": 416
           },
           {
@@ -2223,7 +2251,7 @@
           }
         ],
         "type": "error",
-        "source": "b13be646-fe5e-48b7-bdb4-caf368731738",
+        "source": "685fbc04-b1f3-4dfc-8483-642cc141d227",
         "target": "0bd1ccc9-ac2a-41c7-ac3a-e0a0ebc38a5c",
         "settings": {
           "exit": {
@@ -2256,7 +2284,7 @@
         ],
         "type": "plain",
         "source": "9cc8c4dd-d663-4d19-a97f-506536c3ffc4",
-        "target": "62ce3911-837f-4067-9211-db5a24f70884",
+        "target": "de94b1b8-829a-4714-b280-9ca78046c972",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -2278,11 +2306,11 @@
         "name": "",
         "path": [
           {
-            "x": 1560,
+            "x": 1544,
             "y": 224
           },
           {
-            "x": 1560,
+            "x": 1544,
             "y": 416
           },
           {
@@ -2291,7 +2319,7 @@
           }
         ],
         "type": "error",
-        "source": "5e365315-9b06-4748-a2f8-03a4c76e7629",
+        "source": "bab4fa2b-efb1-4b0b-9c4d-dddc18145630",
         "target": "0bd1ccc9-ac2a-41c7-ac3a-e0a0ebc38a5c",
         "settings": {
           "exit": {
@@ -2314,7 +2342,7 @@
         "name": "",
         "path": [
           {
-            "x": 1040,
+            "x": 1024,
             "y": 288
           },
           {
@@ -2323,7 +2351,7 @@
           }
         ],
         "type": "plain",
-        "source": "b13be646-fe5e-48b7-bdb4-caf368731738",
+        "source": "685fbc04-b1f3-4dfc-8483-642cc141d227",
         "target": "5f80ebc5-df9b-47d1-aa44-b2b7aa972f27",
         "settings": {
           "exit": {
@@ -2722,11 +2750,11 @@
         "name": "",
         "path": [
           {
-            "x": 152,
+            "x": 144,
             "y": 224
           },
           {
-            "x": 152,
+            "x": 144,
             "y": 288
           },
           {
@@ -2735,7 +2763,7 @@
           }
         ],
         "type": "error",
-        "source": "79071f0e-f5cb-4ca8-b490-d733da2c6626",
+        "source": "6d8a6bc0-3201-4d49-a665-78b9c1d5937b",
         "target": "7b4dcafb-6878-45ec-90dd-a045595b754d",
         "settings": {
           "exit": {
@@ -3100,13 +3128,13 @@
             "y": 192
           },
           {
-            "x": 112,
+            "x": 104,
             "y": 192
           }
         ],
         "type": "default",
         "source": "2b0b5ee8-8441-4b72-825b-3c924d619fc7",
-        "target": "79071f0e-f5cb-4ca8-b490-d733da2c6626",
+        "target": "6d8a6bc0-3201-4d49-a665-78b9c1d5937b",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -3132,13 +3160,13 @@
             "y": 192
           },
           {
-            "x": 1520,
+            "x": 1504,
             "y": 192
           }
         ],
         "type": "plain",
         "source": "fc8b35c1-32c1-40e8-bc80-418b23679186",
-        "target": "5e365315-9b06-4748-a2f8-03a4c76e7629",
+        "target": "bab4fa2b-efb1-4b0b-9c4d-dddc18145630",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -3173,7 +3201,7 @@
           }
         ],
         "type": "error",
-        "source": "62ce3911-837f-4067-9211-db5a24f70884",
+        "source": "de94b1b8-829a-4714-b280-9ca78046c972",
         "target": "0bd1ccc9-ac2a-41c7-ac3a-e0a0ebc38a5c",
         "settings": {
           "exit": {
@@ -3328,17 +3356,17 @@
             "y": 192
           },
           {
-            "x": 1000,
+            "x": 984,
             "y": 192
           },
           {
-            "x": 1000,
+            "x": 984,
             "y": 256
           }
         ],
         "type": "plain",
         "source": "fb400f3e-5958-44f2-b2eb-76ff119907bb",
-        "target": "b13be646-fe5e-48b7-bdb4-caf368731738",
+        "target": "685fbc04-b1f3-4dfc-8483-642cc141d227",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -3379,7 +3407,7 @@
         "name": "",
         "path": [
           {
-            "x": 192,
+            "x": 184,
             "y": 192
           },
           {
@@ -3388,7 +3416,7 @@
           }
         ],
         "type": "plain",
-        "source": "79071f0e-f5cb-4ca8-b490-d733da2c6626",
+        "source": "6d8a6bc0-3201-4d49-a665-78b9c1d5937b",
         "target": "eaec2764-1dad-4e68-91cb-fd3eebe2dbd7",
         "settings": {
           "exit": {
@@ -3420,7 +3448,7 @@
           }
         ],
         "type": "plain",
-        "source": "62ce3911-837f-4067-9211-db5a24f70884",
+        "source": "de94b1b8-829a-4714-b280-9ca78046c972",
         "target": "bf08dba2-5a77-4048-a0ed-5ab39099595e",
         "settings": {
           "exit": {
@@ -3455,7 +3483,7 @@
       "widget": {
         "draft": false,
         "deleted": false,
-        "version": 3
+        "version": 4
       },
       "content": {
         "[footer]": [
@@ -3562,7 +3590,7 @@
       "widget": {
         "draft": false,
         "deleted": false,
-        "version": 3
+        "version": 4
       },
       "content": {
         "[footer]": [
@@ -3750,6 +3778,10 @@
   ],
   "settings": {
     "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
     "targetFeed": {
       "type": "object",
       "variable": "staff"
@@ -3762,6 +3794,8 @@
     "notifyOnStart": true,
     "allowNamespace": true,
     "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
     "fieldVisibilityConditions": {
       "docs": {
         "enabled": false,

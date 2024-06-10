@@ -1,12 +1,12 @@
 {
-  "__id": "018c8757-193c-7ef4-a96f-0762c799c3bf",
+  "__id": "018fb8c1-cf14-7c56-ac79-096ca147af75",
   "namespace": "kedo.payslip_requests_1c",
   "code": "create_paylist_request_1c",
   "category": "00000000-0000-0000-0000-000000000000",
   "__name": "Создать заявку на расчётный лист",
   "type": "bpmn",
   "draft": false,
-  "version": 10,
+  "version": 4,
   "context": [
     {
       "code": "end_period_date",
@@ -27,6 +27,58 @@
           "additionalType": "date",
           "defaultTimeType": "startOfDay",
           "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "subdivisions",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "structural_subdivision",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Подразделения",
+        "data": {}
+      }
+    },
+    {
+      "code": "integration_1c",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Интеграция 1С",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
         }
       }
     },
@@ -130,133 +182,6 @@
       }
     },
     {
-      "code": "payslip_counter",
-      "type": "FLOAT",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": 0,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Счетчик запущенных процессов",
-        "data": {
-          "additionalType": "integer",
-          "showRowSeparator": true
-        }
-      }
-    },
-    {
-      "code": "subdivisions",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "structural_subdivision",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Подразделения",
-        "data": {}
-      }
-    },
-    {
-      "code": "payslip_requests_1c",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "payslip_requests_1c",
-        "filter": null,
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Запросы расчетных листков в 1С"
-      }
-    },
-    {
-      "code": "staffs",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": false,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "staff",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Сотрудники",
-        "data": {}
-      }
-    },
-    {
-      "code": "integration_1c",
-      "type": "BOOLEAN",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Интеграция 1С",
-        "data": {
-          "additionalType": "radio",
-          "noValue": "Нет",
-          "yesValue": "Да"
-        }
-      }
-    },
-    {
       "code": "month",
       "type": "ENUM",
       "searchable": false,
@@ -338,6 +263,117 @@
       }
     },
     {
+      "code": "generate_by",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "organization",
+            "name": "Организации",
+            "checked": true
+          },
+          {
+            "code": "subdivision",
+            "name": "Подразделениям",
+            "checked": false
+          },
+          {
+            "code": "staff",
+            "name": "Сотрудникам",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Сформировать по",
+        "data": {}
+      }
+    },
+    {
+      "code": "payslip_counter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счетчик запущенных процессов",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "payslip_requests_1c",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "payslip_requests_1c",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Запросы расчетных листков в 1С"
+      }
+    },
+    {
+      "code": "staffs",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники",
+        "data": {}
+      }
+    },
+    {
       "code": "from",
       "type": "FLOAT",
       "searchable": false,
@@ -387,42 +423,6 @@
         "name": "Пачка сотрудников",
         "data": {}
       }
-    },
-    {
-      "code": "generate_by",
-      "type": "ENUM",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "enumItems": [
-          {
-            "code": "organization",
-            "name": "Организации",
-            "checked": true
-          },
-          {
-            "code": "subdivision",
-            "name": "Подразделениям",
-            "checked": false
-          },
-          {
-            "code": "staff",
-            "name": "Сотрудникам",
-            "checked": false
-          }
-        ]
-      },
-      "view": {
-        "name": "Сформировать по",
-        "data": {}
-      }
     }
   ],
   "manualRun": false,
@@ -430,7 +430,7 @@
   "__createdAt": "2023-09-22T10:44:18.423679974Z",
   "__createdBy": "b1815b65-1548-40d4-a2c2-8c2edb60ebe9",
   "__updatedAt": "2024-03-13T12:53:11.244783868Z",
-  "__updatedBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
   "process": {
     "items": {
       "00000000-0000-0000-0000-000000000000": {
@@ -2080,113 +2080,6 @@
   },
   "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ntype PositionApp = TApplication\u003cApplication$kedo$position$Data, Application$kedo$position$Params, Application$kedo$position$Processes\u003e;\ntype Position = ApplicationItem\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e;\n\nconst CHUNK_SIZE = 20;\n\nasync function get_kedo_settings(): Promise\u003cvoid\u003e {\n    const settings = await Namespace.app.settings.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n\n    const integration_1c = settings.find(f =\u003e f.data.code == 'integration_1c');\n    Context.data.integration_1c = integration_1c ? integration_1c.data.status : false;\n\n    const alternative_integration_1c = settings.find(f =\u003e f.data.code == 'use_alternative_integration');\n    Context.data.alternative_integration_1c = alternative_integration_1c ? alternative_integration_1c.data.status : false;\n}\n\nasync function get_staffs_by_organization(): Promise\u003cvoid\u003e {\n    const employment_placement = await Namespace.app.employment_directory.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__status.eq(Namespace.app.employment_directory.fields.__status.variants.actual),\n            f.organization.link(Context.data.organization!)\n        ))\n        .size(10000)\n        .all();\n\n    const staff_ids = [...new Set(\n        employment_placement\n            .filter(f =\u003e f.data.staff != undefined)\n            .map(f =\u003e f.data.staff!.id)\n    )];\n\n    const staffs = await Context.fields.staffs.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__status.eq(Context.fields.staffs.app.fields.__status.variants.signed_documents),\n            f.individual_id_1c.neq(null),\n            f.__id.in(staff_ids)\n        ))\n        .size(staff_ids.length)\n        .all();\n\n    Context.data.staffs_pack = staffs.slice(Context.data.from!, Context.data.from! + 100);\n    Context.data.from! += 100;\n    Context.data.payslip_counter! += Context.data.staffs_pack.length;\n}\n\nasync function get_staffs_by_subdivisions(): Promise\u003cvoid\u003e {\n    if (!Context.data.subdivisions || Context.data.subdivisions.length == 0) {\n        throw new Error('Подразделения не выбраны');\n    }\n\n    const subdivision_ids = Context.data.subdivisions.map(f =\u003e f.id);\n\n    const subdivisions = await Context.fields.subdivisions.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__id.in(subdivision_ids)\n        ))\n        .size(subdivision_ids.length)\n        .all();\n\n    Context.data.staffs = [];\n\n\n    let positionsApp: PositionApp[] = [];\n\n    subdivisions.forEach(s =\u003e {\n        positionsApp.push(...s.data.positions ?? [])\n    });\n\n    let staffs: typeof Context.data.staffs = [];\n\n    for (let i = 0; i \u003c positionsApp.length; i += CHUNK_SIZE) {\n        const chunk = positionsApp.slice(i, i + CHUNK_SIZE);\n\n        await Promise.all(\n            chunk.map(f =\u003e f.fetch())\n        )\n            .then((pos) =\u003e pos.forEach(p =\u003e {\n                staffs.push(...p.data.staff ?? [], ...p.data.staff_external_combination ?? [], ...p.data.staff_internal_combination ?? []);\n            }))\n    }\n\n    Context.data.staffs = staffs;\n}\n\nasync function get_staffs_pack(): Promise\u003cvoid\u003e {\n    const pack = await Promise.all(Context.data.staffs!.slice(Context.data.from!, 100).map(f =\u003e f.fetch()));\n    Context.data.staffs_pack = pack.filter(f =\u003e f.data.individual_id_1c);\n    Context.data.from! += 100;\n\n    Context.data.payslip_counter! += Context.data.staffs_pack.length;\n}\n\nasync function check_staff_list(): Promise\u003cboolean\u003e {\n    return Context.data.staffs_pack!.length \u003e 0 ? true : false;\n}\n",
   "forms": [
-    {
-      "id": "",
-      "code": "form_ffaaf90b-62d8-4dc4-adbc-708f0d564c55",
-      "name": "Форма запуска",
-      "values": {
-        "formType": "start-process-form",
-        "formGroup": {
-          "path": ["context"]
-        }
-      },
-      "widget": {
-        "draft": false,
-        "deleted": false,
-        "version": 3
-      },
-      "content": {
-        "[footer]": [
-          {
-            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
-            "values": {
-              "buttons": {
-                "path": ["actionButtons"]
-              }
-            },
-            "content": null,
-            "descriptor": "buttons-panel",
-            "descriptorVersion": null
-          }
-        ],
-        "[content]": [
-          {
-            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
-            "values": {
-              "shadow": true
-            },
-            "content": {
-              "": [
-                {
-                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
-                  "values": {
-                    "form": {
-                      "path": ["context"]
-                    },
-                    "fields": {
-                      "path": ["fields"]
-                    }
-                  },
-                  "content": null,
-                  "descriptor": "dynamic-form",
-                  "descriptorVersion": null
-                }
-              ]
-            },
-            "descriptor": "modal-body",
-            "descriptorVersion": null
-          }
-        ],
-        "[sidebar]": [
-          {
-            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
-            "values": null,
-            "content": {
-              "": [
-                {
-                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
-                  "values": {
-                    "userGuide": {
-                      "path": ["instruction"]
-                    }
-                  },
-                  "content": null,
-                  "descriptor": "user-guide",
-                  "descriptorVersion": null
-                }
-              ]
-            },
-            "descriptor": "sidebar-widget",
-            "descriptorVersion": null
-          },
-          {
-            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
-            "values": null,
-            "content": {
-              "": [
-                {
-                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
-                  "values": {
-                    "context": {
-                      "path": ["context"]
-                    }
-                  },
-                  "content": null,
-                  "descriptor": "target-widget",
-                  "descriptorVersion": null
-                }
-              ]
-            },
-            "descriptor": "sidebar-widget",
-            "descriptorVersion": null
-          }
-        ],
-        "[headerControls]": [],
-        "[headerCustomization]": []
-      },
-      "descriptor": "item-form-complex-popup",
-      "descriptorVersion": 2
-    },
     {
       "id": "",
       "code": "form_9b61f476-dbfc-4eff-a514-636b02e780dd",

@@ -1,0 +1,149 @@
+{
+  "__id": "fcd174c0-5050-4add-8074-62d0e1bf7aa5",
+  "__name": "Прием на работу",
+  "code": "employee_reception",
+  "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название базы 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "integration_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "awaiting_documents_table_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Приложение интеграции",
+        "data": {},
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "employment_placement",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employment_directory",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Место занятости",
+        "data": {},
+        "input": true,
+        "output": false
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\ntype Staff = ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e;\ntype Organization = ApplicationItem\u003cApplication$kedo$organization$Data, Application$kedo$organization$Params\u003e;\n\ninterface StaffData {\n\t\"Сотрудник\": Staff1CData,\n\t\"ФизЛицо\": IndividualData,\n\t\"Документы\": PassportData[],\n}\n\ninterface Staff1CData {\n\t\"Guid\": string,\n\t\"ГоловнаяОрганизация\": string,\n}\n\ninterface IndividualData {\n\t\"Guid\": string,\n\t\"ДатаРождения\": string,\n\t\"Пол\": string,\n\t\"ИНН\"?: string,\n\t\"ФИО\": string,\n\t\"Фамилия\": string,\n\t\"Имя\": string,\n\t\"Отчество\"?: string,\n\t\"СтраховойНомерПФР\"?: string,\n\t\"КонтактнаяИнформация\"?: ContactInfo[],\n}\n\ninterface Document {\n\t\"ВидДокумента\": string,\n}\n\ninterface ContactInfo {\n\t\"Тип\": \"Адрес\" | \"Телефон\" | \"АдресЭлектроннойПочты\",\n\t\"Вид_Key\": string,\n\t\"Значение\": string,\n}\n\ninterface PassportData {\n\t\"ВидДокумента\": \"ПаспортРФ\",\n\t\"Серия\": string,\n\t\"Номер\": string,\n\t\"ДатаВыдачи\": string,\n\t\"КемВыдан\": string,\n\t\"КодПодразделения\": string,\n\t\"ЯвляетсяДокументомУдостоверяющимЛичность\": boolean,\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tif (!Context.data.staff) {\n\t\tthrow new Error(\"Не указан сотрудник\");\n\t}\n\n\tif (!Context.data.employment_placement) {\n\t\tthrow new Error(\"Не указано место занятости сотрудника\");\n\t}\n\n\tconst current_date = new Datetime();\n\n\tconst [staff, employment_placement] = await Promise.all([\n\t\tContext.data.staff.fetch(),\n\t\tContext.data.employment_placement.fetch(),\n\t]);\n\n\tconst [position, organization, subdivision] = await Promise.all([\n\t\temployment_placement.data.position?.fetch(),\n\t\temployment_placement.data.organization?.fetch(),\n\t\temployment_placement.data.subdivision?.fetch(),\n\t]);\n\n\tif (!position) {\n\t\tthrow new Error(\"По данному месту занятости не указана позиция ШР\");\n\t}\n\n\tif (!organization) {\n\t\tthrow new Error(\"По данному месту занятости не указана организация\");\n\t}\n\n\tif (!subdivision) {\n\t\tthrow new Error(\"По данному месту занятости не указано подразделение\");\n\t}\n\n\tconst id_1c = employment_placement.data.id_1c;\n\tconst individual_id = staff.data.individual_id_1c;\n\n\tconst staff_data = getStaffdata(staff, id_1c, individual_id, organization);\n\n\tconst body = {\n\t\t\"Date\": current_date.format('YYYY-MM-DDT00:00:00'),\n\t\t\"Организация_Key\": organization.data.ref_key ?? \"\",\n\t\t\"Подразделение_Key\": subdivision.data.ref_key ?? \"\",\n\t\t\"Должность_Key\": position.data.ref_key ?? \"\",\n\t\t\"Сотрудник_Key\": staff_data[\"Сотрудник\"].Guid,\n\t\t\"ДатаПриема\": staff.data.work_start?.format(\"YYYY-MM-DDT00:00:00\") ?? \"\",\n\t\t\"КоличествоСтавок\": 1,\n\t\t\"ВидЗанятости\": \"ОсновноеМестоРаботы\",\n\t\t// \"ГрафикРаботы_Key\": \"899b02dc-7a6b-11e2-9362-001b11b25590\",\n\t\t\"ВидТарифнойСтавки\": \"МесячнаяТарифнаяСтавка\",\n\t\t\"ВидДоговора\": \"ТрудовойДоговор\",\n\t\t\"СрочныйДоговор\": false,\n\t\t\"СезонныйДоговор\": false,\n\t\t\"ДанныеСотрудников\": [staff_data]\n\t};\n\n\tconst accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n\tconst integration_app = Namespace.params.fields.integration_app.app.create();\n\n\tintegration_app.data.__name = `Прием на работу (${staff.data.__name})`;\n\tintegration_app.data.document_odata_name = \"Document_ПриемНаРаботу\";\n\tintegration_app.data.accounting_systems = accounting1c;\n\tintegration_app.data.document_creation_data = JSON.stringify(body);\n\tintegration_app.data.personal_guid_1c = JSON.stringify([staff_data[\"ФизЛицо\"].Guid]);\n\tintegration_app.data.additional_info = `${staff.data.__name} - ${staff.data.id_1c ? \"Сотрудник существует\" : \"Новый\"}`;\n\tintegration_app.data.base_1c_name = Context.data.connection_name;\n\n\tawait integration_app.save();\n\n\tContext.data.integration_app = integration_app;\n\n}\n\nfunction getStaffdata(staff: Staff, id1c: string | undefined, individualId: string | undefined, organization: Organization): StaffData {\n\tconst staff_info: StaffData = {\n\t\t\"Сотрудник\": {\n\t\t\t\"Guid\": id1c ?? generateGUID(),\n\t\t\t\"ГоловнаяОрганизация\": organization.data.ref_key ?? \"\",\n\t\t},\n\t\t\"ФизЛицо\": {\n\t\t\t\"Guid\": individualId ?? generateGUID(),\n\t\t\t\"ДатаРождения\": staff.data.date_of_birth!.format(\"YYYY-MM-DDT00:00:00\"),\n\t\t\t\"Пол\": staff.data.sex == true ? \"Мужской\" : \"Женский\",\n\t\t\t\"ИНН\": staff.data.inn ?? \"\",\n\t\t\t\"ФИО\": staff.data.__name,\n\t\t\t\"Фамилия\": staff.data.surname ?? \"\",\n\t\t\t\"Имя\": staff.data.name ?? \"\",\n\t\t\t\"Отчество\": staff.data.middlename ?? \"\",\n\t\t\t\"СтраховойНомерПФР\": staff.data.snils ?? \"\",\n\t\t\t\"КонтактнаяИнформация\": getContactsData(staff),\n\t\t},\n\t\t\"Документы\": [\n\t\t\tgetPassportData(staff),\n\t\t],\n\t}\n\n\treturn staff_info;\n}\n\nfunction getContactsData(staff: Staff): ContactInfo[] {\n\tconst contacts: ContactInfo[] = [];\n\n\tif (staff.data.email) {\n\t\tcontacts.push({\n\t\t\t\"Тип\": \"АдресЭлектроннойПочты\",\n\t\t\t\"Вид_Key\": \"dceee501-d2e6-11e4-8fb4-14dae9b19c71\",\n\t\t\t\"Значение\": staff.data.email.email,\n\t\t})\n\t}\n\n\tif (staff.data.phone) {\n\t\tcontacts.push({\n\t\t\t\"Тип\": \"Телефон\",\n\t\t\t\"Вид_Key\": \"82bc737b-0a3f-11e3-93c0-001b11b25590\",\n\t\t\t\"Значение\": staff.data.phone.tel,\n\t\t})\n\t}\n\n\tif (staff.data.address) {\n\t\tcontacts.push({\n\t\t\t\"Тип\": \"Адрес\",\n\t\t\t\"Вид_Key\": \"5d56f793-8eda-4697-b26d-5afc3972f430\",\n\t\t\t\"Значение\": staff.data.address,\n\t\t})\n\t}\n\n\treturn contacts;\n}\n\nfunction getPassportData(staff: Staff): PassportData {\n\treturn {\n\t\t\"ВидДокумента\": \"ПаспортРФ\",\n\t\t\"Серия\": staff.data.passport_series ?? \"\",\n\t\t\"Номер\": staff.data.passport_number ?? \"\",\n\t\t\"ДатаВыдачи\": staff.data.date_of_issue?.format(\"YYYY-MM-DDT00:00:00\") ?? \"\",\n\t\t\"КемВыдан\": staff.data.issued_by ?? \"\",\n\t\t\"КодПодразделения\": staff.data.passport_department_code ?? \"\",\n\t\t\"ЯвляетсяДокументомУдостоверяющимЛичность\": true,\n\t}\n}\n\nfunction generateGUID(): string {\n\treturn 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {\n\t\tvar r = Math.random() * 16 | 0, v = c == 'x' ? r : (r \u0026 0x3 | 0x8);\n\t\treturn v.toString(16);\n\t});\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-05-31T20:59:16.380313392Z",
+  "__createdBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__updatedAt": "2024-05-31T21:15:13.452471814Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__deletedAt": null
+}

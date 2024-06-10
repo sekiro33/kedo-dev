@@ -1,22 +1,22 @@
 {
-  "__id": "018c8757-193d-7f41-a116-b3104f566c6d",
+  "__id": "018fb8c1-cf14-7c28-9795-ff5a553b57e0",
   "namespace": "kedo_ext",
   "code": "app_employment_process",
   "category": "00000000-0000-0000-0000-000000000000",
   "__name": "Подписание заявления на трудоустройство",
   "type": "bpmn",
   "draft": false,
-  "version": 11,
+  "version": 5,
   "context": [
     {
-      "code": "hr_dep",
+      "code": "staff_user",
       "type": "SYS_USER",
       "searchable": false,
       "indexed": false,
       "deleted": false,
       "array": true,
       "required": false,
-      "single": false,
+      "single": true,
       "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
@@ -29,8 +29,58 @@
         }
       },
       "view": {
-        "name": "Отдел кадров",
+        "name": "Сотрудник (пользователь)",
         "data": {}
+      }
+    },
+    {
+      "code": "hr_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Пользователь отдела кадров (один)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "count_hr",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "count_hr",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
       }
     },
     {
@@ -75,31 +125,6 @@
       },
       "view": {
         "name": "Ген. дир",
-        "data": {}
-      }
-    },
-    {
-      "code": "staff_user",
-      "type": "SYS_USER",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        }
-      },
-      "view": {
-        "name": "Сотрудник (пользователь)",
         "data": {}
       }
     },
@@ -258,14 +283,14 @@
       }
     },
     {
-      "code": "hr_user",
+      "code": "hr_dep",
       "type": "SYS_USER",
       "searchable": false,
       "indexed": false,
       "deleted": false,
       "array": true,
       "required": false,
-      "single": true,
+      "single": false,
       "defaultValue": null,
       "calcByFormula": false,
       "formula": "",
@@ -278,33 +303,8 @@
         }
       },
       "view": {
-        "name": "Пользователь отдела кадров (один)",
-        "data": {},
-        "input": true,
-        "output": true
-      }
-    },
-    {
-      "code": "count_hr",
-      "type": "FLOAT",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "count_hr",
-        "data": {
-          "additionalType": "integer",
-          "showRowSeparator": true
-        },
-        "input": true,
-        "output": true
+        "name": "Отдел кадров",
+        "data": {}
       }
     },
     {
@@ -336,8 +336,8 @@
   "readonly": false,
   "__createdAt": "2023-04-11T12:08:13.196411053Z",
   "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
-  "__updatedAt": "2024-03-05T19:25:18.532804626Z",
-  "__updatedBy": "cc31283b-f390-46e0-85c1-612cce8051b2",
+  "__updatedAt": "2024-06-05T05:41:29.74755605Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
   "process": {
     "items": {
       "00000000-0000-0000-0000-000000000000": {
@@ -428,6 +428,48 @@
             "status": [5],
             "variable": "job_application"
           }
+        }
+      },
+      "15d03ff1-eb67-49de-813c-24dbbc0a60c8": {
+        "x": -128,
+        "y": 160,
+        "id": "15d03ff1-eb67-49de-813c-24dbbc0a60c8",
+        "lane": "4bbb8e08-b29f-447c-863e-92a3e9688df9",
+        "name": "Получаем участников групп",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["42700432-ee42-461e-9943-484d3a1040f3"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_group_members_workflow",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "head"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization_head"
+              }
+            }
+          ],
+          "namespace": "kedo.organization",
+          "subProcessTargetFieldCode": ""
         }
       },
       "1a4fdeee-6871-43cb-b36c-0cfe47410ac9": {
@@ -2010,601 +2052,6 @@
           "redirectUrl": ""
         }
       },
-      "44d046e9-6711-46c5-bc91-524af90765c6": {
-        "x": -128,
-        "y": 160,
-        "id": "44d046e9-6711-46c5-bc91-524af90765c6",
-        "icon": "system",
-        "lane": "4bbb8e08-b29f-447c-863e-92a3e9688df9",
-        "name": "Получаем участников группы \"Отдел кадров\"",
-        "type": "ca",
-        "color": "#20c997",
-        "exits": [
-          "0bf107e0-483b-4451-ba58-d4024ae5dc22",
-          "b6680898-5b56-4b7a-91ce-6dd8a69aeecc"
-        ],
-        "width": 80,
-        "height": 64,
-        "settings": {
-          "code": "get_users",
-          "name": "",
-          "input": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "staff.organization"
-              },
-              "target": {
-                "kind": "context",
-                "value": "organization"
-              }
-            }
-          ],
-          "output": [
-            {
-              "target": {
-                "kind": "context",
-                "value": "hr_dep"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "accounting"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "matching_finance"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "office_managers"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "signatories"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "head"
-              },
-              "target": {
-                "kind": "context",
-                "value": "boss"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "error"
-              }
-            }
-          ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
-          "escalation": {
-            "byTime": {
-              "limit": {
-                "days": 0,
-                "kind": "duration",
-                "hours": 0,
-                "minutes": 0,
-                "absolute": false
-              },
-              "action": {
-                "notify": false,
-                "interrupt": false,
-                "receivers": []
-              },
-              "enabled": false
-            },
-            "byError": {
-              "exit": "b6680898-5b56-4b7a-91ce-6dd8a69aeecc",
-              "notify": true,
-              "interrupt": true,
-              "receivers": [
-                {
-                  "code": "administrators",
-                  "kind": "group",
-                  "multi": true,
-                  "namespace": "system"
-                }
-              ]
-            }
-          },
-          "bindingForm": {
-            "fieldValues": {
-              "boss": {
-                "kind": "Mapped",
-                "path": ["head"]
-              },
-              "error": null,
-              "groups": null,
-              "hr_dep": null,
-              "boss_app": null,
-              "accounting": null,
-              "signatories": null,
-              "_bindingData": {
-                "inputs": [
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "staff.organization"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "organization"
-                    }
-                  }
-                ],
-                "outputs": [
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "hr_dep"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "accounting"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "matching_finance"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "office_managers"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "signatories"
-                    }
-                  },
-                  {
-                    "source": {
-                      "kind": "context",
-                      "value": "head"
-                    },
-                    "target": {
-                      "kind": "context",
-                      "value": "boss"
-                    }
-                  },
-                  {
-                    "target": {
-                      "kind": "context",
-                      "value": "error"
-                    }
-                  }
-                ],
-                "sources": [
-                  {
-                    "code": "__createdBy",
-                    "type": "SYS_USER",
-                    "view": {
-                      "name": "Инициатор",
-                      "system": true
-                    },
-                    "array": false,
-                    "single": true
-                  },
-                  {
-                    "code": "__name",
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "string"
-                      },
-                      "name": "Название",
-                      "system": true
-                    },
-                    "array": false,
-                    "single": true
-                  },
-                  {
-                    "code": "__comment",
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "Комментарий",
-                      "system": true
-                    },
-                    "array": false,
-                    "single": true
-                  },
-                  {
-                    "code": "job_application",
-                    "data": {
-                      "code": "job_application",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Заявление на трудоустройство"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "staff",
-                    "data": {
-                      "code": "staff",
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      },
-                      "bindings": null,
-                      "namespace": "kedo",
-                      "isDependent": false,
-                      "linkedFieldCode": ""
-                    },
-                    "type": "SYS_COLLECTION",
-                    "view": {
-                      "data": {},
-                      "name": "Сотрудник"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "staff_user",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Сотрудник (пользователь)"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "hr_dep",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Отдел кадров"
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "head",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Ген. дир"
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "signed",
-                    "data": {},
-                    "type": "BOOLEAN",
-                    "view": {
-                      "data": {
-                        "noValue": "Нет",
-                        "yesValue": "Да",
-                        "additionalType": "radio"
-                      },
-                      "name": "Подписано"
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "sortable": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  }
-                ],
-                "targets": [
-                  {
-                    "code": "organization",
-                    "data": {},
-                    "type": "REF_ITEM",
-                    "view": {
-                      "data": {},
-                      "name": "Организация",
-                      "input": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": true,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "hr_dep",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Отдел кадров",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "accounting",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Бухгалтерия",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "matching_finance",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Ответственные за финансы ",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "office_managers",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Офис менеджеры",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "signatories",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Подписанты",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": false,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "boss",
-                    "data": {
-                      "filter": {
-                        "value": {
-                          "tf": {}
-                        },
-                        "enabled": false
-                      }
-                    },
-                    "type": "SYS_USER",
-                    "view": {
-                      "data": {},
-                      "name": "Руководитель компании",
-                      "output": true
-                    },
-                    "array": true,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  },
-                  {
-                    "code": "error",
-                    "data": {},
-                    "type": "STRING",
-                    "view": {
-                      "data": {
-                        "additionalType": "text"
-                      },
-                      "name": "error",
-                      "output": true
-                    },
-                    "array": false,
-                    "single": true,
-                    "deleted": false,
-                    "formula": "",
-                    "indexed": false,
-                    "required": false,
-                    "searchable": false,
-                    "defaultValue": null,
-                    "calcByFormula": false
-                  }
-                ]
-              },
-              "organization": {
-                "kind": "Mapped",
-                "path": ["staff", "organization"]
-              },
-              "office_managers": null,
-              "matching_finance": null,
-              "__dynamic_binding": {}
-            }
-          },
-          "targetAppCode": "",
-          "dynamicBinding": {}
-        }
-      },
       "453ea7a2-a0bb-452e-951a-a9e348d8b1b5": {
         "x": 2352,
         "y": 336,
@@ -2813,7 +2260,7 @@
         "name": "Получить настройки КЭДО",
         "type": "script",
         "color": "#fde9a0",
-        "exits": ["08c67cfe-fbc1-4746-8aa7-4ce4a1f3fc54"],
+        "exits": ["24785f10-5306-4832-9895-e81896bacafc"],
         "width": 80,
         "height": 64,
         "settings": {
@@ -6775,38 +6222,6 @@
         },
         "nameShift": 0
       },
-      "08c67cfe-fbc1-4746-8aa7-4ce4a1f3fc54": {
-        "id": "08c67cfe-fbc1-4746-8aa7-4ce4a1f3fc54",
-        "name": "",
-        "path": [
-          {
-            "x": -144,
-            "y": 192
-          },
-          {
-            "x": -128,
-            "y": 192
-          }
-        ],
-        "type": "plain",
-        "source": "68a7bb2d-fa65-47a4-afc1-86b69d89d5e6",
-        "target": "44d046e9-6711-46c5-bc91-524af90765c6",
-        "settings": {
-          "exit": {
-            "confirm": "none",
-            "interrupt": false,
-            "skipCheck": false,
-            "formFields": [],
-            "buttonClass": "default",
-            "confirmText": "",
-            "popoverSize": "md",
-            "formDescription": ""
-          },
-          "conditions": [],
-          "descritpion": ""
-        },
-        "nameShift": 0
-      },
       "0b5a817a-b70d-4f8e-af89-bcc81a3acd6f": {
         "id": "0b5a817a-b70d-4f8e-af89-bcc81a3acd6f",
         "name": "",
@@ -6823,38 +6238,6 @@
         "type": "plain",
         "source": "9c51c632-4bd7-4937-9032-371a60b59138",
         "target": "fcd3eb2a-c921-4f1e-8ec9-0063cd010f2a",
-        "settings": {
-          "exit": {
-            "confirm": "none",
-            "interrupt": false,
-            "skipCheck": false,
-            "formFields": [],
-            "buttonClass": "default",
-            "confirmText": "",
-            "popoverSize": "md",
-            "formDescription": ""
-          },
-          "conditions": [],
-          "descritpion": ""
-        },
-        "nameShift": 0
-      },
-      "0bf107e0-483b-4451-ba58-d4024ae5dc22": {
-        "id": "0bf107e0-483b-4451-ba58-d4024ae5dc22",
-        "name": "",
-        "path": [
-          {
-            "x": -48,
-            "y": 192
-          },
-          {
-            "x": -32,
-            "y": 192
-          }
-        ],
-        "type": "plain",
-        "source": "44d046e9-6711-46c5-bc91-524af90765c6",
-        "target": "98488c62-d403-4025-92b2-8e3b54962590",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -7043,6 +6426,38 @@
         },
         "nameShift": 0
       },
+      "24785f10-5306-4832-9895-e81896bacafc": {
+        "id": "24785f10-5306-4832-9895-e81896bacafc",
+        "name": "",
+        "path": [
+          {
+            "x": -144,
+            "y": 192
+          },
+          {
+            "x": -128,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "68a7bb2d-fa65-47a4-afc1-86b69d89d5e6",
+        "target": "15d03ff1-eb67-49de-813c-24dbbc0a60c8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
       "2e713979-0602-473a-ab65-a36b339b418b": {
         "id": "2e713979-0602-473a-ab65-a36b339b418b",
         "name": "",
@@ -7174,6 +6589,38 @@
         "type": "plain",
         "source": "761fb012-d993-46ec-9ccd-3bdb1324b183",
         "target": "453ea7a2-a0bb-452e-951a-a9e348d8b1b5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "42700432-ee42-461e-9943-484d3a1040f3": {
+        "id": "42700432-ee42-461e-9943-484d3a1040f3",
+        "name": "",
+        "path": [
+          {
+            "x": -48,
+            "y": 192
+          },
+          {
+            "x": -32,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "15d03ff1-eb67-49de-813c-24dbbc0a60c8",
+        "target": "98488c62-d403-4025-92b2-8e3b54962590",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -8073,38 +7520,6 @@
         },
         "nameShift": 0
       },
-      "b6680898-5b56-4b7a-91ce-6dd8a69aeecc": {
-        "id": "b6680898-5b56-4b7a-91ce-6dd8a69aeecc",
-        "name": "",
-        "path": [
-          {
-            "x": -48,
-            "y": 208
-          },
-          {
-            "x": -32,
-            "y": 208
-          }
-        ],
-        "type": "error",
-        "source": "44d046e9-6711-46c5-bc91-524af90765c6",
-        "target": "98488c62-d403-4025-92b2-8e3b54962590",
-        "settings": {
-          "exit": {
-            "confirm": "none",
-            "interrupt": false,
-            "skipCheck": false,
-            "formFields": [],
-            "buttonClass": "default",
-            "confirmText": "",
-            "popoverSize": "md",
-            "formDescription": ""
-          },
-          "conditions": [],
-          "descritpion": ""
-        },
-        "nameShift": 0
-      },
       "b8c3a26c-8b0f-4307-b49e-a6abb081db5f": {
         "id": "b8c3a26c-8b0f-4307-b49e-a6abb081db5f",
         "name": "",
@@ -8741,6 +8156,7 @@
     "allowNamespace": false,
     "applicationContext": false,
     "importsDependencies": [],
+    "useStartFormInDebug": true,
     "fieldVisibilityConditions": {
       "staff": {
         "enabled": false,

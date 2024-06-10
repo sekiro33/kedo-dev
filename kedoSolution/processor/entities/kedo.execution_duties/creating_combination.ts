@@ -20,22 +20,13 @@ async function check_create_result(): Promise<boolean> {
 		return false;
 	}
 }
-
 async function checkTypeCombination(): Promise<boolean> {
-	if (!Context.data.execution_duties) {
-		throw new Error("Context.data.execution_duties is undefined");
-	}
-
-	const execution_duties = await Context.data.execution_duties.fetch();
-
-	if (execution_duties.data.type_combination) {
-		const type_combination = await execution_duties.data.type_combination.fetch();
-		
-		// Только замещение
-		if (type_combination.data.code === "substitution_only") {
-			return true;
+	const app = await Context.data.execution_duties!.fetch();
+    if (app.data.type_combination) {
+        const type_combination = await app.data.type_combination!.fetch();
+        if (type_combination.data.code == 'substitution_only') {
+			return true
 		}
 	}
-
-	return false;
+	return false
 }

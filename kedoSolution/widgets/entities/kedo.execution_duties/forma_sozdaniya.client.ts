@@ -79,11 +79,11 @@ async function onInit(): Promise<void> {
         Context.data.started_from_vacation_process = false;
         await subtitusuion_set();
     }
-    // if (Context.data.started_from_vacation_process === true) {
-    //     ViewContext.data.show_dates_string = true;
-    // } else {
+    if (Context.data.started_from_vacation_process === true) {
+        ViewContext.data.show_dates_string = true;
+    } else {
         ViewContext.data.show_dates_string = false;
-    // }
+    }
     await check_form();
 
     all_staffs = await Context.fields.substitute.app.search().where((f, g) => g.and(
@@ -250,8 +250,8 @@ async function check_basis_app(): Promise<void> {
         const app_basis = await Context.data.app_basis.fetch();
         const app_basis_code = app_basis.code;
         if (app_basis_code === 'vacations') {
-            // const vacation_app = app_basis as TApplication<Application$absences$vacations$Data, Application$absences$vacations$Params, Application$absences$vacations$Processes>;
-            const vacation = app_basis;
+            const vacation_app = app_basis // as TApplication<Application$absences$vacations$Data, Application$absences$vacations$Params, Application$absences$vacations$Processes>;
+            const vacation = await vacation_app.fetch();
             if (Context.data.start_date && Context.data.end_date && vacation.data.start && vacation.data.end) {
                 if (Context.data.start_date.before(vacation.data.start)) {
                     show_error_message('Дата начала заявки на ИО указана раньше даты начала заявки на отпуск/отсутствие');

@@ -42,20 +42,3 @@ async function get_labor_contract(): Promise<void> {
     Context.data.employment_contract_number = labor_contract.data.__index!.toString();
   }
 }
-
-async function getEmploymentPlace(): Promise<void> {
-    if (!Context.data.staff) {
-      throw new Error("staff is undefined");
-    }
-
-    if (Context.data.transfer_table && Context.data.transfer_table.length > 0) {
-      const row = Context.data.transfer_table.find(field => field.transfer_staff.id == Context.data.staff!.id);
-
-      if (row) {
-        const place = await row.transfer_employment_place.fetch();
-
-        Context.data.employment_place = row.transfer_employment_place;
-        Context.data.current_posotion = place.data.position;
-      }
-    }
-}

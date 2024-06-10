@@ -1,13 +1,62 @@
 {
-  "__id": "018c8757-193c-7ea4-9323-1333c1648e66",
+  "__id": "018fb8c1-cf14-7cca-bb8c-6e651e679d2e",
   "namespace": "kedo.payslip_requests_1c",
   "code": "processing_payslip_1c",
   "category": "00000000-0000-0000-0000-000000000000",
   "__name": "Обработка расчётного листа 1C",
   "type": "bpmn",
   "draft": false,
-  "version": 3,
+  "version": 5,
   "context": [
+    {
+      "code": "payslip_requests_1c",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "payslip_requests_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Запрос на расчетный лист в 1С"
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Error",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
     {
       "code": "payslip",
       "type": "SYS_COLLECTION",
@@ -149,63 +198,14 @@
           "timeOptional": false
         }
       }
-    },
-    {
-      "code": "payslip_requests_1c",
-      "type": "SYS_COLLECTION",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": true,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {
-        "code": "payslip_requests_1c",
-        "filter": {
-          "value": {
-            "tf": {}
-          },
-          "enabled": false
-        },
-        "bindings": null,
-        "namespace": "kedo",
-        "isDependent": false,
-        "linkedFieldCode": ""
-      },
-      "view": {
-        "name": "Запрос на расчетный лист в 1С"
-      }
-    },
-    {
-      "code": "error",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Error",
-        "data": {
-          "additionalType": "string"
-        }
-      }
     }
   ],
   "manualRun": false,
   "readonly": false,
   "__createdAt": "2023-09-23T15:21:00.520223857Z",
   "__createdBy": "b1815b65-1548-40d4-a2c2-8c2edb60ebe9",
-  "__updatedAt": "2023-09-23T16:12:22.171905321Z",
-  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-06-04T23:13:08.021502729Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
   "process": {
     "items": {
       "00000000-0000-0000-0000-000000000000": {
@@ -369,6 +369,112 @@
           "actionType": "nothing",
           "messageText": "",
           "redirectUrl": ""
+        }
+      },
+      "771ce1b2-5dfd-4a0b-81a6-e0fc813a9548": {
+        "x": 376,
+        "y": 208,
+        "id": "771ce1b2-5dfd-4a0b-81a6-e0fc813a9548",
+        "icon": "system",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Запрос на расчетный лист",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "6fd00e85-a37b-43c2-ba1b-c9ec6727ee76",
+          "0f944f89-6f7e-477a-8e77-263f91eda4d8"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "payslip_request",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.individual_id_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personal_id"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "start_period_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "end_period_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "end_date"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "integration_app_id"
+              },
+              "target": {
+                "kind": "context",
+                "value": "payslip_request_id"
+              }
+            }
+          ],
+          "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "0f944f89-6f7e-477a-8e77-263f91eda4d8",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
         }
       },
       "93fc1cb8-fda5-4b22-be9c-b0d7e768299e": {
@@ -633,112 +739,6 @@
           "funcType": "BOOLEAN",
           "description": ""
         }
-      },
-      "fd7cf923-3cd0-4246-8f96-d346b00ff6a1": {
-        "x": 376,
-        "y": 208,
-        "id": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
-        "icon": "system",
-        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
-        "name": "(1С ЗУП) Создать запрос на расчетный листок",
-        "type": "ca",
-        "color": "#20c997",
-        "exits": [
-          "0f944f89-6f7e-477a-8e77-263f91eda4d8",
-          "6fd00e85-a37b-43c2-ba1b-c9ec6727ee76"
-        ],
-        "width": 80,
-        "height": 64,
-        "settings": {
-          "code": "get_payslip_1c",
-          "name": "",
-          "input": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "start_period_date"
-              },
-              "target": {
-                "kind": "context",
-                "value": "start_date"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "end_period_date"
-              },
-              "target": {
-                "kind": "context",
-                "value": "end_date"
-              }
-            },
-            {
-              "source": {
-                "kind": "context",
-                "value": "staff.individual_id_1c"
-              },
-              "target": {
-                "kind": "context",
-                "value": "personal_id"
-              }
-            },
-            {
-              "target": {
-                "kind": "context",
-                "value": "connection_name"
-              }
-            }
-          ],
-          "output": [
-            {
-              "source": {
-                "kind": "context",
-                "value": "integration_app_id"
-              },
-              "target": {
-                "kind": "context",
-                "value": "id_payslip_app"
-              }
-            }
-          ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
-          "escalation": {
-            "byTime": {
-              "limit": {
-                "days": 0,
-                "kind": "duration",
-                "hours": 0,
-                "minutes": 0,
-                "absolute": false
-              },
-              "action": {
-                "notify": false,
-                "interrupt": false,
-                "receivers": []
-              },
-              "enabled": false
-            },
-            "byError": {
-              "exit": "0f944f89-6f7e-477a-8e77-263f91eda4d8",
-              "notify": true,
-              "interrupt": true,
-              "receivers": [
-                {
-                  "code": "administrators",
-                  "kind": "group",
-                  "multi": true,
-                  "namespace": "system"
-                }
-              ]
-            }
-          },
-          "bindingForm": {
-            "fieldValues": {}
-          },
-          "targetAppCode": "",
-          "dynamicBinding": {}
-        }
       }
     },
     "lanes": {
@@ -844,7 +844,7 @@
           }
         ],
         "type": "error",
-        "source": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "source": "771ce1b2-5dfd-4a0b-81a6-e0fc813a9548",
         "target": "c18ad997-168c-43a2-930d-4a3f637d5c34",
         "settings": {
           "exit": {
@@ -956,7 +956,7 @@
         ],
         "type": "plain",
         "source": "ee746227-7e6b-46a9-b5c0-9f877879a42d",
-        "target": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "target": "771ce1b2-5dfd-4a0b-81a6-e0fc813a9548",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -1106,7 +1106,7 @@
           }
         ],
         "type": "plain",
-        "source": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "source": "771ce1b2-5dfd-4a0b-81a6-e0fc813a9548",
         "target": "59266a78-40b0-42f5-b21c-b52a34c18889",
         "settings": {
           "exit": {
@@ -1322,6 +1322,10 @@
   "forms": [],
   "settings": {
     "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
     "targetFeed": {
       "type": "object",
       "variable": "payslip_requests_1c"
@@ -1334,6 +1338,8 @@
     "notifyOnStart": true,
     "allowNamespace": false,
     "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
     "fieldVisibilityConditions": {
       "error": {
         "enabled": false,
