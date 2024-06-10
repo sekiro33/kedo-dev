@@ -1,0 +1,2496 @@
+{
+  "__id": "018c8757-193c-7efb-8b07-a2fabe1a451c",
+  "namespace": "kedo.staff",
+  "code": "get_remaining_work_leaves_1c",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1С) Получение остатков отгулов",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "total_number_of_connections",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество подключений",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "full_iteration_amount",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "end_iteration",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Закончить итерации",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "amount_of_data",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество записей",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "connections_object",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Объект подключений",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "is_alternative",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Альтернативная интеграция",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "work_leave_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные отгулов",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "current_connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Имя текущего подключения",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "response",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "current_connection_index",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Индекс текущего подключения",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "request_url",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "URL запроса",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "current_iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер текущей страницы",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "connections_exist",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Есть подключение",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-03-19T08:25:28.351211361Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2023-08-28T12:45:30.032420483Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": -128,
+        "y": 80,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["7cc94a4e-9c31-4a51-a5d3-bfdc039cefa0"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Получение остатков отгула из 1С ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "032814cd-2fdb-45be-8d8e-a20a8581d68c": {
+        "x": 1320,
+        "y": 520,
+        "id": "032814cd-2fdb-45be-8d8e-a20a8581d68c",
+        "icon": "exclusive",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8da87012-8a4a-45ef-9322-9dfbd85d036c",
+          "15137a58-6f49-4b05-9aad-da48a111a950"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "0478a1a8-d25b-4d5e-b06a-a7178d10495c": {
+        "x": 224,
+        "y": 152,
+        "id": "0478a1a8-d25b-4d5e-b06a-a7178d10495c",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Парсинг объекта подключений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f2f39329-372b-4f5f-9ff0-b919a06eb5bf"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseConnectionsObject",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "15e15fda-83ad-4892-a0e3-973b22cc5804": {
+        "x": 248,
+        "y": 264,
+        "id": "15e15fda-83ad-4892-a0e3-973b22cc5804",
+        "icon": "exclusive",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "213e8850-d9df-4d55-b5b5-04c8271d615f",
+          "a29e6f93-7470-4c53-8787-2668b229ec53"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "185044de-d40d-4d40-a9b8-f5008c68b9ab": {
+        "x": -152,
+        "y": 152,
+        "id": "185044de-d40d-4d40-a9b8-f5008c68b9ab",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Получение настроек КЭДО",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["2bf96cef-1f33-462c-b303-fb608696a3fe"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getParams",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "2d890466-083b-4002-a3b3-332e47400e6d": {
+        "x": 1040,
+        "y": 408,
+        "id": "2d890466-083b-4002-a3b3-332e47400e6d",
+        "icon": "system",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Получить остатки отгула",
+        "type": "ca",
+        "color": "#fde9a0",
+        "exits": [
+          "aac9abd5-2192-4393-88db-5a4b4e5db0d1",
+          "5756e35b-be89-4708-85f6-e766edaff11a"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_url"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "current_connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "aac9abd5-2192-4393-88db-5a4b4e5db0d1",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "2f12b615-3d14-4b75-8932-2402712ce5ad": {
+        "x": 1296,
+        "y": 240,
+        "id": "2f12b615-3d14-4b75-8932-2402712ce5ad",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Конец цикла",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["e87bcda8-4059-40e9-b43c-f1c67f8e7af8"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "endIteration",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "36732ecf-bd12-4d0d-bbdf-a73ae4c66875": {
+        "x": 80,
+        "y": 152,
+        "id": "36732ecf-bd12-4d0d-bbdf-a73ae4c66875",
+        "icon": "system",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Получить объект всех подключений 1",
+        "type": "ca",
+        "color": "#fde9a0",
+        "exits": [
+          "256ef5bc-3725-48f7-b87a-192836e293d8",
+          "d3061774-aab3-4727-ae7e-dc8d996d7494"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "kedo_module_get_connections_object",
+          "name": "",
+          "input": [],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "connections_object"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connections_object"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connections_exist"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connections_exist"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "256ef5bc-3725-48f7-b87a-192836e293d8",
+              "notify": true,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "3984813d-adb0-4032-9088-28c50c9d7b10": {
+        "x": -32,
+        "y": 56,
+        "id": "3984813d-adb0-4032-9088-28c50c9d7b10",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Запуск загрузки из таблицы",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["97eaa23a-5b81-4977-acd6-6f374f7683de"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "load_paid_leave_data_from_table",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.staff",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "3a17b803-b43b-4a01-b043-06fb5d971230": {
+        "x": 224,
+        "y": 416,
+        "id": "3a17b803-b43b-4a01-b043-06fb5d971230",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Ошибка: Не найдены подключения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["bd560534-95da-4abc-8fdf-afd8a27c3cc8"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "writeNoConnectionsError",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3df215d9-3298-4c4c-9fd4-ce2f6b4255bd": {
+        "x": 1296,
+        "y": 400,
+        "id": "3df215d9-3298-4c4c-9fd4-ce2f6b4255bd",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Обновить данные отгулов",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["eb1fbfe6-8dc7-4337-807a-7cc506647a8e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateLeavesData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "61ecdd3d-5286-4fb4-90f5-5101679ff00f": {
+        "x": 904,
+        "y": 408,
+        "id": "61ecdd3d-5286-4fb4-90f5-5101679ff00f",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Заполнение данных запроса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["8cabf466-6072-4d6a-bca5-a6313e76abc2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getRequestData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "6380ad4b-02ba-4745-871a-37ec29484fd5": {
+        "x": 1048,
+        "y": 256,
+        "id": "6380ad4b-02ba-4745-871a-37ec29484fd5",
+        "icon": "end",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "68ad594d-6370-422d-8d11-6783f102ebc8": {
+        "x": 792,
+        "y": 256,
+        "id": "68ad594d-6370-422d-8d11-6783f102ebc8",
+        "icon": "exclusive",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "a2627207-9491-4d5f-9e55-2bd2297c10d8",
+          "7cc12190-4749-4372-9a0d-bce868dfe040"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "6e671a33-0e93-48f2-b589-8540fd67ae94": {
+        "x": 1176,
+        "y": 424,
+        "id": "6e671a33-0e93-48f2-b589-8540fd67ae94",
+        "icon": "exclusive",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "3c484c67-9c71-4b17-b015-b6da8e9eb9c3",
+          "fdb5a22b-1e06-46f7-b45d-df90ec25bc6e"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "8ddbe9b5-fc49-4a9b-a664-b709e4bb7fc2": {
+        "x": -8,
+        "y": 168,
+        "id": "8ddbe9b5-fc49-4a9b-a664-b709e4bb7fc2",
+        "icon": "exclusive",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8be9597a-b370-4203-8e42-351301b82c31",
+          "87d3c25e-7b69-4491-b6f0-d5941e990b82"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "9d86cc58-65e9-4b5d-a8af-1481e33705d8": {
+        "x": 104,
+        "y": 72,
+        "id": "9d86cc58-65e9-4b5d-a8af-1481e33705d8",
+        "icon": "end",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "af5070ce-0ee1-44ff-94c1-07791809a4b2": {
+        "x": 664,
+        "y": 152,
+        "id": "af5070ce-0ee1-44ff-94c1-07791809a4b2",
+        "icon": "system",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Получить количество записей",
+        "type": "ca",
+        "color": "#fde9a0",
+        "exits": [
+          "c1649dae-7029-4d8c-9aeb-fb810c6cc1f2",
+          "ce6f0343-515f-4c12-8253-044e1ddace32"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_url"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "current_connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "ce6f0343-515f-4c12-8253-044e1ddace32",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "b3d9eaaa-c13a-449a-b0e0-22d0601f3761": {
+        "x": 1152,
+        "y": 504,
+        "id": "b3d9eaaa-c13a-449a-b0e0-22d0601f3761",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Парсинг данных",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6dca3d31-c4f5-488f-8f87-fb81c933c51e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseResponseData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "c07b541d-c21f-48ae-9a85-aaf93a84c150": {
+        "x": 904,
+        "y": 240,
+        "id": "c07b541d-c21f-48ae-9a85-aaf93a84c150",
+        "icon": "user",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Ознакомиться с ошибкой при получении остатков отгула",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": ["ff163e62-c9cf-4aab-b365-995814ce8718"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "notify": true,
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [
+            {
+              "code": "current_connection_name",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "request_url",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "response",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "error",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "allowReassign": true,
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          }
+        }
+      },
+      "ce805cb4-0fef-4adb-8f49-4a1d834f959e": {
+        "x": 1152,
+        "y": 640,
+        "id": "ce805cb4-0fef-4adb-8f49-4a1d834f959e",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Обновление данных итерации",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6f98f37b-2eee-426e-a051-138726107229"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateIterationData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e2926846-726f-4660-8068-9156109beca6": {
+        "x": 512,
+        "y": 152,
+        "id": "e2926846-726f-4660-8068-9156109beca6",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Заполнение данных для запроса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["cc62c40f-868f-44f6-86fc-34defb313f7e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillEmployeesData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e79ae993-0ede-4234-ad07-2cee2b4ccb50": {
+        "x": 1176,
+        "y": 256,
+        "id": "e79ae993-0ede-4234-ad07-2cee2b4ccb50",
+        "icon": "exclusive",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "632e5fd1-7b79-4a99-ba2d-b73f9c685225",
+          "7cc27c75-6400-4931-bab1-4064cab7ad99"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "ee2537e6-1afa-421f-96c0-b5debce023db": {
+        "x": 368,
+        "y": 152,
+        "id": "ee2537e6-1afa-421f-96c0-b5debce023db",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Начало итераций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["52637f0b-16a5-4633-b86d-c2636dd920e3"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "startConnectionsIteration",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "f0aa4936-4943-4930-85f0-83852109aade": {
+        "x": 768,
+        "y": 408,
+        "id": "f0aa4936-4943-4930-85f0-83852109aade",
+        "icon": "script",
+        "lane": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Заполнить данные итераций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["07965017-1694-4b6c-8be6-2fa9ec68c9e2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillIterData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "f398f2d7-796b-4cd5-9bba-bcb24446687b": {
+        "x": -220,
+        "y": 8,
+        "id": "f398f2d7-796b-4cd5-9bba-bcb24446687b",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1760,
+        "height": 912,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "07965017-1694-4b6c-8be6-2fa9ec68c9e2": {
+        "id": "07965017-1694-4b6c-8be6-2fa9ec68c9e2",
+        "name": "",
+        "path": [
+          {
+            "x": 848,
+            "y": 440
+          },
+          {
+            "x": 904,
+            "y": 440
+          }
+        ],
+        "type": "plain",
+        "source": "f0aa4936-4943-4930-85f0-83852109aade",
+        "target": "61ecdd3d-5286-4fb4-90f5-5101679ff00f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "15137a58-6f49-4b05-9aad-da48a111a950": {
+        "id": "15137a58-6f49-4b05-9aad-da48a111a950",
+        "name": "",
+        "path": [
+          {
+            "x": 1336,
+            "y": 520
+          },
+          {
+            "x": 1336,
+            "y": 464
+          }
+        ],
+        "type": "plain",
+        "source": "032814cd-2fdb-45be-8d8e-a20a8581d68c",
+        "target": "3df215d9-3298-4c4c-9fd4-ce2f6b4255bd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "full_iteration_amount"
+              },
+              "b": {
+                "kind": "context",
+                "value": "current_iteration"
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "213e8850-d9df-4d55-b5b5-04c8271d615f": {
+        "id": "213e8850-d9df-4d55-b5b5-04c8271d615f",
+        "name": "",
+        "path": [
+          {
+            "x": 264,
+            "y": 296
+          },
+          {
+            "x": 264,
+            "y": 416
+          }
+        ],
+        "type": "plain",
+        "source": "15e15fda-83ad-4892-a0e3-973b22cc5804",
+        "target": "3a17b803-b43b-4a01-b043-06fb5d971230",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "connections_exist"
+              },
+              "b": {
+                "kind": "manual",
+                "value": false
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "256ef5bc-3725-48f7-b87a-192836e293d8": {
+        "id": "256ef5bc-3725-48f7-b87a-192836e293d8",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 216
+          },
+          {
+            "x": 120,
+            "y": 448
+          },
+          {
+            "x": 224,
+            "y": 448
+          }
+        ],
+        "type": "error",
+        "source": "36732ecf-bd12-4d0d-bbdf-a73ae4c66875",
+        "target": "3a17b803-b43b-4a01-b043-06fb5d971230",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2bf96cef-1f33-462c-b303-fb608696a3fe": {
+        "id": "2bf96cef-1f33-462c-b303-fb608696a3fe",
+        "name": "",
+        "path": [
+          {
+            "x": -72,
+            "y": 184
+          },
+          {
+            "x": -8,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "185044de-d40d-4d40-a9b8-f5008c68b9ab",
+        "target": "8ddbe9b5-fc49-4a9b-a664-b709e4bb7fc2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3c484c67-9c71-4b17-b015-b6da8e9eb9c3": {
+        "id": "3c484c67-9c71-4b17-b015-b6da8e9eb9c3",
+        "name": "",
+        "path": [
+          {
+            "x": 1192,
+            "y": 424
+          },
+          {
+            "x": 1192,
+            "y": 312
+          },
+          {
+            "x": 964,
+            "y": 312
+          },
+          {
+            "x": 964,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "6e671a33-0e93-48f2-b589-8540fd67ae94",
+        "target": "c07b541d-c21f-48ae-9a85-aaf93a84c150",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "52637f0b-16a5-4633-b86d-c2636dd920e3": {
+        "id": "52637f0b-16a5-4633-b86d-c2636dd920e3",
+        "name": "",
+        "path": [
+          {
+            "x": 448,
+            "y": 184
+          },
+          {
+            "x": 512,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "ee2537e6-1afa-421f-96c0-b5debce023db",
+        "target": "e2926846-726f-4660-8068-9156109beca6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5756e35b-be89-4708-85f6-e766edaff11a": {
+        "id": "5756e35b-be89-4708-85f6-e766edaff11a",
+        "name": "",
+        "path": [
+          {
+            "x": 1120,
+            "y": 440
+          },
+          {
+            "x": 1176,
+            "y": 440
+          }
+        ],
+        "type": "plain",
+        "source": "2d890466-083b-4002-a3b3-332e47400e6d",
+        "target": "6e671a33-0e93-48f2-b589-8540fd67ae94",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "632e5fd1-7b79-4a99-ba2d-b73f9c685225": {
+        "id": "632e5fd1-7b79-4a99-ba2d-b73f9c685225",
+        "name": "",
+        "path": [
+          {
+            "x": 1176,
+            "y": 272
+          },
+          {
+            "x": 1080,
+            "y": 272
+          }
+        ],
+        "type": "plain",
+        "source": "e79ae993-0ede-4234-ad07-2cee2b4ccb50",
+        "target": "6380ad4b-02ba-4745-871a-37ec29484fd5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "end_iteration"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6dca3d31-c4f5-488f-8f87-fb81c933c51e": {
+        "id": "6dca3d31-c4f5-488f-8f87-fb81c933c51e",
+        "name": "",
+        "path": [
+          {
+            "x": 1232,
+            "y": 536
+          },
+          {
+            "x": 1320,
+            "y": 536
+          }
+        ],
+        "type": "plain",
+        "source": "b3d9eaaa-c13a-449a-b0e0-22d0601f3761",
+        "target": "032814cd-2fdb-45be-8d8e-a20a8581d68c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6f98f37b-2eee-426e-a051-138726107229": {
+        "id": "6f98f37b-2eee-426e-a051-138726107229",
+        "name": "",
+        "path": [
+          {
+            "x": 1152,
+            "y": 672
+          },
+          {
+            "x": 944,
+            "y": 672
+          },
+          {
+            "x": 944,
+            "y": 472
+          }
+        ],
+        "type": "plain",
+        "source": "ce805cb4-0fef-4adb-8f49-4a1d834f959e",
+        "target": "61ecdd3d-5286-4fb4-90f5-5101679ff00f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7cc12190-4749-4372-9a0d-bce868dfe040": {
+        "id": "7cc12190-4749-4372-9a0d-bce868dfe040",
+        "name": "",
+        "path": [
+          {
+            "x": 808,
+            "y": 288
+          },
+          {
+            "x": 808,
+            "y": 408
+          }
+        ],
+        "type": "default",
+        "source": "68ad594d-6370-422d-8d11-6783f102ebc8",
+        "target": "f0aa4936-4943-4930-85f0-83852109aade",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7cc27c75-6400-4931-bab1-4064cab7ad99": {
+        "id": "7cc27c75-6400-4931-bab1-4064cab7ad99",
+        "name": "",
+        "path": [
+          {
+            "x": 1192,
+            "y": 256
+          },
+          {
+            "x": 1192,
+            "y": 88
+          },
+          {
+            "x": 408,
+            "y": 88
+          },
+          {
+            "x": 408,
+            "y": 152
+          }
+        ],
+        "type": "default",
+        "source": "e79ae993-0ede-4234-ad07-2cee2b4ccb50",
+        "target": "ee2537e6-1afa-421f-96c0-b5debce023db",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7cc94a4e-9c31-4a51-a5d3-bfdc039cefa0": {
+        "id": "7cc94a4e-9c31-4a51-a5d3-bfdc039cefa0",
+        "name": "",
+        "path": [
+          {
+            "x": -112,
+            "y": 112
+          },
+          {
+            "x": -112,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "185044de-d40d-4d40-a9b8-f5008c68b9ab",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "87d3c25e-7b69-4491-b6f0-d5941e990b82": {
+        "id": "87d3c25e-7b69-4491-b6f0-d5941e990b82",
+        "name": "",
+        "path": [
+          {
+            "x": 8,
+            "y": 168
+          },
+          {
+            "x": 8,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "8ddbe9b5-fc49-4a9b-a664-b709e4bb7fc2",
+        "target": "3984813d-adb0-4032-9088-28c50c9d7b10",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_alternative"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8be9597a-b370-4203-8e42-351301b82c31": {
+        "id": "8be9597a-b370-4203-8e42-351301b82c31",
+        "name": "",
+        "path": [
+          {
+            "x": 24,
+            "y": 184
+          },
+          {
+            "x": 80,
+            "y": 184
+          }
+        ],
+        "type": "default",
+        "source": "8ddbe9b5-fc49-4a9b-a664-b709e4bb7fc2",
+        "target": "36732ecf-bd12-4d0d-bbdf-a73ae4c66875",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8cabf466-6072-4d6a-bca5-a6313e76abc2": {
+        "id": "8cabf466-6072-4d6a-bca5-a6313e76abc2",
+        "name": "",
+        "path": [
+          {
+            "x": 984,
+            "y": 440
+          },
+          {
+            "x": 1040,
+            "y": 440
+          }
+        ],
+        "type": "plain",
+        "source": "61ecdd3d-5286-4fb4-90f5-5101679ff00f",
+        "target": "2d890466-083b-4002-a3b3-332e47400e6d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8da87012-8a4a-45ef-9322-9dfbd85d036c": {
+        "id": "8da87012-8a4a-45ef-9322-9dfbd85d036c",
+        "name": "",
+        "path": [
+          {
+            "x": 1336,
+            "y": 552
+          },
+          {
+            "x": 1336,
+            "y": 672
+          },
+          {
+            "x": 1232,
+            "y": 672
+          }
+        ],
+        "type": "default",
+        "source": "032814cd-2fdb-45be-8d8e-a20a8581d68c",
+        "target": "ce805cb4-0fef-4adb-8f49-4a1d834f959e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "97eaa23a-5b81-4977-acd6-6f374f7683de": {
+        "id": "97eaa23a-5b81-4977-acd6-6f374f7683de",
+        "name": "",
+        "path": [
+          {
+            "x": 48,
+            "y": 88
+          },
+          {
+            "x": 104,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "3984813d-adb0-4032-9088-28c50c9d7b10",
+        "target": "9d86cc58-65e9-4b5d-a8af-1481e33705d8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a2627207-9491-4d5f-9e55-2bd2297c10d8": {
+        "id": "a2627207-9491-4d5f-9e55-2bd2297c10d8",
+        "name": "",
+        "path": [
+          {
+            "x": 824,
+            "y": 272
+          },
+          {
+            "x": 904,
+            "y": 272
+          }
+        ],
+        "type": "plain",
+        "source": "68ad594d-6370-422d-8d11-6783f102ebc8",
+        "target": "c07b541d-c21f-48ae-9a85-aaf93a84c150",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a29e6f93-7470-4c53-8787-2668b229ec53": {
+        "id": "a29e6f93-7470-4c53-8787-2668b229ec53",
+        "name": "",
+        "path": [
+          {
+            "x": 280,
+            "y": 280
+          },
+          {
+            "x": 360,
+            "y": 280
+          },
+          {
+            "x": 360,
+            "y": 184
+          },
+          {
+            "x": 368,
+            "y": 184
+          }
+        ],
+        "type": "default",
+        "source": "15e15fda-83ad-4892-a0e3-973b22cc5804",
+        "target": "ee2537e6-1afa-421f-96c0-b5debce023db",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aac9abd5-2192-4393-88db-5a4b4e5db0d1": {
+        "id": "aac9abd5-2192-4393-88db-5a4b4e5db0d1",
+        "name": "",
+        "path": [
+          {
+            "x": 1080,
+            "y": 408
+          },
+          {
+            "x": 1080,
+            "y": 344
+          },
+          {
+            "x": 944,
+            "y": 344
+          },
+          {
+            "x": 944,
+            "y": 304
+          }
+        ],
+        "type": "error",
+        "source": "2d890466-083b-4002-a3b3-332e47400e6d",
+        "target": "c07b541d-c21f-48ae-9a85-aaf93a84c150",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bd560534-95da-4abc-8fdf-afd8a27c3cc8": {
+        "id": "bd560534-95da-4abc-8fdf-afd8a27c3cc8",
+        "name": "",
+        "path": [
+          {
+            "x": 304,
+            "y": 448
+          },
+          {
+            "x": 704,
+            "y": 448
+          },
+          {
+            "x": 704,
+            "y": 272
+          },
+          {
+            "x": 792,
+            "y": 272
+          }
+        ],
+        "type": "plain",
+        "source": "3a17b803-b43b-4a01-b043-06fb5d971230",
+        "target": "68ad594d-6370-422d-8d11-6783f102ebc8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c1649dae-7029-4d8c-9aeb-fb810c6cc1f2": {
+        "id": "c1649dae-7029-4d8c-9aeb-fb810c6cc1f2",
+        "name": "",
+        "path": [
+          {
+            "x": 744,
+            "y": 184
+          },
+          {
+            "x": 808,
+            "y": 184
+          },
+          {
+            "x": 808,
+            "y": 256
+          }
+        ],
+        "type": "plain",
+        "source": "af5070ce-0ee1-44ff-94c1-07791809a4b2",
+        "target": "68ad594d-6370-422d-8d11-6783f102ebc8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cc62c40f-868f-44f6-86fc-34defb313f7e": {
+        "id": "cc62c40f-868f-44f6-86fc-34defb313f7e",
+        "name": "",
+        "path": [
+          {
+            "x": 592,
+            "y": 184
+          },
+          {
+            "x": 664,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "e2926846-726f-4660-8068-9156109beca6",
+        "target": "af5070ce-0ee1-44ff-94c1-07791809a4b2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ce6f0343-515f-4c12-8253-044e1ddace32": {
+        "id": "ce6f0343-515f-4c12-8253-044e1ddace32",
+        "name": "",
+        "path": [
+          {
+            "x": 744,
+            "y": 168
+          },
+          {
+            "x": 944,
+            "y": 168
+          },
+          {
+            "x": 944,
+            "y": 240
+          }
+        ],
+        "type": "error",
+        "source": "af5070ce-0ee1-44ff-94c1-07791809a4b2",
+        "target": "c07b541d-c21f-48ae-9a85-aaf93a84c150",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d3061774-aab3-4727-ae7e-dc8d996d7494": {
+        "id": "d3061774-aab3-4727-ae7e-dc8d996d7494",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 184
+          },
+          {
+            "x": 224,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "36732ecf-bd12-4d0d-bbdf-a73ae4c66875",
+        "target": "0478a1a8-d25b-4d5e-b06a-a7178d10495c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e87bcda8-4059-40e9-b43c-f1c67f8e7af8": {
+        "id": "e87bcda8-4059-40e9-b43c-f1c67f8e7af8",
+        "name": "",
+        "path": [
+          {
+            "x": 1296,
+            "y": 272
+          },
+          {
+            "x": 1208,
+            "y": 272
+          }
+        ],
+        "type": "plain",
+        "source": "2f12b615-3d14-4b75-8932-2402712ce5ad",
+        "target": "e79ae993-0ede-4234-ad07-2cee2b4ccb50",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "eb1fbfe6-8dc7-4337-807a-7cc506647a8e": {
+        "id": "eb1fbfe6-8dc7-4337-807a-7cc506647a8e",
+        "name": "",
+        "path": [
+          {
+            "x": 1336,
+            "y": 400
+          },
+          {
+            "x": 1336,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "3df215d9-3298-4c4c-9fd4-ce2f6b4255bd",
+        "target": "2f12b615-3d14-4b75-8932-2402712ce5ad",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f2f39329-372b-4f5f-9ff0-b919a06eb5bf": {
+        "id": "f2f39329-372b-4f5f-9ff0-b919a06eb5bf",
+        "name": "",
+        "path": [
+          {
+            "x": 264,
+            "y": 216
+          },
+          {
+            "x": 264,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "0478a1a8-d25b-4d5e-b06a-a7178d10495c",
+        "target": "15e15fda-83ad-4892-a0e3-973b22cc5804",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fdb5a22b-1e06-46f7-b45d-df90ec25bc6e": {
+        "id": "fdb5a22b-1e06-46f7-b45d-df90ec25bc6e",
+        "name": "",
+        "path": [
+          {
+            "x": 1192,
+            "y": 456
+          },
+          {
+            "x": 1192,
+            "y": 504
+          }
+        ],
+        "type": "default",
+        "source": "6e671a33-0e93-48f2-b589-8540fd67ae94",
+        "target": "b3d9eaaa-c13a-449a-b0e0-22d0601f3761",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ff163e62-c9cf-4aab-b365-995814ce8718": {
+        "id": "ff163e62-c9cf-4aab-b365-995814ce8718",
+        "name": "",
+        "path": [
+          {
+            "x": 984,
+            "y": 272
+          },
+          {
+            "x": 1048,
+            "y": 272
+          }
+        ],
+        "type": "plain",
+        "source": "c07b541d-c21f-48ae-9a85-aaf93a84c150",
+        "target": "6380ad4b-02ba-4745-871a-37ec29484fd5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nconst iterationBatch = 100;\n\nasync function fillEmployeesData(): Promise\u003cvoid\u003e {\n    Context.data.request_url = \"AccumulationRegister_ДниЧасыОтгулов?$format=json\u0026$skip=999999\u0026$inlinecount=allpages\";\n}\n\nasync function fillIterData(): Promise\u003cvoid\u003e {\n    const response = JSON.parse(Context.data.response!);\n    const count = parseInt(response[\"odata.count\"]);\n    Context.data.amount_of_data = count;\n    Context.data.current_iteration = 0;\n    Context.data.full_iteration_amount = Math.ceil(count / iterationBatch) - 1;\n    Context.data.work_leave_data = JSON.stringify([])\n}\n\nasync function parseConnectionsObject(): Promise\u003cvoid\u003e {\n    const connectionsArray = Context.data.connections_object ? JSON.parse(Context.data.connections_object) : []\n\n    if (connectionsArray.length === 0) return;\n\n    Context.data.total_number_of_connections = connectionsArray.length\n}\n\nasync function getRequestData(): Promise\u003cvoid\u003e {\n    const startSkip = Context.data.current_iteration! * iterationBatch;\n    Context.data.request_url = `AccumulationRegister_ДниЧасыОтгулов?$format=json\u0026$skip=${startSkip}\u0026$top=${iterationBatch}`;\n}\n\nasync function updateIterationData(): Promise\u003cvoid\u003e {\n    Context.data.current_iteration = Context.data.current_iteration! + 1\n}\n\nasync function writeNoConnectionsError(): Promise\u003cvoid\u003e {\n    Context.data.error = \"Нет доступных подключений 1С\"\n}\n\nasync function startConnectionsIteration(): Promise\u003cvoid\u003e {\n    const connectionsArray = Context.data.connections_object ? JSON.parse(Context.data.connections_object) : []\n    if (!Context.data.current_connection_index) {\n        Context.data.current_connection_index = 0;\n    }\n\n    Context.data.current_connection_name = connectionsArray[Context.data.current_connection_index].name\n}\n\nasync function endIteration(): Promise\u003cvoid\u003e {\n    Context.data.current_connection_index = Context.data.current_connection_index! + 1\n\n    if (Context.data.current_connection_index \u003e= Context.data.current_connection_index!) {\n        Context.data.end_iteration = true\n    }\n}\n\n\nasync function parseResponseData(): Promise\u003cvoid\u003e {\n    const response = JSON.parse(Context.data.response!)\n    const workLeaves = JSON.parse(Context.data.work_leave_data!)\n\n    for(let i = 0; i \u003c response.value.length; i++) {\n        const currentInstance = response.value[i]\n        for(let j = 0; j \u003c currentInstance[\"RecordSet\"].length; j++) {\n            const employee = workLeaves.find((item: any) =\u003e item.employeeId === currentInstance[\"RecordSet\"][j][\"Сотрудник_Key\"])\n            if (!!employee) {\n                employee.amount += currentInstance[\"RecordSet\"][j][\"Дни\"]\n                continue;\n            }\n\n            workLeaves.push({\n                employeeId: currentInstance[\"RecordSet\"][j][\"Сотрудник_Key\"],\n                amount: currentInstance[\"RecordSet\"][j][\"Дни\"]\n            })\n        }\n    }\n\n    Context.data.work_leave_data = JSON.stringify(workLeaves)\n}\n\nasync function updateLeavesData(): Promise\u003cvoid\u003e {\n    const workLeaves = JSON.parse(Context.data.work_leave_data!)\n    const employees = await Context.fields.staff.app.search().where(f =\u003e \n        f.__deletedAt.eq(null)\n    ).all()\n\n    for(let i = 0; i \u003c workLeaves.length; i++) {\n        const employee = employees.find((item: any) =\u003e {\n            return item.data.id_1c === workLeaves[i].employeeId\n        })\n\n        if (!!employee) {\n            employee.data.remaining_work_leave_days = workLeaves[i].amount\n            await employee.save()\n        }\n    }\n}\nasync function getParams(): Promise\u003cvoid\u003e {\n    const settings = await Namespace.app.settings.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n\n    const alternative_integration = settings.find(f =\u003e f.data.code == 'use_alternative_integration');\n    Context.data.is_alternative = alternative_integration ? alternative_integration.data.status : false;\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "response": {
+        "enabled": false,
+        "conditions": []
+      },
+      "request_url": {
+        "enabled": false,
+        "conditions": []
+      },
+      "end_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "amount_of_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_alternative": {
+        "enabled": false,
+        "conditions": []
+      },
+      "work_leave_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "connections_exist": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "connections_object": {
+        "enabled": false,
+        "conditions": []
+      },
+      "full_iteration_amount": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_connection_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_connection_index": {
+        "enabled": false,
+        "conditions": []
+      },
+      "total_number_of_connections": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

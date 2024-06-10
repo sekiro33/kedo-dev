@@ -1,0 +1,3972 @@
+{
+  "__id": "018c8757-193c-7ef7-80e9-11d85e924374",
+  "namespace": "kedo.orders_lna",
+  "code": "create_and_sign_order",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Создание и подписание приказа",
+  "type": "bpmn",
+  "draft": false,
+  "version": 5,
+  "context": [
+    {
+      "code": "document_text",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текст приказа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "document_number",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер приказа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "city",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Город",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "document_reason",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Преамбула",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "document_lna",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "docs_lna",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Документ ЛНА",
+        "data": {}
+      }
+    },
+    {
+      "code": "fact_signature",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Фактический подписант",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "error",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "document_title",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Заголовок к тексту приказа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "document_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл приказа",
+        "data": {}
+      }
+    },
+    {
+      "code": "document_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата приказа",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "legal_person",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Юр.лицо",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "approving_persons",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Согласующие",
+        "data": {}
+      }
+    },
+    {
+      "code": "orders_lna",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "orders_lna",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приказ ЛНА"
+      }
+    },
+    {
+      "code": "boss",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель компании",
+        "data": {}
+      }
+    },
+    {
+      "code": "job_position",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Должность подписанта",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник (для xml)",
+        "data": {}
+      }
+    },
+    {
+      "code": "xml_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "xml_file",
+        "data": {}
+      }
+    },
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "signature",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписанты",
+        "data": {}
+      }
+    },
+    {
+      "code": "signers_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Подписанты (приложение)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "kedo_settings",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Настройки КЭДО",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "head_signing_notification",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Требуется уведомление о подписании документов работодателю",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-03-23T10:37:52.144622233Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2024-03-21T06:35:17.014545025Z",
+  "__updatedBy": "cc31283b-f390-46e0-85c1-612cce8051b2",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 24,
+        "y": 248,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["03012661-3f6e-4c15-9369-ef6910463afc"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Создание и подписание приказа ({$orders_lna})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0af4a15c-7af4-42ad-aea7-0998c4e02126": {
+        "x": 416,
+        "y": 608,
+        "id": "0af4a15c-7af4-42ad-aea7-0998c4e02126",
+        "icon": "change",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Приказы ЛНА -\u003e Отменён",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["84c77b0a-2559-47c2-af02-f15ee41e1309"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 4,
+          "variable": "orders_lna",
+          "keepInCurrentGroup": false
+        }
+      },
+      "0b9a1a69-e241-4e48-a5c8-ea3edea1cc3e": {
+        "x": 2168,
+        "y": 416,
+        "id": "0b9a1a69-e241-4e48-a5c8-ea3edea1cc3e",
+        "icon": "notification",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Оповещение на администраторов",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["1c0568ea-21f3-41ac-a330-968775f03e10"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$debug}",
+          "messageHeader": "XML-файл не сформировался"
+        }
+      },
+      "0e9252c5-6593-45f0-9f6e-9607c85d5213": {
+        "x": 2288,
+        "y": 320,
+        "id": "0e9252c5-6593-45f0-9f6e-9607c85d5213",
+        "icon": "change",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Приказы ЛНА -\u003e Утверждён",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["67ffc936-6726-4041-8020-c2de801d9803"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 3,
+          "variable": "orders_lna",
+          "keepInCurrentGroup": false
+        }
+      },
+      "0fde93e8-adcf-4745-b00b-2193eb048903": {
+        "x": 2168,
+        "y": 320,
+        "id": "0fde93e8-adcf-4745-b00b-2193eb048903",
+        "icon": "system",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Запись XML-файла в элемент",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["c3647d8c-37cb-438d-9b0d-c7bfaa2829ad"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            }
+          ],
+          "variable": "orders_lna"
+        }
+      },
+      "15eb78b3-f879-4b85-8b69-e81435b0cf48": {
+        "x": 864,
+        "y": 320,
+        "id": "15eb78b3-f879-4b85-8b69-e81435b0cf48",
+        "icon": "system",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Выдача прав на элемент",
+        "type": "app_element_permissions",
+        "color": "#fde9a0",
+        "exits": ["69599336-8be1-4d3c-b7db-154628389786"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "delete": false,
+          "userVariableName": "approving_persons",
+          "accessPermissions": ["read"],
+          "appElementVariableName": "orders_lna"
+        }
+      },
+      "1df58a98-b85f-4fb0-8186-d83ad6614438": {
+        "x": 440,
+        "y": 704,
+        "id": "1df58a98-b85f-4fb0-8186-d83ad6614438",
+        "icon": "end",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "1f75c568-bcd1-464e-9960-e678e48092a2": {
+        "x": 1392,
+        "y": 336,
+        "id": "1f75c568-bcd1-464e-9960-e678e48092a2",
+        "icon": "exclusive",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "a93e7abe-dfd6-4815-9da3-de9e084fb4ab",
+          "9dcc8b8a-bc68-4ed9-a3f7-0aa4a83d9c28"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "3794e61b-88d1-43a6-89e2-c036ba88be43": {
+        "x": 1368,
+        "y": 512,
+        "id": "3794e61b-88d1-43a6-89e2-c036ba88be43",
+        "icon": "change",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Приказы ЛНА -\u003e Новый",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["a8b1435c-cce1-496d-a880-edad5b0dfdf2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 5,
+          "variable": "orders_lna",
+          "keepInCurrentGroup": false
+        }
+      },
+      "440819fb-367d-4ff3-8e40-266e1992401a": {
+        "x": 1936,
+        "y": 320,
+        "id": "440819fb-367d-4ff3-8e40-266e1992401a",
+        "icon": "send_doc",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Подписать приказ",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "cdca1dc1-9590-4d17-ab3d-0c919e41e125",
+          "0ddc9c6c-fe5c-4dff-a927-cb0f62c0c2ec"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "orders_lna",
+          "name": "",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "orders_lna"
+              }
+            }
+          ],
+          "target": "orders_lna",
+          "provider": {
+            "code": "CryptoPro",
+            "namespace": "system.__digital_sign_provider"
+          },
+          "signExit": "0ddc9c6c-fe5c-4dff-a927-cb0f62c0c2ec",
+          "namespace": "kedo",
+          "cancelExit": "cdca1dc1-9590-4d17-ab3d-0c919e41e125",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 8,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "optional",
+            "signAttributes": "optional",
+            "signDocflowSolution": "disabled"
+          }
+        }
+      },
+      "45ce711c-d553-4413-a737-802dda6eaa0e": {
+        "x": 776,
+        "y": 248,
+        "id": "45ce711c-d553-4413-a737-802dda6eaa0e",
+        "icon": "exclusive",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Уже существует?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "e8a85dff-6de1-451b-b30e-9a1e5567ffa5",
+          "9899a743-e45d-45a0-ba72-d0d552e16c14"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "48270e66-c9a1-4a06-af8a-3fe4d18f7e7c": {
+        "x": 304,
+        "y": 232,
+        "id": "48270e66-c9a1-4a06-af8a-3fe4d18f7e7c",
+        "icon": "script",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Получить настройки КЭДО и подписантов",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f26fb452-b573-47bf-bbf2-4a1c6265b17d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSigners",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "750f3a4f-995e-4a08-9ad4-3b37f255de7d": {
+        "x": 1248,
+        "y": 320,
+        "id": "750f3a4f-995e-4a08-9ad4-3b37f255de7d",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Запуск процесса согласования приказа ЛНА",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["5090a9e9-d88d-416c-b154-59651776ead1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "approval_order_lna",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "__createdBy"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__createdBy"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "approving_persons"
+              },
+              "target": {
+                "kind": "context",
+                "value": "approving"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "orders_lna"
+              },
+              "target": {
+                "kind": "context",
+                "value": "order_lna"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "approved"
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ],
+          "linkCode": "orders_lna",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": "order_lna"
+        }
+      },
+      "77b558cd-891d-4308-9acb-c102b4d88f01": {
+        "x": 1088,
+        "y": 320,
+        "id": "77b558cd-891d-4308-9acb-c102b4d88f01",
+        "icon": "change",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Приказы ЛНА -\u003e На согласовании",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["63330391-20c6-4c08-88ba-9bfdb726b03a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 1,
+          "variable": "orders_lna",
+          "keepInCurrentGroup": false
+        }
+      },
+      "89af4686-0f6b-435e-9c68-82ab2b83c087": {
+        "x": 752,
+        "y": 320,
+        "id": "89af4686-0f6b-435e-9c68-82ab2b83c087",
+        "icon": "create",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Создание карточки приказа",
+        "type": "app_create",
+        "color": "#a0e9fd",
+        "exits": ["3ae99799-aa8f-4564-803e-4dc1e3b8bf67"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_lna"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc_lna"
+              }
+            }
+          ],
+          "variable": "orders_lna"
+        }
+      },
+      "92806278-88ac-4e78-9dde-742b814dea36": {
+        "x": 72,
+        "y": 232,
+        "id": "92806278-88ac-4e78-9dde-742b814dea36",
+        "icon": "system",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Получаем участников групп",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "34b9d5bc-a0ee-47f1-85e9-35b9341296d8",
+          "97162570-3838-47bc-86c5-14ee24e71962"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_users",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_lna.organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "hr_dep"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "accounting"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "matching_finance"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "office_managers"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "signature"
+              },
+              "target": {
+                "kind": "context",
+                "value": "signatories"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "boss"
+              },
+              "target": {
+                "kind": "context",
+                "value": "boss"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "97162570-3838-47bc-86c5-14ee24e71962",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "boss": {
+                "kind": "Mapped",
+                "path": ["boss"]
+              },
+              "error": {
+                "kind": "Mapped",
+                "path": ["error"]
+              },
+              "groups": null,
+              "hr_dep": null,
+              "boss_app": null,
+              "accounting": null,
+              "signatories": {
+                "kind": "Mapped",
+                "path": ["signature"]
+              },
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "document_lna.organization"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "organization"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "accounting"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "matching_finance"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "office_managers"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "signature"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "signatories"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "boss"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "boss"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "error"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "error"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "document_text",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Текст приказа"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "approving_persons",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Согласующие"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "orders_lna",
+                    "data": {
+                      "code": "orders_lna",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "name": "Приказ ЛНА"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_number",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Номер приказа"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signature",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "job_position",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Должность подписанта"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл приказа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "city",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Город"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_date",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": false,
+                        "additionalType": "date",
+                        "defaultTimeType": "startOfDay"
+                      },
+                      "name": "Дата приказа"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "fact_signature",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Фактический подписант"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": true,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "approved",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Согласовано"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "debug",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "debug"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_reason",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Преамбула"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_lna",
+                    "data": {
+                      "code": "docs_lna",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Документ ЛНА"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_title",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Заголовок к тексту приказа"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "legal_person",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Юр.лицо"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "xml_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "xml_file"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Сотрудник (для xml)"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "id": 20,
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "isNewField": true,
+                    "searchable": false,
+                    "calcByFormula": false,
+                    "isNameChanged": true
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "organization",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": true,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "accounting",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Бухгалтерия",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "matching_finance",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Ответственные за финансы ",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "office_managers",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Офис менеджеры",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatories",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "organization": {
+                "kind": "Mapped",
+                "path": ["document_lna", "organization"]
+              },
+              "office_managers": null,
+              "matching_finance": null,
+              "__dynamic_binding": {}
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "93accc15-897e-44ff-b70c-d560c53cebd3": {
+        "x": 1088,
+        "y": 232,
+        "id": "93accc15-897e-44ff-b70c-d560c53cebd3",
+        "icon": "system",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Изменение версии приказа",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["cbab7ad6-0216-40d2-a51d-a254b177695a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__file"
+              }
+            }
+          ],
+          "variable": "orders_lna"
+        }
+      },
+      "950ed61f-f4e5-4e5e-a6b7-80e3738539b9": {
+        "x": 1736,
+        "y": 336,
+        "id": "950ed61f-f4e5-4e5e-a6b7-80e3738539b9",
+        "icon": "exclusive",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Требуется уведомление  работодателю?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "1be36cff-3af6-4c24-a0d5-d5a617ab0f0b",
+          "0288848a-e79b-439f-a114-aa3eb6c53884"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "a1506446-31ad-4dfd-aad1-fac0d51a500a": {
+        "x": 72,
+        "y": 144,
+        "id": "a1506446-31ad-4dfd-aad1-fac0d51a500a",
+        "icon": "notification",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Не удалось получить участников групп",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["a172982d-5e9f-47fb-8403-9fbddcbaf27e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Не удалось получить участников групп"
+        }
+      },
+      "aaa35c17-3da5-489d-bfe5-5084bed45280": {
+        "x": 416,
+        "y": 512,
+        "id": "aaa35c17-3da5-489d-bfe5-5084bed45280",
+        "icon": "user",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Скорректировать",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "f4600318-26fb-4b76-835f-de24e4c2c1a6",
+          "5d61cde7-25aa-4a97-8e78-2e250638587e"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Скорректировать: {$orders_lna}",
+          "notify": true,
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [
+            {
+              "code": "document_date",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "document_number",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "document_title",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "document_reason",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "document_text",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "signature",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "allowReassign": true,
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          }
+        }
+      },
+      "aec61216-eeb1-49da-b050-1527c378a922": {
+        "x": 184,
+        "y": 232,
+        "id": "aec61216-eeb1-49da-b050-1527c378a922",
+        "icon": "script",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Получение должности подписанта",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["fd2cfd30-73e8-4dd1-9739-c2af1264a720"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_signatory",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "bcb443a7-05d2-447a-8734-e49750a30b13": {
+        "x": 2392,
+        "y": 320,
+        "id": "bcb443a7-05d2-447a-8734-e49750a30b13",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Исполнение приказа",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["fede1284-3382-4fea-92c8-fec3c915a853"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "execution_order",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "orders_lna"
+              },
+              "target": {
+                "kind": "context",
+                "value": "orders_lna"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "__createdBy"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__createdBy"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_number"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_number"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "city"
+              },
+              "target": {
+                "kind": "context",
+                "value": "city"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_lna.organization.entity"
+              },
+              "target": {
+                "kind": "context",
+                "value": "legal_person"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "kedo.orders_lna",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "d6e8896d-fbe8-440c-ada5-1b49542488f6": {
+        "x": 2512,
+        "y": 336,
+        "id": "d6e8896d-fbe8-440c-ada5-1b49542488f6",
+        "icon": "end",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "d75eec68-c9b4-4b08-811a-2bc51689e0d6": {
+        "x": 416,
+        "y": 232,
+        "id": "d75eec68-c9b4-4b08-811a-2bc51689e0d6",
+        "icon": "doctemplate",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Генерация приказа по шаблону",
+        "type": "doc_template",
+        "color": "#f0f4c3",
+        "exits": ["03118463-f4f8-45c5-92c9-ce22752110bb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "aacf9c59-2e3e-4975-be65-dfb0c42c42ac",
+          "toPDF": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "city"
+              },
+              "target": {
+                "kind": "context",
+                "value": "city"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_number"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_number"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_reason"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_reason"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_text"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_text"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_title"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_title"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "legal_person"
+              },
+              "target": {
+                "kind": "context",
+                "value": "legal_person"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "boss"
+              },
+              "target": {
+                "kind": "context",
+                "value": "signature"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "job_position"
+              },
+              "target": {
+                "kind": "context",
+                "value": "job_position"
+              }
+            }
+          ],
+          "namespace": "kedo.orders_lna",
+          "outputFileCode": "document_file",
+          "outputFileName": "Приказ {$document_number} от {$document_date}.pdf"
+        }
+      },
+      "e193c0a1-26ab-4158-aa31-e6583d72030e": {
+        "x": 1480,
+        "y": 320,
+        "id": "e193c0a1-26ab-4158-aa31-e6583d72030e",
+        "icon": "change",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Приказы ЛНА -\u003e На подписании",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["f3c8c208-7650-4a61-9ffa-8a3c6fa3291b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 2,
+          "variable": "orders_lna",
+          "keepInCurrentGroup": false
+        }
+      },
+      "e464f9a8-f01c-4fbd-b655-5b890ffd96c3": {
+        "x": 2056,
+        "y": 320,
+        "id": "e464f9a8-f01c-4fbd-b655-5b890ffd96c3",
+        "icon": "system",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Генерация XML",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "f9d0928a-77b5-4c49-8d1a-20ff13bb677e",
+          "1ae9734d-8fa1-438e-b2df-53d2a3bbf384"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_xml",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "orders_lna"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "debug"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "1ae9734d-8fa1-438e-b2df-53d2a3bbf384",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "eeb82b07-e3e1-4891-b954-7aa04c68bd8a": {
+        "x": 576,
+        "y": 232,
+        "id": "eeb82b07-e3e1-4891-b954-7aa04c68bd8a",
+        "icon": "system",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Перевод названия файла ",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "f2ce3c9e-f88b-4301-91e2-1c58e551a466",
+          "0b88fff1-9d22-47be-95cd-0f9f08e7bc08"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "translate",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "0b88fff1-9d22-47be-95cd-0f9f08e7bc08",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "f03f9962-d1fa-4446-924f-6d3268f61c2a": {
+        "x": 1824,
+        "y": 320,
+        "id": "f03f9962-d1fa-4446-924f-6d3268f61c2a",
+        "lane": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Оповещение подписантам",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["e66e56cc-5231-4cd5-95b9-f68510bac6e9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "head_signing_notification_workflow",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Приказ ЛНА"
+              },
+              "target": {
+                "kind": "context",
+                "value": "topic_of_the_letter"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "КЭДО"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_head"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Вам поступила задача на подписание приказа ЛНА. Перейдите на портал КЭДО. (ссылка)"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_text_for_sms"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Вам поступила задача на подписание приказа ЛНА. Перейдите на портал КЭДО. "
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_body"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "orders_lna"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc_app"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "signers_app",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": "staff"
+        }
+      },
+      "fbfedeb6-73f8-4287-b879-e5adc314d1ae": {
+        "x": 976,
+        "y": 320,
+        "id": "fbfedeb6-73f8-4287-b879-e5adc314d1ae",
+        "icon": "system",
+        "lane": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Выдача прав на элемент",
+        "type": "app_element_permissions",
+        "color": "#fde9a0",
+        "exits": ["c3dc2bb2-9e2a-4469-8cff-c851a1c94681"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "delete": false,
+          "userVariableName": "signature",
+          "accessPermissions": ["read"],
+          "appElementVariableName": "orders_lna"
+        }
+      }
+    },
+    "lanes": {
+      "2088b682-3a9a-49a4-8b2c-2238772f8419": {
+        "x": 1220,
+        "y": 8,
+        "id": "2088b682-3a9a-49a4-8b2c-2238772f8419",
+        "name": "Подписанты",
+        "color": "#d6f0cc",
+        "width": 1384,
+        "height": 776,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "signature",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      },
+      "d659c531-10ee-40d1-8b5e-5214e480926f": {
+        "x": 8,
+        "y": 8,
+        "id": "d659c531-10ee-40d1-8b5e-5214e480926f",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1212,
+        "height": 776,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0288848a-e79b-439f-a114-aa3eb6c53884": {
+        "id": "0288848a-e79b-439f-a114-aa3eb6c53884",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 1752,
+            "y": 336
+          },
+          {
+            "x": 1752,
+            "y": 264
+          },
+          {
+            "x": 1976,
+            "y": 264
+          },
+          {
+            "x": 1976,
+            "y": 320
+          }
+        ],
+        "type": "default",
+        "source": "950ed61f-f4e5-4e5e-a6b7-80e3738539b9",
+        "target": "440819fb-367d-4ff3-8e40-266e1992401a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "03012661-3f6e-4c15-9369-ef6910463afc": {
+        "id": "03012661-3f6e-4c15-9369-ef6910463afc",
+        "name": "",
+        "path": [
+          {
+            "x": 56,
+            "y": 264
+          },
+          {
+            "x": 72,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "92806278-88ac-4e78-9dde-742b814dea36",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "03118463-f4f8-45c5-92c9-ce22752110bb": {
+        "id": "03118463-f4f8-45c5-92c9-ce22752110bb",
+        "name": "",
+        "path": [
+          {
+            "x": 496,
+            "y": 264
+          },
+          {
+            "x": 576,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "d75eec68-c9b4-4b08-811a-2bc51689e0d6",
+        "target": "eeb82b07-e3e1-4891-b954-7aa04c68bd8a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0b88fff1-9d22-47be-95cd-0f9f08e7bc08": {
+        "id": "0b88fff1-9d22-47be-95cd-0f9f08e7bc08",
+        "name": "",
+        "path": [
+          {
+            "x": 656,
+            "y": 248
+          },
+          {
+            "x": 768,
+            "y": 248
+          },
+          {
+            "x": 768,
+            "y": 264
+          },
+          {
+            "x": 776,
+            "y": 264
+          }
+        ],
+        "type": "error",
+        "source": "eeb82b07-e3e1-4891-b954-7aa04c68bd8a",
+        "target": "45ce711c-d553-4413-a737-802dda6eaa0e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0ddc9c6c-fe5c-4dff-a927-cb0f62c0c2ec": {
+        "id": "0ddc9c6c-fe5c-4dff-a927-cb0f62c0c2ec",
+        "name": "",
+        "path": [
+          {
+            "x": 2016,
+            "y": 352
+          },
+          {
+            "x": 2056,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "440819fb-367d-4ff3-8e40-266e1992401a",
+        "target": "e464f9a8-f01c-4fbd-b655-5b890ffd96c3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1ae9734d-8fa1-438e-b2df-53d2a3bbf384": {
+        "id": "1ae9734d-8fa1-438e-b2df-53d2a3bbf384",
+        "name": "",
+        "path": [
+          {
+            "x": 2096,
+            "y": 384
+          },
+          {
+            "x": 2096,
+            "y": 448
+          },
+          {
+            "x": 2168,
+            "y": 448
+          }
+        ],
+        "type": "error",
+        "source": "e464f9a8-f01c-4fbd-b655-5b890ffd96c3",
+        "target": "0b9a1a69-e241-4e48-a5c8-ea3edea1cc3e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1be36cff-3af6-4c24-a0d5-d5a617ab0f0b": {
+        "id": "1be36cff-3af6-4c24-a0d5-d5a617ab0f0b",
+        "name": "Да",
+        "path": [
+          {
+            "x": 1768,
+            "y": 352
+          },
+          {
+            "x": 1824,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "950ed61f-f4e5-4e5e-a6b7-80e3738539b9",
+        "target": "f03f9962-d1fa-4446-924f-6d3268f61c2a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "head_signing_notification"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1c0568ea-21f3-41ac-a330-968775f03e10": {
+        "id": "1c0568ea-21f3-41ac-a330-968775f03e10",
+        "name": "",
+        "path": [
+          {
+            "x": 2248,
+            "y": 448
+          },
+          {
+            "x": 2328,
+            "y": 448
+          },
+          {
+            "x": 2328,
+            "y": 384
+          }
+        ],
+        "type": "plain",
+        "source": "0b9a1a69-e241-4e48-a5c8-ea3edea1cc3e",
+        "target": "0e9252c5-6593-45f0-9f6e-9607c85d5213",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "34b9d5bc-a0ee-47f1-85e9-35b9341296d8": {
+        "id": "34b9d5bc-a0ee-47f1-85e9-35b9341296d8",
+        "name": "",
+        "path": [
+          {
+            "x": 152,
+            "y": 264
+          },
+          {
+            "x": 184,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "92806278-88ac-4e78-9dde-742b814dea36",
+        "target": "aec61216-eeb1-49da-b050-1527c378a922",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3ae99799-aa8f-4564-803e-4dc1e3b8bf67": {
+        "id": "3ae99799-aa8f-4564-803e-4dc1e3b8bf67",
+        "name": "",
+        "path": [
+          {
+            "x": 832,
+            "y": 352
+          },
+          {
+            "x": 864,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "89af4686-0f6b-435e-9c68-82ab2b83c087",
+        "target": "15eb78b3-f879-4b85-8b69-e81435b0cf48",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5090a9e9-d88d-416c-b154-59651776ead1": {
+        "id": "5090a9e9-d88d-416c-b154-59651776ead1",
+        "name": "",
+        "path": [
+          {
+            "x": 1328,
+            "y": 352
+          },
+          {
+            "x": 1392,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "750f3a4f-995e-4a08-9ad4-3b37f255de7d",
+        "target": "1f75c568-bcd1-464e-9960-e678e48092a2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5d61cde7-25aa-4a97-8e78-2e250638587e": {
+        "id": "5d61cde7-25aa-4a97-8e78-2e250638587e",
+        "name": "Отменить приказ",
+        "path": [
+          {
+            "x": 456,
+            "y": 576
+          },
+          {
+            "x": 456,
+            "y": 608
+          }
+        ],
+        "type": "plain",
+        "source": "aaa35c17-3da5-489d-bfe5-5084bed45280",
+        "target": "0af4a15c-7af4-42ad-aea7-0998c4e02126",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": true,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "63330391-20c6-4c08-88ba-9bfdb726b03a": {
+        "id": "63330391-20c6-4c08-88ba-9bfdb726b03a",
+        "name": "",
+        "path": [
+          {
+            "x": 1168,
+            "y": 352
+          },
+          {
+            "x": 1248,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "77b558cd-891d-4308-9acb-c102b4d88f01",
+        "target": "750f3a4f-995e-4a08-9ad4-3b37f255de7d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "67ffc936-6726-4041-8020-c2de801d9803": {
+        "id": "67ffc936-6726-4041-8020-c2de801d9803",
+        "name": "",
+        "path": [
+          {
+            "x": 2368,
+            "y": 352
+          },
+          {
+            "x": 2392,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "0e9252c5-6593-45f0-9f6e-9607c85d5213",
+        "target": "bcb443a7-05d2-447a-8734-e49750a30b13",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "69599336-8be1-4d3c-b7db-154628389786": {
+        "id": "69599336-8be1-4d3c-b7db-154628389786",
+        "name": "",
+        "path": [
+          {
+            "x": 944,
+            "y": 352
+          },
+          {
+            "x": 976,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "15eb78b3-f879-4b85-8b69-e81435b0cf48",
+        "target": "fbfedeb6-73f8-4287-b879-e5adc314d1ae",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "84c77b0a-2559-47c2-af02-f15ee41e1309": {
+        "id": "84c77b0a-2559-47c2-af02-f15ee41e1309",
+        "name": "",
+        "path": [
+          {
+            "x": 456,
+            "y": 672
+          },
+          {
+            "x": 456,
+            "y": 704
+          }
+        ],
+        "type": "plain",
+        "source": "0af4a15c-7af4-42ad-aea7-0998c4e02126",
+        "target": "1df58a98-b85f-4fb0-8186-d83ad6614438",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "97162570-3838-47bc-86c5-14ee24e71962": {
+        "id": "97162570-3838-47bc-86c5-14ee24e71962",
+        "name": "",
+        "path": [
+          {
+            "x": 112,
+            "y": 232
+          },
+          {
+            "x": 112,
+            "y": 208
+          }
+        ],
+        "type": "error",
+        "source": "92806278-88ac-4e78-9dde-742b814dea36",
+        "target": "a1506446-31ad-4dfd-aad1-fac0d51a500a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9899a743-e45d-45a0-ba72-d0d552e16c14": {
+        "id": "9899a743-e45d-45a0-ba72-d0d552e16c14",
+        "name": "Да",
+        "path": [
+          {
+            "x": 808,
+            "y": 264
+          },
+          {
+            "x": 1088,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "45ce711c-d553-4413-a737-802dda6eaa0e",
+        "target": "93accc15-897e-44ff-b70c-d560c53cebd3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "orders_lna"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9dcc8b8a-bc68-4ed9-a3f7-0aa4a83d9c28": {
+        "id": "9dcc8b8a-bc68-4ed9-a3f7-0aa4a83d9c28",
+        "name": "Отказано",
+        "path": [
+          {
+            "x": 1408,
+            "y": 368
+          },
+          {
+            "x": 1408,
+            "y": 512
+          }
+        ],
+        "type": "default",
+        "source": "1f75c568-bcd1-464e-9960-e678e48092a2",
+        "target": "3794e61b-88d1-43a6-89e2-c036ba88be43",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a172982d-5e9f-47fb-8403-9fbddcbaf27e": {
+        "id": "a172982d-5e9f-47fb-8403-9fbddcbaf27e",
+        "name": "",
+        "path": [
+          {
+            "x": 152,
+            "y": 176
+          },
+          {
+            "x": 224,
+            "y": 176
+          },
+          {
+            "x": 224,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "a1506446-31ad-4dfd-aad1-fac0d51a500a",
+        "target": "aec61216-eeb1-49da-b050-1527c378a922",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a8b1435c-cce1-496d-a880-edad5b0dfdf2": {
+        "id": "a8b1435c-cce1-496d-a880-edad5b0dfdf2",
+        "name": "",
+        "path": [
+          {
+            "x": 1368,
+            "y": 544
+          },
+          {
+            "x": 496,
+            "y": 544
+          }
+        ],
+        "type": "plain",
+        "source": "3794e61b-88d1-43a6-89e2-c036ba88be43",
+        "target": "aaa35c17-3da5-489d-bfe5-5084bed45280",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a93e7abe-dfd6-4815-9da3-de9e084fb4ab": {
+        "id": "a93e7abe-dfd6-4815-9da3-de9e084fb4ab",
+        "name": "Согласовано",
+        "path": [
+          {
+            "x": 1424,
+            "y": 352
+          },
+          {
+            "x": 1480,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "1f75c568-bcd1-464e-9960-e678e48092a2",
+        "target": "e193c0a1-26ab-4158-aa31-e6583d72030e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "approved"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c3647d8c-37cb-438d-9b0d-c7bfaa2829ad": {
+        "id": "c3647d8c-37cb-438d-9b0d-c7bfaa2829ad",
+        "name": "",
+        "path": [
+          {
+            "x": 2248,
+            "y": 352
+          },
+          {
+            "x": 2288,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "0fde93e8-adcf-4745-b00b-2193eb048903",
+        "target": "0e9252c5-6593-45f0-9f6e-9607c85d5213",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c3dc2bb2-9e2a-4469-8cff-c851a1c94681": {
+        "id": "c3dc2bb2-9e2a-4469-8cff-c851a1c94681",
+        "name": "",
+        "path": [
+          {
+            "x": 1056,
+            "y": 352
+          },
+          {
+            "x": 1088,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "fbfedeb6-73f8-4287-b879-e5adc314d1ae",
+        "target": "77b558cd-891d-4308-9acb-c102b4d88f01",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cbab7ad6-0216-40d2-a51d-a254b177695a": {
+        "id": "cbab7ad6-0216-40d2-a51d-a254b177695a",
+        "name": "",
+        "path": [
+          {
+            "x": 1128,
+            "y": 296
+          },
+          {
+            "x": 1128,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "93accc15-897e-44ff-b70c-d560c53cebd3",
+        "target": "77b558cd-891d-4308-9acb-c102b4d88f01",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cdca1dc1-9590-4d17-ab3d-0c919e41e125": {
+        "id": "cdca1dc1-9590-4d17-ab3d-0c919e41e125",
+        "name": "",
+        "path": [
+          {
+            "x": 1976,
+            "y": 384
+          },
+          {
+            "x": 1976,
+            "y": 544
+          },
+          {
+            "x": 1448,
+            "y": 544
+          }
+        ],
+        "type": "default",
+        "source": "440819fb-367d-4ff3-8e40-266e1992401a",
+        "target": "3794e61b-88d1-43a6-89e2-c036ba88be43",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e66e56cc-5231-4cd5-95b9-f68510bac6e9": {
+        "id": "e66e56cc-5231-4cd5-95b9-f68510bac6e9",
+        "name": "",
+        "path": [
+          {
+            "x": 1904,
+            "y": 352
+          },
+          {
+            "x": 1936,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "f03f9962-d1fa-4446-924f-6d3268f61c2a",
+        "target": "440819fb-367d-4ff3-8e40-266e1992401a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e8a85dff-6de1-451b-b30e-9a1e5567ffa5": {
+        "id": "e8a85dff-6de1-451b-b30e-9a1e5567ffa5",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 792,
+            "y": 280
+          },
+          {
+            "x": 792,
+            "y": 320
+          }
+        ],
+        "type": "default",
+        "source": "45ce711c-d553-4413-a737-802dda6eaa0e",
+        "target": "89af4686-0f6b-435e-9c68-82ab2b83c087",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f26fb452-b573-47bf-bbf2-4a1c6265b17d": {
+        "id": "f26fb452-b573-47bf-bbf2-4a1c6265b17d",
+        "name": "",
+        "path": [
+          {
+            "x": 384,
+            "y": 264
+          },
+          {
+            "x": 416,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "48270e66-c9a1-4a06-af8a-3fe4d18f7e7c",
+        "target": "d75eec68-c9b4-4b08-811a-2bc51689e0d6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f2ce3c9e-f88b-4301-91e2-1c58e551a466": {
+        "id": "f2ce3c9e-f88b-4301-91e2-1c58e551a466",
+        "name": "",
+        "path": [
+          {
+            "x": 656,
+            "y": 264
+          },
+          {
+            "x": 776,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "eeb82b07-e3e1-4891-b954-7aa04c68bd8a",
+        "target": "45ce711c-d553-4413-a737-802dda6eaa0e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f3c8c208-7650-4a61-9ffa-8a3c6fa3291b": {
+        "id": "f3c8c208-7650-4a61-9ffa-8a3c6fa3291b",
+        "name": "",
+        "path": [
+          {
+            "x": 1560,
+            "y": 352
+          },
+          {
+            "x": 1736,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "e193c0a1-26ab-4158-aa31-e6583d72030e",
+        "target": "950ed61f-f4e5-4e5e-a6b7-80e3738539b9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f4600318-26fb-4b76-835f-de24e4c2c1a6": {
+        "id": "f4600318-26fb-4b76-835f-de24e4c2c1a6",
+        "name": "Повторная генерация",
+        "path": [
+          {
+            "x": 456,
+            "y": 512
+          },
+          {
+            "x": 456,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "aaa35c17-3da5-489d-bfe5-5084bed45280",
+        "target": "d75eec68-c9b4-4b08-811a-2bc51689e0d6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f9d0928a-77b5-4c49-8d1a-20ff13bb677e": {
+        "id": "f9d0928a-77b5-4c49-8d1a-20ff13bb677e",
+        "name": "",
+        "path": [
+          {
+            "x": 2136,
+            "y": 352
+          },
+          {
+            "x": 2168,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "e464f9a8-f01c-4fbd-b655-5b890ffd96c3",
+        "target": "0fde93e8-adcf-4745-b00b-2193eb048903",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fd2cfd30-73e8-4dd1-9739-c2af1264a720": {
+        "id": "fd2cfd30-73e8-4dd1-9739-c2af1264a720",
+        "name": "",
+        "path": [
+          {
+            "x": 264,
+            "y": 264
+          },
+          {
+            "x": 304,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "aec61216-eeb1-49da-b050-1527c378a922",
+        "target": "48270e66-c9a1-4a06-af8a-3fe4d18f7e7c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fede1284-3382-4fea-92c8-fec3c915a853": {
+        "id": "fede1284-3382-4fea-92c8-fec3c915a853",
+        "name": "",
+        "path": [
+          {
+            "x": 2472,
+            "y": 352
+          },
+          {
+            "x": 2512,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "bcb443a7-05d2-447a-8734-e49750a30b13",
+        "target": "d6e8896d-fbe8-440c-ada5-1b49542488f6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function get_signatory(): Promise\u003cvoid\u003e {\n    if (Context.data.boss) {\n        const headApp = await Context.fields.staff.app.search()\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n                f.ext_user.eq(Context.data.boss!)\n            ))\n            .first()\n        Context.data.job_position = (await headApp!.data.position!.fetch()).data.__name\n    }\n}\n\nasync function getSigners(): Promise\u003cvoid\u003e {\n    const kedo_settings = await Context.fields.kedo_settings.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('head_signing_notification')\n        ))\n        .first();\n    Context.data.head_signing_notification = kedo_settings ? kedo_settings.data.status : false;\n\n    const document_lna = await Context.data.document_lna!.fetch();\n    const organization_staff = await document_lna?.data.organization?.fetch();\n    Context.data.signers_app = organization_staff?.data.signatories;\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "orders_lna"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "boss": {
+        "enabled": false,
+        "conditions": []
+      },
+      "city": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      },
+      "xml_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signature": {
+        "enabled": false,
+        "conditions": []
+      },
+      "orders_lna": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signers_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_lna": {
+        "enabled": false,
+        "conditions": []
+      },
+      "job_position": {
+        "enabled": false,
+        "conditions": []
+      },
+      "legal_person": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_text": {
+        "enabled": false,
+        "conditions": []
+      },
+      "kedo_settings": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_title": {
+        "enabled": false,
+        "conditions": []
+      },
+      "fact_signature": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_number": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_reason": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approving_persons": {
+        "enabled": false,
+        "conditions": []
+      },
+      "head_signing_notification": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

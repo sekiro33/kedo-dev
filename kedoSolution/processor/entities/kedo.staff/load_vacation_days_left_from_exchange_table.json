@@ -1,0 +1,917 @@
+{
+  "__id": "018e89f8-23b6-7982-b9b0-c968a7da69e0",
+  "namespace": "kedo.staff",
+  "code": "load_vacation_days_left_from_exchange_table",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1C) Загрузить остатки отпусков из таблицы обмена информацией",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "days_left_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные остатков",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "vacation_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Исправленные данные отпусков",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "employee_ids",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "id Сотрудников",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "workplace",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Тип занятости",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "vacations_type",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Типы Отпусков",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "continue",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Продолжать?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-04-07T07:04:44.997839412Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2024-04-15T11:43:35.650780645Z",
+  "__updatedBy": "b25a7cf7-ce56-4d22-b3c0-a7e160498088",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["1b89508f-5ecf-4d3e-99e0-507856ff3a38"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "(1C) Загрузить остатки отпусков из таблицы обмена информацией ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "074e4e63-e0a7-49f8-858f-915103e20162": {
+        "x": 80,
+        "y": 488,
+        "id": "074e4e63-e0a7-49f8-858f-915103e20162",
+        "icon": "script",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Отметить данные как загруженные",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["c1532d10-77d6-49e9-9ae1-0927661fe8c7"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "markDataAsProcessed",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "47b7fb94-dc7c-4b91-982c-0143d9be6889": {
+        "x": 80,
+        "y": 712,
+        "id": "47b7fb94-dc7c-4b91-982c-0143d9be6889",
+        "icon": "notification",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Оповещение об окончании процесса",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["b39044fb-3a35-4522-8fcd-7aea7a4591cb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            },
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageHeader": "Загрузка остатков отпусков из 1С завершена"
+        }
+      },
+      "96807439-c2cf-4fcc-9dec-0b02d490e867": {
+        "x": 80,
+        "y": 624,
+        "id": "96807439-c2cf-4fcc-9dec-0b02d490e867",
+        "icon": "script",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Обработка данных",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["31c122f7-12a8-49d6-aec3-661ef21400ff"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillTheRest",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "adfbc735-14d6-412c-b3db-146bdaec596d": {
+        "x": 80,
+        "y": 376,
+        "id": "adfbc735-14d6-412c-b3db-146bdaec596d",
+        "icon": "script",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Обновить связи между сотрудниками и отпусками",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "f3461a5c-830f-4905-a4d6-9b5b3224fa68",
+          "b7ac99e0-96c4-4cad-b331-2ad274036b92"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "linkVacations",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "b7ac99e0-96c4-4cad-b331-2ad274036b92",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "b6801c59-4d2a-4725-a06b-f5ce96789883": {
+        "x": 104,
+        "y": 304,
+        "id": "b6801c59-4d2a-4725-a06b-f5ce96789883",
+        "icon": "exclusive",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "4e9a091c-4f0a-4a3b-8add-0a23c8216530",
+          "00b936c8-8834-4c92-a771-3d1cdb41a3dc"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "bd95eb6d-7417-4ce9-83e6-ece06160ab62": {
+        "x": 104,
+        "y": 808,
+        "id": "bd95eb6d-7417-4ce9-83e6-ece06160ab62",
+        "icon": "end",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "c6711220-6b8a-4d05-a8b2-7730d20861f6": {
+        "x": 80,
+        "y": 128,
+        "id": "c6711220-6b8a-4d05-a8b2-7730d20861f6",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Загрузка типов отпусков",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["da1615c4-fb2e-438c-8ba2-cb1760b533e9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "loading_vacation_types",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.type_vacations_1c",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "da4a36a9-af75-4c14-b4fa-2616678d703f": {
+        "x": 80,
+        "y": 216,
+        "id": "da4a36a9-af75-4c14-b4fa-2616678d703f",
+        "icon": "script",
+        "lane": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Загрузить данные остатков",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "d3d2d265-a3b6-4343-8f60-c0cba03ffcb0",
+          "9faf96dc-d801-4965-83d2-c6e4e8a8e363"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "loadDaysLeftData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "d3d2d265-a3b6-4343-8f60-c0cba03ffcb0",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "995011aa-8bf0-4299-b3f1-470fb3042b2d": {
+        "x": 8,
+        "y": 8,
+        "id": "995011aa-8bf0-4299-b3f1-470fb3042b2d",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 556,
+        "height": 908,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "00b936c8-8834-4c92-a771-3d1cdb41a3dc": {
+        "id": "00b936c8-8834-4c92-a771-3d1cdb41a3dc",
+        "name": "",
+        "path": [
+          {
+            "x": 104,
+            "y": 320
+          },
+          {
+            "x": 52,
+            "y": 320
+          },
+          {
+            "x": 52,
+            "y": 596
+          },
+          {
+            "x": 120,
+            "y": 596
+          },
+          {
+            "x": 120,
+            "y": 624
+          }
+        ],
+        "type": "default",
+        "source": "b6801c59-4d2a-4725-a06b-f5ce96789883",
+        "target": "96807439-c2cf-4fcc-9dec-0b02d490e867",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1b89508f-5ecf-4d3e-99e0-507856ff3a38": {
+        "id": "1b89508f-5ecf-4d3e-99e0-507856ff3a38",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "c6711220-6b8a-4d05-a8b2-7730d20861f6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "31c122f7-12a8-49d6-aec3-661ef21400ff": {
+        "id": "31c122f7-12a8-49d6-aec3-661ef21400ff",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 688
+          },
+          {
+            "x": 120,
+            "y": 712
+          }
+        ],
+        "type": "plain",
+        "source": "96807439-c2cf-4fcc-9dec-0b02d490e867",
+        "target": "47b7fb94-dc7c-4b91-982c-0143d9be6889",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4e9a091c-4f0a-4a3b-8add-0a23c8216530": {
+        "id": "4e9a091c-4f0a-4a3b-8add-0a23c8216530",
+        "name": "Продолжать цикл",
+        "path": [
+          {
+            "x": 120,
+            "y": 336
+          },
+          {
+            "x": 120,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "b6801c59-4d2a-4725-a06b-f5ce96789883",
+        "target": "adfbc735-14d6-412c-b3db-146bdaec596d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "continue"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9faf96dc-d801-4965-83d2-c6e4e8a8e363": {
+        "id": "9faf96dc-d801-4965-83d2-c6e4e8a8e363",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 280
+          },
+          {
+            "x": 120,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "da4a36a9-af75-4c14-b4fa-2616678d703f",
+        "target": "b6801c59-4d2a-4725-a06b-f5ce96789883",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b39044fb-3a35-4522-8fcd-7aea7a4591cb": {
+        "id": "b39044fb-3a35-4522-8fcd-7aea7a4591cb",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 776
+          },
+          {
+            "x": 120,
+            "y": 808
+          }
+        ],
+        "type": "plain",
+        "source": "47b7fb94-dc7c-4b91-982c-0143d9be6889",
+        "target": "bd95eb6d-7417-4ce9-83e6-ece06160ab62",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b7ac99e0-96c4-4cad-b331-2ad274036b92": {
+        "id": "b7ac99e0-96c4-4cad-b331-2ad274036b92",
+        "name": "",
+        "path": [
+          {
+            "x": 140,
+            "y": 440
+          },
+          {
+            "x": 140,
+            "y": 488
+          }
+        ],
+        "type": "error",
+        "source": "adfbc735-14d6-412c-b3db-146bdaec596d",
+        "target": "074e4e63-e0a7-49f8-858f-915103e20162",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c1532d10-77d6-49e9-9ae1-0927661fe8c7": {
+        "id": "c1532d10-77d6-49e9-9ae1-0927661fe8c7",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 552
+          },
+          {
+            "x": 120,
+            "y": 564
+          },
+          {
+            "x": 292,
+            "y": 564
+          },
+          {
+            "x": 292,
+            "y": 232
+          },
+          {
+            "x": 160,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "074e4e63-e0a7-49f8-858f-915103e20162",
+        "target": "da4a36a9-af75-4c14-b4fa-2616678d703f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d3d2d265-a3b6-4343-8f60-c0cba03ffcb0": {
+        "id": "d3d2d265-a3b6-4343-8f60-c0cba03ffcb0",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 248
+          },
+          {
+            "x": 256,
+            "y": 248
+          },
+          {
+            "x": 256,
+            "y": 536
+          },
+          {
+            "x": 160,
+            "y": 536
+          }
+        ],
+        "type": "error",
+        "source": "da4a36a9-af75-4c14-b4fa-2616678d703f",
+        "target": "074e4e63-e0a7-49f8-858f-915103e20162",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "da1615c4-fb2e-438c-8ba2-cb1760b533e9": {
+        "id": "da1615c4-fb2e-438c-8ba2-cb1760b533e9",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 192
+          },
+          {
+            "x": 120,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "c6711220-6b8a-4d05-a8b2-7730d20861f6",
+        "target": "da4a36a9-af75-4c14-b4fa-2616678d703f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f3461a5c-830f-4905-a4d6-9b5b3224fa68": {
+        "id": "f3461a5c-830f-4905-a4d6-9b5b3224fa68",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 440
+          },
+          {
+            "x": 120,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "adfbc735-14d6-412c-b3db-146bdaec596d",
+        "target": "074e4e63-e0a7-49f8-858f-915103e20162",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ninterface VacationData {\n    employeeId: string;\n    individualEmployeeId: string;\n    amount: number;\n    vacType: string;\n}\n\nlet batchSize = 5;\n\nasync function loadDaysLeftData(): Promise\u003cvoid\u003e {   \n    \n    const vacationsData = await Namespace.app.posted_1c_data.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.table_name.eq(\"InformationRegister_EM_ОстаткиОтпусков\")\n        )).where((f, g) =\u003e g.or(\n            f.is_processed.eq(false),\n            f.is_processed.eq(null),\n        ))\n        .size(batchSize).all()\n\n    Context.data.continue = true;\n    if (!vacationsData || (vacationsData \u0026\u0026 vacationsData.length === 0)) {\n        Context.data.continue = false;\n        Context.data.debug += ` Закончили цикл `;\n        return;\n    }\n\n    const vacationsType = await Namespace.app.posted_1c_data.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.table_name.eq(\"Catalog_ВидыОтпусков\")\n        )).first()\n\n    const sortedApps = vacationsData.sort((a, b) =\u003e {\n        const aDate: any = a.data.__createdAt.asDate()\n        const bDate: any = b.data.__createdAt.asDate()\n        return bDate - aDate\n    })\n\n    const baseArray: any[] = []\n    const latestData = baseArray.concat(...(sortedApps.filter(item =\u003e !!item.data.table_data).map(item =\u003e JSON.parse(item.data.table_data!))));\n    Context.data.debug += ` latest data ${latestData.length}`\n    if (!!latestData \u0026\u0026 !!vacationsType) {\n        const types = JSON.parse(vacationsType.data.table_data!)\n        const parsedVacationsData = latestData.map((item: any) =\u003e {\n            return item.data[\"Record\"]\n        })\n        //Context.data.days_left_data = JSON.stringify(parsedVacationsData)\n        //Context.data.vacations_type = JSON.stringify(types)\n        await parseData(parsedVacationsData);\n    } else {\n        Context.data.days_left_data = JSON.stringify([])\n        Context.data.debug += ` Не загружены данные о типах отпусков или нет данных об остатках отпусков `;\n    }\n}\n\nasync function parseData(data: any[]): Promise\u003cvoid\u003e {\n    //const data = JSON.parse(Context.data.days_left_data!)\n    const vacations: VacationData[] = []\n\n    if (!data) {\n        return;\n    }\n\n    Context.data.debug += ' data length ' + data.length;\n\n    //задача 1331\n    //создали переменную для поддержки старого алгоритма. В новом алгоритме берём данные из поля ФизЛицо\n    let loadPositions = false;\n    if (data \u0026\u0026 data[0] \u0026\u0026 data[0][0] \u0026\u0026 data[0][0].hasOwnProperty(\"ФизЛицо\")) {\n        loadPositions = true;\n    }\n\n    for (let i = 0; i \u003c data.length; i++) {\n        for (let j = 0; j \u003c data[i].length; j++) {\n            const employeeData = data[i][j]\n\n            const employee = vacations.find((item: VacationData) =\u003e item.employeeId === employeeData[\"Сотрудник\"] \u0026\u0026 item.vacType === employeeData[\"ТипОтпуска\"])\n            if (!employee) {\n\n                if (!loadPositions) {\n                    vacations.push({\n                        employeeId: employeeData[\"Сотрудник\"],\n                        individualEmployeeId: \"\",\n                        amount: parseFloat(employeeData[\"ОстатокДней\"]),\n                        vacType: employeeData[\"ТипОтпуска\"],\n                    })\n                } else {\n                    vacations.push({\n                        employeeId: employeeData[\"Сотрудник\"],\n                        individualEmployeeId: employeeData[\"ФизЛицо\"],\n                        amount: parseFloat(employeeData[\"ОстатокДней\"]),\n                        vacType: employeeData[\"ТипОтпуска\"],\n                    })\n                }\n            }\n        }\n    }\n\n    //Context.data.vacation_data = JSON.stringify(vacations)\n    await updateVacationData(vacations, data);\n}\n\n\nasync function updateVacationData(vacations_data: any[], days_left_data: any[]): Promise\u003cvoid\u003e {\n\n    const vacationsLeftovers = await Namespace.app.vacation_leftovers.search()\n        .where(f =\u003e f.__deletedAt.eq(null)).size(10000).all()\n    //const vacations: VacationData[] = JSON.parse(Context.data.vacation_data!)\n    const vacations: VacationData[] = vacations_data; \n    if (vacations.length === 0) {\n        return\n    }\n\n    //задача 1331\n    //так же заполняем переменную, по которой понимаем, берём данные из поля Сотрудник или ФизЛицо\n    let loadPositions = false;\n    if (vacations \u0026\u0026 vacations[0].individualEmployeeId != \"\") {\n        loadPositions = true;\n    }\n\n    let promises: Promise\u003cvoid\u003e[] = []\n    let employees: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e[];\n\n    if (!loadPositions) {\n        const employeesIds = vacations.map((item: VacationData) =\u003e item.employeeId)\n\n        employees = await Namespace.app.staff.search().where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.id_1c.in(employeesIds)\n        )).size(10000).all();\n\n        for (let i = 0; i \u003c employees.length; i++) {\n            const currentEmployee = employees[i]\n            const employeeVacations = vacations.filter((item: VacationData) =\u003e {\n                return item.employeeId === currentEmployee.data.id_1c\n            })\n            const totalAmount = employeeVacations.reduce((acc: number, value: VacationData) =\u003e acc + value.amount, 0)\n            currentEmployee.data.remaining_vacation_days = Math.ceil(totalAmount);\n            promises.push(currentEmployee.save())\n            if (promises.length \u003e= 20) {\n                await Promise.all(promises)\n                promises = []\n            }\n        }\n    } else {\n        const employeesIds = vacations.map((item: VacationData) =\u003e item.individualEmployeeId)\n\n        employees = await Namespace.app.staff.search().where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.individual_id_1c.in(employeesIds)\n        )).size(10000).all();\n\n        for (let i = 0; i \u003c employees.length; i++) {\n            const currentEmployee = employees[i]\n            const employeeVacations = vacations.filter((item: VacationData) =\u003e {\n                return item.individualEmployeeId === currentEmployee.data.individual_id_1c \u0026\u0026 item.employeeId === currentEmployee.data.id_1c\n            })\n            const totalAmount = employeeVacations.reduce((acc: number, value: VacationData) =\u003e acc + Math.round(value.amount), 0)\n            currentEmployee.data.remaining_vacation_days = Math.ceil(totalAmount);\n            promises.push(currentEmployee.save())\n            if (promises.length \u003e= 20) {\n                await Promise.all(promises)\n                promises = []\n            }\n        }\n    }\n    await Promise.all(promises)\n    promises = []\n\n    //const data = JSON.parse(Context.data.days_left_data!)\n    const data = days_left_data;\n    const vacationTypes = await Namespace.app.type_vacations_1c.search()\n        .where(f =\u003e f.__deletedAt.eq(null)).size(10000).all()\n\n    for (let i = 0; i \u003c data.length; i++) {\n        for (let j = 0; j \u003c data[i].length; j++) {\n            const employeeData = data[i][j]\n            const employee = employees.find((item) =\u003e {\n                if (!loadPositions) {\n                    return item.data.id_1c === employeeData[\"Сотрудник\"]\n                } else {\n                    return item.data.individual_id_1c === employeeData[\"ФизЛицо\"]\n                }\n            })\n            if (!!employee) {\n                employee.data.vacation_leftovers = []\n                if (employee.data.employment_table \u0026\u0026 employee.data.employment_table.length \u003e 0) {\n                    employee.data.employment_table.forEach(item =\u003e {\n                        item.remaining_vacations = []\n                    })\n                }\n                promises.push(employee.save())\n                if (promises.length \u003e= 20) {\n                    await Promise.all(promises)\n                    promises = []\n                }\n            }\n        }\n    }\n    await Promise.all(promises)\n    promises = []\n\n    const employeeIds: string[] = []\n    for (let i = 0; i \u003c vacations.length; i++) {\n\n        //Context.data.debug += ' index ' + i + ' ';\n\n        const employeeData = vacations[i]\n\n        const vacationType = vacationTypes.find(item =\u003e item.data.guid === employeeData.vacType)\n\n        let employee: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e | undefined;\n\n        if (!loadPositions) {\n            employee = employees.find((item) =\u003e {\n                if (item.data.id_1c === employeeData.employeeId) {\n                    return true\n                } else {\n                    if (!item.data.employment_table || item.data.employment_table.length === 0)\n                        return false\n\n                    const existsInEmploymentTable = item.data.employment_table.find(row =\u003e row.id_1c === employeeData.employeeId)\n                    return !!existsInEmploymentTable\n                }\n            })\n        } else {\n            employee = employees.find((item) =\u003e {\n                if (item.data.individual_id_1c === employeeData.individualEmployeeId) {\n                    return true\n                }\n            })\n        }\n\n        let position: ApplicationItemRef\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e | undefined = undefined;\n        let workplace: string = \"\";\n        if (loadPositions \u0026\u0026 !!employee) {\n            const row = employee.data.employment_table!.find(elem =\u003e elem.id_1c === employeeData.employeeId);\n            if (row) {\n                position = row.position;\n                //workplace = row.type_employment.name;\n                //Context.data.debug += ' found position '\n            }\n        }\n\n        let appfind: ApplicationItem\u003cApplication$kedo$vacation_leftovers$Data, Application$kedo$vacation_leftovers$Params\u003e | undefined;\n\n        appfind = vacationsLeftovers.find(item =\u003e item.data.guid_type_vacation === employeeData.vacType \u0026\u0026 item.data.guid_staff === employeeData.employeeId \u0026\u0026 !item.data.__deletedAt);\n\n        if (!appfind) {\n            appfind = Namespace.app.vacation_leftovers.create()\n        }\n\n        if (!!employee) {\n\n            if (!!vacationType) {\n                appfind.data.vacation_type_app = vacationType\n                appfind.data.vacation_name = vacationType.data.__name\n                appfind.data.__name = `${employee.data.__name} - ${vacationType.data.__name}`\n            }\n            appfind.data.guid_staff = employeeData.employeeId\n            employeeIds.push(employeeData.employeeId)\n            appfind.data.guid_type_vacation = employeeData.vacType\n            appfind.data.staff = employee\n            appfind.data.remainder = Math.ceil(employeeData.amount)\n\n            if (loadPositions) {\n                appfind.data.position = position;\n                //appfind.data.type_employment = workplace;\n            }\n\n            promises.push(appfind.save())\n            if (promises.length \u003e= 50) {\n                await Promise.all(promises)\n                promises = []\n            }\n        }\n    }\n    await Promise.all(promises);\n    Context.data.employee_ids = JSON.stringify(employeeIds);\n}\n\nasync function saveEmployee(employee: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e): Promise\u003cvoid\u003e {\n    try {\n        employee.save();\n    } catch (e) {\n        Context.data.debug += String(e);\n    }\n}\n\nasync function linkVacations(): Promise\u003cvoid\u003e {\n    if (!Context.data.employee_ids) return;\n    const employeeIds = JSON.parse(Context.data.employee_ids)\n    const employees = await Context.fields.staff.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.id_1c.in(employeeIds)\n    )).size(10000).all()\n    const vacations = await Namespace.app.vacation_leftovers.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null)\n    )).size(10000).all()\n    let promises: Promise\u003cvoid\u003e[] = []\n    for (let i = 0; i \u003c employees.length; i++) {\n        const currentEmployee = employees[i]\n        const mainId = currentEmployee.data.id_1c\n        const additIds: string[] = []\n        if (currentEmployee.data.employment_table) {\n            for (let j = 0; j \u003c currentEmployee.data.employment_table.length; j++) {\n                additIds.push(currentEmployee.data.employment_table[j].id_1c)\n            }\n        }\n\n        const employeeVacations = vacations.filter(item =\u003e item.data.guid_staff === mainId || !!(additIds.find((id: string) =\u003e item.data.guid_staff === id)))\n        employeeVacations.forEach(item =\u003e {\n            if (item.data.guid_staff === mainId) {\n                currentEmployee.data.vacation_leftovers!.push(item)\n            }\n\n            if (!currentEmployee.data.employment_table || currentEmployee.data.employment_table.length === 0) {\n                return\n            }\n\n            const currentEmployeeRow = currentEmployee.data.employment_table.find(row =\u003e row.id_1c === item.data.guid_staff)\n            if (!currentEmployeeRow) {\n                return\n            }\n            currentEmployeeRow.remaining_vacations.push(item)\n        })\n        promises.push(saveEmployee(currentEmployee))\n        if (promises.length \u003e= 50) {\n            await Promise.all(promises)\n            promises = []\n        }\n    }\n    await Promise.all(promises)\n}\n\nasync function markDataAsProcessed(): Promise\u003cvoid\u003e {\n    const vacationsData = await Namespace.app.posted_1c_data.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.table_name.eq(\"InformationRegister_EM_ОстаткиОтпусков\")\n        )).where((f, g) =\u003e g.or(\n            f.is_processed.eq(false),\n            f.is_processed.eq(null),\n        ))\n        .size(batchSize).all()\n\n    let promises: Promise\u003cvoid\u003e[] = []\n    for (let table of vacationsData) {\n        table.data.is_processed = true\n        promises.push(table.save())\n        if (promises.length \u003e= 20) {\n            await Promise.all(promises)\n            promises = []\n        }\n    }\n    await Promise.all(promises)\n}\n\nasync function fillTheRest(): Promise\u003cvoid\u003e {\n\n    try {\n\n        const vacation_leftovers = await Namespace.app.vacation_leftovers.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n        let promises: Promise\u003cvoid\u003e[] = [];\n\n        for (let vl of vacation_leftovers) {\n            if (!vl.data.staff || !vl.data.position || !vl.data.type_employment) {\n                const employee = await Namespace.app.staff.search().where((f, g) =\u003e g.and(f.__deletedAt.eq(null), f.id_1c.eq(vl.data.guid_staff!))).size(10000).first();\n\n                if (employee) {\n                    vl.data.staff = employee;\n                    vl.data.position = employee.data.position;\n                    vl.data.type_employment = Context.fields.staff.app.fields.employment_table.fields.type_employment.variants.main_workplace.name;\n                    promises.push(vl.save());\n                    if (promises.length \u003e= 20) {\n                        await Promise.all(promises);\n                        promises = [];\n                    }\n                }\n            }\n        }\n        await Promise.all(promises);\n\n    } catch (e) {\n        Context.data.debug += ` Error while saving the vacation leftovers `;\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "__name",
+          "display": "Название",
+          "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+          "readonly": false,
+          "required": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "continue": {
+        "enabled": false,
+        "conditions": []
+      },
+      "workplace": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employee_ids": {
+        "enabled": false,
+        "conditions": []
+      },
+      "vacation_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "days_left_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "vacations_type": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

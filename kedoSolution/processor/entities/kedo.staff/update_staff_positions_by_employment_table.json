@@ -1,0 +1,416 @@
+{
+  "__id": "018e89f8-23b6-796e-83dd-7c3d5b0f793d",
+  "namespace": "kedo.staff",
+  "code": "update_staff_positions_by_employment_table",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обновить позиции ШР по таблице занятости",
+  "type": "bpmn",
+  "draft": false,
+  "version": 1,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-08-14T21:41:41.075705265Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-03-26T13:36:01.771678293Z",
+  "__updatedBy": "d78f4b2f-13a2-4903-aeeb-fdb72d5b9d0c",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "d860717c-f52e-4894-b604-36a880be8f7f",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["194603eb-5f5d-48a5-8a87-30b234e99a70"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обновить позиции ШР по таблице занятости ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "458eb5e5-2ba3-4477-80ea-14f8efb1775f": {
+        "x": 80,
+        "y": 160,
+        "id": "458eb5e5-2ba3-4477-80ea-14f8efb1775f",
+        "lane": "d860717c-f52e-4894-b604-36a880be8f7f",
+        "name": "Обновление справочника занятости",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["9a30256e-dfb2-448b-b86c-6ed1b4e6cc44"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "update_staff_employment_placement_workflow",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "staff",
+          "namespace": "kedo.employment_directory",
+          "subProcessTargetFieldCode": "staff"
+        }
+      },
+      "6c74aac1-be38-4581-8e3b-18bac5931982": {
+        "x": 216,
+        "y": 280,
+        "id": "6c74aac1-be38-4581-8e3b-18bac5931982",
+        "icon": "notification",
+        "lane": "d860717c-f52e-4894-b604-36a880be8f7f",
+        "name": "Не удалось обновить позиции ШР",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["aa136917-1326-4c19-a605-8230caf20532"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageHeader": "Не удалось обновить позиции ШР"
+        }
+      },
+      "d49569a6-7afa-4ad4-9676-9730575b6213": {
+        "x": 80,
+        "y": 280,
+        "id": "d49569a6-7afa-4ad4-9676-9730575b6213",
+        "icon": "script",
+        "lane": "d860717c-f52e-4894-b604-36a880be8f7f",
+        "name": "Обновить позиции ШР",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "78bbf971-4150-49a7-97b9-da95be4eda31",
+          "a5be99c2-1e17-4996-8983-4f8b632595cc"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "update_positions",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "78bbf971-4150-49a7-97b9-da95be4eda31",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "e800e9e8-870f-4732-8d06-5e3e19a2c508": {
+        "x": 104,
+        "y": 488,
+        "id": "e800e9e8-870f-4732-8d06-5e3e19a2c508",
+        "icon": "end",
+        "lane": "d860717c-f52e-4894-b604-36a880be8f7f",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "d860717c-f52e-4894-b604-36a880be8f7f": {
+        "x": 8,
+        "y": 8,
+        "id": "d860717c-f52e-4894-b604-36a880be8f7f",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 400,
+        "height": 620,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "194603eb-5f5d-48a5-8a87-30b234e99a70": {
+        "id": "194603eb-5f5d-48a5-8a87-30b234e99a70",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 160
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "458eb5e5-2ba3-4477-80ea-14f8efb1775f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "78bbf971-4150-49a7-97b9-da95be4eda31": {
+        "id": "78bbf971-4150-49a7-97b9-da95be4eda31",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 312
+          },
+          {
+            "x": 216,
+            "y": 312
+          }
+        ],
+        "type": "error",
+        "source": "d49569a6-7afa-4ad4-9676-9730575b6213",
+        "target": "6c74aac1-be38-4581-8e3b-18bac5931982",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9a30256e-dfb2-448b-b86c-6ed1b4e6cc44": {
+        "id": "9a30256e-dfb2-448b-b86c-6ed1b4e6cc44",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 224
+          },
+          {
+            "x": 120,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "458eb5e5-2ba3-4477-80ea-14f8efb1775f",
+        "target": "d49569a6-7afa-4ad4-9676-9730575b6213",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a5be99c2-1e17-4996-8983-4f8b632595cc": {
+        "id": "a5be99c2-1e17-4996-8983-4f8b632595cc",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 344
+          },
+          {
+            "x": 120,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "d49569a6-7afa-4ad4-9676-9730575b6213",
+        "target": "e800e9e8-870f-4732-8d06-5e3e19a2c508",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aa136917-1326-4c19-a605-8230caf20532": {
+        "id": "aa136917-1326-4c19-a605-8230caf20532",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 344
+          },
+          {
+            "x": 256,
+            "y": 504
+          },
+          {
+            "x": 136,
+            "y": 504
+          }
+        ],
+        "type": "plain",
+        "source": "6c74aac1-be38-4581-8e3b-18bac5931982",
+        "target": "e800e9e8-870f-4732-8d06-5e3e19a2c508",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ninterface Combination {\n    position: ApplicationItem\u003cApplication$kedo$position$Data, any\u003e,\n    type_employment: string | undefined,\n}\n\nasync function update_positions(): Promise\u003cvoid\u003e {\n    const staff = await Context.data.staff!.fetch();\n\n    const employment_table = staff.data.employment_table;\n\n    if (!employment_table || employment_table.length == 0) {\n        return;\n    }\n\n    const staff_position = await Namespace.app.position.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        g.or(\n            f.staff.has(staff),\n            f.staff_internal_combination.has(staff),\n            f.staff_external_combination.has(staff),\n        )\n    )).size(10000).all();\n\n    await Promise.all(staff_position.map(f =\u003e {\n        const main_pos_index = f.data.staff!.findIndex(f =\u003e f.id == staff.id);\n        const external_pos_index = f.data.staff_external_combination!.findIndex(f =\u003e f.id == staff.id);\n        const internal_pos_index = f.data.staff_internal_combination!.findIndex(f =\u003e f.id == staff.id);\n\n        if (main_pos_index != -1) {\n            f.data.staff!.splice(main_pos_index, 1);\n        }\n\n        if (external_pos_index != -1) {\n            f.data.staff_external_combination!.splice(external_pos_index, 1);\n        }\n\n        if (internal_pos_index != -1) {\n            f.data.staff_internal_combination!.splice(internal_pos_index, 1);\n        }\n\n        return f.save();\n    }))\n\n    const positions = await Promise.all(employment_table.map(f =\u003e f.position.fetch()));\n\n    const combination: Combination[] = positions.map(f =\u003e {\n        return {\n            position: f,\n            type_employment: employment_table.find(e =\u003e e.position.id == f.id)?.type_employment.code\n        }\n    });\n    if (staff.data.__status \u0026\u0026 staff.data.__status.code == \"dismissed\") {\n        await Promise.all(combination.map(f =\u003e {\n            if (f.type_employment == 'main_workplace') {\n                f.position.data.old_staff!.push(staff);\n            }\n\n            if (f.type_employment == 'internal_combination') {\n                f.position.data.old_staff_internal_combination!.push(staff);\n            }\n\n            if (f.type_employment == 'external_combination') {\n                f.position.data.old_staff_external_combination!.push(staff);\n            }\n\n            return f.position.save();\n        }))\n    } else {\n        await Promise.all(combination.map(f =\u003e {\n            if (f.type_employment == 'main_workplace') {\n                f.position.data.staff!.push(staff);\n            }\n\n            if (f.type_employment == 'internal_combination') {\n                f.position.data.staff_internal_combination!.push(staff);\n            }\n\n            if (f.type_employment == 'external_combination') {\n                f.position.data.staff_external_combination!.push(staff);\n            }\n\n            return f.position.save();\n        }))\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": false,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "__name",
+          "display": "Название",
+          "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+          "readonly": false,
+          "required": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": false,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {}
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

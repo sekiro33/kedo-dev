@@ -1,0 +1,928 @@
+{
+  "__id": "018e89f8-23b6-7904-ae3f-0eb6b688d83f",
+  "namespace": "kedo.cancel_memo",
+  "code": "signing_memo_cancel_doc",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Подписание служебной записки на отмену документов",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "app_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование заявки",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемая заявка",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_memo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_memo",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Служебная записка"
+      }
+    },
+    {
+      "code": "memo_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл служебной записки",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "xml_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "XML-файл служебной записки",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "memo_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Служебная записка подписана?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signatory_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписант (Пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-21T09:47:56.635710542Z",
+  "__createdBy": "dbf3495b-ce41-49f5-ba21-cdd11a052281",
+  "__updatedAt": "2024-03-29T14:59:38.429392592Z",
+  "__updatedBy": "1a8a4a0b-7e7e-4e0e-895e-ab2a0a301d1e",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 224,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["80f2079d-6364-43b4-bd4d-b3e54783b5f4"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Подписание служебной записки на отмену документов ({$cancel_memo})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "132ab940-8519-4bbe-9466-795765a0eaf9": {
+        "x": 328,
+        "y": 208,
+        "id": "132ab940-8519-4bbe-9466-795765a0eaf9",
+        "icon": "system",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "Запись XML файла заявления",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["f110b4bc-fdad-40bb-86da-a317c3a8fc05"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "notify": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file_doc"
+              }
+            }
+          ],
+          "variable": "cancel_memo"
+        }
+      },
+      "215218c0-a8b8-4627-8231-70e72cd7c45f": {
+        "x": 232,
+        "y": 208,
+        "id": "215218c0-a8b8-4627-8231-70e72cd7c45f",
+        "icon": "system",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "Генерация XML",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "fb6b5fd3-1da4-48e3-a132-e59e54ca0bdc",
+          "e5afd881-b019-4ad1-a872-4f38d0b5f985"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_xml",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "cancel_memo"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "cancel_memo.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "debug"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "e5afd881-b019-4ad1-a872-4f38d0b5f985",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "6db169a2-7947-4d45-b6e3-163c018f0bd0": {
+        "x": 160,
+        "y": 408,
+        "id": "6db169a2-7947-4d45-b6e3-163c018f0bd0",
+        "icon": "end",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "71a913e5-010d-4c92-8324-5a15d6944e37": {
+        "x": 624,
+        "y": 224,
+        "id": "71a913e5-010d-4c92-8324-5a15d6944e37",
+        "icon": "end",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "72041209-ec00-4da0-8b0a-e1f6935f7f30": {
+        "x": 136,
+        "y": 208,
+        "id": "72041209-ec00-4da0-8b0a-e1f6935f7f30",
+        "icon": "send_doc",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "Подписание служебной записки",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "598bedf4-88e5-4d9e-aea1-9a27dff0fda7",
+          "29ba859b-af5b-4b11-93b6-c69f3b6e03a3"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "cancel_memo",
+          "name": "Подписание служебной записки по заявке: {$app_name}",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "cancel_memo"
+              }
+            }
+          ],
+          "target": "cancel_memo",
+          "signExit": "598bedf4-88e5-4d9e-aea1-9a27dff0fda7",
+          "namespace": "kedo",
+          "cancelExit": "29ba859b-af5b-4b11-93b6-c69f3b6e03a3",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 4,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "showComment": "disabled",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "allowReassign": true,
+          "isIgnoreSubstitutionTarget": ""
+        }
+      },
+      "a49d4bcf-78b6-4624-af84-752d8e9cda96": {
+        "x": 232,
+        "y": 288,
+        "id": "a49d4bcf-78b6-4624-af84-752d8e9cda96",
+        "icon": "notification",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "Оповещение администраторов",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["342b46bb-cb86-40e2-9023-80edc16d6c39"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$debug}",
+          "messageHeader": "XML-файл не сформировался"
+        }
+      },
+      "ffe7a9ff-5bf5-43fc-ac4d-17a5a23cc89f": {
+        "x": 424,
+        "y": 208,
+        "id": "ffe7a9ff-5bf5-43fc-ac4d-17a5a23cc89f",
+        "icon": "script",
+        "lane": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "Успешное подписание: обновление контекста БП",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["bce9429f-3cf6-4e75-b557-7d33dcf2fa71"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateContext",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "8084c40a-3e1f-41e1-91bd-d0f2157a8e23": {
+        "x": 4,
+        "y": 8,
+        "id": "8084c40a-3e1f-41e1-91bd-d0f2157a8e23",
+        "name": "Подписант (Пользователь)",
+        "color": "#d6f0cc",
+        "width": 916,
+        "height": 640,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "signatory_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "29ba859b-af5b-4b11-93b6-c69f3b6e03a3": {
+        "id": "29ba859b-af5b-4b11-93b6-c69f3b6e03a3",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 272
+          },
+          {
+            "x": 176,
+            "y": 408
+          }
+        ],
+        "type": "default",
+        "source": "72041209-ec00-4da0-8b0a-e1f6935f7f30",
+        "target": "6db169a2-7947-4d45-b6e3-163c018f0bd0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "342b46bb-cb86-40e2-9023-80edc16d6c39": {
+        "id": "342b46bb-cb86-40e2-9023-80edc16d6c39",
+        "name": "",
+        "path": [
+          {
+            "x": 312,
+            "y": 320
+          },
+          {
+            "x": 416,
+            "y": 320
+          },
+          {
+            "x": 416,
+            "y": 240
+          },
+          {
+            "x": 424,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "a49d4bcf-78b6-4624-af84-752d8e9cda96",
+        "target": "ffe7a9ff-5bf5-43fc-ac4d-17a5a23cc89f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "598bedf4-88e5-4d9e-aea1-9a27dff0fda7": {
+        "id": "598bedf4-88e5-4d9e-aea1-9a27dff0fda7",
+        "name": "",
+        "path": [
+          {
+            "x": 216,
+            "y": 240
+          },
+          {
+            "x": 232,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "72041209-ec00-4da0-8b0a-e1f6935f7f30",
+        "target": "215218c0-a8b8-4627-8231-70e72cd7c45f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "80f2079d-6364-43b4-bd4d-b3e54783b5f4": {
+        "id": "80f2079d-6364-43b4-bd4d-b3e54783b5f4",
+        "name": "",
+        "path": [
+          {
+            "x": 96,
+            "y": 240
+          },
+          {
+            "x": 136,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "72041209-ec00-4da0-8b0a-e1f6935f7f30",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bce9429f-3cf6-4e75-b557-7d33dcf2fa71": {
+        "id": "bce9429f-3cf6-4e75-b557-7d33dcf2fa71",
+        "name": "",
+        "path": [
+          {
+            "x": 504,
+            "y": 240
+          },
+          {
+            "x": 624,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "ffe7a9ff-5bf5-43fc-ac4d-17a5a23cc89f",
+        "target": "71a913e5-010d-4c92-8324-5a15d6944e37",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e5afd881-b019-4ad1-a872-4f38d0b5f985": {
+        "id": "e5afd881-b019-4ad1-a872-4f38d0b5f985",
+        "name": "",
+        "path": [
+          {
+            "x": 272,
+            "y": 272
+          },
+          {
+            "x": 272,
+            "y": 288
+          }
+        ],
+        "type": "error",
+        "source": "215218c0-a8b8-4627-8231-70e72cd7c45f",
+        "target": "a49d4bcf-78b6-4624-af84-752d8e9cda96",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f110b4bc-fdad-40bb-86da-a317c3a8fc05": {
+        "id": "f110b4bc-fdad-40bb-86da-a317c3a8fc05",
+        "name": "",
+        "path": [
+          {
+            "x": 408,
+            "y": 240
+          },
+          {
+            "x": 424,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "132ab940-8519-4bbe-9466-795765a0eaf9",
+        "target": "ffe7a9ff-5bf5-43fc-ac4d-17a5a23cc89f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fb6b5fd3-1da4-48e3-a132-e59e54ca0bdc": {
+        "id": "fb6b5fd3-1da4-48e3-a132-e59e54ca0bdc",
+        "name": "",
+        "path": [
+          {
+            "x": 312,
+            "y": 240
+          },
+          {
+            "x": 328,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "215218c0-a8b8-4627-8231-70e72cd7c45f",
+        "target": "132ab940-8519-4bbe-9466-795765a0eaf9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "\n\nasync function updateContext(): Promise\u003cvoid\u003e {\n    Context.data.memo_signed = true;\n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "cancel_memo",
+          "data": {
+            "code": "cancel_memo",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Служебная записка"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "cancel_memo"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "xml_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "memo_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "memo_signed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatory_user": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

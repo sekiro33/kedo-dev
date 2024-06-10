@@ -1,0 +1,61 @@
+{
+  "__id": "fc12e836-0746-422c-a263-07c06eae1530",
+  "__name": "Получение ссылки на портал",
+  "code": "get_portal_link",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "portal_link",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ссылка на портал",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\nasync function action(): Promise\u003cvoid\u003e {\n\tconst codes = [\n\t\t// Использовать Личный кабинет (КЭДО 2.0)\n\t\t\"use_my_profile\"\n\t];\n\n\tconst settings = await Namespace.params.fields.settings.app.search()\n\t\t.where((f, g) =\u003e g.and(\n\t\t\tf.__deletedAt.eq(null),\n\t\t\tf.code.in(codes)\n\t\t))\n\t\t.size(codes.length)\n\t\t.all();\n\n\tconst use_my_profile = settings.find(f =\u003e f.data.code === \"use_my_profile\")?.data.status ?? false;\n\t\n\tconst portal = use_my_profile == true ? \"my_profile\" : \"_start_page\";\n\n\tContext.data.portal_link = `${System.getBaseUrl()}/_portal/kedo_ext/${portal}`;\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-05-07T10:16:24.874366637Z",
+  "__createdBy": "34ff56b9-aa7a-4000-8a60-8359f257b257",
+  "__updatedAt": "2024-05-16T10:07:12.603859821Z",
+  "__updatedBy": "34ff56b9-aa7a-4000-8a60-8359f257b257",
+  "__deletedAt": null
+}

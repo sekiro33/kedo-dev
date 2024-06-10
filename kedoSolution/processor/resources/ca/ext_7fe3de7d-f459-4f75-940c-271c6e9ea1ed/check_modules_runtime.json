@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    const baseUrl = System.getBaseUrl();\n    const tokenSetting = await Context.fields.settings_app.app.search().where(f => f.code.eq(\"api_key\")).first();\n    if (!tokenSetting || !tokenSetting.data.value) {\n        Context.data.enabled_module_code = \"null\";\n        return;\n    }\n    ;\n    let goskeyEnabled = false;\n    let commonIntegrationEnabled = false;\n    const goskeyResponse = await fetch(`${baseUrl}/pub/v1/scheme/modules/7fb0a0d0-fc8d-452e-843f-6a7f2f28a8bf`, {\n        headers: {\n            Authorization: `Bearer ${tokenSetting.data.value}`\n        }\n    });\n    if (goskeyResponse.ok) {\n        const responseJson = await goskeyResponse.json();\n        goskeyEnabled = responseJson.module.enabled;\n    }\n    ;\n    const commonIntegrationResponse = await fetch(`${baseUrl}/pub/v1/scheme/modules/27c1fb4a-e011-47a6-aa26-cf0fc42c39cd`, {\n        headers: {\n            Authorization: `Bearer ${tokenSetting.data.value}`\n        }\n    });\n    if (commonIntegrationResponse.ok) {\n        const responseJson = await commonIntegrationResponse.json();\n        commonIntegrationEnabled = responseJson.module.enabled;\n    }\n    ;\n    Context.data.enabled_module_code = [goskeyEnabled, commonIntegrationEnabled].every(item => item) ? \"all\" :\n        goskeyEnabled ? \"goskey\" :\n            commonIntegrationEnabled ? \"common_integration\" : \"null\";\n}\n;\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

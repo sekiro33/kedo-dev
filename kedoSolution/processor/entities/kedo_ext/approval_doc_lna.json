@@ -1,0 +1,620 @@
+{
+  "__id": "018c8757-193d-7f3a-80d2-c693fd03687c",
+  "namespace": "kedo_ext",
+  "code": "approval_doc_lna",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Согласование документа ЛНА",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "doc_lna",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "docs_lna",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Документ ЛНА",
+        "data": {}
+      }
+    },
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "approving",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Согласующие",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-04-11T07:48:06.175808277Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2023-05-16T05:13:47.160941304Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "c113f33f-1c89-4c1c-b226-53084741b2b2",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["5242ef76-ee3f-44b1-a052-c800105b41bd"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Согласование документа ЛНА - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "21bb9337-8b67-4410-9c09-5b156bd9e85c": {
+        "x": 288,
+        "y": 360,
+        "id": "21bb9337-8b67-4410-9c09-5b156bd9e85c",
+        "icon": "system",
+        "lane": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "name": "Согласовано = false",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["57e9f97e-ab07-438d-8da4-a79d973dbd6e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "2d588587-530d-4751-896b-dbaaee5af357": {
+        "x": 408,
+        "y": 168,
+        "id": "2d588587-530d-4751-896b-dbaaee5af357",
+        "icon": "approval_list",
+        "lane": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "name": "Согласовано",
+        "type": "approval_list_close",
+        "color": "#f0f4c3",
+        "exits": ["cad47cc6-3b9b-4086-bb66-da34f2be538a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "approved": true,
+          "withoutNotify": false,
+          "targetFieldCode": "doc_lna"
+        }
+      },
+      "2d8cf0d7-0e26-4362-8a15-cb32a6747bdb": {
+        "x": 288,
+        "y": 264,
+        "id": "2d8cf0d7-0e26-4362-8a15-cb32a6747bdb",
+        "icon": "approval_list",
+        "lane": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "name": "Отказано",
+        "type": "approval_list_close",
+        "color": "#f0f4c3",
+        "exits": ["d0b11bfc-be08-4bc0-a673-9727229cae1b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "approved": false,
+          "withoutNotify": false,
+          "targetFieldCode": "doc_lna"
+        }
+      },
+      "659e4989-5c2e-4758-8d91-4ec319e63f39": {
+        "x": 528,
+        "y": 168,
+        "id": "659e4989-5c2e-4758-8d91-4ec319e63f39",
+        "icon": "system",
+        "lane": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "name": "Согласовано = true",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["f00a0f0c-01d5-4380-ac48-684bd679b964"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "76482da4-9fbc-430d-86d6-087fa83855a5": {
+        "x": 288,
+        "y": 168,
+        "id": "76482da4-9fbc-430d-86d6-087fa83855a5",
+        "icon": "send_doc",
+        "lane": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "loop": "parallel",
+        "name": "Согласование",
+        "type": "approval_list_process",
+        "color": "#f0f4c3",
+        "exits": [
+          "e64f2e53-83d3-4768-b003-c8a223ea47c9",
+          "a7173e1f-98e2-4271-9e55-410639658ead"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "cleanUp": false,
+          "taskName": "{$doc_lna}: Согласовать",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 2,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "settingSign": {
+            "isSign": "disabled"
+          },
+          "withoutNotify": false,
+          "targetFieldCode": "doc_lna",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {}
+          },
+          "customStatusSettings": {
+            "customStatuses": [
+              {
+                "status": "approved",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              },
+              {
+                "status": "rejected",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              }
+            ]
+          }
+        }
+      },
+      "b4e0b38d-64aa-423f-a4b0-e4ef515c7578": {
+        "x": 552,
+        "y": 376,
+        "id": "b4e0b38d-64aa-423f-a4b0-e4ef515c7578",
+        "icon": "end",
+        "lane": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "02ac9811-1a8e-44d7-b5b0-da84a5186732": {
+        "x": 232,
+        "y": 8,
+        "id": "02ac9811-1a8e-44d7-b5b0-da84a5186732",
+        "name": "Согласующие",
+        "color": "#d6f0cc",
+        "width": 516,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "approving",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      },
+      "c113f33f-1c89-4c1c-b226-53084741b2b2": {
+        "x": 8,
+        "y": 8,
+        "id": "c113f33f-1c89-4c1c-b226-53084741b2b2",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "5242ef76-ee3f-44b1-a052-c800105b41bd": {
+        "id": "5242ef76-ee3f-44b1-a052-c800105b41bd",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 200
+          },
+          {
+            "x": 288,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "76482da4-9fbc-430d-86d6-087fa83855a5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "57e9f97e-ab07-438d-8da4-a79d973dbd6e": {
+        "id": "57e9f97e-ab07-438d-8da4-a79d973dbd6e",
+        "name": "",
+        "path": [
+          {
+            "x": 368,
+            "y": 392
+          },
+          {
+            "x": 552,
+            "y": 392
+          }
+        ],
+        "type": "plain",
+        "source": "21bb9337-8b67-4410-9c09-5b156bd9e85c",
+        "target": "b4e0b38d-64aa-423f-a4b0-e4ef515c7578",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a7173e1f-98e2-4271-9e55-410639658ead": {
+        "id": "a7173e1f-98e2-4271-9e55-410639658ead",
+        "name": "",
+        "path": [
+          {
+            "x": 368,
+            "y": 200
+          },
+          {
+            "x": 408,
+            "y": 200
+          }
+        ],
+        "type": "default",
+        "source": "76482da4-9fbc-430d-86d6-087fa83855a5",
+        "target": "2d588587-530d-4751-896b-dbaaee5af357",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cad47cc6-3b9b-4086-bb66-da34f2be538a": {
+        "id": "cad47cc6-3b9b-4086-bb66-da34f2be538a",
+        "name": "",
+        "path": [
+          {
+            "x": 488,
+            "y": 200
+          },
+          {
+            "x": 528,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "2d588587-530d-4751-896b-dbaaee5af357",
+        "target": "659e4989-5c2e-4758-8d91-4ec319e63f39",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d0b11bfc-be08-4bc0-a673-9727229cae1b": {
+        "id": "d0b11bfc-be08-4bc0-a673-9727229cae1b",
+        "name": "",
+        "path": [
+          {
+            "x": 328,
+            "y": 328
+          },
+          {
+            "x": 328,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "2d8cf0d7-0e26-4362-8a15-cb32a6747bdb",
+        "target": "21bb9337-8b67-4410-9c09-5b156bd9e85c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e64f2e53-83d3-4768-b003-c8a223ea47c9": {
+        "id": "e64f2e53-83d3-4768-b003-c8a223ea47c9",
+        "name": "",
+        "path": [
+          {
+            "x": 328,
+            "y": 232
+          },
+          {
+            "x": 328,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "76482da4-9fbc-430d-86d6-087fa83855a5",
+        "target": "2d8cf0d7-0e26-4362-8a15-cb32a6747bdb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__rejectPercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f00a0f0c-01d5-4380-ac48-684bd679b964": {
+        "id": "f00a0f0c-01d5-4380-ac48-684bd679b964",
+        "name": "",
+        "path": [
+          {
+            "x": 568,
+            "y": 232
+          },
+          {
+            "x": 568,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "659e4989-5c2e-4758-8d91-4ec319e63f39",
+        "target": "b4e0b38d-64aa-423f-a4b0-e4ef515c7578",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "doc_lna": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

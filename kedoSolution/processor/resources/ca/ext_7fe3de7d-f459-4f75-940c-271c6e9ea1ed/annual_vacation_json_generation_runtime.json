@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    const vacationApp = Namespace.params.fields.employee_app.app;\n    let vacation = await vacationApp.search().where((f, g) => g.and(f.__deletedAt.eq(null), f.__id.eq(Context.data.vacation_id))).first();\n    if (!vacation) {\n        throw new Error('Нет отпуска с указанным id!');\n    }\n    if (!vacation.data.kedo_staff) {\n        throw new Error('В отпуске не указан сотрудник (приложение КЭДО)!');\n    }\n    let employee = await vacation.data.kedo_staff.fetch();\n    if (!employee.data.position) {\n        throw new Error('У сотрудника не указана должность');\n    }\n    if (!employee.data.id_1c) {\n        throw new Error('У сотрудника нет id 1c!');\n    }\n    let job = await employee.data.position.fetch();\n    if (!job.data.ref_key) {\n        throw new Error('У должности нет указанного ref_key!');\n    }\n    if (!vacation.data.statements) {\n        throw new Error('В указанном отпуске нет заявлений!');\n    }\n    let attachment = await vacation.data.statements[0].fetch();\n    if (!attachment.data.__file) {\n        throw new Error('Нет файла заявления для прикрепления!');\n    }\n    let attachmentFile = await attachment.data.__file.fetch();\n    let attachmentFileLink = await attachmentFile.getDownloadUrl();\n    let incomeStatementFileBuffer = await fetch(attachmentFileLink).then(doc => doc.arrayBuffer());\n    let incomeStatementFileB64String = btoa(String.fromCharCode(...new Uint8Array(incomeStatementFileBuffer)));\n    let vacationData = {\n        processID: Context.data.process_id,\n        employeeID: employee.data.id_1c,\n        firstName: employee.data.full_name ? employee.data.full_name.firstname : '',\n        lastName: employee.data.full_name ? employee.data.full_name.lastname : '',\n        middleName: employee.data.full_name ? employee.data.full_name.middlename : '',\n        jobID: job.data.ref_key,\n        vacationType: \"Ежегодный оплачиваемый отпуск\",\n        vacationStartDate: vacation.data.start_string,\n        vacationEndDate: vacation.data.end_string,\n        attachmentFile: incomeStatementFileB64String,\n    };\n    Context.data.json = JSON.stringify(vacationData);\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

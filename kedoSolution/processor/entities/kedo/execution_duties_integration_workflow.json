@@ -1,0 +1,1211 @@
+{
+  "__id": "018f0a73-f072-7844-a7d1-0dc0691cce50",
+  "namespace": "kedo",
+  "code": "execution_duties_integration_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "КЭДО: Интеграция с УС (Заявки на ИО)",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "use_alternative_integration",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Использовать 1С как мастер систему",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "order_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл приказа",
+        "data": {}
+      }
+    },
+    {
+      "code": "substitute_staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Замещающий",
+        "data": {}
+      }
+    },
+    {
+      "code": "execution_duties",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "execution_duties",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": " Заявка на ИО",
+        "data": {}
+      }
+    },
+    {
+      "code": "transfer_to_paper",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Перевод в бумагу",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "start_date_string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата начала (строка)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "document_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл ДС",
+        "data": {}
+      }
+    },
+    {
+      "code": "settings_kedo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Настройки КЭДО",
+        "data": {}
+      }
+    },
+    {
+      "code": "use_alternative_system",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Использовать альтернативную учетную систему",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "reason_transfer_paper",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Причина перевода в бумагу",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "end_date_string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата окончания (строка)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "integration_1c",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Интеграция с учетной системой",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "request_canceled",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Запрос отменен",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-11-28T20:26:08.379139685Z",
+  "__createdBy": "3e35cf33-1cfb-4628-be0f-d94a4288dd2c",
+  "__updatedAt": "2024-04-24T12:26:28.544599567Z",
+  "__updatedBy": "099fd2a1-8125-406b-aaff-0db06d81aa40",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 40,
+        "y": 272,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["3e4012bd-723a-4113-903b-9ba475bdab76"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "КЭДО: Интеграция с УС (Заявки на ИО) - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0a5aa341-1565-488f-bac0-0781e6b2d85a": {
+        "x": 504,
+        "y": 56,
+        "id": "0a5aa341-1565-488f-bac0-0781e6b2d85a",
+        "icon": "end",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "64ab9c99-292d-45c7-a058-df97b2d39d87": {
+        "x": 504,
+        "y": 272,
+        "id": "64ab9c99-292d-45c7-a058-df97b2d39d87",
+        "icon": "exclusive",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "6b7f19dd-c1dd-4a07-a322-a168c869d637",
+          "bc56f7ab-95cf-4fbb-80c2-66bdd04241fd"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "b93f2e56-7730-4a95-80b1-1b6bae61ab8f": {
+        "x": 592,
+        "y": 256,
+        "id": "b93f2e56-7730-4a95-80b1-1b6bae61ab8f",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "Доп. соглашение и приказ",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["b95cbb04-f891-447d-9978-b563481ebb18"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_agreement_order",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "start_date_string"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "end_date_string"
+              },
+              "target": {
+                "kind": "context",
+                "value": "end_date_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "execution_staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties"
+              },
+              "target": {
+                "kind": "context",
+                "value": "execution_duties"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties.start_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties.end_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "end_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "order_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "order_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "transfer_to_paper"
+              },
+              "target": {
+                "kind": "context",
+                "value": "transfer_to_paper"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "reason_transfer_paper"
+              },
+              "target": {
+                "kind": "context",
+                "value": "reason_transfer_paper"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "substitute_staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "substitute_staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "substitute_staff",
+          "namespace": "kedo.execution_duties",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "bc628324-98f6-4d46-a5da-c466ce62fdbc": {
+        "x": 136,
+        "y": 256,
+        "id": "bc628324-98f6-4d46-a5da-c466ce62fdbc",
+        "icon": "script",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "Какая УС?",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["217490ed-04ce-4ed1-8de5-5d0bcedafa07"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSettings",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "c25c4524-348e-41a4-92ca-d0710afe9237": {
+        "x": 296,
+        "y": 272,
+        "id": "c25c4524-348e-41a4-92ca-d0710afe9237",
+        "icon": "exclusive",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "0e03b991-908e-4364-967f-485d40fd2a34",
+          "02aad388-8dc0-46fe-97d2-a0cf3e438752"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "cbd7a729-608b-462e-b1aa-803f8b4b48af": {
+        "x": 456,
+        "y": 360,
+        "id": "cbd7a729-608b-462e-b1aa-803f8b4b48af",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "УС: Подготовка приказа (Заявки на ИО)",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["25ff038f-12e7-435a-8da9-b14022632492"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "execution_duties_integration_workflow",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties"
+              },
+              "target": {
+                "kind": "context",
+                "value": "execution_duties"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "d998284a-bbd9-4cd5-9fc6-8e7c25decb59": {
+        "x": 480,
+        "y": 144,
+        "id": "d998284a-bbd9-4cd5-9fc6-8e7c25decb59",
+        "icon": "system",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "Совмещение проведено = нет",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["a16a4c48-d59c-46bb-beb7-951b8cc68ce8"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "notify": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "combination_carried_out"
+              }
+            }
+          ],
+          "variable": "execution_duties"
+        }
+      },
+      "dbb4eed8-0c3c-4331-b6a8-7799e5bd3309": {
+        "x": 736,
+        "y": 272,
+        "id": "dbb4eed8-0c3c-4331-b6a8-7799e5bd3309",
+        "icon": "end",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "e1575cd2-dff8-423d-9bea-354d9b0c39ef": {
+        "x": 376,
+        "y": 256,
+        "id": "e1575cd2-dff8-423d-9bea-354d9b0c39ef",
+        "lane": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "Получить печатные формы из 1С",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["b32818e1-1d2f-432c-8d72-d93f8303d610"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_print_forms_from_1c",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties"
+              },
+              "target": {
+                "kind": "context",
+                "value": "execution_duties"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "order_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "order_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "additional_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "transfer_to_paper"
+              },
+              "target": {
+                "kind": "context",
+                "value": "transfered_in_paper"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "reason_transfer_paper"
+              },
+              "target": {
+                "kind": "context",
+                "value": "reason_transfer_paper"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_canceled"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_cancelled"
+              }
+            }
+          ],
+          "linkCode": "execution_duties",
+          "namespace": "kedo.execution_duties",
+          "subProcessTargetFieldCode": "execution_duties"
+        }
+      }
+    },
+    "lanes": {
+      "942dd7e9-6ffb-4514-a0f2-1257a3741776": {
+        "x": 8,
+        "y": 8,
+        "id": "942dd7e9-6ffb-4514-a0f2-1257a3741776",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 848,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "02aad388-8dc0-46fe-97d2-a0cf3e438752": {
+        "id": "02aad388-8dc0-46fe-97d2-a0cf3e438752",
+        "name": "",
+        "path": [
+          {
+            "x": 328,
+            "y": 288
+          },
+          {
+            "x": 376,
+            "y": 288
+          }
+        ],
+        "type": "default",
+        "source": "c25c4524-348e-41a4-92ca-d0710afe9237",
+        "target": "e1575cd2-dff8-423d-9bea-354d9b0c39ef",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0e03b991-908e-4364-967f-485d40fd2a34": {
+        "id": "0e03b991-908e-4364-967f-485d40fd2a34",
+        "name": "",
+        "path": [
+          {
+            "x": 312,
+            "y": 304
+          },
+          {
+            "x": 312,
+            "y": 392
+          },
+          {
+            "x": 456,
+            "y": 392
+          }
+        ],
+        "type": "plain",
+        "source": "c25c4524-348e-41a4-92ca-d0710afe9237",
+        "target": "cbd7a729-608b-462e-b1aa-803f8b4b48af",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "use_alternative_system"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "217490ed-04ce-4ed1-8de5-5d0bcedafa07": {
+        "id": "217490ed-04ce-4ed1-8de5-5d0bcedafa07",
+        "name": "",
+        "path": [
+          {
+            "x": 216,
+            "y": 288
+          },
+          {
+            "x": 296,
+            "y": 288
+          }
+        ],
+        "type": "plain",
+        "source": "bc628324-98f6-4d46-a5da-c466ce62fdbc",
+        "target": "c25c4524-348e-41a4-92ca-d0710afe9237",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "25ff038f-12e7-435a-8da9-b14022632492": {
+        "id": "25ff038f-12e7-435a-8da9-b14022632492",
+        "name": "",
+        "path": [
+          {
+            "x": 536,
+            "y": 392
+          },
+          {
+            "x": 752,
+            "y": 392
+          },
+          {
+            "x": 752,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "cbd7a729-608b-462e-b1aa-803f8b4b48af",
+        "target": "dbb4eed8-0c3c-4331-b6a8-7799e5bd3309",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3e4012bd-723a-4113-903b-9ba475bdab76": {
+        "id": "3e4012bd-723a-4113-903b-9ba475bdab76",
+        "name": "",
+        "path": [
+          {
+            "x": 72,
+            "y": 288
+          },
+          {
+            "x": 136,
+            "y": 288
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "bc628324-98f6-4d46-a5da-c466ce62fdbc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6b7f19dd-c1dd-4a07-a322-a168c869d637": {
+        "id": "6b7f19dd-c1dd-4a07-a322-a168c869d637",
+        "name": "",
+        "path": [
+          {
+            "x": 536,
+            "y": 288
+          },
+          {
+            "x": 592,
+            "y": 288
+          }
+        ],
+        "type": "default",
+        "source": "64ab9c99-292d-45c7-a058-df97b2d39d87",
+        "target": "b93f2e56-7730-4a95-80b1-1b6bae61ab8f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a16a4c48-d59c-46bb-beb7-951b8cc68ce8": {
+        "id": "a16a4c48-d59c-46bb-beb7-951b8cc68ce8",
+        "name": "",
+        "path": [
+          {
+            "x": 520,
+            "y": 144
+          },
+          {
+            "x": 520,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "d998284a-bbd9-4cd5-9fc6-8e7c25decb59",
+        "target": "0a5aa341-1565-488f-bac0-0781e6b2d85a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b32818e1-1d2f-432c-8d72-d93f8303d610": {
+        "id": "b32818e1-1d2f-432c-8d72-d93f8303d610",
+        "name": "",
+        "path": [
+          {
+            "x": 456,
+            "y": 288
+          },
+          {
+            "x": 504,
+            "y": 288
+          }
+        ],
+        "type": "plain",
+        "source": "e1575cd2-dff8-423d-9bea-354d9b0c39ef",
+        "target": "64ab9c99-292d-45c7-a058-df97b2d39d87",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b95cbb04-f891-447d-9978-b563481ebb18": {
+        "id": "b95cbb04-f891-447d-9978-b563481ebb18",
+        "name": "",
+        "path": [
+          {
+            "x": 672,
+            "y": 288
+          },
+          {
+            "x": 736,
+            "y": 288
+          }
+        ],
+        "type": "plain",
+        "source": "b93f2e56-7730-4a95-80b1-1b6bae61ab8f",
+        "target": "dbb4eed8-0c3c-4331-b6a8-7799e5bd3309",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bc56f7ab-95cf-4fbb-80c2-66bdd04241fd": {
+        "id": "bc56f7ab-95cf-4fbb-80c2-66bdd04241fd",
+        "name": "",
+        "path": [
+          {
+            "x": 520,
+            "y": 272
+          },
+          {
+            "x": 520,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "64ab9c99-292d-45c7-a058-df97b2d39d87",
+        "target": "d998284a-bbd9-4cd5-9fc6-8e7c25decb59",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "request_canceled"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\nasync function getSettings(): Promise\u003cvoid\u003e {\n    //Интеграция с учетной системой\n    const integration_1c = await Context.fields.settings_kedo.app.search()\n        .size(10000)\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('integration_1c')\n        ))\n        .first();\n    Context.data.integration_1c = integration_1c ? integration_1c.data.status : false;\n    //Использовать 1С как мастер систему\n    const alternative_integration = await Context.fields.settings_kedo.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('use_alternative_integration')\n        ))\n        .first();\n    Context.data.use_alternative_integration = alternative_integration ? alternative_integration.data.status : false;\n    //Использовать альтернативную учетную систему\n    const alternative_system = await Context.fields.settings_kedo.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('use_alternative_system')\n        ))\n        .first();\n    Context.data.use_alternative_system = alternative_system ? alternative_system.data.status : false;\n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "order_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "settings_kedo": {
+        "enabled": false,
+        "conditions": []
+      },
+      "integration_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "end_date_string": {
+        "enabled": false,
+        "conditions": []
+      },
+      "execution_duties": {
+        "enabled": false,
+        "conditions": []
+      },
+      "request_canceled": {
+        "enabled": false,
+        "conditions": []
+      },
+      "substitute_staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "start_date_string": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_to_paper": {
+        "enabled": false,
+        "conditions": []
+      },
+      "reason_transfer_paper": {
+        "enabled": false,
+        "conditions": []
+      },
+      "use_alternative_system": {
+        "enabled": false,
+        "conditions": []
+      },
+      "use_alternative_integration": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

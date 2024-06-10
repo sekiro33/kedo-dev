@@ -1,0 +1,277 @@
+<style>
+.portal-header__bar {
+    width: calc(100vw - 40px);
+    height: 60px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.portal-header__bar:before,
+.portal-header__bar:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.portal-header__bar .portal-header__bar-item {
+    padding: 8px 16px 8px 0px;
+    float: left;
+    width: auto;
+    border: none;
+    display: block;
+    outline: 0;
+}
+
+.portal-header__bar .portal-header__bar-logo {
+    margin-left: 15px;
+    height: 32px;
+    width: 32px;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.portal-header__bar .portal-header__user {
+    position: fixed;
+    right: 0;
+    margin-right: 0px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 60px;
+}
+
+@media screen and (max-width: 992px) {
+    .portal-header__user {
+        display: none !important;
+    }
+}
+
+.portal-header__bar .portal-header__partner-text {
+    font-style: normal;
+    font-weight: normal;
+    line-height: 32px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    text-transform: uppercase;
+    color: #062543;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.portal-header__bar .portal-mobile-menu {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    height: 60px;
+}
+
+@media screen and (min-width: 993px) {
+    .portal-mobile-menu {
+        display: none !important;
+    }
+}
+
+.portal-header__user-name {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 22px;
+    color: #062543;
+    margin-left: 16px;
+}
+
+.portal-header__company {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 20px;
+    color: #062543;
+    margin-left: 16px;
+}
+
+.portal-header__user_logout {
+    margin: 16px 0 20px 30px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 16px;
+    line-height: 24px;
+    color: #5082E6;
+}
+
+.portal-header__user_logout:hover {
+    cursor: pointer;
+}
+
+.portal-header__modal {
+    display: none;
+    position: absolute;
+    z-index: 9000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    background-color: rgb(0,0,0);
+    background-color: rgba(0,0,0,0.4);
+}
+
+.portal-header__modal-content {
+    background-color: #fefefe;
+    width: 100%;
+    height: 100%;
+    overflow-y: initial;
+}
+
+.portal-header__modal-close {
+    padding-right: 36px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: #fff;
+    font-size: 24px;
+}
+
+.portal-header__mobile-menu {
+    display: flex;
+    flex-direction: column;
+    background-color: #1e6599;
+}
+
+.portal-header__mobile-menu-item {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: stretch;
+    line-height: 20px;
+    padding: 20px 18px;
+}
+
+.portal-header__mobile-menu-item-logout i {
+    margin-left: 4px;
+    margin-right: 12px;
+    color: #595959;
+}
+
+.portal-header__mobile-menu-item-logout span {
+    color: #595959;
+}
+
+.portal-header__mobile-menu-item__wrap {
+    display: block;
+}
+
+.portal-header__mobile-menu-item-icon {
+    margin-right: 16px;
+    color: #1e6599;
+}
+
+.portal-header__mobile-menu-item-label {
+    color: #000;
+}
+
+.portal-header__mobile-menu-header {
+    display: flex;
+    flex-direction: row;
+    height: 60px;
+    justify-content: space-between;
+}
+
+.kedo_ext-header__mobile-menu-body {
+    background-color: #fefefe;
+    overflow-y: auto;
+    border-radius: 30px 30px 0px 0px;
+    height: calc(100vh - 60px - 60px); // mobile-menu-header height
+}
+
+.portal-header__mobile-menu-delimiter {
+    margin: 0px;
+}
+
+.portal-header__mobile-menu-footer {
+    background-color: #fefefe;
+}
+
+.portal-header__mobile-menu-title {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 21px;
+    font-weight: 400;
+    line-height: normal;
+    display: flex;
+    padding: 20px;
+}
+</style>
+
+<div class="portal-header__bar ">
+    <a href="<%= getStartPageURL() %>" class="portal-header__bar-item"><img class="portal-header__bar-logo" src="<%= getLogoSrc() %>"></a>
+    <% if(getHeaderText()) {%>
+    <div class="portal-header__bar-item portal-header__partner-text"><%= getHeaderText() %></div>
+    <% } %>
+    <div class="portal-header__bar-item portal-header__user">
+        <div>
+            <div class="portal-header__user-name"><%= getUserFIO() %></div>
+            <div class="portal-header__company"><%= getCompanyName() %></div>
+        </div>
+        <a onclick="<%- Scripts %>.logoutCurrentUser();" class="portal-header__user_logout">Выйти</a>
+    </div>
+    <div class="portal-header__bar-item portal-mobile-menu">
+        <a onclick="<%- Scripts %>.showMobileMenu();"><i class="elma-icons md-24">menu_burger</i></a>
+    </div>
+</div>
+
+<div id="d1c4a7fe-ba3d-4bdd-bfa7-93a58c4ec7ba">
+    <div id="df0aa1ba-23a2-4077-817d-2a12fe3aa049" class="portal-header__modal">
+        <div class="portal-header__modal-content">
+            <div class="portal-header__mobile-menu">
+                <div class="portal-header__mobile-menu-header">
+                    <div class="portal-header__mobile-menu-title">
+                        <%= getUserFIO() %>
+                    </div>
+                    <div class="portal-header__modal-close">
+                        <a onclick="<%- Scripts %>.closeMobileMenu();">
+                            <i class="elma-icons md-24">system_close</i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portal-header__mobile-menu-body">
+                    <%for(var item of getNavigationItems()) {%>
+                        <div class="portal-header__mobile-menu-item__wrap">
+                            <a
+                                class="portal-header__mobile-menu-item"
+                                onclick="<%- Scripts %>.closeMobileMenu();"
+                                href="<%= item.url %>"
+                            >
+                                <i class="portal-header__mobile-menu-item-icon elma-icons md-24"
+                                >file_type_text</i
+                                ><span class="portal-header__mobile-menu-item-label"><%= item.name %></span>
+                            </a>
+                        </div>
+                    <%}%>
+                </div>
+                <div class="portal-header__mobile-menu-footer">
+                    <hr class="portal-header__mobile-menu-delimiter">
+                    <div class="portal-header__mobile-menu-item__wrap">
+                        <a
+                            class="portal-header__mobile-menu-item portal-header__mobile-menu-item-logout"
+                            onclick="<%- Scripts %>.logoutCurrentUser();"
+                        >
+                            <i class="portal-header__mobile-menu-item-icon elma-icons md-24"
+                            >system_logout</i>
+                            <span class="portal-header__mobile-menu-item-label">Выход</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="fd164163-fdf1-4a56-bcb5-5d8bd1cdaeda" class="portal-header__modal">
+        CustomModalBody
+    </div>
+</div>

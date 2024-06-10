@@ -1,0 +1,942 @@
+{
+  "__id": "018c8757-193c-7eb3-8d2d-68fa7f3dc966",
+  "namespace": "kedo",
+  "code": "matching_users_and_employees",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Сопоставление пользователей и сотрудников",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "offset_iterations",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "offset_iterations",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "external_users",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "_user_profiles",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "_system_catalogs",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Внешние пользователи",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники",
+        "data": {}
+      }
+    },
+    {
+      "code": "length2",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "length2",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "size_iterations",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "size_iterations",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "is_matching",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Есть сопоставления?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "string_error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "string_error",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "string",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "length1",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "length1",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "end_processing",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "end_processing",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "employee",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "employee",
+        "data": {}
+      }
+    },
+    {
+      "code": "count_users",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Сопоставленные пользователи",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "users",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Пользователи",
+        "data": {}
+      }
+    },
+    {
+      "code": "user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "user",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-10-17T11:14:17.226136413Z",
+  "__createdBy": "1c0c8888-b2de-4c76-afa3-40a7dce6d018",
+  "__updatedAt": "2023-10-26T06:26:00.296722605Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["a1d12806-eca9-4745-ab08-96f55f0fff4e"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Сопоставление пользователей и сотрудников - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0cee8a9f-f4fa-48b9-9c65-cde359542cb0": {
+        "x": 768,
+        "y": 56,
+        "id": "0cee8a9f-f4fa-48b9-9c65-cde359542cb0",
+        "icon": "notification",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "Сопоставлений не было",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["5034f158-8ddc-4dd1-b2ad-47bd90f75f75"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Сопоставлений не было"
+        }
+      },
+      "13dd2f3f-06ae-46ef-87d5-a42169e62a2a": {
+        "x": 608,
+        "y": 72,
+        "id": "13dd2f3f-06ae-46ef-87d5-a42169e62a2a",
+        "icon": "exclusive",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "80366111-8941-4ed9-9ffd-093e2244f089",
+          "1e837669-3c63-4b8c-8c80-4d7e2de97cc8"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "c3cf1b0d-ac9b-442b-ad7e-54d92339b371": {
+        "x": 432,
+        "y": 72,
+        "id": "c3cf1b0d-ac9b-442b-ad7e-54d92339b371",
+        "icon": "exclusive",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "bd87ae7d-4645-4393-b2df-accc9bef012c",
+          "c55558e2-a905-4473-aee9-20923ac9e6c7"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "ca9d047c-ecc9-42e1-a584-663527f9d3fb": {
+        "x": 952,
+        "y": 72,
+        "id": "ca9d047c-ecc9-42e1-a584-663527f9d3fb",
+        "icon": "end",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "d261e14f-7505-4559-ae85-f4fcb24c00b6": {
+        "x": 584,
+        "y": 176,
+        "id": "d261e14f-7505-4559-ae85-f4fcb24c00b6",
+        "icon": "notification",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "Оповещение о сопоставлении сотрудников",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["3b80f7b7-8cde-4685-877d-0d01864a8873"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Сопоставлено сотрудников: {$count_users}"
+        }
+      },
+      "efc076ca-c828-4155-8d8b-72e31408279a": {
+        "x": 216,
+        "y": 56,
+        "id": "efc076ca-c828-4155-8d8b-72e31408279a",
+        "icon": "script",
+        "lane": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "Получить карточки сотрудников",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["be187922-fe5a-4edb-b3ee-140aa3cd50ba"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getAllEmployee",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "6948e550-8c60-4897-904e-690fe44736db": {
+        "x": 8,
+        "y": 8,
+        "id": "6948e550-8c60-4897-904e-690fe44736db",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1040,
+        "height": 980,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "1e837669-3c63-4b8c-8c80-4d7e2de97cc8": {
+        "id": "1e837669-3c63-4b8c-8c80-4d7e2de97cc8",
+        "name": "",
+        "path": [
+          {
+            "x": 640,
+            "y": 88
+          },
+          {
+            "x": 768,
+            "y": 88
+          }
+        ],
+        "type": "default",
+        "source": "13dd2f3f-06ae-46ef-87d5-a42169e62a2a",
+        "target": "0cee8a9f-f4fa-48b9-9c65-cde359542cb0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3b80f7b7-8cde-4685-877d-0d01864a8873": {
+        "id": "3b80f7b7-8cde-4685-877d-0d01864a8873",
+        "name": "",
+        "path": [
+          {
+            "x": 664,
+            "y": 208
+          },
+          {
+            "x": 940,
+            "y": 208
+          },
+          {
+            "x": 940,
+            "y": 88
+          },
+          {
+            "x": 952,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "d261e14f-7505-4559-ae85-f4fcb24c00b6",
+        "target": "ca9d047c-ecc9-42e1-a584-663527f9d3fb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5034f158-8ddc-4dd1-b2ad-47bd90f75f75": {
+        "id": "5034f158-8ddc-4dd1-b2ad-47bd90f75f75",
+        "name": "",
+        "path": [
+          {
+            "x": 848,
+            "y": 88
+          },
+          {
+            "x": 952,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "0cee8a9f-f4fa-48b9-9c65-cde359542cb0",
+        "target": "ca9d047c-ecc9-42e1-a584-663527f9d3fb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "80366111-8941-4ed9-9ffd-093e2244f089": {
+        "id": "80366111-8941-4ed9-9ffd-093e2244f089",
+        "name": "",
+        "path": [
+          {
+            "x": 624,
+            "y": 104
+          },
+          {
+            "x": 624,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "13dd2f3f-06ae-46ef-87d5-a42169e62a2a",
+        "target": "d261e14f-7505-4559-ae85-f4fcb24c00b6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_matching"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a1d12806-eca9-4745-ab08-96f55f0fff4e": {
+        "id": "a1d12806-eca9-4745-ab08-96f55f0fff4e",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 88
+          },
+          {
+            "x": 216,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "efc076ca-c828-4155-8d8b-72e31408279a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bd87ae7d-4645-4393-b2df-accc9bef012c": {
+        "id": "bd87ae7d-4645-4393-b2df-accc9bef012c",
+        "name": "Обработаны все пользователи",
+        "path": [
+          {
+            "x": 464,
+            "y": 88
+          },
+          {
+            "x": 608,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "c3cf1b0d-ac9b-442b-ad7e-54d92339b371",
+        "target": "13dd2f3f-06ae-46ef-87d5-a42169e62a2a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "end_processing"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "be187922-fe5a-4edb-b3ee-140aa3cd50ba": {
+        "id": "be187922-fe5a-4edb-b3ee-140aa3cd50ba",
+        "name": "",
+        "path": [
+          {
+            "x": 296,
+            "y": 88
+          },
+          {
+            "x": 432,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "efc076ca-c828-4155-8d8b-72e31408279a",
+        "target": "c3cf1b0d-ac9b-442b-ad7e-54d92339b371",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c55558e2-a905-4473-aee9-20923ac9e6c7": {
+        "id": "c55558e2-a905-4473-aee9-20923ac9e6c7",
+        "name": "Пользователи обработаны не все",
+        "path": [
+          {
+            "x": 448,
+            "y": 104
+          },
+          {
+            "x": 448,
+            "y": 140
+          },
+          {
+            "x": 256,
+            "y": 140
+          },
+          {
+            "x": 256,
+            "y": 120
+          }
+        ],
+        "type": "default",
+        "source": "c3cf1b0d-ac9b-442b-ad7e-54d92339b371",
+        "target": "efc076ca-c828-4155-8d8b-72e31408279a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "async function getAllEmployee(): Promise\u003cvoid\u003e {\n\n    if (!Context.data.offset_iterations) {\n        Context.data.offset_iterations = 0;\n    }\n\n    const size_iterations = 100;\n\n    let resultEmployee: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e[] = [];\n    let appSearchEmployee = Context.fields.staff.app.search();\n\n    try {\n        const items: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e[] = await appSearchEmployee.where(f =\u003e f.ext_user.eq(null)).sort(\"__createdAt\", true)\n            .size(100)\n            .from(Context.data.offset_iterations)\n            .all();\n\n        resultEmployee.push(...items);\n    } catch (e) {\n        Context.data.string_error = e.message;\n        return\n    }\n\n    if (!Context.data.count_users) {\n        Context.data.count_users = 0;\n    }\n\n    for (let row_employee of resultEmployee) {\n        let fio = row_employee.data.full_name?.lastname + ' ' + row_employee.data.full_name?.firstname;\n        if (row_employee.data.full_name?.middlename) {\n            fio = fio + ' ' + row_employee.data.full_name.middlename;\n        }\n\n        let find_user = await System.users.search().where(f =\u003e f.__name.eq(fio)).first();\n        if (find_user) {\n\n            if ((find_user.data.email \u0026\u0026 row_employee.data.email \u0026\u0026 (find_user.data.email == row_employee.data.email.email)) ||\n                (find_user.data.workPhone \u0026\u0026 row_employee.data.phone \u0026\u0026 (find_user.data.workPhone == row_employee.data.phone)) ||\n                (find_user.data.mobilePhone \u0026\u0026 row_employee.data.phone \u0026\u0026 (find_user.data.mobilePhone.tel == row_employee.data.phone.tel))) {\n                row_employee.data.ext_user = find_user;\n                Context.data.is_matching = true;\n                Context.data.count_users = Context.data.count_users + 1;\n\n                await row_employee.save();\n            }\n        }\n    }\n\n    if (resultEmployee.length \u003c size_iterations) {\n        Context.data.end_processing = true;\n    } else {\n        Context.data.offset_iterations += 100;\n    }\n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "users": {
+        "enabled": false,
+        "conditions": []
+      },
+      "length": {
+        "enabled": false,
+        "conditions": []
+      },
+      "string": {
+        "enabled": false,
+        "conditions": []
+      },
+      "length1": {
+        "enabled": false,
+        "conditions": []
+      },
+      "length2": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employee": {
+        "enabled": false,
+        "conditions": []
+      },
+      "n1111111": {
+        "enabled": false,
+        "conditions": []
+      },
+      "count_users": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_matching": {
+        "enabled": false,
+        "conditions": []
+      },
+      "string_error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "end_processing": {
+        "enabled": false,
+        "conditions": []
+      },
+      "external_users": {
+        "enabled": false,
+        "conditions": []
+      },
+      "size_iterations": {
+        "enabled": false,
+        "conditions": []
+      },
+      "offset_iterations": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

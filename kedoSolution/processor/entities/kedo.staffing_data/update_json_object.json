@@ -1,0 +1,651 @@
+{
+  "__id": "018c8757-193c-7ed3-9496-6648904cbe84",
+  "namespace": "kedo.staffing_data",
+  "code": "update_json_object",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1С) Создание объекта JSON для работы виджета ШР",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "staffing_data",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staffing_data",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Данные Штатного расписания"
+      }
+    },
+    {
+      "code": "json_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "JSON данные",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "maximum_nesting_in_staffing",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 20,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Максимальная вложенность в штатном расписании",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2022-04-13T13:06:49.854498833Z",
+  "__createdBy": "6df9caf6-9e2b-4c10-b9cc-e897caad35ae",
+  "__updatedAt": "2022-05-12T07:16:08.332593809Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["c39c0755-66eb-45aa-bce0-c2336e2d5151"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обновить объект JSON ({$staffing_data})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "4e698e14-7817-45d9-be1a-b893c6a644e7": {
+        "x": 392,
+        "y": 56,
+        "id": "4e698e14-7817-45d9-be1a-b893c6a644e7",
+        "icon": "create",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "Создание элемента приложения",
+        "type": "app_create",
+        "color": "#a0e9fd",
+        "exits": ["be01e9b9-2ce9-47b1-ab26-2c9446d63ee1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "json_data"
+              },
+              "target": {
+                "kind": "context",
+                "value": "json_staffing_data"
+              }
+            }
+          ],
+          "variable": "staffing_data"
+        }
+      },
+      "57428b97-002d-4e38-ad9d-401e7f531cb3": {
+        "x": 392,
+        "y": 168,
+        "id": "57428b97-002d-4e38-ad9d-401e7f531cb3",
+        "icon": "user",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "Просмотр ошибки парсинга объекта Штатного расписания",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": ["191c6f11-c926-4ceb-8376-a374130a7306"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "notify": true,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [
+            {
+              "code": "error",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "allowReassign": true,
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          }
+        }
+      },
+      "72355c05-4212-4c03-84cc-6bac303b2fdb": {
+        "x": 512,
+        "y": 72,
+        "id": "72355c05-4212-4c03-84cc-6bac303b2fdb",
+        "icon": "end",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "7bbb2398-2e74-48f0-aca7-c439df56d73a": {
+        "x": 312,
+        "y": 72,
+        "id": "7bbb2398-2e74-48f0-aca7-c439df56d73a",
+        "icon": "exclusive",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "4172c035-9772-4695-935f-75144e310ed7",
+          "69ba1da6-4342-459a-a166-553fd820dad3"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "e714cd76-a5f5-43f2-8598-5195f505eeec": {
+        "x": 176,
+        "y": 56,
+        "id": "e714cd76-a5f5-43f2-8598-5195f505eeec",
+        "icon": "script",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "Создать JSON",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "960081d5-9c8e-42a9-b80a-a4cc554f6a89",
+          "c4f7a299-6928-4bde-94bd-14ba77778b8d"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseJson",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "c4f7a299-6928-4bde-94bd-14ba77778b8d",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "ee27b20d-5237-42ca-900b-409c9e491342": {
+        "x": 176,
+        "y": 168,
+        "id": "ee27b20d-5237-42ca-900b-409c9e491342",
+        "icon": "script",
+        "lane": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "Обработка ошибки",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["5ed959cb-1e43-4d63-86d2-c1b4fac9a366"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "errorHandle",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "101a39a8-614a-4e3e-8f24-ba1a439ff139": {
+        "x": 8,
+        "y": 8,
+        "id": "101a39a8-614a-4e3e-8f24-ba1a439ff139",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 736,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "191c6f11-c926-4ceb-8376-a374130a7306": {
+        "id": "191c6f11-c926-4ceb-8376-a374130a7306",
+        "name": "",
+        "path": [
+          {
+            "x": 472,
+            "y": 200
+          },
+          {
+            "x": 528,
+            "y": 200
+          },
+          {
+            "x": 528,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "57428b97-002d-4e38-ad9d-401e7f531cb3",
+        "target": "72355c05-4212-4c03-84cc-6bac303b2fdb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4172c035-9772-4695-935f-75144e310ed7": {
+        "id": "4172c035-9772-4695-935f-75144e310ed7",
+        "name": "Есть ошибка",
+        "path": [
+          {
+            "x": 328,
+            "y": 104
+          },
+          {
+            "x": 328,
+            "y": 200
+          },
+          {
+            "x": 392,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "7bbb2398-2e74-48f0-aca7-c439df56d73a",
+        "target": "57428b97-002d-4e38-ad9d-401e7f531cb3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5ed959cb-1e43-4d63-86d2-c1b4fac9a366": {
+        "id": "5ed959cb-1e43-4d63-86d2-c1b4fac9a366",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 216
+          },
+          {
+            "x": 392,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "ee27b20d-5237-42ca-900b-409c9e491342",
+        "target": "57428b97-002d-4e38-ad9d-401e7f531cb3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "69ba1da6-4342-459a-a166-553fd820dad3": {
+        "id": "69ba1da6-4342-459a-a166-553fd820dad3",
+        "name": "",
+        "path": [
+          {
+            "x": 344,
+            "y": 88
+          },
+          {
+            "x": 392,
+            "y": 88
+          }
+        ],
+        "type": "default",
+        "source": "7bbb2398-2e74-48f0-aca7-c439df56d73a",
+        "target": "4e698e14-7817-45d9-be1a-b893c6a644e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "960081d5-9c8e-42a9-b80a-a4cc554f6a89": {
+        "id": "960081d5-9c8e-42a9-b80a-a4cc554f6a89",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 88
+          },
+          {
+            "x": 312,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "e714cd76-a5f5-43f2-8598-5195f505eeec",
+        "target": "7bbb2398-2e74-48f0-aca7-c439df56d73a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "be01e9b9-2ce9-47b1-ab26-2c9446d63ee1": {
+        "id": "be01e9b9-2ce9-47b1-ab26-2c9446d63ee1",
+        "name": "",
+        "path": [
+          {
+            "x": 472,
+            "y": 88
+          },
+          {
+            "x": 512,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "4e698e14-7817-45d9-be1a-b893c6a644e7",
+        "target": "72355c05-4212-4c03-84cc-6bac303b2fdb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c39c0755-66eb-45aa-bce0-c2336e2d5151": {
+        "id": "c39c0755-66eb-45aa-bce0-c2336e2d5151",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 88
+          },
+          {
+            "x": 176,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "e714cd76-a5f5-43f2-8598-5195f505eeec",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c4f7a299-6928-4bde-94bd-14ba77778b8d": {
+        "id": "c4f7a299-6928-4bde-94bd-14ba77778b8d",
+        "name": "",
+        "path": [
+          {
+            "x": 216,
+            "y": 120
+          },
+          {
+            "x": 216,
+            "y": 168
+          }
+        ],
+        "type": "error",
+        "source": "e714cd76-a5f5-43f2-8598-5195f505eeec",
+        "target": "ee27b20d-5237-42ca-900b-409c9e491342",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\n\nasync function parseJson(): Promise\u003cvoid\u003e {\n    Context.data.max_nesting_fact = 0;\n    let countOfIterations: number = 20;\n    if(Context.data.maximum_nesting_in_staffing){\n        countOfIterations = Context.data.maximum_nesting_in_staffing;\n    }\n\n    let count: number = 0;\n    \n    class Element {\n        [x: string]: any;\n        constructor(data: { [x: string]: any; }) {\n            if (data.data.__name) {\n            this._description = data.data.__name;\n            } else {\n            this._description = null;\n            }\n            if (data.data.ref_key) {\n            this._ref_key = data.data.ref_key;\n            } else {\n            this._ref_key = null;\n            }\n            if (data.data.owner_key) {\n            this._owner_key = data.data.owner_key;\n            } else {\n            this._owner_key = null;\n            }\n            if (data.data.parent_key) {\n            this._parent_key = data.data.parent_key;\n            } else {\n            this._parent_key = null;\n            }\n            if (data.data.division_key) {\n            this._division_key = data.data.division_key;\n            } else {\n            this._division_key = null;\n            }\n            if (data.data.position_key) {\n            this._position_key = data.data.position_key;\n            } else {\n            this._position_key = null;\n            }\n            this._element_template = {\n                description: \"\",\n                ref_key: \"\",\n                owner_key: \"\",\n                parent_key: \"\",\n                division_key: \"\",\n                position_key: \"\",\n                children: null,\n            };\n        }\n\n        getElement() {\n            const element = Object.assign(this._element_template);\n\n            element.description = this._description;\n            element.ref_key = this._ref_key;\n            element.owner_key = this._owner_key;\n            element.parent_key = this._parent_key;\n            element.division_key = this._division_key;\n            element.position_key = this._position_key;\n\n            return element;\n        }\n    }\n\n    let positionsObj: ApplicationItem\u003cApplication$kedo$position$Data,Application$kedo$position$Params\u003e[]|undefined;\n    positionsObj = await Namespace.app.position.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n\n    let resultObj: any = { children: null };\n\n    // ==========================================================\n    let lineOfElements: any = [];\n\n    async function checkElementParent(element: { parent_key: string; ref_key: any; owner_key: any; }) {\n        // проверка на цикличные ссылки\n        if(count \u003e countOfIterations){\n            Context.data.error += 'Превышен лимит вложенности штатного расписания ';\n            return;\n        }\n\n        if (element.parent_key !== \"00000000-0000-0000-0000-000000000000\") {\n            let elementParentData: ApplicationItem\u003cApplication$kedo$structural_subdivision$Data,Application$kedo$structural_subdivision$Params\u003e|undefined;\n            try {\n                elementParentData = await Namespace.app.structural_subdivision.search()\n                    .where((f, g) =\u003e g.and(\n                        f.__deletedAt.eq(null),\n                        f.ref_key.eq(element.parent_key)\n                    ))\n                    .first()\n            }\n            catch(err){\n                Context.data.error += 'Ошибка при поиске приложения подразделения ';\n                throw new Error(err)\n            }\n\n            if (elementParentData) {\n                const elementClass = new Element(elementParentData);\n                const parentElement = elementClass.getElement();\n                lineOfElements.push(parentElement);\n                \n                count++;\n                if (count \u003e Context.data.max_nesting_fact!){\n                    Context.data.max_nesting_fact = count;\n                }\n                \n                await checkElementParent(parentElement);\n            }\n        } else {\n            let elementOwnerData: ApplicationItem\u003cApplication$kedo$organization$Data,Application$kedo$organization$Params\u003e|undefined;\n\n            try {\n                elementOwnerData = await Namespace.app.organization.search()\n                    .where((f, g) =\u003e g.and(\n                        f.__deletedAt.eq(null),\n                        f.ref_key.eq(element.owner_key)\n                    ))\n                    .first()\n            }\n            catch(err){\n                Context.data.error += 'Ошибка при поиске приложения юридического лица ';\n                throw new Error(err)\n            }\n\n            if (elementOwnerData) {\n                const elementClass = new Element(elementOwnerData);\n                const ownerElement = elementClass.getElement();\n                lineOfElements.push(ownerElement);\n            }\n        }\n    }\n\n    async function createElementTree(data: any) {\n        lineOfElements = [];\n\n        const elementClass = new Element(data);\n        const element = elementClass.getElement();\n        lineOfElements.push(element);\n\n        count = 0;\n        await checkElementParent(element);\n    }\n\n    // ==========================================================\n\n    function commitBranchIteartion(targetObj: { children: any[]|null; }, dataIndex: number) {\n        if (dataIndex === -1) {\n            return targetObj;\n        }\n\n        if (targetObj.children === null) {\n            const nextTargetObj = commitBranchIteartion(lineOfElements[dataIndex], dataIndex - 1);\n            targetObj.children = [];\n            targetObj.children.push(nextTargetObj);\n        } else {\n            let ifFinded = false;\n\n            targetObj.children.forEach((item) =\u003e {\n                if (item.ref_key === lineOfElements[dataIndex].ref_key) {\n                    const nextTargetObj = commitBranchIteartion(item, dataIndex - 1);\n                    item = nextTargetObj;\n\n                    ifFinded = true;\n                }\n            });\n\n            if (!ifFinded) {\n                const nextTargetObj = commitBranchIteartion(lineOfElements[dataIndex], dataIndex - 1);\n                targetObj.children.push(nextTargetObj);\n            }\n        }\n        return targetObj;\n    }\n\n    for (let i = 0; i \u003c positionsObj.length; i++) {\n        if(!positionsObj[i].data.ref_key){\n            continue;\n        }\n        \n        await createElementTree(positionsObj[i]);\n\n        resultObj = commitBranchIteartion(resultObj, lineOfElements.length - 1);\n\n    }\n    Context.data.json_data = JSON.stringify(resultObj);\n}\n\nasync function errorHandle(): Promise\u003cvoid\u003e {\n    if(!Context.data.error){\n        Context.data.error = \"Неизвестная ошибка выполнения сценария\"\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staffing_data"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "json_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "maximum_nesting_in_staffing": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

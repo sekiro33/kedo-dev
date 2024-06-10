@@ -1,0 +1,11 @@
+{
+  "scripts": "let baseUrl;\nlet login;\nlet password;\nlet myHeaders;\nfunction getConnectionInfo() {\n    const connectionsArray = Namespace.params.data.list_of_connected_platforms ? JSON.parse(Namespace.params.data.list_of_connected_platforms) : undefined;\n    if (!connectionsArray) {\n        return new Error(`Не найдено записей подключения`);\n    }\n    const currentConnection = connectionsArray.length > 1 ? connectionsArray.find((item) => {\n        return item.name === Context.data.connection_name;\n    }) : connectionsArray[0];\n    if (!currentConnection) {\n        return new Error(`Не найдено подключение c именем ${Context.data.connection_name}`);\n    }\n    baseUrl = currentConnection.url;\n    login = currentConnection.login;\n    password = currentConnection.password;\n    myHeaders = {\n        Authorization: `Basic ${btoa(login + ':' + password)}`,\n    };\n    return null;\n}\nasync function action() {\n    var _a;\n    const currentDate = new TDate();\n    const body = {\n        \"Date\": `${currentDate.format('YYYY-MM-DD')}T00:00:00`,\n        \"Организация_Key\": Context.data.org_id,\n        \"Сотрудник_Key\": Context.data.personal_id,\n        \"НалоговыйПериод\": Context.data.period,\n        \"СпособФормирования\": \"ВРазрезеКодовОКАТО\",\n    };\n    const accounting1c = Namespace.params.fields.awaiting_docs_table_1c.app.fields.accounting_systems.variants.zup_1c;\n    const awaitingApp = Namespace.params.fields.awaiting_docs_table_1c.app.create();\n    awaitingApp.data.__name = \"Справка НДФЛ\";\n    awaitingApp.data.document_odata_name = \"Document_СправкаНДФЛ\";\n    awaitingApp.data.accounting_systems = accounting1c;\n    awaitingApp.data.personal_guid_1c = JSON.stringify([Context.data.personal_id]);\n    awaitingApp.data.document_creation_data = JSON.stringify(body);\n    awaitingApp.data.additional_info = (_a = Context.data.additional_info) !== null && _a !== void 0 ? _a : \"\";\n    awaitingApp.data.base_1c_name = Context.data.connection_name;\n    await awaitingApp.save();\n    Context.data.integration_app_id = awaitingApp.data.__id;\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

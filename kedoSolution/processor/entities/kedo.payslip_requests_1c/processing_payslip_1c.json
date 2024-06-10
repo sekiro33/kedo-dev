@@ -1,0 +1,1375 @@
+{
+  "__id": "018c8757-193c-7ea4-9323-1333c1648e66",
+  "namespace": "kedo.payslip_requests_1c",
+  "code": "processing_payslip_1c",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обработка расчётного листа 1C",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "payslip",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "setlement_sheet",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "personnel_documents",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Расчетный лист",
+        "data": {}
+      }
+    },
+    {
+      "code": "payslip_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл расчетного листа",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "integration_app_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID приложения интеграции",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "start_period_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата начала периода",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "end_period_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата окончания периода",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "payslip_requests_1c",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "payslip_requests_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Запрос на расчетный лист в 1С"
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Error",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-09-23T15:21:00.520223857Z",
+  "__createdBy": "b1815b65-1548-40d4-a2c2-8c2edb60ebe9",
+  "__updatedAt": "2023-09-23T16:12:22.171905321Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 224,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["151e0b58-01d8-42a9-b642-79a1733c30ed"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обработка расчётного листа 1C ({$payslip_requests_1c})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "3a582f80-9d84-4622-b6aa-fd1e8144a480": {
+        "x": 1160,
+        "y": 208,
+        "id": "3a582f80-9d84-4622-b6aa-fd1e8144a480",
+        "icon": "create",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Создать расчетный лист",
+        "type": "app_create",
+        "color": "#a0e9fd",
+        "exits": ["41b87cae-1d0c-4efd-816e-e45d62c8ff6e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "payslip_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "start_period_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "end_period_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "end_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "variable": "payslip"
+        }
+      },
+      "5296ffc7-d244-44e2-a6e1-c74710208a46": {
+        "x": 400,
+        "y": 424,
+        "id": "5296ffc7-d244-44e2-a6e1-c74710208a46",
+        "icon": "end",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "59266a78-40b0-42f5-b21c-b52a34c18889": {
+        "x": 512,
+        "y": 208,
+        "id": "59266a78-40b0-42f5-b21c-b52a34c18889",
+        "icon": "script",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Получить запрос на расчетный лист",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "079f0641-c429-44ed-89ee-50f202cf353b",
+          "4497d58d-a0de-480f-bb29-d06d9d9b4fed"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_payslip_request",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "4497d58d-a0de-480f-bb29-d06d9d9b4fed",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "6ae5c9ca-8a9f-4a99-a8f6-d361310f5a0f": {
+        "x": 1016,
+        "y": 424,
+        "id": "6ae5c9ca-8a9f-4a99-a8f6-d361310f5a0f",
+        "icon": "end",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "93fc1cb8-fda5-4b22-be9c-b0d7e768299e": {
+        "x": 784,
+        "y": 224,
+        "id": "93fc1cb8-fda5-4b22-be9c-b0d7e768299e",
+        "icon": "event",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Ожидание получения расчётного листа",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["0a0dc39b-747c-4fc5-8d2a-cf364c65d99d"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "app_await_status",
+          "app_await": {
+            "status": [3],
+            "variable": "payslip_requests_1c"
+          }
+        }
+      },
+      "94e06b71-beb9-4849-9987-905c37fc50d5": {
+        "x": 872,
+        "y": 208,
+        "id": "94e06b71-beb9-4849-9987-905c37fc50d5",
+        "icon": "script",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Получить печатную форму расчётного листа",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f135e1d8-4095-409a-a40c-21bbccf5eb06"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_print_form",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "afb8cbd2-eb1c-4335-ae55-dc0fdafac89f": {
+        "x": 1392,
+        "y": 224,
+        "id": "afb8cbd2-eb1c-4335-ae55-dc0fdafac89f",
+        "icon": "end",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "c18ad997-168c-43a2-930d-4a3f637d5c34": {
+        "x": 376,
+        "y": 320,
+        "id": "c18ad997-168c-43a2-930d-4a3f637d5c34",
+        "icon": "notification",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Ошибка при получении расчётного листа",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["725e3170-cfc2-4fa3-bafd-b65ae639df37"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Ошибка при получении расчётного листа для сотрудника {$staff.full_name}"
+        }
+      },
+      "d79b0f8f-3435-4dff-be1b-56101250e008": {
+        "x": 216,
+        "y": 320,
+        "id": "d79b0f8f-3435-4dff-be1b-56101250e008",
+        "icon": "notification",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "У сотрудника отсутствует ID ФЛ",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["d3e30669-8798-4947-8159-dc5456055867"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "У сотрудника отсутствует ID ФЛ"
+        }
+      },
+      "e10b5130-ad89-4a90-8cb4-f94fef5972cf": {
+        "x": 1272,
+        "y": 208,
+        "id": "e10b5130-ad89-4a90-8cb4-f94fef5972cf",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Отправить расчетный лист на ознакомление",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["cc652b4b-cb36-4bf7-8ef7-1131fd704ffb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "introduction_to_payroll",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "payslip"
+              },
+              "target": {
+                "kind": "context",
+                "value": "setlement_sheet"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "payslip",
+          "namespace": "personnel_documents.setlement_sheet",
+          "subProcessTargetFieldCode": "setlement_sheet"
+        }
+      },
+      "e2217fae-a46d-41d2-8859-cbfe8c38a305": {
+        "x": 1016,
+        "y": 224,
+        "id": "e2217fae-a46d-41d2-8859-cbfe8c38a305",
+        "icon": "exclusive",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "b16864cf-4360-4110-a036-4fb3a25f9087",
+          "2a96bf76-4cad-4c18-adce-af362f137a3d"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "e8af1e4f-f880-4439-b712-a9bf90c3f64e": {
+        "x": 992,
+        "y": 312,
+        "id": "e8af1e4f-f880-4439-b712-a9bf90c3f64e",
+        "icon": "notification",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "В полученном ответе по запросу отсутствует печатная форма",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["6d588a58-d697-4b61-a75c-c8e550a986b8"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "В ответе по запросу на получение расчетного листа для сотрудника {$staff} отсутствует печатная форма",
+          "messageHeader": "В полученном ответе по запросу отсутствует печатная форма"
+        }
+      },
+      "ebca0247-a201-4150-99ce-c2ed0dc9017e": {
+        "x": 240,
+        "y": 424,
+        "id": "ebca0247-a201-4150-99ce-c2ed0dc9017e",
+        "icon": "end",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "ee746227-7e6b-46a9-b5c0-9f877879a42d": {
+        "x": 240,
+        "y": 224,
+        "id": "ee746227-7e6b-46a9-b5c0-9f877879a42d",
+        "icon": "exclusive",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Проверка ID 1C сотрудника",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "766d1466-ec29-4067-a059-25b2c06e1f3c",
+          "3781b60f-b76d-4bc9-9337-ecf54a64f0c5"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "check_personal_id",
+          "type": "exclusive",
+          "useFunc": true,
+          "funcType": "BOOLEAN",
+          "description": ""
+        }
+      },
+      "fd7cf923-3cd0-4246-8f96-d346b00ff6a1": {
+        "x": 376,
+        "y": 208,
+        "id": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "icon": "system",
+        "lane": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "(1С ЗУП) Создать запрос на расчетный листок",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "0f944f89-6f7e-477a-8e77-263f91eda4d8",
+          "6fd00e85-a37b-43c2-ba1b-c9ec6727ee76"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_payslip_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "start_period_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "end_period_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "end_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.individual_id_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personal_id"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "integration_app_id"
+              },
+              "target": {
+                "kind": "context",
+                "value": "id_payslip_app"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "0f944f89-6f7e-477a-8e77-263f91eda4d8",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      }
+    },
+    "lanes": {
+      "5e8ce252-d618-4ea3-b040-08617ef334f0": {
+        "x": 8,
+        "y": 8,
+        "id": "5e8ce252-d618-4ea3-b040-08617ef334f0",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1476,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "079f0641-c429-44ed-89ee-50f202cf353b": {
+        "id": "079f0641-c429-44ed-89ee-50f202cf353b",
+        "name": "",
+        "path": [
+          {
+            "x": 592,
+            "y": 240
+          },
+          {
+            "x": 784,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "59266a78-40b0-42f5-b21c-b52a34c18889",
+        "target": "93fc1cb8-fda5-4b22-be9c-b0d7e768299e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0a0dc39b-747c-4fc5-8d2a-cf364c65d99d": {
+        "id": "0a0dc39b-747c-4fc5-8d2a-cf364c65d99d",
+        "name": "",
+        "path": [
+          {
+            "x": 816,
+            "y": 240
+          },
+          {
+            "x": 872,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "93fc1cb8-fda5-4b22-be9c-b0d7e768299e",
+        "target": "94e06b71-beb9-4849-9987-905c37fc50d5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0f944f89-6f7e-477a-8e77-263f91eda4d8": {
+        "id": "0f944f89-6f7e-477a-8e77-263f91eda4d8",
+        "name": "",
+        "path": [
+          {
+            "x": 416,
+            "y": 272
+          },
+          {
+            "x": 416,
+            "y": 320
+          }
+        ],
+        "type": "error",
+        "source": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "target": "c18ad997-168c-43a2-930d-4a3f637d5c34",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "151e0b58-01d8-42a9-b642-79a1733c30ed": {
+        "id": "151e0b58-01d8-42a9-b642-79a1733c30ed",
+        "name": "",
+        "path": [
+          {
+            "x": 96,
+            "y": 240
+          },
+          {
+            "x": 240,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "ee746227-7e6b-46a9-b5c0-9f877879a42d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2a96bf76-4cad-4c18-adce-af362f137a3d": {
+        "id": "2a96bf76-4cad-4c18-adce-af362f137a3d",
+        "name": "Есть печатная форма",
+        "path": [
+          {
+            "x": 1048,
+            "y": 240
+          },
+          {
+            "x": 1160,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "e2217fae-a46d-41d2-8859-cbfe8c38a305",
+        "target": "3a582f80-9d84-4622-b6aa-fd1e8144a480",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "payslip_file"
+              },
+              "type": "FILE",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3781b60f-b76d-4bc9-9337-ecf54a64f0c5": {
+        "id": "3781b60f-b76d-4bc9-9337-ecf54a64f0c5",
+        "name": "Есть ФЛ ID",
+        "path": [
+          {
+            "x": 272,
+            "y": 240
+          },
+          {
+            "x": 376,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "ee746227-7e6b-46a9-b5c0-9f877879a42d",
+        "target": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "41b87cae-1d0c-4efd-816e-e45d62c8ff6e": {
+        "id": "41b87cae-1d0c-4efd-816e-e45d62c8ff6e",
+        "name": "",
+        "path": [
+          {
+            "x": 1240,
+            "y": 240
+          },
+          {
+            "x": 1272,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "3a582f80-9d84-4622-b6aa-fd1e8144a480",
+        "target": "e10b5130-ad89-4a90-8cb4-f94fef5972cf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4497d58d-a0de-480f-bb29-d06d9d9b4fed": {
+        "id": "4497d58d-a0de-480f-bb29-d06d9d9b4fed",
+        "name": "",
+        "path": [
+          {
+            "x": 552,
+            "y": 272
+          },
+          {
+            "x": 552,
+            "y": 352
+          },
+          {
+            "x": 456,
+            "y": 352
+          }
+        ],
+        "type": "error",
+        "source": "59266a78-40b0-42f5-b21c-b52a34c18889",
+        "target": "c18ad997-168c-43a2-930d-4a3f637d5c34",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6d588a58-d697-4b61-a75c-c8e550a986b8": {
+        "id": "6d588a58-d697-4b61-a75c-c8e550a986b8",
+        "name": "",
+        "path": [
+          {
+            "x": 1032,
+            "y": 376
+          },
+          {
+            "x": 1032,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "e8af1e4f-f880-4439-b712-a9bf90c3f64e",
+        "target": "6ae5c9ca-8a9f-4a99-a8f6-d361310f5a0f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6fd00e85-a37b-43c2-ba1b-c9ec6727ee76": {
+        "id": "6fd00e85-a37b-43c2-ba1b-c9ec6727ee76",
+        "name": "",
+        "path": [
+          {
+            "x": 456,
+            "y": 240
+          },
+          {
+            "x": 512,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "fd7cf923-3cd0-4246-8f96-d346b00ff6a1",
+        "target": "59266a78-40b0-42f5-b21c-b52a34c18889",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "725e3170-cfc2-4fa3-bafd-b65ae639df37": {
+        "id": "725e3170-cfc2-4fa3-bafd-b65ae639df37",
+        "name": "",
+        "path": [
+          {
+            "x": 416,
+            "y": 384
+          },
+          {
+            "x": 416,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "c18ad997-168c-43a2-930d-4a3f637d5c34",
+        "target": "5296ffc7-d244-44e2-a6e1-c74710208a46",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "766d1466-ec29-4067-a059-25b2c06e1f3c": {
+        "id": "766d1466-ec29-4067-a059-25b2c06e1f3c",
+        "name": "Нет ID ФЛ",
+        "path": [
+          {
+            "x": 256,
+            "y": 256
+          },
+          {
+            "x": 256,
+            "y": 320
+          }
+        ],
+        "type": "default",
+        "source": "ee746227-7e6b-46a9-b5c0-9f877879a42d",
+        "target": "d79b0f8f-3435-4dff-be1b-56101250e008",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b16864cf-4360-4110-a036-4fb3a25f9087": {
+        "id": "b16864cf-4360-4110-a036-4fb3a25f9087",
+        "name": "Печатной формы нет",
+        "path": [
+          {
+            "x": 1032,
+            "y": 256
+          },
+          {
+            "x": 1032,
+            "y": 312
+          }
+        ],
+        "type": "default",
+        "source": "e2217fae-a46d-41d2-8859-cbfe8c38a305",
+        "target": "e8af1e4f-f880-4439-b712-a9bf90c3f64e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cc652b4b-cb36-4bf7-8ef7-1131fd704ffb": {
+        "id": "cc652b4b-cb36-4bf7-8ef7-1131fd704ffb",
+        "name": "",
+        "path": [
+          {
+            "x": 1352,
+            "y": 240
+          },
+          {
+            "x": 1392,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "e10b5130-ad89-4a90-8cb4-f94fef5972cf",
+        "target": "afb8cbd2-eb1c-4335-ae55-dc0fdafac89f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d3e30669-8798-4947-8159-dc5456055867": {
+        "id": "d3e30669-8798-4947-8159-dc5456055867",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 384
+          },
+          {
+            "x": 256,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "d79b0f8f-3435-4dff-be1b-56101250e008",
+        "target": "ebca0247-a201-4150-99ce-c2ed0dc9017e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f135e1d8-4095-409a-a40c-21bbccf5eb06": {
+        "id": "f135e1d8-4095-409a-a40c-21bbccf5eb06",
+        "name": "",
+        "path": [
+          {
+            "x": 952,
+            "y": 240
+          },
+          {
+            "x": 1016,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "94e06b71-beb9-4849-9987-905c37fc50d5",
+        "target": "e2217fae-a46d-41d2-8859-cbfe8c38a305",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function check_personal_id(): Promise\u003cboolean\u003e {\n    if (Context.data.staff) {\n        const staff = await Context.data.staff.fetch();\n        return staff.data.individual_id_1c ? true : false;\n    }\n    return false;\n}\n\nasync function get_payslip_request(): Promise\u003cvoid\u003e {\n    if (!Context.data.integration_app_id) {\n        Context.data.error = `Отсутствует ID приложения интеграции (запрос на РЛ)`;\n        throw new Error(Context.data.error);\n    }\n    \n    if (Context.data.integration_app_id) {\n        Context.data.payslip_requests_1c = await Context.fields.payslip_requests_1c.app.search()\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n                f.__id.eq(Context.data.integration_app_id!)\n            ))\n            .first();\n\n        if (!Context.data.payslip_requests_1c) {\n            Context.data.error = `Не найдено приложение интеграции (запрос на РЛ)`;\n            throw new Error(Context.data.error);\n        }\n    }\n}\n\nasync function get_print_form(): Promise\u003cvoid\u003e {\n    if (Context.data.payslip_requests_1c) {\n        const payslip_requests_1c = await Context.data.payslip_requests_1c.fetch();\n        \n        if (payslip_requests_1c.data.print_forms \u0026\u0026 payslip_requests_1c.data.print_forms.length \u003e 0) {\n            Context.data.payslip_file = payslip_requests_1c.data.print_forms[0];\n        }\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "payslip_requests_1c"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "payslip": {
+        "enabled": false,
+        "conditions": []
+      },
+      "payslip_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "end_period_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "start_period_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "integration_app_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "payslip_requests_1c": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

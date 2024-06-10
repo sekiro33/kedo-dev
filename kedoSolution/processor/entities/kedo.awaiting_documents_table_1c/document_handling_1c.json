@@ -1,0 +1,2746 @@
+{
+  "__id": "018f0a73-f072-783e-979c-adeba7224bdc",
+  "namespace": "kedo.awaiting_documents_table_1c",
+  "code": "document_handling_1c",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обработка приложений интеграции и отправка на подписание",
+  "type": "bpmn",
+  "draft": false,
+  "version": 1,
+  "context": [
+    {
+      "code": "integration_apps",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "awaiting_documents_table_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложения интеграции",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_initiator",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник-инициатор",
+        "data": {}
+      }
+    },
+    {
+      "code": "buffer_print_forms_table",
+      "type": "TABLE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "fields": [
+          {
+            "code": "__count",
+            "data": null,
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "Количество элементов",
+              "system": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "__index",
+            "data": {
+              "result": {}
+            },
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "№",
+              "disabled": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": true,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "print_form",
+            "data": {},
+            "type": "FILE",
+            "view": {
+              "data": {},
+              "name": "Печатная форма"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "doc_type_1c",
+            "data": {
+              "code": "document_types",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "Вид документа 1С"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "integration_app",
+            "data": {
+              "code": "awaiting_documents_table_1c",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "Приложение интеграции"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          }
+        ],
+        "result": {
+          "__count": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__index": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "print_form": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "doc_type_1c": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "integration_app": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          }
+        }
+      },
+      "view": {
+        "name": "Промежуточная таблица печатных форм",
+        "data": {
+          "allowDeleteRows": false,
+          "collapseNestedHeaders": false,
+          "columnsView": {
+            "doc_type_1c": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "integration_app": {
+              "align": "left",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "print_form": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            }
+          },
+          "footerHidden": false,
+          "groupingSettings": {
+            "code": "",
+            "kind": "None",
+            "sort": "asc"
+          },
+          "headerHidden": false,
+          "maxRowCount": 0,
+          "relativeWidth": false,
+          "rowMinHeight": 35,
+          "showOrderNumbers": false,
+          "viewTemplate": "Элементов: {$__count}",
+          "viewVariant": "table"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "print_forms_table",
+      "type": "TABLE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "fields": [
+          {
+            "code": "__count",
+            "data": null,
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "Количество элементов",
+              "system": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "__index",
+            "data": {
+              "result": {}
+            },
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "№",
+              "disabled": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": true,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "staff",
+            "data": {
+              "code": "staff",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "Сотрудник"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "employment_placement",
+            "data": {
+              "code": "employment_directory",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "По месту занятости"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "print_form",
+            "data": {},
+            "type": "FILE",
+            "view": {
+              "data": {},
+              "name": "Печатная форма"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "type_document_1c",
+            "data": {
+              "code": "document_types",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "Вид документа 1С"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "integration_app",
+            "data": {
+              "code": "awaiting_documents_table_1c",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "Приложение интеграции"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          }
+        ],
+        "result": {
+          "staff": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__count": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__index": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "print_form": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "integration_app": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "type_document_1c": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "employment_placement": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          }
+        }
+      },
+      "view": {
+        "name": "Таблица печатных форм",
+        "data": {
+          "allowDeleteRows": false,
+          "collapseNestedHeaders": false,
+          "columnsView": {
+            "employment_placement": {
+              "align": "left",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "integration_app": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "print_form": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "staff": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "type_document_1c": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            }
+          },
+          "footerHidden": false,
+          "groupingSettings": {
+            "code": "",
+            "kind": "None",
+            "sort": "asc"
+          },
+          "headerHidden": false,
+          "maxRowCount": 0,
+          "relativeWidth": true,
+          "rowMinHeight": 35,
+          "showOrderNumbers": false,
+          "viewTemplate": "Элементов: {$__count}",
+          "viewVariant": "table"
+        }
+      }
+    },
+    {
+      "code": "overdue_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата подписания",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "employment_placement",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employment_directory",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "По месту занятости",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "errors_table",
+      "type": "TABLE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "fields": [
+          {
+            "code": "__count",
+            "data": null,
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "Количество элементов",
+              "system": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "__index",
+            "data": {},
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "№",
+              "disabled": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": true,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "integration_app",
+            "data": {
+              "code": "awaiting_documents_table_1c",
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              },
+              "bindings": null,
+              "namespace": "kedo",
+              "isDependent": false,
+              "linkedFieldCode": ""
+            },
+            "type": "SYS_COLLECTION",
+            "view": {
+              "data": {
+                "showCreateItem": false
+              },
+              "name": "Приложение интеграции"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "error",
+            "data": {},
+            "type": "STRING",
+            "view": {
+              "data": {
+                "additionalType": "text"
+              },
+              "name": "Текст ошибки"
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          }
+        ],
+        "result": {
+          "error": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__count": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__index": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "integration_app": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          }
+        }
+      },
+      "view": {
+        "name": "Таблица ошибок",
+        "data": {
+          "allowDeleteRows": false,
+          "collapseNestedHeaders": false,
+          "columnsView": {
+            "error": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "integration_app": {
+              "align": "left",
+              "backgroundColor": "",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "key": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            }
+          },
+          "footerHidden": false,
+          "groupingSettings": {
+            "code": "",
+            "kind": "None",
+            "sort": "asc"
+          },
+          "headerHidden": false,
+          "maxRowCount": 0,
+          "relativeWidth": true,
+          "showOrderNumbers": false,
+          "viewTemplate": "Элементов: {$__count}",
+          "viewVariant": "table"
+        }
+      }
+    },
+    {
+      "code": "awaiting_documents_table_1c",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "awaiting_documents_table_1c",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Таблица приложений интеграции с 1С"
+      }
+    },
+    {
+      "code": "organization",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Организация",
+        "data": {}
+      }
+    },
+    {
+      "code": "from",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "from",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "table_counter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счетчик таблицы",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "counter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счетчик итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "type_document_1c",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "document_types",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Вид документа 1С",
+        "data": {}
+      }
+    },
+    {
+      "code": "print_form",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Печатная форма",
+        "data": {}
+      }
+    },
+    {
+      "code": "size",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 100,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "size",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-09-01T06:47:08.519220767Z",
+  "__createdBy": "b1815b65-1548-40d4-a2c2-8c2edb60ebe9",
+  "__updatedAt": "2024-04-06T08:45:08.659474454Z",
+  "__updatedBy": "099fd2a1-8125-406b-aaff-0db06d81aa40",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 208,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["1e480a36-64f0-4c4d-8fc1-fc6ff5311141"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formCode": "form_77e97220-3c62-4c86-b417-126a70b673c9",
+          "formFields": [
+            {
+              "code": "__name",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обработка приложений интеграции и отправка на подписание ({$awaiting_documents_table_1c})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "02968a46-4f35-430f-b6af-017210620d9d": {
+        "x": 648,
+        "y": 360,
+        "id": "02968a46-4f35-430f-b6af-017210620d9d",
+        "icon": "end",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "143883c6-0e31-42c4-8a9e-8dc7a960dc50": {
+        "x": 800,
+        "y": 192,
+        "id": "143883c6-0e31-42c4-8a9e-8dc7a960dc50",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Добавить печатные формы в результирующую таблицу",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["bf7a3910-0dfd-4b04-9e3d-7858867a6b7f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "concatTables",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "181fc056-d0d4-4dbf-b739-7e19bad1c19a": {
+        "x": 2008,
+        "y": 192,
+        "id": "181fc056-d0d4-4dbf-b739-7e19bad1c19a",
+        "icon": "notification",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Процесс обработки документов из 1С завершён",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["1b8aeea4-5cb4-4165-b61f-0662852b4a9a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Процесс обработки документов из 1С завершён"
+        }
+      },
+      "273d3ed1-f6f9-469b-be08-27cbfa492096": {
+        "x": 968,
+        "y": 208,
+        "id": "273d3ed1-f6f9-469b-be08-27cbfa492096",
+        "icon": "exclusive",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Таблица пустая?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "c6dad638-e028-4839-a429-2910344277d8",
+          "09500616-85eb-4375-abf0-1d6dacdf759a"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "checkPrintFormsTable",
+          "type": "exclusive",
+          "useFunc": true,
+          "funcType": "BOOLEAN",
+          "description": ""
+        }
+      },
+      "6876729b-2418-4999-be53-00cb45874d33": {
+        "x": 800,
+        "y": 344,
+        "id": "6876729b-2418-4999-be53-00cb45874d33",
+        "icon": "notification",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Печатные формы не найдены",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["8ec00519-97b2-453f-89e6-05f0a2d73ea2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Печатные формы не найдены"
+        }
+      },
+      "779941d7-6bfc-4347-b71b-2717354afbb5": {
+        "x": 1840,
+        "y": 392,
+        "id": "779941d7-6bfc-4347-b71b-2717354afbb5",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Сброс счетчика",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["c4e8ede6-63b5-4a7a-a1f6-99bef85d556e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "reset_counter",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "7844387f-874b-434c-a17d-a812256a54fe": {
+        "x": 1232,
+        "y": 192,
+        "id": "7844387f-874b-434c-a17d-a812256a54fe",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Универсальный процесс подписания",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["0ce64b9d-ea5b-495f-a4f6-d007f05346d7"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "prepare_document_for_sign",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "type_document_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_type"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "print_form"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "signatory_app"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "chief_sign_required"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "overdue_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "limit"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "employment_placement"
+              },
+              "target": {
+                "kind": "context",
+                "value": "employment_placement"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "",
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "7d6d05b9-d54e-407b-a847-8227cbb544f6": {
+        "x": 512,
+        "y": 208,
+        "id": "7d6d05b9-d54e-407b-a847-8227cbb544f6",
+        "icon": "exclusive",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Пачка пустая?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "5c6ce42e-75b1-4b2b-8d71-931c65246e85",
+          "b5bc1a79-4f0f-4e3b-9d60-cfa1f43978f9"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "88253825-7c58-4762-8ca9-0ad3ca46b70f": {
+        "x": 1864,
+        "y": 296,
+        "id": "88253825-7c58-4762-8ca9-0ad3ca46b70f",
+        "icon": "timer",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Отдых",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["ac57ef9f-913f-43c2-88e2-84b275e64b54"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "days": 0,
+            "kind": "duration",
+            "hours": 0,
+            "minutes": 2,
+            "absolute": true
+          }
+        }
+      },
+      "8e179032-3099-4342-9305-41c9a61d6020": {
+        "x": 640,
+        "y": 192,
+        "id": "8e179032-3099-4342-9305-41c9a61d6020",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Получить печатные формы из приложений интеграции",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["46605c0b-6149-4457-83db-900cac9f6dd8"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_print_forms_from_integration_app_1c",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "integration_apps"
+              },
+              "target": {
+                "kind": "context",
+                "value": "integration_apps"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "buffer_print_forms_table"
+              },
+              "target": {
+                "kind": "context",
+                "value": "print_forms_table"
+              },
+              "nestedBindings": [
+                {
+                  "source": {
+                    "kind": "context",
+                    "value": "__index"
+                  },
+                  "target": {
+                    "kind": "context",
+                    "value": "__index"
+                  }
+                },
+                {
+                  "source": {
+                    "kind": "context",
+                    "value": "print_form"
+                  },
+                  "target": {
+                    "kind": "context",
+                    "value": "print_form"
+                  }
+                },
+                {
+                  "source": {
+                    "kind": "context",
+                    "value": "doc_type_1c"
+                  },
+                  "target": {
+                    "kind": "context",
+                    "value": "doc_type_1c"
+                  }
+                },
+                {
+                  "target": {
+                    "kind": "context",
+                    "value": "id_1c"
+                  }
+                },
+                {
+                  "source": {
+                    "kind": "context",
+                    "value": "integration_app"
+                  },
+                  "target": {
+                    "kind": "context",
+                    "value": "integration_app"
+                  }
+                }
+              ]
+            }
+          ],
+          "namespace": "kedo.awaiting_documents_table_1c",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "91e04eb6-03a3-45cc-842c-6857c0a45e56": {
+        "x": 184,
+        "y": 192,
+        "id": "91e04eb6-03a3-45cc-842c-6857c0a45e56",
+        "icon": "notification",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Запущен процесс обработки документов из 1С",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["e24e4648-4615-46cf-9f98-d72d9cfdf3e0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Запущен процесс обработки документов из 1С"
+        }
+      },
+      "a3d61da2-13fb-445f-806f-8a7a8da2e491": {
+        "x": 1656,
+        "y": 192,
+        "id": "a3d61da2-13fb-445f-806f-8a7a8da2e491",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Увеличить счетчик таблицы",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["69f7d2cc-46e8-46f4-a838-995223f28b69"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "increment_table_counter",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "ac9395bf-d5c1-4fef-a014-ef031838c141": {
+        "x": 320,
+        "y": 192,
+        "id": "ac9395bf-d5c1-4fef-a014-ef031838c141",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Получить пачку приложений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["4973a1f2-01cf-4efa-9642-6c2419365b91"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getIntegrationAppsPack",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "ace38e19-c506-4623-8f38-1e70b0999b1e": {
+        "x": 1864,
+        "y": 208,
+        "id": "ace38e19-c506-4623-8f38-1e70b0999b1e",
+        "icon": "exclusive",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Есть печатные формы?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "ccfa15ea-a89e-4cdc-9a70-c22fdde6354e",
+          "4d302dde-4ab0-42d6-9340-ae48a85f59e1",
+          "aff14af2-aebe-461b-ba87-6bf58d7de5c8"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "check_table_counter",
+          "type": "exclusive",
+          "useFunc": true,
+          "funcType": "FLOAT",
+          "description": ""
+        }
+      },
+      "b238649d-ddc6-4db4-9af7-e5ec3a5ef099": {
+        "x": 2152,
+        "y": 208,
+        "id": "b238649d-ddc6-4db4-9af7-e5ec3a5ef099",
+        "icon": "end",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "d785b5e1-bf80-4ebe-afdc-4e804918038c": {
+        "x": 1368,
+        "y": 192,
+        "id": "d785b5e1-bf80-4ebe-afdc-4e804918038c",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Приложение обработано = да",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["af89bf26-d499-4c61-a514-cf4972e1a6e9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "change_integration_app_status",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "dc3a9c07-7f5f-4ec3-9d01-f43a8628dff0": {
+        "x": 1520,
+        "y": 192,
+        "id": "dc3a9c07-7f5f-4ec3-9d01-f43a8628dff0",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Увеличить счетчик итераций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["b38f0709-036a-4a1d-be4d-cd8042a745ef"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "increment_counter",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fd2df64a-a42a-4e43-a75e-831fdb78be1c": {
+        "x": 1096,
+        "y": 192,
+        "id": "fd2df64a-a42a-4e43-a75e-831fdb78be1c",
+        "icon": "script",
+        "lane": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Подготовить данные для процесса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["75941a2a-f833-40b4-9124-19cd5a4b5a48"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepare_data",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "2bc2a73c-0578-42eb-bc4d-0155da3487e9": {
+        "x": 8,
+        "y": 8,
+        "id": "2bc2a73c-0578-42eb-bc4d-0155da3487e9",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 2204,
+        "height": 628,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "09500616-85eb-4375-abf0-1d6dacdf759a": {
+        "id": "09500616-85eb-4375-abf0-1d6dacdf759a",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 1000,
+            "y": 224
+          },
+          {
+            "x": 1096,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "273d3ed1-f6f9-469b-be08-27cbfa492096",
+        "target": "fd2df64a-a42a-4e43-a75e-831fdb78be1c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0ce64b9d-ea5b-495f-a4f6-d007f05346d7": {
+        "id": "0ce64b9d-ea5b-495f-a4f6-d007f05346d7",
+        "name": "",
+        "path": [
+          {
+            "x": 1312,
+            "y": 224
+          },
+          {
+            "x": 1368,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "7844387f-874b-434c-a17d-a812256a54fe",
+        "target": "d785b5e1-bf80-4ebe-afdc-4e804918038c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1b8aeea4-5cb4-4165-b61f-0662852b4a9a": {
+        "id": "1b8aeea4-5cb4-4165-b61f-0662852b4a9a",
+        "name": "",
+        "path": [
+          {
+            "x": 2088,
+            "y": 224
+          },
+          {
+            "x": 2152,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "181fc056-d0d4-4dbf-b739-7e19bad1c19a",
+        "target": "b238649d-ddc6-4db4-9af7-e5ec3a5ef099",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1e480a36-64f0-4c4d-8fc1-fc6ff5311141": {
+        "id": "1e480a36-64f0-4c4d-8fc1-fc6ff5311141",
+        "name": "Запуск",
+        "path": [
+          {
+            "x": 96,
+            "y": 224
+          },
+          {
+            "x": 184,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "91e04eb6-03a3-45cc-842c-6857c0a45e56",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "46605c0b-6149-4457-83db-900cac9f6dd8": {
+        "id": "46605c0b-6149-4457-83db-900cac9f6dd8",
+        "name": "",
+        "path": [
+          {
+            "x": 720,
+            "y": 224
+          },
+          {
+            "x": 800,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "8e179032-3099-4342-9305-41c9a61d6020",
+        "target": "143883c6-0e31-42c4-8a9e-8dc7a960dc50",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4973a1f2-01cf-4efa-9642-6c2419365b91": {
+        "id": "4973a1f2-01cf-4efa-9642-6c2419365b91",
+        "name": "",
+        "path": [
+          {
+            "x": 400,
+            "y": 224
+          },
+          {
+            "x": 512,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "ac9395bf-d5c1-4fef-a014-ef031838c141",
+        "target": "7d6d05b9-d54e-407b-a847-8227cbb544f6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4d302dde-4ab0-42d6-9340-ae48a85f59e1": {
+        "id": "4d302dde-4ab0-42d6-9340-ae48a85f59e1",
+        "name": "Да",
+        "path": [
+          {
+            "x": 1880,
+            "y": 208
+          },
+          {
+            "x": 1880,
+            "y": 120
+          },
+          {
+            "x": 1136,
+            "y": 120
+          },
+          {
+            "x": 1136,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "ace38e19-c506-4623-8f38-1e70b0999b1e",
+        "target": "fd2df64a-a42a-4e43-a75e-831fdb78be1c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 1
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5c6ce42e-75b1-4b2b-8d71-931c65246e85": {
+        "id": "5c6ce42e-75b1-4b2b-8d71-931c65246e85",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 544,
+            "y": 224
+          },
+          {
+            "x": 640,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "7d6d05b9-d54e-407b-a847-8227cbb544f6",
+        "target": "8e179032-3099-4342-9305-41c9a61d6020",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "integration_apps"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "69f7d2cc-46e8-46f4-a838-995223f28b69": {
+        "id": "69f7d2cc-46e8-46f4-a838-995223f28b69",
+        "name": "",
+        "path": [
+          {
+            "x": 1736,
+            "y": 224
+          },
+          {
+            "x": 1864,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "a3d61da2-13fb-445f-806f-8a7a8da2e491",
+        "target": "ace38e19-c506-4623-8f38-1e70b0999b1e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "75941a2a-f833-40b4-9124-19cd5a4b5a48": {
+        "id": "75941a2a-f833-40b4-9124-19cd5a4b5a48",
+        "name": "",
+        "path": [
+          {
+            "x": 1176,
+            "y": 224
+          },
+          {
+            "x": 1232,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "fd2df64a-a42a-4e43-a75e-831fdb78be1c",
+        "target": "7844387f-874b-434c-a17d-a812256a54fe",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8ec00519-97b2-453f-89e6-05f0a2d73ea2": {
+        "id": "8ec00519-97b2-453f-89e6-05f0a2d73ea2",
+        "name": "",
+        "path": [
+          {
+            "x": 800,
+            "y": 376
+          },
+          {
+            "x": 680,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "6876729b-2418-4999-be53-00cb45874d33",
+        "target": "02968a46-4f35-430f-b6af-017210620d9d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ac57ef9f-913f-43c2-88e2-84b275e64b54": {
+        "id": "ac57ef9f-913f-43c2-88e2-84b275e64b54",
+        "name": "",
+        "path": [
+          {
+            "x": 1880,
+            "y": 328
+          },
+          {
+            "x": 1880,
+            "y": 392
+          }
+        ],
+        "type": "plain",
+        "source": "88253825-7c58-4762-8ca9-0ad3ca46b70f",
+        "target": "779941d7-6bfc-4347-b71b-2717354afbb5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "af89bf26-d499-4c61-a514-cf4972e1a6e9": {
+        "id": "af89bf26-d499-4c61-a514-cf4972e1a6e9",
+        "name": "",
+        "path": [
+          {
+            "x": 1448,
+            "y": 224
+          },
+          {
+            "x": 1520,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "d785b5e1-bf80-4ebe-afdc-4e804918038c",
+        "target": "dc3a9c07-7f5f-4ec3-9d01-f43a8628dff0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aff14af2-aebe-461b-ba87-6bf58d7de5c8": {
+        "id": "aff14af2-aebe-461b-ba87-6bf58d7de5c8",
+        "name": "На отдых",
+        "path": [
+          {
+            "x": 1880,
+            "y": 240
+          },
+          {
+            "x": 1880,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "ace38e19-c506-4623-8f38-1e70b0999b1e",
+        "target": "88253825-7c58-4762-8ca9-0ad3ca46b70f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b38f0709-036a-4a1d-be4d-cd8042a745ef": {
+        "id": "b38f0709-036a-4a1d-be4d-cd8042a745ef",
+        "name": "",
+        "path": [
+          {
+            "x": 1600,
+            "y": 224
+          },
+          {
+            "x": 1656,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "dc3a9c07-7f5f-4ec3-9d01-f43a8628dff0",
+        "target": "a3d61da2-13fb-445f-806f-8a7a8da2e491",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b5bc1a79-4f0f-4e3b-9d60-cfa1f43978f9": {
+        "id": "b5bc1a79-4f0f-4e3b-9d60-cfa1f43978f9",
+        "name": "Да",
+        "path": [
+          {
+            "x": 528,
+            "y": 208
+          },
+          {
+            "x": 528,
+            "y": 144
+          },
+          {
+            "x": 984,
+            "y": 144
+          },
+          {
+            "x": 984,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "7d6d05b9-d54e-407b-a847-8227cbb544f6",
+        "target": "273d3ed1-f6f9-469b-be08-27cbfa492096",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bf7a3910-0dfd-4b04-9e3d-7858867a6b7f": {
+        "id": "bf7a3910-0dfd-4b04-9e3d-7858867a6b7f",
+        "name": "",
+        "path": [
+          {
+            "x": 840,
+            "y": 256
+          },
+          {
+            "x": 840,
+            "y": 300
+          },
+          {
+            "x": 360,
+            "y": 300
+          },
+          {
+            "x": 360,
+            "y": 256
+          }
+        ],
+        "type": "plain",
+        "source": "143883c6-0e31-42c4-8a9e-8dc7a960dc50",
+        "target": "ac9395bf-d5c1-4fef-a014-ef031838c141",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c4e8ede6-63b5-4a7a-a1f6-99bef85d556e": {
+        "id": "c4e8ede6-63b5-4a7a-a1f6-99bef85d556e",
+        "name": "",
+        "path": [
+          {
+            "x": 1840,
+            "y": 424
+          },
+          {
+            "x": 1808,
+            "y": 424
+          },
+          {
+            "x": 1808,
+            "y": 224
+          },
+          {
+            "x": 1864,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "779941d7-6bfc-4347-b71b-2717354afbb5",
+        "target": "ace38e19-c506-4623-8f38-1e70b0999b1e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c6dad638-e028-4839-a429-2910344277d8": {
+        "id": "c6dad638-e028-4839-a429-2910344277d8",
+        "name": "Да",
+        "path": [
+          {
+            "x": 984,
+            "y": 240
+          },
+          {
+            "x": 984,
+            "y": 376
+          },
+          {
+            "x": 880,
+            "y": 376
+          }
+        ],
+        "type": "default",
+        "source": "273d3ed1-f6f9-469b-be08-27cbfa492096",
+        "target": "6876729b-2418-4999-be53-00cb45874d33",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ccfa15ea-a89e-4cdc-9a70-c22fdde6354e": {
+        "id": "ccfa15ea-a89e-4cdc-9a70-c22fdde6354e",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 1896,
+            "y": 224
+          },
+          {
+            "x": 2008,
+            "y": 224
+          }
+        ],
+        "type": "default",
+        "source": "ace38e19-c506-4623-8f38-1e70b0999b1e",
+        "target": "181fc056-d0d4-4dbf-b739-7e19bad1c19a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e24e4648-4615-46cf-9f98-d72d9cfdf3e0": {
+        "id": "e24e4648-4615-46cf-9f98-d72d9cfdf3e0",
+        "name": "",
+        "path": [
+          {
+            "x": 264,
+            "y": 224
+          },
+          {
+            "x": 320,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "91e04eb6-03a3-45cc-842c-6857c0a45e56",
+        "target": "ac9395bf-d5c1-4fef-a014-ef031838c141",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ntype IntegrationApp = ApplicationItem\u003cApplication$kedo$awaiting_documents_table_1c$Data, Application$kedo$awaiting_documents_table_1c$Params\u003e;\ntype EmploymentPlacement = ApplicationItem\u003cApplication$kedo$employment_directory$Data, Application$kedo$employment_directory$Params\u003e;\ntype Staff = ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e;\ntype DocType1C = ApplicationItem\u003cApplication$kedo$document_types$Data, Application$kedo$document_types$Params\u003e;\n\nconst CHUNK_SIZE = 50;\n\nasync function add_error(app: IntegrationApp, error_text: string): Promise\u003cvoid\u003e {\n    const errors_table = Context.data.errors_table ?? Context.fields.errors_table.create();\n\n    const error_row = errors_table.insert();\n\n    error_row.integration_app = app;\n    error_row.error = error_text;\n\n    Context.data.errors_table = errors_table;\n}\n\nasync function prepare_data(): Promise\u003cvoid\u003e {\n    const row = Context.data.print_forms_table![Context.data.table_counter!];\n\n    Context.data.overdue_date = new Datetime().addDate(0, 0, 1);\n    Context.data.print_form = row.print_form;\n    Context.data.staff = row.staff;\n    Context.data.employment_placement = row.employment_placement;\n    Context.data.type_document_1c = row.type_document_1c;\n}\n\nasync function check_table_counter(): Promise\u003cnumber\u003e {\n    if (Context.data.counter! \u003e= 99) {\n        return 0;\n    }\n\n    if (Context.data.table_counter! \u003c Context.data.print_forms_table!.length) {\n        return 1;\n    }\n\n    return -1;\n}\n\nasync function change_integration_app_status(): Promise\u003cvoid\u003e {\n    const row = Context.data.print_forms_table![Context.data.table_counter!];\n    const integration_app = await row.integration_app.fetch();\n    integration_app.data.processed_elma = true;\n    await integration_app.save();\n}\n\nasync function getIntegrationAppsPack(): Promise\u003cvoid\u003e {\n    const from = Context.data.from ?? 0;\n    const size = Context.data.size ?? 100;\n\n    const integration_apps = await Context.fields.awaiting_documents_table_1c.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.processed_elma.eq(false),\n            f.document_creation_data.eq(null),\n        ))\n        .from(from)\n        .size(size)\n        .all();\n\n    Context.data.integration_apps = integration_apps.length \u003e 0 ? integration_apps : undefined;\n    Context.data.from = from + size;\n}\n\ninterface IStaffData {\n    staff?: Staff,\n    employment_placement?: EmploymentPlacement,\n    id_1c?: string,\n    individual_id_1c?: string,\n}\n\nasync function getStaffData(integration_apps: IntegrationApp[]): Promise\u003cIStaffData[]\u003e {\n    const staff_data: IStaffData[] = [];\n\n    let staff_id_1c: string[] = [];\n\n    integration_apps\n        .filter(f =\u003e f.data.id_1c != undefined \u0026\u0026 f.data.id_1c != null)\n        .map(f =\u003e f.data.id_1c!)\n        .forEach(f =\u003e {\n            let ids: string[] = JSON.parse(f);\n            ids = ids.filter(id =\u003e id != null \u0026\u0026 id != undefined \u0026\u0026 id.trim() != \"\");\n            staff_id_1c = [...staff_id_1c, ...ids];\n        });\n\n    const employment_placements = await Namespace.app.employment_directory.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.id_1c.in(staff_id_1c),\n            f.__status.eq(Namespace.app.employment_directory.fields.__status.variants.actual)\n        ))\n        .size(staff_id_1c.length)\n        .all();\n\n    const staff_ids = employment_placements\n        .filter(f =\u003e f.data.staff != undefined)\n        .map(f =\u003e f.data.staff!.id)\n\n    const staffs = await Context.fields.staff.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__id.in(staff_ids),\n            f.__status.eq(Context.fields.staff.app.fields.__status.variants.signed_documents)\n        ))\n        .size(staff_ids.length)\n        .all();\n\n    for (const staff of staffs) {\n        const employment_placement = employment_placements.find(f =\u003e f.data.staff?.id == staff.id);\n\n        staff_data.push({\n            staff: staff,\n            employment_placement: employment_placement,\n            id_1c: employment_placement?.data.id_1c,\n            individual_id_1c: staff.data.individual_id_1c,\n        });\n    }\n\n    return staff_data;\n}\n\nasync function concatTables(): Promise\u003cvoid\u003e {\n    const print_forms_table = Context.data.print_forms_table ?? Context.fields.print_forms_table.create();\n\n    // Берем промежуточную таблицу с печатными формами.\n    const buffer_table = Context.data.buffer_print_forms_table;\n\n    if (!buffer_table || buffer_table.length == 0) {\n        return;\n    }\n\n    // В промежуточной таблице, в каждой строке указана печатная форма и приложение интеграции, к которой эта печатная форма относится.\n    // Выбираем из таблицы все идентификаторы приложений интеграции и оставляем только уникальные.\n    const integration_app_ids = [...new Set(buffer_table\n        .filter(f =\u003e f.integration_app != undefined)\n        .map(f =\u003e f.integration_app.id)\n    )];\n\n    const integration_apps = await Context.fields.integration_apps.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__id.in(integration_app_ids)\n        ))\n        .size(integration_app_ids.length)\n        .all();\n\n    const staffs = await getStaffData(integration_apps);\n\n    // Из таблицы получаем все строки связанные с текущим обрабатываемым приложением интеграции\n    // и заполняем резульитрующую таблицу.\n    for (const integration_app of integration_apps) {\n        if (!integration_app.data.id_1c) {\n            add_error(integration_app, `Отсутствуют идентификаторы сотрудников. App field \"id_1c\" is undefined`);\n            continue;\n        }\n\n        // Идентификаторы сотрудников хранятся в виде массива строк JSON\n        // Поэтому парсим строку, получаем массив и фильтруем записи\n        let staff_guid_1c: string[] = JSON.parse(integration_app.data.id_1c);\n        staff_guid_1c = staff_guid_1c.filter(f =\u003e f != null \u0026\u0026 f != undefined);\n\n        if (staff_guid_1c.length == 0) {\n            add_error(integration_app, 'Отсутствуют идентификаторы сотрудников. App field \"id_1c\" is empty');\n            continue;\n        }\n\n        const staff_data = staffs.find(f =\u003e f.id_1c == staff_guid_1c[0]);\n\n        if (!staff_data || !staff_data.staff || !staff_data.employment_placement) {\n            add_error(integration_app, 'Не найден сотрудник с данным идентификатором 1С или он не трудоустроен');\n            continue;\n        }\n\n        if (!staff_data.employment_placement.data.organization || staff_data.employment_placement.data.organization.id != Context.data.organization!.id) {\n            add_error(integration_app, `По данному месту занятости (${staff_data.employment_placement.id}) не указана организация или не совпадает с организацией инициатора`);\n            continue;\n        }\n\n        const doc_types = await Context.fields.type_document_1c.app.search()\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n            ))\n            .size(1000)\n            .all();\n\n        const print_forms = buffer_table\n            .filter(f =\u003e f.integration_app?.id == integration_app.id)\n            .map(f =\u003e {\n                return {\n                    print_form: f.print_form,\n                    doc_type_1c: f.doc_type_1c\n                }\n            });\n\n        if (!print_forms || print_forms.length == 0) {\n            add_error(integration_app, 'Отсутствуют печатные формы. App field \"print_forms_table\" is undefined or empty');\n            continue;\n        }\n\n        for (const row of print_forms) {\n            const doc_type = doc_types.find(f =\u003e f.data.doc_type_id_1c == row.doc_type_1c?.id);\n\n            const resultTableRow = print_forms_table.insert();\n            resultTableRow.print_form = row.print_form;\n            resultTableRow.staff = staff_data.staff;\n            resultTableRow.employment_placement = staff_data.employment_placement;\n            resultTableRow.integration_app = integration_app;\n\n            if (!doc_type) {\n                resultTableRow.type_document_1c = doc_types.find(f =\u003e f.data.app_code == 'other_documents')!;\n            } else {\n                resultTableRow.type_document_1c = doc_type;\n            }\n        }\n    }\n\n    Context.data.print_forms_table = print_forms_table;\n}\n\nasync function checkPrintFormsTable(): Promise\u003cboolean\u003e {\n    return Context.data.print_forms_table \u0026\u0026 Context.data.print_forms_table.length \u003e 0 ? true : false;\n}\n\nasync function reset_counter(): Promise\u003cvoid\u003e {\n    Context.data.counter = 0;\n}\n\nasync function increment_counter(): Promise\u003cvoid\u003e {\n    Context.data.counter! += 1;\n}\n\nasync function increment_table_counter(): Promise\u003cvoid\u003e {\n    Context.data.table_counter! += 1;\n}",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_77e97220-3c62-4c86-b417-126a70b673c9",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "awaiting_documents_table_1c"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "from": {
+        "enabled": false,
+        "conditions": []
+      },
+      "size": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "counter": {
+        "enabled": false,
+        "conditions": []
+      },
+      "print_form": {
+        "enabled": false,
+        "conditions": []
+      },
+      "errors_table": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization": {
+        "enabled": false,
+        "conditions": []
+      },
+      "overdue_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "table_counter": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_initiator": {
+        "enabled": false,
+        "conditions": []
+      },
+      "integration_apps": {
+        "enabled": false,
+        "conditions": []
+      },
+      "type_document_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "print_forms_table": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employment_placement": {
+        "enabled": false,
+        "conditions": []
+      },
+      "buffer_print_forms_table": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

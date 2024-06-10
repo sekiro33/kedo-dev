@@ -1,0 +1,987 @@
+{
+  "__id": "018e89f8-23b6-79bc-913b-52886a5951f7",
+  "namespace": "kedo_ext",
+  "code": "replcament_agreement",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Согласование замещения",
+  "type": "bpmn",
+  "draft": false,
+  "version": 2,
+  "context": [
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "comment",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Причина отказа",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "execution_duties",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "execution_duties",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на ИО",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "chief",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Руководитель сотрудника",
+        "data": {}
+      }
+    },
+    {
+      "code": "chief_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель сотрудника (пользователь)",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-07-10T10:30:51.998554289Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-04-02T07:56:51.530441974Z",
+  "__updatedBy": "54584d91-0741-4200-a803-b00376614edb",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "bf7587b9-cbc6-4a62-997a-8b9a1d04bf53",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["66a4d12f-850f-4e31-92bb-0eaf4cf01547"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Согласование замещения - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0cef1c2d-5804-4b8b-b3ec-c5f932079e98": {
+        "x": 296,
+        "y": 144,
+        "id": "0cef1c2d-5804-4b8b-b3ec-c5f932079e98",
+        "icon": "user",
+        "lane": "238d1836-0523-4460-a076-c0c6966f7a47",
+        "name": "Согласовать замещение сотрудника",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "edbac169-f7d9-4ca0-a510-8e8b15964b43",
+          "f6a93029-c638-4f12-a04d-a7634bce42f9"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Согласовать: Установить автоделегирование с {ToString({$execution_duties.staff.full_name}, short, Р)} на {ToString({$staff.full_name}, short, В)}",
+          "notify": true,
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 8,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "code": "chief_user",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [
+            {
+              "code": "execution_duties",
+              "data": {
+                "listSettings": {
+                  "sort": {
+                    "field": "",
+                    "direction": "",
+                    "additionalSortSettings": null
+                  },
+                  "limit": 10,
+                  "buttons": [
+                    {
+                      "id": "35bb8445-9732-4d3e-8cf2-34c0f06a7f90",
+                      "code": "create",
+                      "type": "primary",
+                      "label": "+ Заявка на ИО",
+                      "bindings": [],
+                      "immutable": false,
+                      "silentRun": false,
+                      "permission": "create",
+                      "defaultValues": {},
+                      "useSimpleForm": false,
+                      "simpleFormSize": "default",
+                      "allowedGroupIds": [],
+                      "allowedStatusIds": [],
+                      "processLinkChanged": false,
+                      "showForAllowedStatuses": false,
+                      "showForAllowedStatusGroups": false
+                    }
+                  ],
+                  "aggregateField": "",
+                  "autoUpdateCards": false,
+                  "enabledMassActions": false
+                },
+                "tableSettings": {
+                  "displayFields": [
+                    "__name",
+                    "substitution_type",
+                    "staff",
+                    "substitute",
+                    "start_day_line",
+                    "end_date_line"
+                  ]
+                },
+                "createButtonId": "",
+                "showCreateItem": true,
+                "showSelectItem": true
+              },
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false,
+              "subfields": [
+                {
+                  "code": "staff",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "type_combination",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "start_day_line",
+                  "display": "Дата начала",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "end_date_line",
+                  "display": "Дата окончания",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "substitute",
+                  "data": {
+                    "listSettings": {
+                      "sort": {
+                        "field": "",
+                        "direction": "",
+                        "additionalSortSettings": null
+                      },
+                      "limit": 10,
+                      "buttons": [
+                        {
+                          "id": "47e6f238-74e0-48f4-b6fe-cacdb77def81",
+                          "code": "create",
+                          "type": "primary",
+                          "label": "+ Сотрудник",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "defaultValues": {
+                            "inn": null,
+                            "sex": null,
+                            "city": null,
+                            "home": null,
+                            "note": null,
+                            "email": null,
+                            "phone": null,
+                            "snils": null,
+                            "entity": null,
+                            "region": null,
+                            "street": null,
+                            "address": null,
+                            "housing": null,
+                            "ext_user": null,
+                            "inn_file": null,
+                            "marriage": null,
+                            "position": null,
+                            "apartment": null,
+                            "full_name": null,
+                            "issued_by": null,
+                            "scan_soev": null,
+                            "note_files": null,
+                            "snils_file": null,
+                            "__directory": null,
+                            "is_employed": null,
+                            "__externalId": null,
+                            "notification": null,
+                            "staff_access": true,
+                            "date_of_birth": null,
+                            "date_of_issue": null,
+                            "external_user": null,
+                            "staff_comment": null,
+                            "document_table": null,
+                            "invalid_fields": null,
+                            "passport_number": null,
+                            "passport_series": null,
+                            "personal_number": null,
+                            "disclaimer_comment": null,
+                            "employment_documents": null,
+                            "__externalProcessMeta": null,
+                            "structural_subdivision": null,
+                            "passport_department_code": null,
+                            "photo_with_unfolded_passport": null,
+                            "passport_page_with_photo_and_data": null,
+                            "the_passport_page_with_current_registration": null
+                          },
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        },
+                        {
+                          "id": "377e8253-14a2-4996-a0f6-c9bf66fa54ab",
+                          "code": "create",
+                          "type": "default",
+                          "label": "+ Сотрудник бэк-офиса",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "defaultValues": {
+                            "inn": null,
+                            "sex": null,
+                            "city": null,
+                            "home": null,
+                            "note": null,
+                            "email": null,
+                            "phone": null,
+                            "snils": null,
+                            "entity": null,
+                            "region": null,
+                            "street": null,
+                            "address": null,
+                            "housing": null,
+                            "ext_user": null,
+                            "inn_file": null,
+                            "marriage": null,
+                            "position": null,
+                            "apartment": null,
+                            "full_name": null,
+                            "issued_by": null,
+                            "scan_soev": null,
+                            "note_files": null,
+                            "snils_file": null,
+                            "__directory": null,
+                            "is_employed": null,
+                            "__externalId": null,
+                            "notification": null,
+                            "staff_access": false,
+                            "date_of_birth": null,
+                            "date_of_issue": null,
+                            "external_user": null,
+                            "staff_comment": null,
+                            "document_table": null,
+                            "invalid_fields": null,
+                            "passport_number": null,
+                            "passport_series": null,
+                            "personal_number": null,
+                            "disclaimer_comment": null,
+                            "employment_documents": null,
+                            "__externalProcessMeta": null,
+                            "structural_subdivision": null,
+                            "passport_department_code": null,
+                            "photo_with_unfolded_passport": null,
+                            "passport_page_with_photo_and_data": null,
+                            "the_passport_page_with_current_registration": null
+                          },
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        },
+                        {
+                          "id": "e7878e60-015d-4b4d-a99f-254188a243ed",
+                          "type": "default",
+                          "label": "Загрузить сотрудников из 1С",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "processCode": "load_employee_list",
+                          "processField": "staff",
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processNamespace": "kedo.staff",
+                          "processLinkChanged": true,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        }
+                      ],
+                      "aggregateField": "",
+                      "autoUpdateCards": false,
+                      "enabledMassActions": true
+                    },
+                    "tableSettings": {
+                      "columnsWidth": {
+                        "__name": "257px",
+                        "__status": "300px",
+                        "ext_user": "300px",
+                        "position": "300px",
+                        "__createdAt": "300px",
+                        "__createdBy": "300px",
+                        "organization": "186px",
+                        "staff_member": "300px",
+                        "kedo_agreement": "164px",
+                        "staff_categories": "300px",
+                        "structural_subdivision": "300px"
+                      },
+                      "displayFields": [
+                        "__name",
+                        "kedo_agreement",
+                        "organization",
+                        "position",
+                        "__status",
+                        "__createdAt",
+                        "ext_user",
+                        "structural_subdivision"
+                      ]
+                    },
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "tooltip": "На данного сотрудника на время отсутствия будут поступать все задачи замещаемого сотрудника",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                }
+              ]
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "2adeec08-dfc9-43bb-9fd4-3f3db2625c04": {
+        "x": 584,
+        "y": 160,
+        "id": "2adeec08-dfc9-43bb-9fd4-3f3db2625c04",
+        "icon": "end",
+        "lane": "238d1836-0523-4460-a076-c0c6966f7a47",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "3213a5b9-d057-4df6-85b5-b659630cf9e8": {
+        "x": 296,
+        "y": 256,
+        "id": "3213a5b9-d057-4df6-85b5-b659630cf9e8",
+        "icon": "system",
+        "lane": "238d1836-0523-4460-a076-c0c6966f7a47",
+        "name": "Согласовано = нет",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["0d5036ec-410a-40d5-ad1a-2d1d37255e38"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "81a9925b-4a5e-4d32-914f-b03300ffa1aa": {
+        "x": 464,
+        "y": 144,
+        "id": "81a9925b-4a5e-4d32-914f-b03300ffa1aa",
+        "icon": "system",
+        "lane": "238d1836-0523-4460-a076-c0c6966f7a47",
+        "name": "Согласовано = да",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["81968e24-6660-4a12-a759-f4accbb3df35"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "87d07280-1f4d-488b-b4f4-60936f9ba3f6": {
+        "x": 80,
+        "y": 144,
+        "id": "87d07280-1f4d-488b-b4f4-60936f9ba3f6",
+        "lane": "bf7587b9-cbc6-4a62-997a-8b9a1d04bf53",
+        "name": "Определение руководителя сотрудника",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["d5f2023a-05f5-4791-adc4-312339ca6721"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "periodic_medical_examination",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "chief_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "chief"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "chief"
+              },
+              "target": {
+                "kind": "context",
+                "value": "chief_app"
+              }
+            }
+          ],
+          "linkCode": "",
+          "namespace": "kedo.staff",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "faa217d7-3cf1-4865-b90f-ce36c23238ea": {
+        "x": 320,
+        "y": 376,
+        "id": "faa217d7-3cf1-4865-b90f-ce36c23238ea",
+        "icon": "end",
+        "lane": "238d1836-0523-4460-a076-c0c6966f7a47",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "238d1836-0523-4460-a076-c0c6966f7a47": {
+        "x": 232,
+        "y": 8,
+        "id": "238d1836-0523-4460-a076-c0c6966f7a47",
+        "name": "Руководитель сотрудника",
+        "color": "#d6f0cc",
+        "width": 400,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "chief_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "bf7587b9-cbc6-4a62-997a-8b9a1d04bf53": {
+        "x": 8,
+        "y": 8,
+        "id": "bf7587b9-cbc6-4a62-997a-8b9a1d04bf53",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0d5036ec-410a-40d5-ad1a-2d1d37255e38": {
+        "id": "0d5036ec-410a-40d5-ad1a-2d1d37255e38",
+        "name": "",
+        "path": [
+          {
+            "x": 336,
+            "y": 320
+          },
+          {
+            "x": 336,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "3213a5b9-d057-4df6-85b5-b659630cf9e8",
+        "target": "faa217d7-3cf1-4865-b90f-ce36c23238ea",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "66a4d12f-850f-4e31-92bb-0eaf4cf01547": {
+        "id": "66a4d12f-850f-4e31-92bb-0eaf4cf01547",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 144
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "87d07280-1f4d-488b-b4f4-60936f9ba3f6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "81968e24-6660-4a12-a759-f4accbb3df35": {
+        "id": "81968e24-6660-4a12-a759-f4accbb3df35",
+        "name": "",
+        "path": [
+          {
+            "x": 544,
+            "y": 176
+          },
+          {
+            "x": 584,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "81a9925b-4a5e-4d32-914f-b03300ffa1aa",
+        "target": "2adeec08-dfc9-43bb-9fd4-3f3db2625c04",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d5f2023a-05f5-4791-adc4-312339ca6721": {
+        "id": "d5f2023a-05f5-4791-adc4-312339ca6721",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 176
+          },
+          {
+            "x": 296,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "87d07280-1f4d-488b-b4f4-60936f9ba3f6",
+        "target": "0cef1c2d-5804-4b8b-b3ec-c5f932079e98",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "edbac169-f7d9-4ca0-a510-8e8b15964b43": {
+        "id": "edbac169-f7d9-4ca0-a510-8e8b15964b43",
+        "name": "Согласовано",
+        "path": [
+          {
+            "x": 376,
+            "y": 176
+          },
+          {
+            "x": 464,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "0cef1c2d-5804-4b8b-b3ec-c5f932079e98",
+        "target": "81a9925b-4a5e-4d32-914f-b03300ffa1aa",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f6a93029-c638-4f12-a04d-a7634bce42f9": {
+        "id": "f6a93029-c638-4f12-a04d-a7634bce42f9",
+        "name": "Отказать",
+        "path": [
+          {
+            "x": 336,
+            "y": 208
+          },
+          {
+            "x": 336,
+            "y": 256
+          }
+        ],
+        "type": "plain",
+        "source": "0cef1c2d-5804-4b8b-b3ec-c5f932079e98",
+        "target": "3213a5b9-d057-4df6-85b5-b659630cf9e8",
+        "settings": {
+          "exit": {
+            "confirm": "form",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [
+              {
+                "code": "comment",
+                "tooltip": "",
+                "readonly": false,
+                "required": true,
+                "hideEmpty": false
+              }
+            ],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": "Укажите причину отказа"
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "chief": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "comment": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      },
+      "chief_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "execution_duties": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

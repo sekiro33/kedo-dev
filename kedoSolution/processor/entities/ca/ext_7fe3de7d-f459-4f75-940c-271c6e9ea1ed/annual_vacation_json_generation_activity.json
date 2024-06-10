@@ -1,0 +1,103 @@
+{
+  "__id": "6f3a98f8-cfc3-4c1c-8c9a-5b0598011857",
+  "__name": "(Контур) Генерация JSON для ежегодного оплачиваемого отпуска",
+  "code": "annual_vacation_json_generation",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "process_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID процесса",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    },
+    {
+      "code": "vacation_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID отпуска",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    },
+    {
+      "code": "json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Сформированный JSON",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "//Ежегодный оплачиваемый отпуск\ninterface IKonturVacationData {\n\tprocessID: string,\n\temployeeID: string,\n\tfirstName: string,\n\tlastName: string,\n\tmiddleName: string,\n\tjobID: string,\n\tvacationStartDate: string,\n\tvacationEndDate: string,\n\tattachmentFile: string,\n\tvacationType: \"Ежегодный оплачиваемый отпуск\"\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tconst vacationApp = Namespace.params.fields.employee_app.app; // тут должны быть отпуска\n\n\tlet vacation = await vacationApp.search().where((f, g) =\u003e g.and(\n\t\tf.__deletedAt.eq(null),\n\t\tf.__id.eq(Context.data.vacation_id as string)\n\t)).first();\n\n\tif (!vacation) {\n\t\tthrow new Error('Нет отпуска с указанным id!')\n\t}\n\tif (!vacation.data.kedo_staff) {\n\t\tthrow new Error('В отпуске не указан сотрудник (приложение КЭДО)!')\n\t}\n\tlet employee = await vacation.data.kedo_staff.fetch();\n\tif (!employee.data.position) {\n\t\tthrow new Error('У сотрудника не указана должность')\n\t}\n\tif (!employee.data.id_1c) {\n\t\tthrow new Error('У сотрудника нет id 1c!')\n\t}\n\tlet job = await employee.data.position.fetch();\n\tif (!job.data.ref_key) {\n\t\tthrow new Error('У должности нет указанного ref_key!')\n\t}\n\tif (!vacation.data.statements) {\n\t\tthrow new Error('В указанном отпуске нет заявлений!')\n\t}\n\tlet attachment = await vacation.data.statements[0].fetch();\n\tif (!attachment.data.__file) {\n\t\tthrow new Error('Нет файла заявления для прикрепления!')\n\t}\n\tlet attachmentFile = await attachment.data.__file.fetch();\n\tlet attachmentFileLink = await attachmentFile.getDownloadUrl();\n\tlet incomeStatementFileBuffer = await fetch(attachmentFileLink).then(doc =\u003e doc.arrayBuffer());\n\tlet incomeStatementFileB64String = btoa(String.fromCharCode(...new Uint8Array(incomeStatementFileBuffer)));\n\n\tlet vacationData: IKonturVacationData = {\n\t\tprocessID: Context.data.process_id!,\n\t\temployeeID: employee.data.id_1c,\n\t\tfirstName: employee.data.full_name ? employee.data.full_name.firstname : '',\n\t\tlastName: employee.data.full_name ? employee.data.full_name.lastname : '',\n\t\tmiddleName: employee.data.full_name ? employee.data.full_name.middlename : '',\n\t\tjobID: job.data.ref_key,\n\t\tvacationType: \"Ежегодный оплачиваемый отпуск\",\n\t\tvacationStartDate: vacation.data.start_string!,\n\t\tvacationEndDate: vacation.data.end_string!,\n\t\tattachmentFile: incomeStatementFileB64String,\n\t}\n\n\tContext.data.json = JSON.stringify(vacationData);\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:02.099707929Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:55.208989542Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

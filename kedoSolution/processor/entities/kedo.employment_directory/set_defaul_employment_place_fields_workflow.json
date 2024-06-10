@@ -1,0 +1,923 @@
+{
+  "__id": "018d11ed-3bba-7870-ba28-015a015843aa",
+  "namespace": "kedo.employment_directory",
+  "code": "set_defaul_employment_place_fields_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Установка полей \"Заявка по месту занятости\" в решениях",
+  "type": "bpmn",
+  "draft": false,
+  "version": 23,
+  "context": [
+    {
+      "code": "absences_enabled",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отпуска подключены?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "employment_directory",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employment_directory",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Справочник занятости"
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "token",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": "b774101d-baf2-47b7-b597-c7f52ee8f935",
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Токен",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "business_trip_enabled",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Командировки подключены?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текст ошибки",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app_list",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "app_list",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "app_data",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "element_count",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество обработанных элементов",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-01-16T10:59:36.506818592Z",
+  "__createdBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "__updatedAt": "2024-03-15T12:20:54.210386596Z",
+  "__updatedBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 136,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["09ce33ea-e596-4dc9-ace6-df857cc2eed8"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Установка полей \"Заявка по месту занятости\" в решениях",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "41e20051-6605-4692-837d-f55142db6a5e": {
+        "x": 784,
+        "y": 120,
+        "id": "41e20051-6605-4692-837d-f55142db6a5e",
+        "icon": "script",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Получить приложение",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["edb211e1-871e-471f-a189-6b8c4273d8d2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getApp",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "97dc1214-60da-4940-9de7-24ca8055ae89": {
+        "x": 216,
+        "y": 120,
+        "id": "97dc1214-60da-4940-9de7-24ca8055ae89",
+        "icon": "script",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Получить токен",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "ee4c276f-6120-4d00-a8f2-27d5d5630a34",
+          "14fb81f1-5b25-402a-aa33-3e55721e89b4"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getApiToken",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "14fb81f1-5b25-402a-aa33-3e55721e89b4",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "aa5c61ee-6b76-4523-b811-0321940b8144": {
+        "x": 648,
+        "y": 136,
+        "id": "aa5c61ee-6b76-4523-b811-0321940b8144",
+        "icon": "exclusive",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Есть необработанные приложения?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8169788e-36b1-4baa-9d14-9ca74e18fe49",
+          "e323b1ec-a1d6-4d7e-af5c-109347c7cd93"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "checkAppList",
+          "type": "exclusive",
+          "useFunc": true,
+          "funcType": "BOOLEAN",
+          "description": ""
+        }
+      },
+      "bbcdb75b-2834-446f-9e08-9215dd650ca1": {
+        "x": 216,
+        "y": 240,
+        "id": "bbcdb75b-2834-446f-9e08-9215dd650ca1",
+        "icon": "notification",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Оповещение об ошибке",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["a117583c-f321-4a83-a5b7-51e312dad5cb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Во время выполнения процесса произошла ошибка"
+        }
+      },
+      "bec4ed58-80aa-4630-956c-95a9062c52bb": {
+        "x": 384,
+        "y": 120,
+        "id": "bec4ed58-80aa-4630-956c-95a9062c52bb",
+        "icon": "script",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Получаем список доступных решений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "800c1c35-1df0-4847-b9b9-c3fabfc3f4de",
+          "fb6621ae-57e2-462d-a1d8-b7bcb114c798"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getKedoApps",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "fb6621ae-57e2-462d-a1d8-b7bcb114c798",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "c0d4d1a1-06c3-4fb1-87cb-3d4c6cd36810": {
+        "x": 240,
+        "y": 360,
+        "id": "c0d4d1a1-06c3-4fb1-87cb-3d4c6cd36810",
+        "icon": "end",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "c21e7f3a-51c9-4cde-9373-debfc1331ef9": {
+        "x": 936,
+        "y": 120,
+        "id": "c21e7f3a-51c9-4cde-9373-debfc1331ef9",
+        "icon": "script",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Обработать элементы приложения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f2ecacda-bef6-4b00-a9a4-7dcf39840200"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "update_employments",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "f6eb3ecd-d9e1-4d94-b57a-207b6cf32650": {
+        "x": 808,
+        "y": 248,
+        "id": "f6eb3ecd-d9e1-4d94-b57a-207b6cf32650",
+        "icon": "end",
+        "lane": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "b522dd7e-749e-48a9-ba52-83858e09b058": {
+        "x": 8,
+        "y": 8,
+        "id": "b522dd7e-749e-48a9-ba52-83858e09b058",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1108,
+        "height": 448,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "09ce33ea-e596-4dc9-ace6-df857cc2eed8": {
+        "id": "09ce33ea-e596-4dc9-ace6-df857cc2eed8",
+        "name": "Запуск",
+        "path": [
+          {
+            "x": 96,
+            "y": 152
+          },
+          {
+            "x": 216,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "97dc1214-60da-4940-9de7-24ca8055ae89",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "14fb81f1-5b25-402a-aa33-3e55721e89b4": {
+        "id": "14fb81f1-5b25-402a-aa33-3e55721e89b4",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 184
+          },
+          {
+            "x": 256,
+            "y": 240
+          }
+        ],
+        "type": "error",
+        "source": "97dc1214-60da-4940-9de7-24ca8055ae89",
+        "target": "bbcdb75b-2834-446f-9e08-9215dd650ca1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "800c1c35-1df0-4847-b9b9-c3fabfc3f4de": {
+        "id": "800c1c35-1df0-4847-b9b9-c3fabfc3f4de",
+        "name": "",
+        "path": [
+          {
+            "x": 464,
+            "y": 152
+          },
+          {
+            "x": 648,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "bec4ed58-80aa-4630-956c-95a9062c52bb",
+        "target": "aa5c61ee-6b76-4523-b811-0321940b8144",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8169788e-36b1-4baa-9d14-9ca74e18fe49": {
+        "id": "8169788e-36b1-4baa-9d14-9ca74e18fe49",
+        "name": "Да",
+        "path": [
+          {
+            "x": 680,
+            "y": 152
+          },
+          {
+            "x": 784,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "aa5c61ee-6b76-4523-b811-0321940b8144",
+        "target": "41e20051-6605-4692-837d-f55142db6a5e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a117583c-f321-4a83-a5b7-51e312dad5cb": {
+        "id": "a117583c-f321-4a83-a5b7-51e312dad5cb",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 304
+          },
+          {
+            "x": 256,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "bbcdb75b-2834-446f-9e08-9215dd650ca1",
+        "target": "c0d4d1a1-06c3-4fb1-87cb-3d4c6cd36810",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e323b1ec-a1d6-4d7e-af5c-109347c7cd93": {
+        "id": "e323b1ec-a1d6-4d7e-af5c-109347c7cd93",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 664,
+            "y": 168
+          },
+          {
+            "x": 664,
+            "y": 264
+          },
+          {
+            "x": 808,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "aa5c61ee-6b76-4523-b811-0321940b8144",
+        "target": "f6eb3ecd-d9e1-4d94-b57a-207b6cf32650",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "edb211e1-871e-471f-a189-6b8c4273d8d2": {
+        "id": "edb211e1-871e-471f-a189-6b8c4273d8d2",
+        "name": "",
+        "path": [
+          {
+            "x": 864,
+            "y": 152
+          },
+          {
+            "x": 936,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "41e20051-6605-4692-837d-f55142db6a5e",
+        "target": "c21e7f3a-51c9-4cde-9373-debfc1331ef9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ee4c276f-6120-4d00-a8f2-27d5d5630a34": {
+        "id": "ee4c276f-6120-4d00-a8f2-27d5d5630a34",
+        "name": "",
+        "path": [
+          {
+            "x": 296,
+            "y": 152
+          },
+          {
+            "x": 384,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "97dc1214-60da-4940-9de7-24ca8055ae89",
+        "target": "bec4ed58-80aa-4630-956c-95a9062c52bb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f2ecacda-bef6-4b00-a9a4-7dcf39840200": {
+        "id": "f2ecacda-bef6-4b00-a9a4-7dcf39840200",
+        "name": "",
+        "path": [
+          {
+            "x": 1016,
+            "y": 152
+          },
+          {
+            "x": 1044,
+            "y": 152
+          },
+          {
+            "x": 1044,
+            "y": 76
+          },
+          {
+            "x": 664,
+            "y": 76
+          },
+          {
+            "x": 664,
+            "y": 136
+          }
+        ],
+        "type": "plain",
+        "source": "c21e7f3a-51c9-4cde-9373-debfc1331ef9",
+        "target": "aa5c61ee-6b76-4523-b811-0321940b8144",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fb6621ae-57e2-462d-a1d8-b7bcb114c798": {
+        "id": "fb6621ae-57e2-462d-a1d8-b7bcb114c798",
+        "name": "",
+        "path": [
+          {
+            "x": 424,
+            "y": 184
+          },
+          {
+            "x": 424,
+            "y": 272
+          },
+          {
+            "x": 296,
+            "y": 272
+          }
+        ],
+        "type": "error",
+        "source": "bec4ed58-80aa-4630-956c-95a9062c52bb",
+        "target": "bbcdb75b-2834-446f-9e08-9215dd650ca1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ninterface IAppContext {\n    __id: string,\n    employment_place: string[],\n    kedo_staff?: string[],\n    staff?: string[],\n}\n\ninterface IResponse {\n    success: boolean,\n    error?: string,\n    app_context?: IAppContext[],\n    total?: number,\n}\n\ninterface ISolution {\n    name: string,\n    code: string,\n}\n\ninterface IApp {\n    namespace: string,\n    code: string,\n    staff_code: string,\n    employment_code: string,\n}\n\nconst CHUNK_SIZE = 100;\nconst VACATION_SOLUTION = \"otpuska\";\nconst BUSINESS_TRIP_SOLUTION = \"komandirovki\";\n\nconst namespaces = {\n    \"absences\": {\n        name: \"absences\",\n        apps: [\n            {\n                code: \"vacations\",\n                staff_code: \"kedo_staff\",\n                employment_code: \"employment_place\",\n            }\n        ]\n    },\n    \"kedo\": {\n        name: \"kedo\",\n        apps: [\n            {\n                code: \"execution_duties\",\n                staff_code: \"staff\",\n                employment_code: \"staff_employment_placement\",\n            },\n        ],\n    },\n    \"time_tracking\": {\n        name: \"time_tracking\",\n        apps: [\n            {\n                code: \"overtime_work\",\n                staff_code: \"kedo_staff\",\n                employment_code: \"employment_place\",\n            }\n        ]\n    },\n    \"personnel_documents\": {\n        name: \"personnel_documents\",\n        apps: [\n            {\n                code: \"application_for_leave_without_pay\",\n                staff_code: \"staff\",\n                employment_code: \"employment_placement\",\n            },\n            {\n                code: \"paid_leave\",\n                staff_code: \"staff\",\n                employment_code: \"employment_place\",\n            },\n            {\n                code: 'memo_business_trip',\n                staff_code: \"staff\",\n                employment_code: \"employment_placement\",\n            },\n            {\n                code: \"application_for_financial_assistance\",\n                staff_code: \"staff\",\n                employment_code: \"employment_placement\",\n            },\n            {\n                code: \"benefit_application\",\n                staff_code: \"staff\",\n                employment_code: \"employment_placement\",\n            },\n            {\n                code: \"application_for_the_transfer_of_salary_to_the_current_account\",\n                staff_code: \"staff\",\n                employment_code: \"employment_placement\",\n            },\n            {\n                code: \"free_from\",\n                staff_code: \"staff\",\n                employment_code: \"employment_placement\",\n            },\n            {\n                code: \"certificate\",\n                staff_code: \"staff\",\n                employment_code: \"employment_place\",\n            }\n        ]\n    },\n    \"business_trips\": {\n        name: \"business_trips\",\n        apps: [\n            {\n                code: \"businesstrip_requests\",\n                staff_code: \"kedo_staff\",\n                employment_code: \"employment_placement\",\n            }\n        ]\n    }\n}\n\nclass ElmaApp {\n    private namespace: string;\n    private code: string;\n\n    constructor(namespace: string, code: string) {\n        this.code = code;\n        this.namespace = namespace;\n    }\n\n    /** Формирование URL API запроса на получение списка элементов приложения.*/\n    private getListURL(): string {\n        return `${System.getBaseUrl()}/pub/v1/app/${this.namespace}/${this.code}/list`;\n    }\n\n    /** Формирование URL API запроса на обновление элемента приложения.\n     * @param id идентификатор приложения\n     */\n    private getUpdateElementURL(element_id: string): string {\n        return `${System.getBaseUrl()}/pub/v1/app/${this.namespace}/${this.code}/${element_id}/update`;\n    }\n\n    /** Запрос на обновление контекста приложения.*/\n    async updateEmploymentPlacement(element_id: string, context: any): Promise\u003cvoid\u003e {\n        const token = Context.data.token;\n\n        try {\n            const request = await fetch(this.getUpdateElementURL(element_id), {\n                method: \"POST\",\n                headers: {\n                    Authorization: `Bearer ${token}`\n                },\n                body: JSON.stringify(context)\n            });\n        } catch (error) {\n            throw new Error(error)\n        }\n    }\n\n    /** Получение списка элементов приложения. */\n    async getElements(filter?: any): Promise\u003cIResponse | undefined\u003e {\n        const token = Context.data.token;\n\n        try {\n            const request = await fetch(this.getListURL(), {\n                method: \"POST\",\n                headers: {\n                    Authorization: `Bearer ${token}`\n                },\n                body: JSON.stringify(filter ?? {})\n            });\n\n            const response = await request.json();\n\n            if (response \u0026\u0026 response.success \u0026\u0026 response.success == true) {\n                return \u003cIResponse\u003e{\n                    success: response.success,\n                    error: response.error,\n                    app_context: response.result.result,\n                    total: response.result.total,\n                };\n            } else {\n                throw new Error(JSON.stringify(response ?? request));\n            }\n        } catch (error) {\n            throw new Error(error);\n        }\n    }\n\n    async getTotalElementsCount(filter?: any): Promise\u003cnumber\u003e {\n        const response = await this.getElements(filter);\n\n        if (!response || response.success == false || !response.total) return 0;\n\n        return response.total;\n    }\n\n}\n\n/** \n * Тело для запроса получения списка элементов приложения.\n * Идет фильтрация по незаполненности поля \"Заявка по месту занятости\"\n * Используется пагинация.\n */\nconst filter = (from: number, size: number, employment_field_name: string) =\u003e {\n    return {\n        \"active\": true,\n        \"from\" : from,\n        \"size\" : size,\n        \"filter\": {\n            \"or\": [\n                {\n                    \"eq\": [\n                        {\n                            \"field\": employment_field_name\n                        },\n                        null\n                    ]\n                },\n                {\n                    \"link\": [\n                        {\n                            \"field\": employment_field_name\n                        },\n                        {\n                            \"list\": []\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}\n\n/** Получение токена из настроек КЭДО. */\nasync function getApiToken(): Promise\u003cvoid\u003e {\n    const api_key = await Namespace.app.settings.search()\n        .where(f =\u003e f.code.eq(\"api_key\"))\n        .first();\n\n    if (!api_key || !api_key.data.value) {\n        Context.data.error = `Не найден параметр api_key или параметр не заполнен.`;\n        throw new Error(Context.data.error);\n    }\n\n    Context.data.token = api_key.data.value;\n}\n\n/** Получить список активных решений. */\nasync function getSolutions(): Promise\u003cISolution[]\u003e {\n    let solutions: ISolution[] = [];\n\n    /** Выполняем запрос на получение списка всех решений. */\n    try {\n        const request = await fetch(`${System.getBaseUrl()}/pub/v1/scheme/solutions`, {\n            method: \"GET\",\n            headers: {\n                \"Authorization\": `Bearer ${Context.data.token}`\n            }\n        });\n\n        if (!request.ok) {\n            throw new Error(JSON.stringify(request));\n        }\n\n        const response = await request.json();\n        solutions = response.result.result as ISolution[];\n    } catch (error) {\n        Context.data.error = JSON.stringify(error);\n        throw new Error(error);\n    } finally {\n        return solutions;\n    }\n}\n\n/** Сформировать список приложений. */\nasync function getKedoApps(): Promise\u003cvoid\u003e {\n    const solutions = await getSolutions();\n\n    if (!solutions || solutions.length == 0) {\n        Context.data.error = `Не удалось получить список решений`;\n        throw new Error(Context.data.error);\n    }\n\n    const apps: IApp[] = [];\n\n    const kedo_apps = namespaces.kedo.apps;\n\n    apps.push(...kedo_apps.map(f =\u003e {\n        return \u003cIApp\u003e{\n            namespace: namespaces.kedo.name,\n            code: f.code,\n            staff_code: f.staff_code,\n            employment_code : f.employment_code,\n        }\n    }));\n\n    const personnel_documents_apps = namespaces.personnel_documents.apps;\n\n    apps.push(...personnel_documents_apps.map(f =\u003e {\n        return \u003cIApp\u003e{\n            namespace: namespaces.personnel_documents.name,\n            code: f.code,\n            staff_code: f.staff_code,\n            employment_code : f.employment_code,\n        }\n    }));\n\n    if (solutions.find(f =\u003e f.code == BUSINESS_TRIP_SOLUTION)) {\n        Context.data.business_trip_enabled = true;\n\n        const business_trip_apps = namespaces.business_trips.apps;\n\n        apps.push(...business_trip_apps.map(f =\u003e {\n            return \u003cIApp\u003e{\n                namespace: namespaces.business_trips.name,\n                code: f.code,\n                staff_code: f.staff_code,\n                employment_code : f.employment_code,\n            }\n        }));\n    }\n\n    if (solutions.find(f =\u003e f.code == VACATION_SOLUTION)) {\n        Context.data.absences_enabled = true;\n\n        const absences_apps = namespaces.absences.apps;\n\n        apps.push(...absences_apps.map(f =\u003e {\n            return \u003cIApp\u003e{\n                namespace: namespaces.absences.name,\n                code: f.code,\n                staff_code: f.staff_code,\n                employment_code : f.employment_code,\n            }\n        }));\n\n        const time_tracking = namespaces.time_tracking.apps;\n\n        apps.push(...time_tracking.map(f =\u003e {\n            return \u003cIApp\u003e{\n                namespace: namespaces.time_tracking.name,\n                code: f.code,\n                staff_code: f.staff_code,\n                employment_code : f.employment_code,\n            }\n        }));\n    }\n\n    Context.data.app_list = JSON.stringify(apps);\n}\n\nasync function checkAppList(): Promise\u003cboolean\u003e {\n    const app_list: IApp[] = Context.data.app_list ? JSON.parse(Context.data.app_list) : [];\n\n    if (app_list.length == 0) {\n        return false;\n    }\n\n    return true;\n}\n\nasync function getApp(): Promise\u003cvoid\u003e {\n    const app_list: IApp[] = Context.data.app_list ? JSON.parse(Context.data.app_list) : [];\n\n    if (app_list.length == 0) {\n        throw new Error(\"app_list is empty\");\n    }\n\n    Context.data.app_data = JSON.stringify(app_list.pop());\n    Context.data.app_list = JSON.stringify(app_list);\n}\n\nasync function update_employments(): Promise\u003cvoid\u003e {\n    // Выполняем первый запрос для получения\n    // количества элементов приложения, которые подходят под заданные фильтром условия.\n    // Из этого запроса на интересует только поле total.\n    const app_data: IApp = Context.data.app_data ? JSON.parse(Context.data.app_data) : undefined;\n\n    if (!app_data) {\n        throw new Error(\"app_data is undefined\");\n    }\n\n    const app = new ElmaApp(app_data.namespace, app_data.code);\n    const total_count = await app.getTotalElementsCount(filter(0, 1, app_data.employment_code));\n\n    // Получаем все записи из справочника по местам занятости.\n    const employment_directory = await Namespace.app.employment_directory.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__status.eq(Namespace.app.employment_directory.fields.__status.variants.actual)\n        ))\n        .size(10000)\n        .all();\n\n    // Пакетно выполняем запросы на получение и обновление элементов приложения.\n    for (let i = 0; i \u003c total_count; i += CHUNK_SIZE) {\n        const elements = await app.getElements(filter(i, i + CHUNK_SIZE, app_data.employment_code));\n\n        if (!elements || !elements.app_context) return;\n\n        let promises: Promise\u003cvoid\u003e[] = [];\n\n        for (let el of elements.app_context) {\n            //  Используя staff_code вытягиваем из полученного приложения поле с сотрудником\n            if (!(el as any)[app_data.staff_code] || !(el as any)[app_data.staff_code][0]) {\n                continue;\n            }\n\n            const staff_id: string = (el as any)[app_data.staff_code][0];\n\n            // Получение записи из справочника занятости\n            const staff_employment = employment_directory.filter(f =\u003e f.data.staff?.id == staff_id);\n\n            if (!staff_employment || staff_employment.length == 0) {\n                continue;\n            }\n\n            const employment = staff_employment.find(f =\u003e f.data.type_employment?.code == \"main_workplace\") ?? staff_employment[0];\n\n            // Тело для запроса изменения контекста элемента приложения.\n            // В некоторых приложениях используются разные коды полей, поэтому учитываем два варианта наименования.\n            const element_context = {\n                context: {}\n            };\n\n            (element_context.context as any)[`${app_data.employment_code}`] = [employment.id];\n\n\n            promises.push(app.updateEmploymentPlacement(el.__id, element_context));\n\n            if (promises.length \u003e 10) {\n                await Promise.all(promises).then(() =\u003e {\n                    Context.data.element_count = (Context.data.element_count ?? 0) + promises.length;\n                });\n                promises = [];\n            }\n        }\n\n        await Promise.all(promises).then(() =\u003e {\n            Context.data.element_count = (Context.data.element_count ?? 0) + promises.length;\n        });;\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "__name",
+          "display": "Название",
+          "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+          "readonly": false,
+          "required": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "employment_directory"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "token": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_list": {
+        "enabled": false,
+        "conditions": []
+      },
+      "element_count": {
+        "enabled": false,
+        "conditions": []
+      },
+      "absences_enabled": {
+        "enabled": false,
+        "conditions": []
+      },
+      "business_trip_enabled": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

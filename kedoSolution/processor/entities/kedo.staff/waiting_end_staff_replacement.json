@@ -1,0 +1,573 @@
+{
+  "__id": "018c8757-193c-7ecd-8fd0-106038b74507",
+  "namespace": "kedo.staff",
+  "code": "waiting_end_staff_replacement",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Ожидание окончания замещения сотрудника",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текст ошибки",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "date_end",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата окончания замещения",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-07-20T06:54:48.076782073Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2023-08-02T07:05:33.266464911Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 80,
+        "y": 104,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["82d235b1-dcbb-48a1-80bf-0320909e7816"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Ожидание окончания замещения сотрудника ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "2873c39d-8fd3-4a07-85a1-aac80255fd85": {
+        "x": 304,
+        "y": 248,
+        "id": "2873c39d-8fd3-4a07-85a1-aac80255fd85",
+        "icon": "end",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "47783f7b-7d11-4204-ab77-ebddeba6ba06": {
+        "x": 152,
+        "y": 176,
+        "id": "47783f7b-7d11-4204-ab77-ebddeba6ba06",
+        "icon": "notification",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "Ошибка в ходе выполнения процесса",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["c9d7bde3-81af-4c68-b8d7-8d50521bebf7"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Не удалось найти замещения"
+        }
+      },
+      "718a059c-8c4e-4a50-b068-7bd78b9ad419": {
+        "x": 152,
+        "y": 88,
+        "id": "718a059c-8c4e-4a50-b068-7bd78b9ad419",
+        "icon": "script",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "Найти активные замещения сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "17d66d3b-d6ee-4a03-a911-8819ccf4689f",
+          "9a674b92-8e32-4378-bb09-ef8a429c8020"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_staff_replcament",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "9a674b92-8e32-4378-bb09-ef8a429c8020",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "e6063ce3-3587-4fce-bfe7-878494e26625": {
+        "x": 176,
+        "y": 280,
+        "id": "e6063ce3-3587-4fce-bfe7-878494e26625",
+        "icon": "end",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "efc62f91-07fc-449b-bbbb-e3f78f98e6a8": {
+        "x": 488,
+        "y": 104,
+        "id": "efc62f91-07fc-449b-bbbb-e3f78f98e6a8",
+        "icon": "timer",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "Ожидание окончания замещения",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["e5f93a2b-3207-4b8e-8b15-e3c3a0329aa2"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "code": "date_end",
+            "days": 0,
+            "kind": "variable",
+            "hours": 0,
+            "minutes": 0,
+            "absolute": false,
+            "substraction": false
+          }
+        }
+      },
+      "fe48be44-de75-4733-a044-d1a4c43d1d84": {
+        "x": 304,
+        "y": 104,
+        "id": "fe48be44-de75-4733-a044-d1a4c43d1d84",
+        "icon": "exclusive",
+        "lane": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "ef637809-92af-430e-a5d8-513edec1e91d",
+          "c38c063e-cf3f-4ef8-ba20-3714237e1a14"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      }
+    },
+    "lanes": {
+      "78ae30b4-dc13-45d8-a39c-dbb52dfe339f": {
+        "x": 8,
+        "y": 8,
+        "id": "78ae30b4-dc13-45d8-a39c-dbb52dfe339f",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 904,
+        "height": 336,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "17d66d3b-d6ee-4a03-a911-8819ccf4689f": {
+        "id": "17d66d3b-d6ee-4a03-a911-8819ccf4689f",
+        "name": "",
+        "path": [
+          {
+            "x": 232,
+            "y": 120
+          },
+          {
+            "x": 304,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "718a059c-8c4e-4a50-b068-7bd78b9ad419",
+        "target": "fe48be44-de75-4733-a044-d1a4c43d1d84",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "82d235b1-dcbb-48a1-80bf-0320909e7816": {
+        "id": "82d235b1-dcbb-48a1-80bf-0320909e7816",
+        "name": "",
+        "path": [
+          {
+            "x": 112,
+            "y": 120
+          },
+          {
+            "x": 152,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "718a059c-8c4e-4a50-b068-7bd78b9ad419",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9a674b92-8e32-4378-bb09-ef8a429c8020": {
+        "id": "9a674b92-8e32-4378-bb09-ef8a429c8020",
+        "name": "",
+        "path": [
+          {
+            "x": 192,
+            "y": 152
+          },
+          {
+            "x": 192,
+            "y": 176
+          }
+        ],
+        "type": "error",
+        "source": "718a059c-8c4e-4a50-b068-7bd78b9ad419",
+        "target": "47783f7b-7d11-4204-ab77-ebddeba6ba06",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c38c063e-cf3f-4ef8-ba20-3714237e1a14": {
+        "id": "c38c063e-cf3f-4ef8-ba20-3714237e1a14",
+        "name": "",
+        "path": [
+          {
+            "x": 336,
+            "y": 120
+          },
+          {
+            "x": 488,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "fe48be44-de75-4733-a044-d1a4c43d1d84",
+        "target": "efc62f91-07fc-449b-bbbb-e3f78f98e6a8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "date_end"
+              },
+              "type": "DATETIME",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c9d7bde3-81af-4c68-b8d7-8d50521bebf7": {
+        "id": "c9d7bde3-81af-4c68-b8d7-8d50521bebf7",
+        "name": "",
+        "path": [
+          {
+            "x": 192,
+            "y": 240
+          },
+          {
+            "x": 192,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "47783f7b-7d11-4204-ab77-ebddeba6ba06",
+        "target": "e6063ce3-3587-4fce-bfe7-878494e26625",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e5f93a2b-3207-4b8e-8b15-e3c3a0329aa2": {
+        "id": "e5f93a2b-3207-4b8e-8b15-e3c3a0329aa2",
+        "name": "",
+        "path": [
+          {
+            "x": 504,
+            "y": 104
+          },
+          {
+            "x": 504,
+            "y": 68
+          },
+          {
+            "x": 192,
+            "y": 68
+          },
+          {
+            "x": 192,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "efc62f91-07fc-449b-bbbb-e3f78f98e6a8",
+        "target": "718a059c-8c4e-4a50-b068-7bd78b9ad419",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ef637809-92af-430e-a5d8-513edec1e91d": {
+        "id": "ef637809-92af-430e-a5d8-513edec1e91d",
+        "name": "Нет активных замещений",
+        "path": [
+          {
+            "x": 320,
+            "y": 136
+          },
+          {
+            "x": 320,
+            "y": 248
+          }
+        ],
+        "type": "default",
+        "source": "fe48be44-de75-4733-a044-d1a4c43d1d84",
+        "target": "2873c39d-8fd3-4a07-85a1-aac80255fd85",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function get_staff_replcament(): Promise\u003cvoid\u003e {\n    if (!Context.data.staff) {\n        Context.data.error = 'Не указан сотрудник';\n        throw new Error(Context.data.error);\n    }\n\n    const staff = await Context.data.staff.fetch();\n    \n    if (!staff.data.ext_user) {\n        Context.data.error = 'У сотрудника не найден связанный с ним пользователь';\n        throw new Error(Context.data.error);\n    }\n\n    const user = staff.data.ext_user;\n\n    const now = new Datetime();\n\n    const replacement = await System.replacements.search().where((f, g) =\u003e g.and(\n        f.absent.eq(user),\n        f.begin.lte(now),\n        f.end.gte(now),\n    )).first()\n\n    if (replacement) {\n        Context.data.date_end = replacement.data.end;\n    } else {\n        Context.data.date_end = undefined;\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "date_end": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

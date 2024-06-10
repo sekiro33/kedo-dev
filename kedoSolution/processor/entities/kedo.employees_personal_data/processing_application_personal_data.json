@@ -1,0 +1,3155 @@
+{
+  "__id": "018f9fc7-fd1e-7122-9535-4f1388d12efa",
+  "namespace": "kedo.employees_personal_data",
+  "code": "processing_application_personal_data",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обработка заявки на изменение персональных данных",
+  "type": "bpmn",
+  "draft": false,
+  "version": 12,
+  "context": [
+    {
+      "code": "isEmployeeProcessed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "(__BP)Таблица занятости обработана?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_sex",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "male",
+            "name": "Мужской",
+            "checked": false
+          },
+          {
+            "code": "female",
+            "name": "Женский",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Пол родственника",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_personal_data_accepring",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Даю согласие на обработку персональных данных родственника",
+        "data": {
+          "additionalType": "checkbox",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "proficience_level",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "a1",
+            "name": "А1 - Начальный",
+            "checked": false
+          },
+          {
+            "code": "a2",
+            "name": "А2 - Ниже среднего (Pre-Intermediate)",
+            "checked": false
+          },
+          {
+            "code": "b1",
+            "name": "В1 - Средний (Intermediate)",
+            "checked": false
+          },
+          {
+            "code": "b2",
+            "name": "В2 - Выше среднего (Upper-Intermediate)",
+            "checked": false
+          },
+          {
+            "code": "c1",
+            "name": "С1 - Продвинутый (Advanced)",
+            "checked": false
+          },
+          {
+            "code": "c2",
+            "name": "С2 - Профессиональный (Proficiency)",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Уровень владения",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_snils",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "mask": {
+          "pattern": "^([0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{3}.[0-9]{2})?$",
+          "errorMessage": "Формат - XXX-XXX-XXX XX"
+        }
+      },
+      "view": {
+        "name": "СНИЛС",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_birth_certificate",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Свидетельство о рождении",
+        "tooltip": "Требуется скан свидетельства о рождении ребенка (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_number",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "mask": {
+          "pattern": "^([0-9]{6})?$",
+          "errorMessage": "Формат - XXXXXX"
+        }
+      },
+      "view": {
+        "name": "Номер паспорта",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_marriage_certificate",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Свидетельство о заключении брака",
+        "tooltip": "Требуется скан свидетельства о заключении брака (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_full_name",
+      "type": "FULL_NAME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ФИО Сотрудника",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "internal_place_string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "(__BP) Внутреннее совместительство строка",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "is_external_combination",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Внешнее совместительство?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "count_type_employment",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "(__BP) count_type_employment",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "military_record_document",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ воинского учета",
+        "tooltip": "Требуется прикрепить документ воинского учета (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата выдачи",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_series",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "mask": {
+          "pattern": "^([0-9]{4})?$",
+          "errorMessage": "Формат - XXXX"
+        }
+      },
+      "view": {
+        "name": "Серия паспорта",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relation_degree",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "husband_wife",
+            "name": "Муж/Жена",
+            "checked": false
+          },
+          {
+            "code": "child",
+            "name": "Ребенок",
+            "checked": false
+          },
+          {
+            "code": "mother",
+            "name": "Мать",
+            "checked": false
+          },
+          {
+            "code": "father",
+            "name": "Отец",
+            "checked": false
+          },
+          {
+            "code": "brother",
+            "name": "Брат",
+            "checked": false
+          },
+          {
+            "code": "sister",
+            "name": "Сестра",
+            "checked": false
+          },
+          {
+            "code": "other_degree",
+            "name": "Другая степень родства",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Степень родства",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "place_employment",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employment_directory",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Место занятости",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_current_registration",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Паспорт. Скан страница с актуальной регистрацией",
+        "tooltip": "Требуется прикрепить скан страницы паспорта с актуальной регистрацией (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Паспорт. Страница с фото и данными",
+        "tooltip": "Скан документа (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_birth_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата рождения родственника",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "category_type_personal_data",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": []
+      },
+      "view": {
+        "name": "(__BP) Тип персональных данных (категория)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_temporary_registration",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Временная регистрация",
+        "tooltip": "Требуется прикрепить документ, подтверждающий временную регистрацию (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_full_name",
+      "type": "FULL_NAME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ФИО родственника",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "change_registration_address",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Изменение адреса регистрации",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Временной",
+          "yesValue": "Постоянной"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_phone",
+      "type": "PHONE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Телефон родственника",
+        "data": {
+          "type": "work"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_personal_data_accepting",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Даю согласие на обработку персональных данных родственника",
+        "data": {
+          "additionalType": "checkbox",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_foreign_language",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Иностранный язык",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_issued_by",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Кем выдан",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_phone",
+      "type": "PHONE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер телефона",
+        "data": {
+          "type": "work"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "type_personal_data",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "type_employees_personal_data",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Тип персональных данных",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_personal_data_accepting",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Даю согласие на обработку персональных данных",
+        "data": {
+          "additionalType": "checkbox",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_passport_code",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "mask": {
+          "pattern": "\\d{3}-\\d{3}",
+          "errorMessage": "Формат - XXX-XXX"
+        }
+      },
+      "view": {
+        "name": "Код подразделения",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_other_documents",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Прочие документы",
+        "tooltip": "Требуется скан подтверждающего документа опекунства, попечительства, усыновления и прочих родственных связей (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "completion_certificate",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ об окончании обучения",
+        "tooltip": "Требуется скан(-ы) документа(-ов) об образовании (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "organization_employee",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Организация сотрудника из таблицы занятости",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_address",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Адрес",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "type_employment_string",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "(__BP) Вид занятости сотрудника (строка)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "passport_data_changed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Изменились паспортные данные",
+        "data": {
+          "additionalType": "checkbox",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "marriage_certificate",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Свидетельство о заключении брака",
+        "tooltip": "Требуется скан свидетельства о заключении брака (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "is_internal_combination",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Внутреннее совместительство?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "is_internal_place",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Встречалось уже внутреннее совместительство?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "count_iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер итерации",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "education_level",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "higher",
+            "name": "Высшее",
+            "checked": false
+          },
+          {
+            "code": "secondary_vocational_1",
+            "name": "Среднее профессиональное",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Уровень образования",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "employees_personal_data",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employees_personal_data",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на изменение персональных данных"
+      }
+    },
+    {
+      "code": "is_main_workplace",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Основное место работы?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "diver_license",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Водительское удостоверение",
+        "tooltip": "Требуется прикрепить скан водительского удостоверения (.docx или .pdf)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "relative_snils",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "mask": {
+          "pattern": "^([0-9]{3}[-]{1}[0-9]{3}[-]{1}[0-9]{3}.[0-9]{2})?$",
+          "errorMessage": "Формат - XXX-XXX-XXX XX"
+        }
+      },
+      "view": {
+        "name": "СНИЛС родственника",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "address_registration",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Адрес регистрации",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-11T11:40:10.842595638Z",
+  "__createdBy": "dbf3495b-ce41-49f5-ba21-cdd11a052281",
+  "__updatedAt": "2024-05-27T10:07:16.520234334Z",
+  "__updatedBy": "40489035-c2e3-4dba-8113-51ef4cb9dad3",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 24,
+        "y": 200,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["ddc0f53a-34b9-4b9e-a529-1ceb9b32673f"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "Будет запущен процесс в рамках которого необходимо дождаться задачи для создания заявки на изменение персональных данных.",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обработка заявки на изменение персональных данных ({$employees_personal_data})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "37c72a65-b4c3-44e2-aa6a-714f98a2f4ab": {
+        "x": 832,
+        "y": 280,
+        "id": "37c72a65-b4c3-44e2-aa6a-714f98a2f4ab",
+        "icon": "exclusive",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Внутреннее совместительство?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "4461cf70-3798-4187-8fc9-ef482463eca7",
+          "6f141d96-9ed0-4420-a964-dc24e1127fb5"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "3b8f4105-32aa-4d14-a12a-7d7ebbca1b5e": {
+        "x": 360,
+        "y": 336,
+        "id": "3b8f4105-32aa-4d14-a12a-7d7ebbca1b5e",
+        "icon": "end",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "4baa1a25-95b0-421e-be15-e95aba89ec85": {
+        "x": 1184,
+        "y": 200,
+        "id": "4baa1a25-95b0-421e-be15-e95aba89ec85",
+        "icon": "end",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "5c6eff14-d0fb-4e8f-8a02-cabb18cf8551": {
+        "x": 808,
+        "y": 184,
+        "id": "5c6eff14-d0fb-4e8f-8a02-cabb18cf8551",
+        "icon": "create",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Создание заявки по месту работы",
+        "type": "app_create",
+        "color": "#a0e9fd",
+        "exits": ["49ffddb3-ec08-497a-9040-1e1f64cbec54"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "notify": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "category_type_personal_data"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personal_data_type"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_full_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "full_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_series"
+              },
+              "target": {
+                "kind": "context",
+                "value": "series"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_number"
+              },
+              "target": {
+                "kind": "context",
+                "value": "number"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "date_of_issue"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_issued_by"
+              },
+              "target": {
+                "kind": "context",
+                "value": "issued_by"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_code"
+              },
+              "target": {
+                "kind": "context",
+                "value": "department_code"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "page_photos_and_data"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_personal_data_accepting"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personal_data_accepting"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "marriage_certificate"
+              },
+              "target": {
+                "kind": "context",
+                "value": "certificate"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_address"
+              },
+              "target": {
+                "kind": "context",
+                "value": "address"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_phone"
+              },
+              "target": {
+                "kind": "context",
+                "value": "phone"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_snils"
+              },
+              "target": {
+                "kind": "context",
+                "value": "snils"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "change_registration_address"
+              },
+              "target": {
+                "kind": "context",
+                "value": "change_registration_address"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_temporary_registration"
+              },
+              "target": {
+                "kind": "context",
+                "value": "temporary_registration"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_passport_current_registration"
+              },
+              "target": {
+                "kind": "context",
+                "value": "page_current_registration"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "passport_data_changed"
+              },
+              "target": {
+                "kind": "context",
+                "value": "passport_data_changed"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "military_record_document"
+              },
+              "target": {
+                "kind": "context",
+                "value": "military_record_document"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "diver_license"
+              },
+              "target": {
+                "kind": "context",
+                "value": "diver_license"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_foreign_language"
+              },
+              "target": {
+                "kind": "context",
+                "value": "foreign_language"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "proficience_level"
+              },
+              "target": {
+                "kind": "context",
+                "value": "proficience_level"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "education_level"
+              },
+              "target": {
+                "kind": "context",
+                "value": "education_level"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "completion_certificate"
+              },
+              "target": {
+                "kind": "context",
+                "value": "completion_certificate"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relation_degree"
+              },
+              "target": {
+                "kind": "context",
+                "value": "relation_degree"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_full_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "full_name_family"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_full_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "child_full_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_sex"
+              },
+              "target": {
+                "kind": "context",
+                "value": "sex"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_birth_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "birth_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_phone"
+              },
+              "target": {
+                "kind": "context",
+                "value": "relative_phone"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_snils"
+              },
+              "target": {
+                "kind": "context",
+                "value": "snils_family"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_birth_certificate"
+              },
+              "target": {
+                "kind": "context",
+                "value": "family_birth_certificate"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_marriage_certificate"
+              },
+              "target": {
+                "kind": "context",
+                "value": "marriage_certificate_family"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "relative_other_documents"
+              },
+              "target": {
+                "kind": "context",
+                "value": "other_documents_family"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": ""
+              },
+              "target": {
+                "kind": "context",
+                "value": "child_personal_data_accept"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "type_employment_string"
+              },
+              "target": {
+                "kind": "context",
+                "value": "place_employment_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "address_registration"
+              },
+              "target": {
+                "kind": "context",
+                "value": "registration_address"
+              }
+            }
+          ],
+          "variable": "employees_personal_data"
+        }
+      },
+      "5ea3c9f0-2494-447a-b043-d277e6b76d5f": {
+        "x": 712,
+        "y": 184,
+        "id": "5ea3c9f0-2494-447a-b043-d277e6b76d5f",
+        "icon": "script",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Инициализация дополнительных переменных",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["8354570a-21c3-47cb-8940-c67fb5612ac2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "initializingAdditionalVariables",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "79c21a91-3e8a-4537-86ab-84a3c1041d07": {
+        "x": 616,
+        "y": 184,
+        "id": "79c21a91-3e8a-4537-86ab-84a3c1041d07",
+        "icon": "script",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Чтение строчки из таблицы занятости сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["63bd681f-f968-4b4b-9378-44576ad1fd0d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "processingRows",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "afb127ed-65b3-49db-97e7-59b78a8d820d": {
+        "x": 1064,
+        "y": 200,
+        "id": "afb127ed-65b3-49db-97e7-59b78a8d820d",
+        "icon": "exclusive",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Таблица занятости обработана?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "1cfb7bc6-d824-441f-ad66-23858824bdb8",
+          "fa4c1b91-f4b6-4b3a-9593-05051a7841cf"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "b5a19155-41b2-4765-9208-621af9cfde9d": {
+        "x": 904,
+        "y": 184,
+        "id": "b5a19155-41b2-4765-9208-621af9cfde9d",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Запуск процесса изменение ПДн",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["3bc79959-d789-4b88-86f2-39c1acbda059"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "personal_data_change",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "employees_personal_data"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff_personal_data"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "organization_employee"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization_employee"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "category_type_personal_data"
+              },
+              "target": {
+                "kind": "context",
+                "value": "type_employment"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "place_employment"
+              },
+              "target": {
+                "kind": "context",
+                "value": "place_employment"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "type_employment_string"
+              },
+              "target": {
+                "kind": "context",
+                "value": "type_employment_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "type_personal_data"
+              },
+              "target": {
+                "kind": "context",
+                "value": "type_employees_personal_data"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "employees_personal_data",
+          "namespace": "kedo.staff",
+          "subProcessTargetFieldCode": "staff_personal_data"
+        }
+      },
+      "d10ec5fe-d4e3-4297-bafb-8a44c1aa1b19": {
+        "x": 336,
+        "y": 184,
+        "id": "d10ec5fe-d4e3-4297-bafb-8a44c1aa1b19",
+        "icon": "user",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Создать заявку на изменение персональных данных",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "04539d07-d932-4d0b-b4fb-b71fcfc5b9f0",
+          "fadc7b01-065f-4e35-b2ec-8c9e1912ea24"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Создать заявку на изменение персональных данных {$staff}",
+          "notify": true,
+          "formCode": "form_dd7b2908-30fa-43e0-b808-552c2cc78023",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "isIgnoreSubstitutionTarget": "",
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "de86c9cd-6288-44c7-bebb-ab29fb41aedb": {
+        "x": 520,
+        "y": 184,
+        "id": "de86c9cd-6288-44c7-bebb-ab29fb41aedb",
+        "icon": "script",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Обработка занятости сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["2ca1a087-9724-4e18-92a8-d501f5c79089"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "processingTable",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "f46fc18e-6aa7-48c9-899b-f148753034fd": {
+        "x": 240,
+        "y": 184,
+        "id": "f46fc18e-6aa7-48c9-899b-f148753034fd",
+        "icon": "script",
+        "lane": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Заполнение контекста БП",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f8be238a-55a2-45a8-a53f-a138ed5376a0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillingContext",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "7455a703-78c1-441e-963b-99057db69c7f": {
+        "x": 8,
+        "y": 8,
+        "id": "7455a703-78c1-441e-963b-99057db69c7f",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1308,
+        "height": 640,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "04539d07-d932-4d0b-b4fb-b71fcfc5b9f0": {
+        "id": "04539d07-d932-4d0b-b4fb-b71fcfc5b9f0",
+        "name": "Сформировать заявку",
+        "path": [
+          {
+            "x": 416,
+            "y": 216
+          },
+          {
+            "x": 520,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "d10ec5fe-d4e3-4297-bafb-8a44c1aa1b19",
+        "target": "de86c9cd-6288-44c7-bebb-ab29fb41aedb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1cfb7bc6-d824-441f-ad66-23858824bdb8": {
+        "id": "1cfb7bc6-d824-441f-ad66-23858824bdb8",
+        "name": "Да",
+        "path": [
+          {
+            "x": 1096,
+            "y": 216
+          },
+          {
+            "x": 1184,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "afb127ed-65b3-49db-97e7-59b78a8d820d",
+        "target": "4baa1a25-95b0-421e-be15-e95aba89ec85",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "isEmployeeProcessed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2ca1a087-9724-4e18-92a8-d501f5c79089": {
+        "id": "2ca1a087-9724-4e18-92a8-d501f5c79089",
+        "name": "",
+        "path": [
+          {
+            "x": 600,
+            "y": 216
+          },
+          {
+            "x": 616,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "de86c9cd-6288-44c7-bebb-ab29fb41aedb",
+        "target": "79c21a91-3e8a-4537-86ab-84a3c1041d07",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3bc79959-d789-4b88-86f2-39c1acbda059": {
+        "id": "3bc79959-d789-4b88-86f2-39c1acbda059",
+        "name": "",
+        "path": [
+          {
+            "x": 984,
+            "y": 216
+          },
+          {
+            "x": 1064,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "b5a19155-41b2-4765-9208-621af9cfde9d",
+        "target": "afb127ed-65b3-49db-97e7-59b78a8d820d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4461cf70-3798-4187-8fc9-ef482463eca7": {
+        "id": "4461cf70-3798-4187-8fc9-ef482463eca7",
+        "name": "Да",
+        "path": [
+          {
+            "x": 864,
+            "y": 296
+          },
+          {
+            "x": 1056,
+            "y": 296
+          },
+          {
+            "x": 1056,
+            "y": 216
+          },
+          {
+            "x": 1064,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "37c72a65-b4c3-44e2-aa6a-714f98a2f4ab",
+        "target": "afb127ed-65b3-49db-97e7-59b78a8d820d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_internal_combination"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "49ffddb3-ec08-497a-9040-1e1f64cbec54": {
+        "id": "49ffddb3-ec08-497a-9040-1e1f64cbec54",
+        "name": "",
+        "path": [
+          {
+            "x": 888,
+            "y": 216
+          },
+          {
+            "x": 904,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "5c6eff14-d0fb-4e8f-8a02-cabb18cf8551",
+        "target": "b5a19155-41b2-4765-9208-621af9cfde9d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "63bd681f-f968-4b4b-9378-44576ad1fd0d": {
+        "id": "63bd681f-f968-4b4b-9378-44576ad1fd0d",
+        "name": "",
+        "path": [
+          {
+            "x": 696,
+            "y": 216
+          },
+          {
+            "x": 712,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "79c21a91-3e8a-4537-86ab-84a3c1041d07",
+        "target": "5ea3c9f0-2494-447a-b043-d277e6b76d5f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6f141d96-9ed0-4420-a964-dc24e1127fb5": {
+        "id": "6f141d96-9ed0-4420-a964-dc24e1127fb5",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 848,
+            "y": 280
+          },
+          {
+            "x": 848,
+            "y": 248
+          }
+        ],
+        "type": "default",
+        "source": "37c72a65-b4c3-44e2-aa6a-714f98a2f4ab",
+        "target": "5c6eff14-d0fb-4e8f-8a02-cabb18cf8551",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8354570a-21c3-47cb-8940-c67fb5612ac2": {
+        "id": "8354570a-21c3-47cb-8940-c67fb5612ac2",
+        "name": "",
+        "path": [
+          {
+            "x": 752,
+            "y": 248
+          },
+          {
+            "x": 752,
+            "y": 296
+          },
+          {
+            "x": 832,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "5ea3c9f0-2494-447a-b043-d277e6b76d5f",
+        "target": "37c72a65-b4c3-44e2-aa6a-714f98a2f4ab",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ddc0f53a-34b9-4b9e-a529-1ceb9b32673f": {
+        "id": "ddc0f53a-34b9-4b9e-a529-1ceb9b32673f",
+        "name": "Продолжить",
+        "path": [
+          {
+            "x": 56,
+            "y": 216
+          },
+          {
+            "x": 240,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "f46fc18e-6aa7-48c9-899b-f148753034fd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f8be238a-55a2-45a8-a53f-a138ed5376a0": {
+        "id": "f8be238a-55a2-45a8-a53f-a138ed5376a0",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 216
+          },
+          {
+            "x": 336,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "f46fc18e-6aa7-48c9-899b-f148753034fd",
+        "target": "d10ec5fe-d4e3-4297-bafb-8a44c1aa1b19",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fa4c1b91-f4b6-4b3a-9593-05051a7841cf": {
+        "id": "fa4c1b91-f4b6-4b3a-9593-05051a7841cf",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 1080,
+            "y": 232
+          },
+          {
+            "x": 1080,
+            "y": 360
+          },
+          {
+            "x": 656,
+            "y": 360
+          },
+          {
+            "x": 656,
+            "y": 248
+          }
+        ],
+        "type": "default",
+        "source": "afb127ed-65b3-49db-97e7-59b78a8d820d",
+        "target": "79c21a91-3e8a-4537-86ab-84a3c1041d07",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fadc7b01-065f-4e35-b2ec-8c9e1912ea24": {
+        "id": "fadc7b01-065f-4e35-b2ec-8c9e1912ea24",
+        "name": "Отменить",
+        "path": [
+          {
+            "x": 376,
+            "y": 248
+          },
+          {
+            "x": 376,
+            "y": 336
+          }
+        ],
+        "type": "plain",
+        "source": "d10ec5fe-d4e3-4297-bafb-8a44c1aa1b19",
+        "target": "3b8f4105-32aa-4d14-a12a-7d7ebbca1b5e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": true,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "\nasync function processingRows(): Promise\u003cvoid\u003e {\n    Context.data.count_iteration!++;\n    Context.data.is_main_workplace = false;\n    Context.data.is_internal_combination = false;\n    Context.data.is_external_combination = false;\n\n    if (!Context.data.staff) {\n        throw new Error(\"staff is undefined\")\n    }\n\n    const staff = await Context.data.staff.fetch();\n    if (staff.data.employment_table) {\n        const row = staff.data.employment_table[Context.data.count_type_employment! - 1];\n        Context.data.type_employment_string = row.type_employment.name;\n        Context.data.organization_employee = row.organization;\n        Context.data.place_employment = row.employment_placement_app;\n        Context.data.count_type_employment!--;\n\n        if (row.type_employment.code == 'main_workplace') {\n            Context.data.is_main_workplace = true;\n        }\n        if (row.type_employment.code == 'internal_combination') {\n            Context.data.is_internal_combination = true;\n            Context.data.is_internal_place = true;\n        }\n        if (row.type_employment.code == 'external_combination') {\n            Context.data.is_external_combination = true;\n        }\n        if (Context.data.is_internal_place === true \u0026\u0026 Context.data.is_external_combination === false) {\n            Context.data.type_employment_string = `Основное место работы и внутреннее(-ие) совместительство(-а)`;\n        }\n\n        if (Context.data.count_type_employment == 0) {\n            Context.data.isEmployeeProcessed = true;\n        } else {\n            Context.data.isEmployeeProcessed = false;\n        }\n    }\n}\n\nasync function processingTable(): Promise\u003cvoid\u003e {\n    if (!Context.data.staff) {\n        throw new Error(\"staff is undefined\")\n    }\n    const staff = await Context.data.staff.fetch();\n    if (staff.data.employment_table) {\n        Context.data.count_type_employment = staff.data.employment_table.length;\n    }\n}\n\nasync function fillingContext(): Promise\u003cvoid\u003e {\n    let user = await System.users.getCurrentUser();\n    Context.data.staff = await Context.fields.staff.app.search().where(f =\u003e f.ext_user.eq(user)).first();\n}\n\nasync function initializingAdditionalVariables(): Promise\u003cvoid\u003e {\n    if (Context.data.type_personal_data) {\n        const type_data = await Context.data.type_personal_data.fetch();\n\n\n        Context.fields.category_type_personal_data.data.variants.push({ code: type_data.data.code!, name: type_data.data.name! });\n        Context.data.category_type_personal_data = Context.fields.category_type_personal_data.data.variants.find(f =\u003e f.code == type_data.data.code!) as never;\n    }\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_dd7b2908-30fa-43e0-b808-552c2cc78023",
+      "name": "Создать заявку на изменение персональных данных",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 11
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "task": {
+                      "path": ["task"]
+                    },
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "d7c36d94-d1a1-4428-93ed-35f28c2ca78d",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "employees_personal_data",
+          "data": {
+            "code": "employees_personal_data",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Заявка на изменение персональных данных"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "employees_personal_data"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_phone": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_snils": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_sex": {
+        "enabled": false,
+        "conditions": []
+      },
+      "diver_license": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_address": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_phone": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_snils": {
+        "enabled": false,
+        "conditions": []
+      },
+      "count_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "education_level": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relation_degree": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_full_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "place_employment": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_internal_place": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_main_workplace": {
+        "enabled": false,
+        "conditions": []
+      },
+      "proficience_level": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_full_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "type_personal_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "isEmployeeProcessed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_birth_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_passport_code": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_passport_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_passport_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "address_registration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "marriage_certificate": {
+        "enabled": false,
+        "conditions": []
+      },
+      "count_type_employment": {
+        "enabled": false,
+        "conditions": []
+      },
+      "internal_place_string": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_employee": {
+        "enabled": false,
+        "conditions": []
+      },
+      "passport_data_changed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_passport_number": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_passport_series": {
+        "enabled": false,
+        "conditions": []
+      },
+      "completion_certificate": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_foreign_language": {
+        "enabled": false,
+        "conditions": []
+      },
+      "type_employment_string": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_external_combination": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_internal_combination": {
+        "enabled": false,
+        "conditions": []
+      },
+      "military_record_document": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_other_documents": {
+        "enabled": true,
+        "conditions": [
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "mother",
+                  "name": "Мать"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          },
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "father",
+                  "name": "Отец"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          },
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "brother",
+                  "name": "Брат"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          },
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "sister",
+                  "name": "Сестра"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          },
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "other_degree",
+                  "name": "Другая степень родства"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          }
+        ]
+      },
+      "staff_passport_issued_by": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_birth_certificate": {
+        "enabled": true,
+        "conditions": [
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "child",
+                  "name": "Ребенок"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          }
+        ]
+      },
+      "category_type_personal_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "change_registration_address": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_temporary_registration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_marriage_certificate": {
+        "enabled": true,
+        "conditions": [
+          {
+            "a": {
+              "kind": "context",
+              "value": "relation_degree"
+            },
+            "b": {
+              "kind": "manual",
+              "value": [
+                {
+                  "code": "husband_wife",
+                  "name": "Муж/Жена"
+                }
+              ]
+            },
+            "type": "ENUM",
+            "inversion": false,
+            "operation": {
+              "relation": "equal",
+              "inversion": false,
+              "caseInsensitive": false
+            },
+            "conjunction": false
+          }
+        ]
+      },
+      "staff_personal_data_accepting": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_personal_data_accepring": {
+        "enabled": false,
+        "conditions": []
+      },
+      "relative_personal_data_accepting": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_passport_current_registration": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

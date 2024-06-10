@@ -1,0 +1,2122 @@
+{
+  "__id": "018f120e-8120-743c-8e12-031921557235",
+  "namespace": "kedo.staff",
+  "code": "sign_me_certificate_reissuance",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Группы: создание и заполнение для настройки прав",
+  "type": "bpmn",
+  "draft": false,
+  "version": 11,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники"
+      }
+    },
+    {
+      "code": "org_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Организация",
+        "data": {}
+      }
+    },
+    {
+      "code": "docks_exists",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документы существуют",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "access_settings",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "access_settings_organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Настройки доступа по организациям",
+        "data": {}
+      }
+    },
+    {
+      "code": "domen",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Домен",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "max_chunk_size",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 30,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Максимальное количество обрабатываемых элементов",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "all_groups_created",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все группы созданы",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "users",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Пользователи",
+        "data": {}
+      }
+    },
+    {
+      "code": "all_docs",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все документы",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "token",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Api-ключ",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Итерация",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "all_apps_processed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все приложения найдены",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "max_iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Максимальное количество итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "ns_codes",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Коды решений",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "app_codes",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Коды приложени",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "chunks",
+      "type": "JSON",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Массив с правами по организациям",
+        "data": {}
+      }
+    },
+    {
+      "code": "all_objects_processed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все объекты обработаны",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "timeout",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Задержка",
+        "data": {
+          "additionalType": "time",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "child_process_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "JSON для дочернего процесса",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "pause_process",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Паусза в процессе",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "all_namespacess_processed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все разделы обработаны",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "from",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Последни обработанны элемент",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2022-08-29T07:31:49.93090533Z",
+  "__createdBy": "cf8d1df0-b980-48d7-b1eb-d65db47398ed",
+  "__updatedAt": "2024-05-08T11:10:11.773645461Z",
+  "__updatedBy": "b9f4e604-e72b-492c-b536-de2f577ab721",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["3d30ccf6-2589-4dfc-8e54-73449a4b850d"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Создание и заполнение групп для настройки прав",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "03101dcc-4917-40fe-9f77-12f90954885c": {
+        "x": 80,
+        "y": 576,
+        "id": "03101dcc-4917-40fe-9f77-12f90954885c",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Поиск приложений по коду раздела",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3495e780-bad1-4e0a-94e3-2c03c6338caf"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getAllApps",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "0ba2c784-3937-4913-8e69-f417643b3ea0": {
+        "x": 80,
+        "y": 1152,
+        "id": "0ba2c784-3937-4913-8e69-f417643b3ea0",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Проверка незаполненных полей у групп доступа",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["dd1340b3-ee09-4639-90f4-6a58e0c59bae"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setMissingFields",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "0bf93dd9-47ac-4d68-8ca3-e28b8b83a05c": {
+        "x": 80,
+        "y": 144,
+        "id": "0bf93dd9-47ac-4d68-8ca3-e28b8b83a05c",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Обрабатываем организации по одной группе",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["7f603c3e-70b0-489b-9747-fb8f8b9c0b49"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createGroupNew",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "10a6e24f-3a57-4d54-a440-d81947e739cf": {
+        "x": 104,
+        "y": 240,
+        "id": "10a6e24f-3a57-4d54-a440-d81947e739cf",
+        "icon": "exclusive",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "9788b839-b9a5-4760-b7da-d1a7cd5c256f",
+          "3ae7c510-74e2-41d0-b7ec-e3fabed1903f"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "1a1ab626-c20a-4adf-844a-9d26678dcb10": {
+        "x": 80,
+        "y": 888,
+        "id": "1a1ab626-c20a-4adf-844a-9d26678dcb10",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Создать группы по чанку",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["887457ca-2919-4bde-8716-408d4cc0e00d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createAllGroups",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "245ec002-0393-4f8a-9087-961c6fc430a5": {
+        "x": 104,
+        "y": 968,
+        "id": "245ec002-0393-4f8a-9087-961c6fc430a5",
+        "icon": "exclusive",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "9f730fd2-4c79-4ee6-bb17-ba3c6e5c5755",
+          "c327b0e3-2c45-4c6d-a965-2cc56ffd9559"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "29204d41-5c80-4984-adef-018d0f4e64f6": {
+        "x": 80,
+        "y": 304,
+        "id": "29204d41-5c80-4984-adef-018d0f4e64f6",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Заполняем отдел кадров и бухгалтерию",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["769070ef-41fd-481e-aa9e-8c405fb28fd9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillAccountingAndHrGroups",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3e8f38d3-1b02-4800-a01b-d715c2e2ea55": {
+        "x": 104,
+        "y": 1240,
+        "id": "3e8f38d3-1b02-4800-a01b-d715c2e2ea55",
+        "icon": "end",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "67b92a60-9786-407c-9461-affa51738282": {
+        "x": 80,
+        "y": 704,
+        "id": "67b92a60-9786-407c-9461-affa51738282",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Фильтрация приложени по полю",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["94b15981-e59b-4d6c-b22b-6ed28ae8dbb7"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getAllDocs",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "72d75ce1-9fd8-4fb1-98be-e80e30049365": {
+        "x": 192,
+        "y": 624,
+        "id": "72d75ce1-9fd8-4fb1-98be-e80e30049365",
+        "icon": "timer",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Пауза",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["7df9baeb-375a-44f8-90ce-b81bcd18add0"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "days": 0,
+            "kind": "duration",
+            "hours": 0,
+            "minutes": 1,
+            "absolute": true
+          }
+        }
+      },
+      "79902153-3873-4491-80bc-5317edc734c3": {
+        "x": 32,
+        "y": 792,
+        "id": "79902153-3873-4491-80bc-5317edc734c3",
+        "icon": "timer",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Пауза",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["8a62fbbf-fcdd-49b2-916c-31cd50c7fb69"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "code": "timeout",
+            "days": 0,
+            "kind": "variable",
+            "hours": 0,
+            "minutes": 0,
+            "absolute": true,
+            "substraction": false
+          }
+        }
+      },
+      "877fd7cb-9acf-4e23-9104-8514e99ba4a7": {
+        "x": 80,
+        "y": 496,
+        "id": "877fd7cb-9acf-4e23-9104-8514e99ba4a7",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Получение всех решений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["60f63bad-a7f9-4068-87f8-72a1adf7905a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSolutions",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "8d6f59f3-282e-4955-8b7d-1436bbfb2003": {
+        "x": 104,
+        "y": 792,
+        "id": "8d6f59f3-282e-4955-8b7d-1436bbfb2003",
+        "icon": "exclusive",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "d9eb4283-c310-4566-9a5e-20aa1d381f31",
+          "84f9ab7f-2918-4e66-a49f-e00628b17364"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "93fa63eb-7a62-4cb5-935a-ff85eb812484": {
+        "x": 104,
+        "y": 840,
+        "id": "93fa63eb-7a62-4cb5-935a-ff85eb812484",
+        "icon": "exclusive",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "fd6ad932-5f83-4fe0-b015-c75985b8f993",
+          "29ca8f04-dd70-4585-8371-d754e7cdafef"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "a87f4faf-6c1e-4d2f-ad2d-d7bef19bec55": {
+        "x": 104,
+        "y": 656,
+        "id": "a87f4faf-6c1e-4d2f-ad2d-d7bef19bec55",
+        "icon": "exclusive",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "a0dcc70f-70fb-4479-89f2-e6c1d31db0b6",
+          "330c3c5b-6423-485f-85ce-c472bac88763"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "a90676fd-9f24-457d-836e-ef0a3c8ec941": {
+        "x": 80,
+        "y": 400,
+        "id": "a90676fd-9f24-457d-836e-ef0a3c8ec941",
+        "icon": "system",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Изменение переменной контекста",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["c096c280-2dea-49ea-8e93-9d988fcebb64"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "all_objects_processed"
+              }
+            }
+          ]
+        }
+      },
+      "d9d8f68a-c543-4b58-a366-93c5c542a4d7": {
+        "x": 80,
+        "y": 1016,
+        "id": "d9d8f68a-c543-4b58-a366-93c5c542a4d7",
+        "icon": "script",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Обрабатываем чанк",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3a627678-6675-4fb8-88f6-1fc0377b4737"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillOrgRights",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "ed0ca7a0-e470-441b-961e-83473014d465": {
+        "x": 104,
+        "y": 1104,
+        "id": "ed0ca7a0-e470-441b-961e-83473014d465",
+        "icon": "exclusive",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "af074f1f-5db7-49de-b16f-561a11a79cd7",
+          "162d8540-562a-4220-b832-a027a555165d"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "eee54369-f9a1-417e-a265-03135c5c0e8f": {
+        "x": 192,
+        "y": 784,
+        "id": "eee54369-f9a1-417e-a265-03135c5c0e8f",
+        "icon": "timer",
+        "lane": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Пауза",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["21a35b2e-577d-4c3b-927d-abb0d3f4130d"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "days": 0,
+            "kind": "duration",
+            "hours": 0,
+            "minutes": 1,
+            "absolute": true
+          }
+        }
+      }
+    },
+    "lanes": {
+      "3d99d218-ae55-43e1-a973-a5bb6fd64511": {
+        "x": 8,
+        "y": 8,
+        "id": "3d99d218-ae55-43e1-a973-a5bb6fd64511",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 416,
+        "height": 1452,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "162d8540-562a-4220-b832-a027a555165d": {
+        "id": "162d8540-562a-4220-b832-a027a555165d",
+        "name": "",
+        "path": [
+          {
+            "x": 104,
+            "y": 1120
+          },
+          {
+            "x": 72,
+            "y": 1120
+          },
+          {
+            "x": 72,
+            "y": 1048
+          },
+          {
+            "x": 80,
+            "y": 1048
+          }
+        ],
+        "type": "default",
+        "source": "ed0ca7a0-e470-441b-961e-83473014d465",
+        "target": "d9d8f68a-c543-4b58-a366-93c5c542a4d7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "21a35b2e-577d-4c3b-927d-abb0d3f4130d": {
+        "id": "21a35b2e-577d-4c3b-927d-abb0d3f4130d",
+        "name": "",
+        "path": [
+          {
+            "x": 208,
+            "y": 784
+          },
+          {
+            "x": 208,
+            "y": 736
+          },
+          {
+            "x": 160,
+            "y": 736
+          }
+        ],
+        "type": "plain",
+        "source": "eee54369-f9a1-417e-a265-03135c5c0e8f",
+        "target": "67b92a60-9786-407c-9461-affa51738282",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "29ca8f04-dd70-4585-8371-d754e7cdafef": {
+        "id": "29ca8f04-dd70-4585-8371-d754e7cdafef",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 872
+          },
+          {
+            "x": 120,
+            "y": 888
+          }
+        ],
+        "type": "plain",
+        "source": "93fa63eb-7a62-4cb5-935a-ff85eb812484",
+        "target": "1a1ab626-c20a-4adf-844a-9d26678dcb10",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_namespacess_processed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "330c3c5b-6423-485f-85ce-c472bac88763": {
+        "id": "330c3c5b-6423-485f-85ce-c472bac88763",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 672
+          },
+          {
+            "x": 208,
+            "y": 672
+          },
+          {
+            "x": 208,
+            "y": 656
+          }
+        ],
+        "type": "default",
+        "source": "a87f4faf-6c1e-4d2f-ad2d-d7bef19bec55",
+        "target": "72d75ce1-9fd8-4fb1-98be-e80e30049365",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3495e780-bad1-4e0a-94e3-2c03c6338caf": {
+        "id": "3495e780-bad1-4e0a-94e3-2c03c6338caf",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 640
+          },
+          {
+            "x": 120,
+            "y": 656
+          }
+        ],
+        "type": "plain",
+        "source": "03101dcc-4917-40fe-9f77-12f90954885c",
+        "target": "a87f4faf-6c1e-4d2f-ad2d-d7bef19bec55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3a627678-6675-4fb8-88f6-1fc0377b4737": {
+        "id": "3a627678-6675-4fb8-88f6-1fc0377b4737",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 1080
+          },
+          {
+            "x": 120,
+            "y": 1104
+          }
+        ],
+        "type": "plain",
+        "source": "d9d8f68a-c543-4b58-a366-93c5c542a4d7",
+        "target": "ed0ca7a0-e470-441b-961e-83473014d465",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3ae7c510-74e2-41d0-b7ec-e3fabed1903f": {
+        "id": "3ae7c510-74e2-41d0-b7ec-e3fabed1903f",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 272
+          },
+          {
+            "x": 120,
+            "y": 304
+          }
+        ],
+        "type": "plain",
+        "source": "10a6e24f-3a57-4d54-a440-d81947e739cf",
+        "target": "29204d41-5c80-4984-adef-018d0f4e64f6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_objects_processed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3d30ccf6-2589-4dfc-8e54-73449a4b850d": {
+        "id": "3d30ccf6-2589-4dfc-8e54-73449a4b850d",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 144
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "0bf93dd9-47ac-4d68-8ca3-e28b8b83a05c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "60f63bad-a7f9-4068-87f8-72a1adf7905a": {
+        "id": "60f63bad-a7f9-4068-87f8-72a1adf7905a",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 560
+          },
+          {
+            "x": 120,
+            "y": 576
+          }
+        ],
+        "type": "plain",
+        "source": "877fd7cb-9acf-4e23-9104-8514e99ba4a7",
+        "target": "03101dcc-4917-40fe-9f77-12f90954885c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "769070ef-41fd-481e-aa9e-8c405fb28fd9": {
+        "id": "769070ef-41fd-481e-aa9e-8c405fb28fd9",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 368
+          },
+          {
+            "x": 120,
+            "y": 400
+          }
+        ],
+        "type": "plain",
+        "source": "29204d41-5c80-4984-adef-018d0f4e64f6",
+        "target": "a90676fd-9f24-457d-836e-ef0a3c8ec941",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7df9baeb-375a-44f8-90ce-b81bcd18add0": {
+        "id": "7df9baeb-375a-44f8-90ce-b81bcd18add0",
+        "name": "",
+        "path": [
+          {
+            "x": 208,
+            "y": 624
+          },
+          {
+            "x": 208,
+            "y": 608
+          },
+          {
+            "x": 160,
+            "y": 608
+          }
+        ],
+        "type": "plain",
+        "source": "72d75ce1-9fd8-4fb1-98be-e80e30049365",
+        "target": "03101dcc-4917-40fe-9f77-12f90954885c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7f603c3e-70b0-489b-9747-fb8f8b9c0b49": {
+        "id": "7f603c3e-70b0-489b-9747-fb8f8b9c0b49",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 208
+          },
+          {
+            "x": 120,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "0bf93dd9-47ac-4d68-8ca3-e28b8b83a05c",
+        "target": "10a6e24f-3a57-4d54-a440-d81947e739cf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "84f9ab7f-2918-4e66-a49f-e00628b17364": {
+        "id": "84f9ab7f-2918-4e66-a49f-e00628b17364",
+        "name": "",
+        "path": [
+          {
+            "x": 104,
+            "y": 808
+          },
+          {
+            "x": 64,
+            "y": 808
+          }
+        ],
+        "type": "plain",
+        "source": "8d6f59f3-282e-4955-8b7d-1436bbfb2003",
+        "target": "79902153-3873-4491-80bc-5317edc734c3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "pause_process"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "887457ca-2919-4bde-8716-408d4cc0e00d": {
+        "id": "887457ca-2919-4bde-8716-408d4cc0e00d",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 952
+          },
+          {
+            "x": 120,
+            "y": 968
+          }
+        ],
+        "type": "plain",
+        "source": "1a1ab626-c20a-4adf-844a-9d26678dcb10",
+        "target": "245ec002-0393-4f8a-9087-961c6fc430a5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8a62fbbf-fcdd-49b2-916c-31cd50c7fb69": {
+        "id": "8a62fbbf-fcdd-49b2-916c-31cd50c7fb69",
+        "name": "",
+        "path": [
+          {
+            "x": 48,
+            "y": 792
+          },
+          {
+            "x": 48,
+            "y": 736
+          },
+          {
+            "x": 80,
+            "y": 736
+          }
+        ],
+        "type": "plain",
+        "source": "79902153-3873-4491-80bc-5317edc734c3",
+        "target": "67b92a60-9786-407c-9461-affa51738282",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "94b15981-e59b-4d6c-b22b-6ed28ae8dbb7": {
+        "id": "94b15981-e59b-4d6c-b22b-6ed28ae8dbb7",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 768
+          },
+          {
+            "x": 120,
+            "y": 792
+          }
+        ],
+        "type": "plain",
+        "source": "67b92a60-9786-407c-9461-affa51738282",
+        "target": "8d6f59f3-282e-4955-8b7d-1436bbfb2003",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9788b839-b9a5-4760-b7da-d1a7cd5c256f": {
+        "id": "9788b839-b9a5-4760-b7da-d1a7cd5c256f",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 256
+          },
+          {
+            "x": 168,
+            "y": 256
+          },
+          {
+            "x": 168,
+            "y": 176
+          },
+          {
+            "x": 160,
+            "y": 176
+          }
+        ],
+        "type": "default",
+        "source": "10a6e24f-3a57-4d54-a440-d81947e739cf",
+        "target": "0bf93dd9-47ac-4d68-8ca3-e28b8b83a05c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9f730fd2-4c79-4ee6-bb17-ba3c6e5c5755": {
+        "id": "9f730fd2-4c79-4ee6-bb17-ba3c6e5c5755",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 984
+          },
+          {
+            "x": 168,
+            "y": 984
+          },
+          {
+            "x": 168,
+            "y": 920
+          },
+          {
+            "x": 160,
+            "y": 920
+          }
+        ],
+        "type": "default",
+        "source": "245ec002-0393-4f8a-9087-961c6fc430a5",
+        "target": "1a1ab626-c20a-4adf-844a-9d26678dcb10",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a0dcc70f-70fb-4479-89f2-e6c1d31db0b6": {
+        "id": "a0dcc70f-70fb-4479-89f2-e6c1d31db0b6",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 688
+          },
+          {
+            "x": 120,
+            "y": 704
+          }
+        ],
+        "type": "plain",
+        "source": "a87f4faf-6c1e-4d2f-ad2d-d7bef19bec55",
+        "target": "67b92a60-9786-407c-9461-affa51738282",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_apps_processed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "af074f1f-5db7-49de-b16f-561a11a79cd7": {
+        "id": "af074f1f-5db7-49de-b16f-561a11a79cd7",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 1136
+          },
+          {
+            "x": 120,
+            "y": 1152
+          }
+        ],
+        "type": "plain",
+        "source": "ed0ca7a0-e470-441b-961e-83473014d465",
+        "target": "0ba2c784-3937-4913-8e69-f417643b3ea0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_objects_processed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c096c280-2dea-49ea-8e93-9d988fcebb64": {
+        "id": "c096c280-2dea-49ea-8e93-9d988fcebb64",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 464
+          },
+          {
+            "x": 120,
+            "y": 496
+          }
+        ],
+        "type": "plain",
+        "source": "a90676fd-9f24-457d-836e-ef0a3c8ec941",
+        "target": "877fd7cb-9acf-4e23-9104-8514e99ba4a7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c327b0e3-2c45-4c6d-a965-2cc56ffd9559": {
+        "id": "c327b0e3-2c45-4c6d-a965-2cc56ffd9559",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 1000
+          },
+          {
+            "x": 120,
+            "y": 1016
+          }
+        ],
+        "type": "plain",
+        "source": "245ec002-0393-4f8a-9087-961c6fc430a5",
+        "target": "d9d8f68a-c543-4b58-a366-93c5c542a4d7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_groups_created"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d9eb4283-c310-4566-9a5e-20aa1d381f31": {
+        "id": "d9eb4283-c310-4566-9a5e-20aa1d381f31",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 824
+          },
+          {
+            "x": 120,
+            "y": 840
+          }
+        ],
+        "type": "default",
+        "source": "8d6f59f3-282e-4955-8b7d-1436bbfb2003",
+        "target": "93fa63eb-7a62-4cb5-935a-ff85eb812484",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "dd1340b3-ee09-4639-90f4-6a58e0c59bae": {
+        "id": "dd1340b3-ee09-4639-90f4-6a58e0c59bae",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 1216
+          },
+          {
+            "x": 120,
+            "y": 1240
+          }
+        ],
+        "type": "plain",
+        "source": "0ba2c784-3937-4913-8e69-f417643b3ea0",
+        "target": "3e8f38d3-1b02-4800-a01b-d715c2e2ea55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fd6ad932-5f83-4fe0-b015-c75985b8f993": {
+        "id": "fd6ad932-5f83-4fe0-b015-c75985b8f993",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 856
+          },
+          {
+            "x": 208,
+            "y": 856
+          },
+          {
+            "x": 208,
+            "y": 816
+          }
+        ],
+        "type": "default",
+        "source": "93fa63eb-7a62-4cb5-935a-ff85eb812484",
+        "target": "eee54369-f9a1-417e-a265-03135c5c0e8f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ntype Organization = ApplicationItem\u003cApplication$kedo$organization$Data, Application$kedo$organization$Params\u003e;\ntype Staff = ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e;\ntype groupMeta = {name: string, fieldCode: string};\ntype accessSettingsMeta = {\n    organizationId: string,\n    accessSettingsId: string,\n    docs: string[];\n};\ntype orgDataKey = keyof typeof Context.fields.org_app.data;\ntype accessFieldsKey = keyof typeof Context.fields.access_settings.app.fields;\ntype accessDataKey = keyof typeof Context.fields.access_settings.data;\n\nclass MyRole {\n    group: UserGroupItem | UserItem[] | OrganisationStructureItem\n    type: 'group' | 'user' | 'orgstruct'\n    code: string\n    constructor(group: UserGroupItem | UserItem[] | OrganisationStructureItem, type: 'group' | 'user' | 'orgstruct', code: string) {\n        this.code = code;\n        this.group = group;\n        this.type = type;\n    };\n    getUsers(): Promise\u003cUserItem[]\u003e {\n        if (this.type == \"group\") {\n            return (\u003cUserGroupItem\u003ethis.group).users();\n        }\n        else if (this.type == \"orgstruct\") {\n            return System.users.search().where(i =\u003e i.osIds.has((\u003cOrganisationStructureItem\u003ethis.group))).size(10000).all()\n        }\n        else return new Promise\u003cUserItem[]\u003e(() =\u003e \u003cUserItem[]\u003ethis.group)\n    }\n    json(): any {\n        return {\n            code: this.code,\n            type: this.type\n        }\n    }\n};\n\n// const namespaces = [\n//     \"kedo\",\n//     \"kedo_ext\",\n//     \"personnel_documents\",\n//     \"absences\",\n//     \"time_tracking\",\n//     \"absences_ext\",\n//     \"business_trips\",\n//     \"business_trips_ext\"\n// ];\n\n// const solutionsNames = [\n//     \"kedo\",\n//     \"otpuska\",\n//     \"komandirovki\"\n// ];\n\nconst uselessNsCodes = [\n    \"admin\",\n    \"messages\",\n    \"company\",\n    \"support\",\n    \"files\",\n    \"tasks\"\n];\n\nlet docCodes = [\n    \"Авансовые отчеты;avansovyi_otchet\",\n    \"Служебные задания;service_assignments\",\n    \"Служебные записки на командировку;trip_requests\",\n    \"Приказы на командировку;order_for_a_business_trip\",\n    \"Согласия на обработку ПДн ребенка;child_personal_data_consent\",\n    \"Заявления на присвоение категории;application_category_assignment\",\n    \"Доп. соглашения на ИО;execution_responsibilities_additional_agreement\",\n    \"Приказы на перевод;order_for_transfer\",\n    \"Заявления на увольнение;letter_of_resignation\",\n    \"Документы для Госключа;goskey_files\",\n    \"Доп. соглашения на перевод;additional_transfer_agreement\",\n    \"Приказы на ИО;order_execution_responsibilities\",\n    \"Служебные записки на ИО;memo_execution_responsibilities\",\n    \"Согласия на перевод;transfer_approve\",\n    \"Документы 1С;docs_1c\",\n    \"Трудовые договоры;labor_contract\",\n    \"Приказы о изменении паспортных данных;passport_data_change_order\",\n    \"Соглашения об ЭВ;electronic_interaction_agreement\",\n    \"Прочие документы трудоустройства;additional_agreement_to_the_contract\",\n    \"Согласия на ИО;execution_responsibilities_consent\",\n    \"Документы ЛНА;docs_lna\",\n    \"Заявки на перевод;transfer_application\",\n    \"Заявления на трудоустройство;job_application\",\n    \"Доп. соглашения;additional_agreement\",\n    \"Приказы о приеме;admission_order\",\n    \"Приказы на увольнение;dismissal_order\",\n    \"Приказы ЛНА;orders_lna\",\n    \"Согласия на обработку персональных данных;consent_processing_personal_data\",\n    \"Отзывы заявлений на увольнение;recall_dismissal\",\n    \"Заявления на изменение паспортных данных;passport_data_application\",\n    \"Личные документы;personal_documents\",\n    \"Заявления о предоставлении сведений о трудовой деятельности;information_about_labor_activity\",\n    \"На выплату пособия;benefit_application\",\n    \"На материальную помощь;application_for_financial_assistance\",\n    \"Расчетные листы;setlement_sheet\",\n    \"Прочие документы;other_documents\",\n    \"На оплачиваемый отпуск;paid_leave\",\n    \"На материальную помощь;order_financial_assistance\",\n    \"На командировку;memo_business_trip\",\n    \"На перечисление ЗП на р/с;application_for_the_transfer_of_salary_to_the_current_account\",\n    \"На отпуск без сохранения оплаты;leave_without_pay\",\n    \"На отпуск без сохранения оплаты;application_for_leave_without_pay\",\n    \"Совмещения;combination\",\n    \"Справки;certificate\",\n    \"На командировку;order_for_business_trip\",\n    \"На оплачиваемый отпуск;paid_leave_order\",\n    \"В свободной форме;free_from\",\n    \"Прочие документы;prochie_dokumenty\",\n    \"Графики отпусков;vacation_schedule\",\n    \"Приказы на отпуск;vacation_orders\",\n    \"Предложение в график отпусков;offer_vacation_schedule\",\n    \"Заявления на отпуск;vacation_docs\",\n    \"Отсрочка от мобилизации;mobilization\",\n    \"Приказы на работу в нерабочее время;overtimeWorkOrders\",\n    \"Приказы на сверхурочную работу;overtimeOrders\",\n    \"Уведомления о праве отказаться;overtimeWorkNotifications\",\n    \"Служебные записки на работу в нерабочее время;overtime_requests\",\n    \"Согласия на работу в нерабочее время;overtimeWorkConsent\",\n    \"Распоряжения о вызове на работу в нерабочее время;overtime_order\",\n    \"Сотрудники;staff\",\n    \"Заявки на перевод;transfer_application\",\n    \"Заявки на ИО;execution_duties\",\n    \"Заявки на присвоение категории;category_assignment\",\n    \"Заявки на изменение персональных данных;employees_personal_data\",\n    \"Заявки на медосмотр;medical_request\",\n    \"Документы ЛНА;docs_lna\",\n    \"Медосмотры;medical_examination\",\n    \"Отпуска/отсутствия;vacations\",\n    \"Работа в нерабочее время;overtime_work\",\n    \"Командировки;businesstrip_requests\",\n    \"Подразделения;structural_subdivision\"\n];\n\nconst defaultGroups: groupMeta[] = [\n    {\n        name: \"Отдел кадров\",\n        fieldCode: \"hr_department\"\n    },\n    {\n        name: \"Бухгалтерия\",\n        fieldCode: \"accounting\"\n    },\n    {\n        name: \"Внутренние сотрудники организации\",\n        fieldCode: \"inner_org_users\"\n    },\n    {\n        name: \"Внешние сотрудники организации\",\n        fieldCode: \"external_org_users\"\n    },\n    {\n        name: \"Подписанты\",\n        fieldCode: \"signatories\"\n    },\n    {\n        name: \"Ответственные за КЭДО\",\n        fieldCode: \"special_access_new\"\n    },\n];\n\n//Создаем группы по умолчанию для каждой организации\nasync function createGroupNew(): Promise\u003cvoid\u003e {\n    async function saveData(group: UserGroupItem, organization: ApplicationItem\u003cApplication$kedo$organization$Data, any\u003e): Promise\u003cvoid\u003e {\n        const newRole = new MyRole(group, \"group\", group.id) as Role;\n        let accessSettings: ApplicationItem\u003cApplication$kedo$access_settings_organization$Data, any\u003e;\n        const accessSettingsExists = allAccessSettings.length \u003e 0 \u0026\u0026 allAccessSettings.find(setting =\u003e setting.data.organization!.id === organization.id);\n        if (accessSettingsExists) {\n            accessSettings = allAccessSettings.find(setting =\u003e setting.data.organization!.id === organization.id)!;\n            Context.data.debug += `accessSettings ${accessSettings.data.__name} exists` + \"\\n\";\n        } else {\n            accessSettings = Context.fields.access_settings.app.create();\n            accessSettings.data.organization = organization;\n            accessSettings.data.__name = `Доступы ${organization.data.__name}`\n        }\n        if (accessSettings.fields[groupObj.fieldCode as accessFieldsKey]) {\n            accessSettings.data[groupObj.fieldCode as accessDataKey] = [newRole];\n        };\n\n        await accessSettings.save();\n\n        if (!organization.data.org_groups) {\n            organization.data.org_groups = [];\n        };\n        if (organization.data.org_groups.map(gr =\u003e gr.code).indexOf(newRole.code) == -1) {\n            organization.data.org_groups.push(newRole);\n            organization.data.access_settings_organization = accessSettings;\n            await organization.save();\n        };\n    };\n\n    const maxIterations = defaultGroups.length;\n    const groupObj = defaultGroups[Context.data.iteration!];\n    const allStaff = await Context.fields.staff.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.ext_user.neq(null)\n    )).size(10000).all();\n    const groups = await System.userGroups.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.namespace.eq(\"kedo\")\n    )).size(10000).all();\n    const organizations = await Context.fields.staff.app.fields.organization.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allAccessSettings = await Context.fields.access_settings.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.organization.neq(null)\n    )).size(10000).all();\n    const promises: Promise\u003cvoid\u003e[] = [];\n\n    for (let org of organizations) {\n        const newGroupName = `${groupObj.name}: ${org.data.__name}`\n        let newGroup: UserGroupItem;\n        if (groups.find(gr =\u003e gr.data.__name === newGroupName)) {\n            newGroup = groups.find(gr =\u003e gr.data.__name === newGroupName)!;\n            Context.data.debug += `group ${newGroup.data.__name} exists` + \"\\n\";\n        } else {\n            newGroup = System.userGroups.create();\n            newGroup.data.__name = newGroupName;\n            newGroup.data.namespace = \"kedo\";\n            newGroup.data.description = org.id;\n        };\n\n        const orgGroupMembers = \u003cStaff[] | undefined\u003eorg.data[groupObj.fieldCode as orgDataKey];\n        if (orgGroupMembers \u0026\u0026 orgGroupMembers.length \u003e 0) {\n            const staffIds = allStaff.filter(s =\u003e orgGroupMembers.map(m =\u003e m.id).indexOf(s.id) != -1).map(s =\u003e s.data.ext_user!.id);\n            newGroup.data.subOrgunitIds = staffIds;\n        };\n\n        promises.push(new Promise(async function (resolve, reject) {\n            await newGroup.save();\n            resolve(await saveData(newGroup, org))\n        }));\n\n        // const newRole = new MyRole(newGroup, \"group\", newGroup.id) as Role;\n        // let accessSettings: ApplicationItem\u003cApplication$kedo$access_settings_organization$Data, any\u003e;\n        // if (allAccessSettings.length \u003e 0 \u0026\u0026 allAccessSettings.find(setting =\u003e setting.data.organization!.id === org.id)) {\n        //     accessSettings = allAccessSettings.find(setting =\u003e setting.data.organization!.id === org.id)!;\n        // } else {\n        //     accessSettings = Context.fields.access_settings.app.create();\n        //     accessSettings.data.organization = org;\n        //     accessSettings.data.__name = `Доступы ${org.data.__name}`\n        // }\n        // if (accessSettings.fields[groupObj.fieldCode as accessFieldsKey]) {\n        //     accessSettings.data[groupObj.fieldCode as accessDataKey] = [newRole];\n        // };\n        // await accessSettings.save();\n        // if (!org.data.org_groups) {\n        //     org.data.org_groups = [];\n        // };\n        // org.data.org_groups.push(newRole);\n        // org.data.access_settings_organization = accessSettings;\n        // await org.save();\n    };\n\n    await Promise.all(promises)\n\n    if (Context.data.iteration == maxIterations - 1) {\n        Context.data.all_objects_processed = true;\n        Context.data.iteration = 0;\n    } else {\n        Context.data.iteration!++;\n    }\n};\n\n//Наполняем группы бухгалтеров и кадровиков пользователями\nasync function fillAccountingAndHrGroups(): Promise\u003cvoid\u003e {\n    const organizations = await Context.fields.org_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    let hrUsers: UserItemRef[] = [];\n    let accountingUsers: UserItemRef[] = [];\n    let specialUsers: UserItemRef[] = [];\n\n    const accountingGroup = await System.userGroups.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.code.eq(\"dfede5be-5011-4ec9-b535-8c9ca3fc4d19\")\n    )).first();\n    const hrGroup = await System.userGroups.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.code.eq(\"abdecf4b-b6ba-419f-bac7-c1455d2a6159\")\n    )).first();\n    const specialAccessGroup = await System.userGroups.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.code.eq(\"0798a43a-8ed9-4b30-8dfe-e16559fb7695\")\n    )).first();\n\n    const existingHrUsersIds = await hrGroup!.users(0, 500).then(users =\u003e users.map(u =\u003e u.id));\n    const existingAccountingUsersIds = await accountingGroup!.users(0, 500).then(users =\u003e users.map(u =\u003e u.id));\n    const existingSpecialUsersIds = await specialAccessGroup!.users(0, 500).then(users =\u003e users.map(u =\u003e u.id));\n\n    for (let org of organizations) {\n        try {\n            if ((!org.data.hr_department || org.data.hr_department.length \u003c 1) \u0026\u0026 (!org.data.accounting || org.data.accounting.length \u003c 1) \u0026\u0026 (!org.data.special_access_new || org.data.special_access_new.length \u003c 1)) {\n                Context.data.debug += `no hr, accounting, or special users for ${org.data.__name}`\n                continue;\n            };\n            const hrStaff = await org.fields.hr_department.fetchAll();\n            const filteredHr = hrStaff.filter(s =\u003e s.data.ext_user \u0026\u0026 existingHrUsersIds.indexOf(s.data.ext_user.id) === -1);\n            hrUsers.push(...filteredHr.map(s =\u003e s.data.ext_user!));\n            const accountingStaff = await org.fields.accounting.fetchAll();\n            const filteredStaff = accountingStaff.filter(s =\u003e s.data.ext_user \u0026\u0026 existingAccountingUsersIds.indexOf(s.data.ext_user.id) === -1);\n            accountingUsers.push(...filteredStaff.map(s =\u003e s.data.ext_user!));\n            const specialStaff = await org.fields.special_access_new.fetchAll();\n            const filteredSpecials = specialStaff.filter(s =\u003e s.data.ext_user \u0026\u0026 existingSpecialUsersIds.indexOf(s.data.ext_user.id) === -1);\n            specialUsers.push(...filteredSpecials.map(s =\u003e s.data.ext_user!))\n        } catch {\n            continue;\n        };\n    };\n\n    const filteredHr = Array.from(new Set(hrUsers));\n    const filteredAccounting = Array.from(new Set(hrUsers));\n    const filteredSpecials = Array.from(new Set(specialUsers))\n    await hrGroup!.addItem(...filteredHr);\n    await accountingGroup!.addItem(...filteredAccounting);\n    await specialAccessGroup!.addItem(...filteredSpecials)\n    await accountingGroup!.save();\n    await hrGroup!.save();\n    await specialAccessGroup!.save();\n};\n\n\n//Получаем все решения\nasync function getSolutions(): Promise\u003cvoid\u003e {\n    const tokenSetting = await Namespace.app.settings.search().where(f =\u003e f.code.eq(\"api_key\")).first();\n    // const domenSetting = await Namespace.app.settings.search().where(f =\u003e f.code.eq(\"domen\")).first();\n    \n    if (!tokenSetting) {\n        throw new Error(\"Проверьте заполненность настроек Домен и Api-токен для методов в модуле в приложении Меню настроек.\")\n    };\n\n    const token = tokenSetting.data.value;\n    const domen = System.getBaseUrl();\n    Context.data.domen = domen;\n    Context.data.token = token;\n\n    const fullUrl = `${domen}/pub/v1/scheme/namespaces`;\n    const response = await fetch(fullUrl, {\n        headers: {\n            Authorization: `Bearer ${token}`\n        }\n    });\n    if (!response.ok) {\n        throw new Error(JSON.stringify({\n            func: \"getSolutions\",\n            err: await response.text()\n        }));\n    };\n    const responseJson = await response.json();\n    if (responseJson.result.result.length \u003c 1) {\n        throw new Error(\"Не найдено разделов\");\n    };\n    let allNamespaces = responseJson.result.result.map((solution: any) =\u003e solution.code);\n\n    allNamespaces = allNamespaces.filter((ns: string) =\u003e {\n        return !ns.startsWith(\"ext_\") \u0026\u0026 !ns.startsWith(\"_\") \u0026\u0026 uselessNsCodes.indexOf(ns) == -1\n    });\n    Context.data.max_iteration = allNamespaces.length;\n    Context.data.ns_codes = JSON.stringify(allNamespaces);\n};\n\n//Получаем все приложения\nasync function getAllApps(): Promise\u003cvoid\u003e {\n    const namespaces = JSON.parse(Context.data.ns_codes!);\n    const childProcessJson: {name: string, path: string}[] = Context.data.child_process_json ? JSON.parse(Context.data.child_process_json) : [];\n    const currentNs = namespaces[Context.data.iteration!];\n    let allDocs: string[] = Context.data.app_codes ? JSON.parse(Context.data.app_codes) : [];\n\n    const appsUrl = `${Context.data.domen}/pub/v1/scheme/namespaces/${currentNs}/apps`;\n    const response = await fetch(appsUrl, {\n        headers: {\n            Authorization: `Bearer ${Context.data.token}`\n        }\n    });\n    \n    if (!response.ok) {\n        Context.data.debug += ` ${JSON.stringify({url: appsUrl, func: \"getAllApps\", err: await response.text()})} `;\n        return;\n    };\n    const responseJson = await response.json();\n    const apps = responseJson.result.result;\n    if (apps.length \u003c 1) {\n        Context.data.debug += `ns ${currentNs} Не найдено приложений`;\n    };\n    const appCodes = apps.map((app: any) =\u003e {\n        const appCode = app.code;\n        const appObj = `${app.namespace};${appCode}`;\n        return appObj;\n    });\n    const childProcessData = apps.map((app: any) =\u003e {\n        const appCode = app.code;\n        const ns = app.namespace;\n        const name = app.name;\n        return {\n            name,\n            path: `${ns};${appCode}`\n        }\n    });\n\n    childProcessJson.push(...childProcessData);\n    allDocs.push(...appCodes);\n    Context.data.app_codes = JSON.stringify(allDocs);\n    Context.data.child_process_json = JSON.stringify(childProcessJson);\n    if (Context.data.iteration === Context.data.max_iteration! - 1) {\n        Context.data.all_apps_processed = true;\n        Context.data.iteration = 0;\n    } else {\n        Context.data.iteration!++;\n    }\n};\n\n//Получаем все документы\nasync function getAllDocs(): Promise\u003cvoid\u003e {\n    Context.data.pause_process = false;\n    let childProcessJson: {name: string, path: string}[] = JSON.parse(Context.data.child_process_json!);\n    const allCodes: string[] = JSON.parse(Context.data.app_codes!);\n    const chunk = allCodes.slice(Context.data.from!, Context.data.from! + Context.data.max_chunk_size!);\n    let allDocs: string[] = Context.data.all_docs ? JSON.parse(Context.data.all_docs!) : []\n    if (!chunk || chunk.length === 0) {\n        Context.data.all_namespacess_processed = true;\n        return;\n    };\n\n    let promises: Promise\u003cany\u003e[] = [];\n\n    for (let app of chunk) {\n        const [currentNs, appCode] = app.split(\";\");\n\n        const fullUrl = `${Context.data.domen}/pub/v1/scheme/namespaces/${currentNs}/apps/${appCode}`;\n        promises.push(fetch(fullUrl, {\n            headers: {\n                Authorization: `Bearer ${Context.data.token}`\n            }\n        }).then(async resp =\u003e {\n            if (!resp.ok) {\n                const respText = await resp.text();\n                if (respText.includes(\"too many\")) {\n                    Context.data.pause_process = true;\n                    Context.data.timeout = new TTime().add(new Duration(30, \"seconds\"));\n                };\n                Context.data.debug += ` ${JSON.stringify({url: fullUrl, func: \"getAllDocs\", error: respText})} `;\n                return;\n            };\n            return resp.json();\n        }).catch(err =\u003e {\n            Context.data.debug += ` error at getAllDocs check apps cycle: ${err.message} `\n            return \"\"\n        }));\n    };\n    const jsonData = await Promise.all(promises).then(items =\u003e items.filter(item =\u003e item));\n    if (Context.data.pause_process) {\n        return;\n    };\n    let docs: string[] = [];\n\n    for (let data of jsonData) {\n        const appCode = data.application.code;\n\n        if (!data.application.fields.find((field: any) =\u003e field.code === \"access_group\")) {\n            childProcessJson = childProcessJson.filter(app =\u003e {\n                const itemCode = app.path.split(\";\")[1];\n                return appCode !== itemCode;\n            });\n            continue;\n        };\n\n        const fullCode = docCodes.map(obj =\u003e obj.split(\";\")[1]).indexOf(appCode) === -1 ? appCode + \"_extended\" : appCode\n        const appObj = `${data.application.name};${fullCode}`;\n        \n        if (docCodes.indexOf(appObj) === -1) {\n            docCodes.push(appObj);\n        };\n\n        docs.push(appObj);\n    };\n\n\n    allDocs.push(...docs.filter(doc =\u003e doc));\n    Context.data.child_process_json = JSON.stringify(childProcessJson);\n    Context.data.all_docs = JSON.stringify(allDocs);\n\n    if (chunk.length \u003c Context.data.max_chunk_size!) {\n        Context.data.all_namespacess_processed = true;\n        await formMetaData();\n    } else {\n        Context.data.debug += ` processed codes: ${JSON.stringify(chunk)} `;\n        Context.data.from! += Context.data.max_chunk_size!;\n    };\n};\n\nasync function formMetaData(): Promise\u003cvoid\u003e {\n    const docs = JSON.parse(Context.data.all_docs!);\n    const organizations = await Context.fields.org_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    let chunks: accessSettingsMeta[] = [];\n\n    for (let org of organizations) {\n        if (org.data.access_settings_organization) {\n            chunks.push({\n                organizationId: org.id,\n                accessSettingsId: org.data.access_settings_organization.id,\n                docs\n            });\n        };\n    };\n    Context.data.max_iteration = chunks.length;\n    Context.data.chunks = chunks;\n};\n\n//Создаем группы для документов\nasync function createAllGroups(): Promise\u003cvoid\u003e {\n    const groups = await System.userGroups.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const metaData = Context.data.chunks ? \u003caccessSettingsMeta\u003e Context.data.chunks[Context.data.iteration!] : undefined;\n    if (metaData) {\n        const org = await Context.fields.org_app.app.search().where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__id.eq(metaData!.organizationId)\n        )).first();\n\n        let promises: Promise\u003cvoid\u003e[] = [];\n\n        for (let docObj of metaData.docs) {\n            const docName = docObj.split(\";\")[0];\n            const groupExists = groups.find(gr =\u003e gr.data.__name === `Доступы для ${docName} ${org!.data.__name}`);\n            if (!groupExists) {\n                const newGroup = System.userGroups.create();\n                newGroup.data.__name = `Доступы для ${docName} ${org!.data.__name}` \n                newGroup.data.namespace = \"kedo\";\n                newGroup.data.subOrgunitIds = org!.data.org_groups \u0026\u0026 org!.data.org_groups.length \u003e 0 ? groups.filter(group =\u003e org!.data.org_groups!.map(gr =\u003e gr.code).indexOf(group.id!) != -1).map(gr =\u003e gr.id) : undefined;\n                newGroup.data.description = org!.id;\n                promises.push(newGroup.save());\n                if (promises.length \u003e= Context.data.max_chunk_size!) {\n                    await Promise.all(promises);\n                    promises = [];\n                }\n            };\n        };\n    await Promise.all(promises);\n    };\n    if (Context.data.iteration == Context.data.max_iteration! - 1) {\n        Context.data.all_groups_created = true;\n        Context.data.iteration = 0;\n    } else {\n        Context.data.iteration!++;\n    };\n};\n\n//Заполнение групп доступа\nasync function fillOrgRights(): Promise\u003cvoid\u003e {\n    const chunk = \u003caccessSettingsMeta\u003eContext.data.chunks[Context.data.iteration!];\n    const orgId = chunk.organizationId;\n    const accessSettingsId = chunk.accessSettingsId;\n    const docs = chunk.docs;\n    const groups = await System.userGroups.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const org = await Context.fields.org_app.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.__id.eq(orgId)\n    )).first();\n    const orgRights = await Context.fields.access_settings.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.__id.eq(accessSettingsId)\n    )).first();\n\n    if (!orgRights) {\n        Context.data.iteration!++;\n        return;\n    };\n    for (let doc of docs) {\n        let [docName, docCode] = doc.split(\";\");\n        if (!org || !orgRights.fields[docCode as keyof typeof orgRights.fields]) {\n            Context.data.debug += `no field code ${docCode} at ${orgRights.data.__name}`\n            continue;\n        };\n        const group = groups.find(gr =\u003e gr.data.__name === `Доступы для ${docName} ${org!.data.__name}`);\n        if (group) {\n            const groupRole = new MyRole(group, \"group\", group.data.__id) as Role;\n            if (!orgRights.data[docCode as accessDataKey]) {\n                orgRights.data[docCode as accessDataKey] = [groupRole];\n                Context.data.debug += `field ${docCode} assigned to ${orgRights.data.__name}`\n            } else {\n                Context.data.debug += `field ${docCode} at ${orgRights.data.__name} already filled`\n            };\n        };\n    };\n    \n    await orgRights.save();\n    if (Context.data.iteration! \u003e= Context.data.max_iteration! - 1) {\n        Context.data.all_objects_processed = true;\n        Context.data.iteration = 0;\n    } else {\n        Context.data.iteration!++;\n    };\n};\n\n//deprecate\n// async function getAppNamespaces(solutions: string[]): Promise\u003cany[]\u003e {\n//     let allNamespaces: any[] = [];\n//     for (let code of solutions) {\n//         const fullUrl = `${Context.data.domen!}/pub/v1/scheme/solutions/${code}`;\n//         const response = await fetch(fullUrl, {\n//             headers: {\n//                 Authorization: `Bearer ${Context.data.token}`\n//             }\n//         });\n//         if (!response.ok) {\n//             throw new Error(JSON.stringify({\n//                 func: \"getAppNamespaces\",\n//                 err: await response.text()\n//             }));\n//         };\n//         const responseJson = await response.json();\n//         const content = responseJson.solution.content;\n//         if (content.length \u003c 1) {\n//             Context.data.debug +=`no apps in namespace ${code}`;\n//             continue;\n//         };\n//         const mappedNamespaces = content.map((ns: any) =\u003e ns.code);\n//         allNamespaces.push(...mappedNamespaces);\n//     };\n//     return allNamespaces;\n// };\n\n\n//Проверка незаполненных полей\nasync function setMissingFields(): Promise\u003cvoid\u003e {\n    const allOrgs = await Context.fields.org_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allOrgRights = await Context.fields.access_settings.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allGroups = await System.userGroups.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    for (let orgRights of allOrgRights) {\n        const org = allOrgs.find(o =\u003e o.id === orgRights.data.organization!.id);\n        const newRightsFields: string[] = [];\n        for (let field of docCodes) {\n            const [appCode, appName] = [field.split(\";\")[1], field.split(\";\")[0]]\n            if (!orgRights.data[appCode as keyof typeof orgRights.data]) {\n                const group = allGroups.find(group =\u003e group.data.__name === `Доступы для ${appName} ${org!.data.__name}`)\n                if (group) {\n                    const newRole = new MyRole(group, \"group\", group.id);\n                    orgRights.data[appCode as keyof typeof orgRights.data] = [newRole];\n                    newRightsFields.push(appName)\n                };\n            };\n        };\n        await orgRights.save().then(_ =\u003e Context.data.debug += `${orgRights.data.__name} processed, new fields: ${newRightsFields.join(\", \")} `)\n    };\n};",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": false,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "from": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "domen": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "token": {
+        "enabled": false,
+        "conditions": []
+      },
+      "users": {
+        "enabled": false,
+        "conditions": []
+      },
+      "chunks": {
+        "enabled": false,
+        "conditions": []
+      },
+      "org_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "timeout": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_docs": {
+        "enabled": false,
+        "conditions": []
+      },
+      "ns_codes": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_codes": {
+        "enabled": false,
+        "conditions": []
+      },
+      "iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "chunk_size": {
+        "enabled": false,
+        "conditions": []
+      },
+      "docks_exists": {
+        "enabled": false,
+        "conditions": []
+      },
+      "max_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "pause_process": {
+        "enabled": false,
+        "conditions": []
+      },
+      "max_chunk_size": {
+        "enabled": false,
+        "conditions": []
+      },
+      "access_settings": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_apps_processed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_groups_created": {
+        "enabled": false,
+        "conditions": []
+      },
+      "child_process_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_objects_processed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_namespacess_processed": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

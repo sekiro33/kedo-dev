@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    var _a, _b;\n    if (!Context.data.move_data) {\n        throw new Error(\"Context.data.move_date is undefined\");\n    }\n    const current_date = new Datetime();\n    const move_data = JSON.parse(Context.data.move_data);\n    const body = {\n        \"Date\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n        \"ПериодРегистрации\": current_date.format(\"YYYY-MM-01T00:00:00\"),\n        \"Организация_Key\": move_data.staff.organization_id,\n        \"Сотрудник_Key\": move_data.staff.id_1c,\n        \"ФизическоеЛицо_Key\": move_data.staff.individual_id_1c,\n        \"ВидОтпуска_Key\": move_data.vacation_type,\n        \"ИсходнаяДатаНачала\": move_data.old_start_date,\n        \"ПереносПоИнициативеСотрудника\": true,\n        \"Комментарий\": (_a = move_data.comment) !== null && _a !== void 0 ? _a : \"\",\n        \"ПричинаПереноса\": move_data.reason,\n        \"Переносы\": move_data.move.map(f => {\n            return {\n                \"ДатаНачала\": f.start_date,\n                \"ДатаОкончания\": f.end_date,\n                \"КоличествоДней\": f.duration,\n            };\n        })\n    };\n    const accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n    const integration_app = Namespace.params.fields.integration_app.app.create();\n    integration_app.data.__name = `Перенос отпуска по графику отпусков (${move_data.staff.name})`;\n    integration_app.data.document_odata_name = \"Document_ПереносОтпуска\";\n    integration_app.data.accounting_systems = accounting1c;\n    integration_app.data.personal_guid_1c = JSON.stringify([move_data.staff.individual_id_1c]);\n    integration_app.data.document_creation_data = JSON.stringify(body);\n    integration_app.data.base_1c_name = Context.data.connection_name;\n    integration_app.data.additional_info = (_b = Context.data.additional_info) !== null && _b !== void 0 ? _b : \"\";\n    integration_app.data.related_element = Context.data.app;\n    await integration_app.save();\n    Context.data.integration_app_id = integration_app.data.__id;\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

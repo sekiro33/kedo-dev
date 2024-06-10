@@ -1,0 +1,5700 @@
+{
+  "__id": "018e89f8-23b6-798f-91cb-2d3583d318bc",
+  "namespace": "kedo",
+  "code": "prepare_document_for_sign",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Подготовка документа для подписания",
+  "type": "bpmn",
+  "draft": false,
+  "version": 8,
+  "context": [
+    {
+      "code": "document_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID документа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "employment_placement",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employment_directory",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка по месту занятости",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "document_type",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "document_types",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Вид документа",
+        "data": {}
+      }
+    },
+    {
+      "code": "file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл",
+        "data": {}
+      }
+    },
+    {
+      "code": "processed_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Обработанный файл",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff_chief_limit",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Подписать работодателю до",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "endOfDay",
+          "setCurrentDatetime": true,
+          "timeOptional": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "goskey_sign_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "unep",
+            "name": "УНЭП",
+            "checked": true
+          },
+          {
+            "code": "ukep",
+            "name": "УКЭП",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Тип подписи для Госключа",
+        "data": {}
+      }
+    },
+    {
+      "code": "sign_wigh_goskey",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Способ подписания - Госключ?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staff_chief_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Подписант со стороны работодателя",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "send_existing_doc",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отправить существующий документ",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "token",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Токен",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "chief_sign_required",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Необходимо подписание со стороны работодателя?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "whom_send",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "all_staffs",
+            "name": "Всем сотрудникам организации",
+            "checked": false
+          },
+          {
+            "code": "selected_staffs",
+            "name": "Выбранным сотрудникам",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Кому отправить",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signatory_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {
+              "__status": {
+                "const": [6]
+              }
+            }
+          },
+          "enabled": true
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Подписант",
+        "data": {}
+      }
+    },
+    {
+      "code": "sign_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "elma",
+            "name": "ELMA",
+            "checked": true
+          },
+          {
+            "code": "work_in_russia",
+            "name": "Работа в России",
+            "checked": false
+          },
+          {
+            "code": "goskey",
+            "name": "Госключ",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Место подписания документа сотрудником",
+        "data": {}
+      }
+    },
+    {
+      "code": "doc_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "personnel_doc",
+            "name": "Кадровый документ",
+            "checked": false
+          },
+          {
+            "code": "employment_doc",
+            "name": "Документ трудоустройства",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Кадровый документ или документ трудоустройства",
+        "data": {}
+      }
+    },
+    {
+      "code": "package_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": "ELMA365 КЭДО",
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название пакета документов",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "incorrect_file_type",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл в неподдерживаемом формате",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "send_staffs_organization",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отправить сотрудникам организации?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signatory_staffs",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {
+              "__status": {
+                "const": [6]
+              },
+              "organization": {
+                "path": null,
+                "context": "signatory_staffs_organization"
+              }
+            }
+          },
+          "enabled": true
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "goskey_files",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файлы для Госключа",
+        "data": {}
+      }
+    },
+    {
+      "code": "documents_for_employment",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "documents_for_employment",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Документы для трудоустройства",
+        "data": {}
+      }
+    },
+    {
+      "code": "personnel_document",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "personnel_documents",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "personnel_documents",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Кадровые документы",
+        "data": {}
+      }
+    },
+    {
+      "code": "goskey_docs_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документы для Госключа JSON",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "limit",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Подписать сотруднику до",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "endOfDay",
+          "setCurrentDatetime": true,
+          "timeOptional": true
+        }
+      }
+    },
+    {
+      "code": "iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Итерация",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "signatory_staffs_organization",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Организация",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название приложения",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "all_files_processed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все файлы обработаны",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "file_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название файла",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "goskey_docs",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документы для госключа",
+        "data": {}
+      }
+    },
+    {
+      "code": "signatories",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписанты",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-06-15T10:19:21.513851545Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-04-05T12:50:17.442911058Z",
+  "__updatedBy": "8c6e1940-a6f3-4603-aff7-7cdf41cc9799",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 112,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["07383bbd-d03f-4f05-82e9-670039f2adee"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formCode": "form_586a133d-c62c-4d87-9f42-02156e696f63",
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Подготовка документа для подписания - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0223e21e-1b84-4b3a-9879-e727ef8e16a9": {
+        "x": 808,
+        "y": 488,
+        "id": "0223e21e-1b84-4b3a-9879-e727ef8e16a9",
+        "icon": "system",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Перевод названия файла",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "ed389264-696b-4368-92ea-af0b1dd2fea5",
+          "aa26ffe2-419c-4bb8-9bf5-4c74502ab3cf"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "translate",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "processed_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "processed_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "ed389264-696b-4368-92ea-af0b1dd2fea5",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "146e2c65-373a-4fdf-a8f8-01f36ade8b79": {
+        "x": 1200,
+        "y": 168,
+        "id": "146e2c65-373a-4fdf-a8f8-01f36ade8b79",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Создать документ",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["c7abfa3f-f30c-427b-af88-7a42b07ea363"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "create_document",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "1c3587e5-cba7-466c-8f20-2488ab768be7": {
+        "x": 920,
+        "y": 488,
+        "id": "1c3587e5-cba7-466c-8f20-2488ab768be7",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Создать документы по всем файлам",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6eb3f7c1-d82c-483a-9bcc-28510091da43"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createDocsByFiles",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "1cc0bf4a-4847-4115-8742-dc7c9610bcae": {
+        "x": 688,
+        "y": 488,
+        "id": "1cc0bf4a-4847-4115-8742-dc7c9610bcae",
+        "icon": "system",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Замена файла",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["30457a3a-93c4-4fa1-997e-fc483a7d8cd6"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "processed_file"
+              }
+            }
+          ]
+        }
+      },
+      "2ba5a31e-65a4-4405-9105-5fca83dcdcc6": {
+        "x": 544,
+        "y": 504,
+        "id": "2ba5a31e-65a4-4405-9105-5fca83dcdcc6",
+        "icon": "exclusive",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "fac4b645-8dbb-4f3a-a4b5-3eb88cd0d0df",
+          "9752b283-0c36-4724-b8aa-ef42cb6d0ec8"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "3295152e-fb38-43d3-ba7c-cb003cd98e87": {
+        "x": 1632,
+        "y": 64,
+        "id": "3295152e-fb38-43d3-ba7c-cb003cd98e87",
+        "icon": "notification",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Ошибка: не найден кадровый документ",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["6084b849-7dd3-4913-9aa5-211dafb73e87"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            },
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Не удалось найти кадровый документ"
+        }
+      },
+      "3ca30a4a-1a2f-4c3d-8017-1ecb131bc5fb": {
+        "x": 856,
+        "y": 168,
+        "id": "3ca30a4a-1a2f-4c3d-8017-1ecb131bc5fb",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Получить карточку подписанта",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["809d9110-62da-4060-a24a-deae4653091a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSignatoryApp",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3fb7bb68-a3c5-4cde-9ba6-a44b95d84ab5": {
+        "x": 448,
+        "y": 168,
+        "id": "3fb7bb68-a3c5-4cde-9ba6-a44b95d84ab5",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Сформировать название приложения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["593a7651-6ac7-43bf-9243-ef554739b614"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "create_app_name",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "445c21db-0388-4235-a3f6-150ac61290bc": {
+        "x": 296,
+        "y": 168,
+        "id": "445c21db-0388-4235-a3f6-150ac61290bc",
+        "icon": "system",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Конвертация файла в PDF",
+        "type": "ca",
+        "color": "#ffc107",
+        "exits": [
+          "0f9a7eb0-ef6c-4a1f-a136-6e3d82633468",
+          "fb5be1f0-dbb4-4d87-941b-d4ce7223ce76"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "pdf_converter",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "file_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "translate_need"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "file_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "orignial_file_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "new_file_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "new_file"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "fb5be1f0-dbb4-4d87-941b-d4ce7223ce76",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "file": {
+                "kind": "Mapped",
+                "path": ["file"]
+              },
+              "new_file": {
+                "kind": "Mapped",
+                "path": ["file"]
+              },
+              "file_name": null,
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "file"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "file"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "file_name"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "file_name"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "manual",
+                      "value": true
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "translate_need"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "file_name"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "orignial_file_name"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "new_file_name"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "file"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "new_file"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "document_id",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "ID документа"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "employment_placement",
+                    "data": {
+                      "code": "employment_directory",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявка по месту занятости",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_type",
+                    "data": {
+                      "code": "document_types",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Вид документа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "processed_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Обработанный файл"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff_chief_limit",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": true,
+                        "additionalType": "datetime",
+                        "defaultTimeType": "endOfDay",
+                        "setCurrentDatetime": true
+                      },
+                      "name": "Подписать работодателю до",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_sign_type",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "unep",
+                          "name": "УНЭП",
+                          "checked": true
+                        },
+                        {
+                          "code": "ukep",
+                          "name": "УКЭП",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Тип подписи для Госключа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "sign_wigh_goskey",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Способ подписания - Госключ?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff_chief_app",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Подписант со стороны работодателя",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "send_existing_doc",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Отправить существующий документ"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "token",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Токен"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "chief_sign_required",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Необходимо подписание со стороны работодателя?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "debug",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "debug"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "whom_send",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "all_staffs",
+                          "name": "Всем сотрудникам организации",
+                          "checked": false
+                        },
+                        {
+                          "code": "selected_staffs",
+                          "name": "Выбранным сотрудникам",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Кому отправить",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatory_app",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {
+                            "__status": {
+                              "const": [6]
+                            }
+                          }
+                        },
+                        "enabled": true
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Подписант"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "sign_type",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "elma",
+                          "name": "ELMA",
+                          "checked": true
+                        },
+                        {
+                          "code": "work_in_russia",
+                          "name": "Работа в России",
+                          "checked": false
+                        },
+                        {
+                          "code": "goskey",
+                          "name": "Госключ",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Место подписания документа сотрудником"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "doc_type",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "personnel_doc",
+                          "name": "Кадровый документ",
+                          "checked": false
+                        },
+                        {
+                          "code": "employment_doc",
+                          "name": "Документ трудоустройства",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Кадровый документ или документ трудоустройства"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "package_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название пакета документов"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": "ELMA365 КЭДО",
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "incorrect_file_type",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Файл в неподдерживаемом формате"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "send_staffs_organization",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Отправить сотрудникам организации?",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatory_staffs",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {
+                            "__status": {
+                              "const": [6]
+                            },
+                            "organization": {
+                              "path": null,
+                              "context": "signatory_staffs_organization"
+                            }
+                          }
+                        },
+                        "enabled": true
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Сотрудники",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_files",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файлы для Госключа"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "documents_for_employment",
+                    "data": {
+                      "code": "documents_for_employment",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Документы для трудоустройства"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "personnel_document",
+                    "data": {
+                      "code": "personnel_documents",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "personnel_documents",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Кадровые документы"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_docs_json",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Документы для Госключа JSON"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "limit",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": true,
+                        "additionalType": "datetime",
+                        "defaultTimeType": "endOfDay",
+                        "setCurrentDatetime": true
+                      },
+                      "name": "Подписать сотруднику до"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "iteration",
+                    "data": {},
+                    "type": "FLOAT",
+                    "view": {
+                      "data": {
+                        "additionalType": "integer",
+                        "showRowSeparator": true
+                      },
+                      "name": "Итерация"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": 0,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatory_staffs_organization",
+                    "data": {
+                      "code": "organization",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "app_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название приложения"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "all_files_processed",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Все файлы обработаны"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название файла"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_docs",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Документы для госключа"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "orignial_file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Исходное название файла",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "new_file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Новое название файла",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл",
+                      "input": true,
+                      "tooltip": "Приложите файл в формате docx, xlsx или pdf"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название файла",
+                      "input": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "translate_need",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Требуется перевод названия файла?",
+                      "input": true,
+                      "tooltip": "Требуется перевод названия файла в латиницу"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "new_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Новый файл",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "new_file_name": null,
+              "translate_need": true,
+              "__dynamic_binding": {},
+              "orignial_file_name": {
+                "kind": "Mapped",
+                "path": ["file_name"]
+              }
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "69d10062-c8c7-411c-8ff4-b4af4d4c23b4": {
+        "x": 712,
+        "y": 168,
+        "id": "69d10062-c8c7-411c-8ff4-b4af4d4c23b4",
+        "icon": "system",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Получаем участников групп",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "012eb43b-0425-4b95-92ae-4eb78dd17de0",
+          "cd9f4ac4-c3d0-40fe-968a-466f91c2ecbf"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_users",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "employment_placement.organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "hr_dep"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "accounting"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "matching_finance"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "office_managers"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "signatories"
+              },
+              "target": {
+                "kind": "context",
+                "value": "signatories"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss_app"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "cd9f4ac4-c3d0-40fe-968a-466f91c2ecbf",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "boss": null,
+              "error": null,
+              "groups": null,
+              "hr_dep": null,
+              "boss_app": null,
+              "accounting": null,
+              "signatories": {
+                "kind": "Mapped",
+                "path": ["signatories"]
+              },
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "employment_placement.organization"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "organization"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "accounting"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "matching_finance"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "office_managers"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "signatories"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "signatories"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss_app"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "error"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "document_id",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "ID документа"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "employment_placement",
+                    "data": {
+                      "code": "employment_directory",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявка по месту занятости",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_type",
+                    "data": {
+                      "code": "document_types",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Вид документа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "processed_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Обработанный файл"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff_chief_limit",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": true,
+                        "additionalType": "datetime",
+                        "defaultTimeType": "endOfDay",
+                        "setCurrentDatetime": true
+                      },
+                      "name": "Подписать работодателю до",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_sign_type",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "unep",
+                          "name": "УНЭП",
+                          "checked": true
+                        },
+                        {
+                          "code": "ukep",
+                          "name": "УКЭП",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Тип подписи для Госключа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "sign_wigh_goskey",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Способ подписания - Госключ?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff_chief_app",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Подписант со стороны работодателя",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "send_existing_doc",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Отправить существующий документ"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "token",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Токен"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "chief_sign_required",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Необходимо подписание со стороны работодателя?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "debug",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "debug"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "whom_send",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "all_staffs",
+                          "name": "Всем сотрудникам организации",
+                          "checked": false
+                        },
+                        {
+                          "code": "selected_staffs",
+                          "name": "Выбранным сотрудникам",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Кому отправить",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatory_app",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {
+                            "__status": {
+                              "const": [6]
+                            }
+                          }
+                        },
+                        "enabled": true
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Подписант"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "sign_type",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "elma",
+                          "name": "ELMA",
+                          "checked": true
+                        },
+                        {
+                          "code": "work_in_russia",
+                          "name": "Работа в России",
+                          "checked": false
+                        },
+                        {
+                          "code": "goskey",
+                          "name": "Госключ",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Место подписания документа сотрудником"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "doc_type",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "personnel_doc",
+                          "name": "Кадровый документ",
+                          "checked": false
+                        },
+                        {
+                          "code": "employment_doc",
+                          "name": "Документ трудоустройства",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Кадровый документ или документ трудоустройства"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "package_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название пакета документов"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": "ELMA365 КЭДО",
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "incorrect_file_type",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Файл в неподдерживаемом формате"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "send_staffs_organization",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Отправить сотрудникам организации?",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatory_staffs",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {
+                            "__status": {
+                              "const": [6]
+                            },
+                            "organization": {
+                              "path": null,
+                              "context": "signatory_staffs_organization"
+                            }
+                          }
+                        },
+                        "enabled": true
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Сотрудники",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_files",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файлы для Госключа"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "documents_for_employment",
+                    "data": {
+                      "code": "documents_for_employment",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Документы для трудоустройства"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "personnel_document",
+                    "data": {
+                      "code": "personnel_documents",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "personnel_documents",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Кадровые документы"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_docs_json",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Документы для Госключа JSON"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "limit",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": true,
+                        "additionalType": "datetime",
+                        "defaultTimeType": "endOfDay",
+                        "setCurrentDatetime": true
+                      },
+                      "name": "Подписать сотруднику до"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "iteration",
+                    "data": {},
+                    "type": "FLOAT",
+                    "view": {
+                      "data": {
+                        "additionalType": "integer",
+                        "showRowSeparator": true
+                      },
+                      "name": "Итерация"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": 0,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatory_staffs_organization",
+                    "data": {
+                      "code": "organization",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "app_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название приложения"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "all_files_processed",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Все файлы обработаны"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название файла"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "goskey_docs",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Документы для госключа"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "id": 33,
+                    "code": "signatories",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "isNewField": true,
+                    "searchable": false,
+                    "calcByFormula": false,
+                    "isNameChanged": true
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "organization",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true,
+                      "output": false
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": true,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "accounting",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Бухгалтерия",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "matching_finance",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Ответственные за финансы ",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "office_managers",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Офис менеджеры",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatories",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss_app",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании (app)",
+                      "input": false,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "organization": {
+                "kind": "Mapped",
+                "path": ["employment_placement", "organization"]
+              },
+              "office_managers": null,
+              "matching_finance": null,
+              "__dynamic_binding": {}
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "75156ec5-8e7f-4e9f-b2c1-e16096677275": {
+        "x": 616,
+        "y": 504,
+        "id": "75156ec5-8e7f-4e9f-b2c1-e16096677275",
+        "icon": "exclusive",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "fee1c340-27d6-4435-9097-e9b161d0ceef",
+          "0b163699-4026-49aa-ada7-fa9cd4e24e16",
+          "9f5afe7f-7687-4233-8a6b-02b3cd7371c1"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "check_file_format",
+          "type": "exclusive",
+          "useFunc": true,
+          "funcType": "FLOAT",
+          "description": ""
+        }
+      },
+      "7e5f583f-d7e9-4750-a658-345f7580dd1f": {
+        "x": 624,
+        "y": 184,
+        "id": "7e5f583f-d7e9-4750-a658-345f7580dd1f",
+        "icon": "exclusive",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Подписант указан?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "f89aeb67-dd90-4d2f-bb7d-4b09de653d70",
+          "b074b972-1fde-4c4e-92bc-5ababbbc7aa4"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "a470575a-baf5-4bfd-a429-61660fe4231c": {
+        "x": 1336,
+        "y": 88,
+        "id": "a470575a-baf5-4bfd-a429-61660fe4231c",
+        "icon": "todo",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Нужное ожидание (см. описание)",
+        "type": "todo",
+        "color": "#fbbe41",
+        "exits": [],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "description": "Не всегда успевает подхватить приложение из контрактов, поэтому делаешь небольшое ожидание"
+        }
+      },
+      "a5825222-0a86-4c6a-a2f5-461735eac769": {
+        "x": 416,
+        "y": 488,
+        "id": "a5825222-0a86-4c6a-a2f5-461735eac769",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Проверка файлов на формат по одному",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6e6f6826-6a45-401a-bcbf-2bbef8e65a43"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getCurrentFile",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "aebefa9d-4a59-4f75-85b4-68db928f6318": {
+        "x": 184,
+        "y": 112,
+        "id": "aebefa9d-4a59-4f75-85b4-68db928f6318",
+        "icon": "exclusive",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8df2c184-74a7-465f-8422-3bc1b999b402",
+          "bba99b5a-ab1f-4a75-97a5-8335ba8a9c01",
+          "7d72afec-592e-43b0-b722-e27868cf614e"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "b20b5b03-34b7-4f07-83a2-56bc7a040eb4": {
+        "x": 808,
+        "y": 400,
+        "id": "b20b5b03-34b7-4f07-83a2-56bc7a040eb4",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Обновить ссылку на файл",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["95342a58-0cf4-40cd-9aac-1354c7895674"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "refreshFileLink",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "bd6018dc-d02e-472a-ae27-afa1f356f54b": {
+        "x": 1784,
+        "y": 184,
+        "id": "bd6018dc-d02e-472a-ae27-afa1f356f54b",
+        "icon": "end",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "bf5bb186-ce29-476b-9856-74514fd7e867": {
+        "x": 1480,
+        "y": 168,
+        "id": "bf5bb186-ce29-476b-9856-74514fd7e867",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Получить кадровый документ",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "4fb781bf-8c3e-49c5-bb86-b5a83cc0f11b",
+          "155f6ee4-daab-49c9-8b23-57ab3961c8b8"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "set_document",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "155f6ee4-daab-49c9-8b23-57ab3961c8b8",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "c035e389-f4c8-4b9c-97d1-12987c9291af": {
+        "x": 1336,
+        "y": 168,
+        "id": "c035e389-f4c8-4b9c-97d1-12987c9291af",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Таймер (5 секунд)",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["97607dfe-293d-4172-be89-d8e9934bc199"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "timer_5",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "c9e562f4-d192-4068-b65e-dd8047ae04c5": {
+        "x": 592,
+        "y": 400,
+        "id": "c9e562f4-d192-4068-b65e-dd8047ae04c5",
+        "icon": "approval_list",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Конвертация файла в PDF 1",
+        "type": "pdf_convert",
+        "color": "#f0f4c3",
+        "exits": ["6bd4f2a4-5b0b-44c1-9d5a-62da81e3f357"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "inputFileCode": "file",
+          "outputFileCode": "processed_file",
+          "outputFileName": "{$file_name}.pdf"
+        }
+      },
+      "d3102694-466a-4b4e-a3ee-bad684c0a79f": {
+        "x": 296,
+        "y": 488,
+        "id": "d3102694-466a-4b4e-a3ee-bad684c0a79f",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Определить неймспейс для документов",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["52b3b7a1-a87b-457f-bcba-7a734b49f1c1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getDocsNamespaces",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "d74e0a6e-fecf-4315-9b8a-3e2f7724e000": {
+        "x": 1784,
+        "y": 80,
+        "id": "d74e0a6e-fecf-4315-9b8a-3e2f7724e000",
+        "icon": "end",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "dae46334-8c48-48b5-9864-3b7d46930f71": {
+        "x": 296,
+        "y": 288,
+        "id": "dae46334-8c48-48b5-9864-3b7d46930f71",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Присвоить файл документа в контекст",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["1fae48be-6a20-4ea2-bc82-8a3635f51d18"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setDocFromFile",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e00d2895-8d04-4e6c-a498-8a8eae0144e0": {
+        "x": 1632,
+        "y": 168,
+        "id": "e00d2895-8d04-4e6c-a498-8a8eae0144e0",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Запуск универсального процесса подписания",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["e1e43342-8a61-441b-affd-c0f8933f01e2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "run_sign_process",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e43a8e84-99e2-45a6-8b12-1b9ac4b154e5": {
+        "x": 1096,
+        "y": 184,
+        "id": "e43a8e84-99e2-45a6-8b12-1b9ac4b154e5",
+        "icon": "exclusive",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Отправка существующего документа?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "b79d9ba1-8832-40c9-8496-9b765144bbb4",
+          "c13556ff-697b-45f0-939d-c71317bfa126"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "f84be2cf-dd15-4397-92b4-47d9a1bd4ea0": {
+        "x": 1184,
+        "y": 504,
+        "id": "f84be2cf-dd15-4397-92b4-47d9a1bd4ea0",
+        "icon": "end",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "fedcd5ef-6dac-425e-9ead-fcaf6a730ad0": {
+        "x": 1040,
+        "y": 488,
+        "id": "fedcd5ef-6dac-425e-9ead-fcaf6a730ad0",
+        "icon": "script",
+        "lane": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Запуск процесса отправки в Госключ",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["782bcbb1-ab74-43ee-8c54-4b5811808448"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "runGoskeyProcess",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "607846de-ea2f-42e5-b6fd-e4689f16644b": {
+        "x": 8,
+        "y": 8,
+        "id": "607846de-ea2f-42e5-b6fd-e4689f16644b",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1828,
+        "height": 856,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "012eb43b-0425-4b95-92ae-4eb78dd17de0": {
+        "id": "012eb43b-0425-4b95-92ae-4eb78dd17de0",
+        "name": "",
+        "path": [
+          {
+            "x": 792,
+            "y": 184
+          },
+          {
+            "x": 856,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "69d10062-c8c7-411c-8ff4-b4af4d4c23b4",
+        "target": "3ca30a4a-1a2f-4c3d-8017-1ecb131bc5fb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "07383bbd-d03f-4f05-82e9-670039f2adee": {
+        "id": "07383bbd-d03f-4f05-82e9-670039f2adee",
+        "name": "Отправить",
+        "path": [
+          {
+            "x": 96,
+            "y": 128
+          },
+          {
+            "x": 184,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "aebefa9d-4a59-4f75-85b4-68db928f6318",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0b163699-4026-49aa-ada7-fa9cd4e24e16": {
+        "id": "0b163699-4026-49aa-ada7-fa9cd4e24e16",
+        "name": "PDF",
+        "path": [
+          {
+            "x": 648,
+            "y": 520
+          },
+          {
+            "x": 688,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "75156ec5-8e7f-4e9f-b2c1-e16096677275",
+        "target": "1cc0bf4a-4847-4115-8742-dc7c9610bcae",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 1
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0f9a7eb0-ef6c-4a1f-a136-6e3d82633468": {
+        "id": "0f9a7eb0-ef6c-4a1f-a136-6e3d82633468",
+        "name": "",
+        "path": [
+          {
+            "x": 376,
+            "y": 184
+          },
+          {
+            "x": 448,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "445c21db-0388-4235-a3f6-150ac61290bc",
+        "target": "3fb7bb68-a3c5-4cde-9ba6-a44b95d84ab5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "155f6ee4-daab-49c9-8b23-57ab3961c8b8": {
+        "id": "155f6ee4-daab-49c9-8b23-57ab3961c8b8",
+        "name": "",
+        "path": [
+          {
+            "x": 1520,
+            "y": 168
+          },
+          {
+            "x": 1520,
+            "y": 96
+          },
+          {
+            "x": 1632,
+            "y": 96
+          }
+        ],
+        "type": "error",
+        "source": "bf5bb186-ce29-476b-9856-74514fd7e867",
+        "target": "3295152e-fb38-43d3-ba7c-cb003cd98e87",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1fae48be-6a20-4ea2-bc82-8a3635f51d18": {
+        "id": "1fae48be-6a20-4ea2-bc82-8a3635f51d18",
+        "name": "",
+        "path": [
+          {
+            "x": 336,
+            "y": 288
+          },
+          {
+            "x": 336,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "dae46334-8c48-48b5-9864-3b7d46930f71",
+        "target": "445c21db-0388-4235-a3f6-150ac61290bc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "30457a3a-93c4-4fa1-997e-fc483a7d8cd6": {
+        "id": "30457a3a-93c4-4fa1-997e-fc483a7d8cd6",
+        "name": "",
+        "path": [
+          {
+            "x": 768,
+            "y": 520
+          },
+          {
+            "x": 808,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "1cc0bf4a-4847-4115-8742-dc7c9610bcae",
+        "target": "0223e21e-1b84-4b3a-9879-e727ef8e16a9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4fb781bf-8c3e-49c5-bb86-b5a83cc0f11b": {
+        "id": "4fb781bf-8c3e-49c5-bb86-b5a83cc0f11b",
+        "name": "",
+        "path": [
+          {
+            "x": 1560,
+            "y": 200
+          },
+          {
+            "x": 1632,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "bf5bb186-ce29-476b-9856-74514fd7e867",
+        "target": "e00d2895-8d04-4e6c-a498-8a8eae0144e0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "52b3b7a1-a87b-457f-bcba-7a734b49f1c1": {
+        "id": "52b3b7a1-a87b-457f-bcba-7a734b49f1c1",
+        "name": "",
+        "path": [
+          {
+            "x": 376,
+            "y": 520
+          },
+          {
+            "x": 416,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "d3102694-466a-4b4e-a3ee-bad684c0a79f",
+        "target": "a5825222-0a86-4c6a-a2f5-461735eac769",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "593a7651-6ac7-43bf-9243-ef554739b614": {
+        "id": "593a7651-6ac7-43bf-9243-ef554739b614",
+        "name": "",
+        "path": [
+          {
+            "x": 528,
+            "y": 200
+          },
+          {
+            "x": 624,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "3fb7bb68-a3c5-4cde-9ba6-a44b95d84ab5",
+        "target": "7e5f583f-d7e9-4750-a658-345f7580dd1f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6084b849-7dd3-4913-9aa5-211dafb73e87": {
+        "id": "6084b849-7dd3-4913-9aa5-211dafb73e87",
+        "name": "",
+        "path": [
+          {
+            "x": 1712,
+            "y": 96
+          },
+          {
+            "x": 1784,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "3295152e-fb38-43d3-ba7c-cb003cd98e87",
+        "target": "d74e0a6e-fecf-4315-9b8a-3e2f7724e000",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6bd4f2a4-5b0b-44c1-9d5a-62da81e3f357": {
+        "id": "6bd4f2a4-5b0b-44c1-9d5a-62da81e3f357",
+        "name": "",
+        "path": [
+          {
+            "x": 672,
+            "y": 432
+          },
+          {
+            "x": 800,
+            "y": 432
+          },
+          {
+            "x": 800,
+            "y": 480
+          },
+          {
+            "x": 828,
+            "y": 480
+          },
+          {
+            "x": 828,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "c9e562f4-d192-4068-b65e-dd8047ae04c5",
+        "target": "0223e21e-1b84-4b3a-9879-e727ef8e16a9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6e6f6826-6a45-401a-bcbf-2bbef8e65a43": {
+        "id": "6e6f6826-6a45-401a-bcbf-2bbef8e65a43",
+        "name": "",
+        "path": [
+          {
+            "x": 496,
+            "y": 520
+          },
+          {
+            "x": 544,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "a5825222-0a86-4c6a-a2f5-461735eac769",
+        "target": "2ba5a31e-65a4-4405-9105-5fca83dcdcc6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6eb3f7c1-d82c-483a-9bcc-28510091da43": {
+        "id": "6eb3f7c1-d82c-483a-9bcc-28510091da43",
+        "name": "",
+        "path": [
+          {
+            "x": 1000,
+            "y": 520
+          },
+          {
+            "x": 1040,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "1c3587e5-cba7-466c-8f20-2488ab768be7",
+        "target": "fedcd5ef-6dac-425e-9ead-fcaf6a730ad0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "782bcbb1-ab74-43ee-8c54-4b5811808448": {
+        "id": "782bcbb1-ab74-43ee-8c54-4b5811808448",
+        "name": "",
+        "path": [
+          {
+            "x": 1120,
+            "y": 520
+          },
+          {
+            "x": 1184,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "fedcd5ef-6dac-425e-9ead-fcaf6a730ad0",
+        "target": "f84be2cf-dd15-4397-92b4-47d9a1bd4ea0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7d72afec-592e-43b0-b722-e27868cf614e": {
+        "id": "7d72afec-592e-43b0-b722-e27868cf614e",
+        "name": "Госключ",
+        "path": [
+          {
+            "x": 200,
+            "y": 144
+          },
+          {
+            "x": 200,
+            "y": 520
+          },
+          {
+            "x": 296,
+            "y": 520
+          }
+        ],
+        "type": "plain",
+        "source": "aebefa9d-4a59-4f75-85b4-68db928f6318",
+        "target": "d3102694-466a-4b4e-a3ee-bad684c0a79f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "sign_wigh_goskey"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "809d9110-62da-4060-a24a-deae4653091a": {
+        "id": "809d9110-62da-4060-a24a-deae4653091a",
+        "name": "",
+        "path": [
+          {
+            "x": 936,
+            "y": 200
+          },
+          {
+            "x": 1096,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "3ca30a4a-1a2f-4c3d-8017-1ecb131bc5fb",
+        "target": "e43a8e84-99e2-45a6-8b12-1b9ac4b154e5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8df2c184-74a7-465f-8422-3bc1b999b402": {
+        "id": "8df2c184-74a7-465f-8422-3bc1b999b402",
+        "name": "",
+        "path": [
+          {
+            "x": 216,
+            "y": 128
+          },
+          {
+            "x": 288,
+            "y": 128
+          },
+          {
+            "x": 288,
+            "y": 200
+          },
+          {
+            "x": 296,
+            "y": 200
+          }
+        ],
+        "type": "default",
+        "source": "aebefa9d-4a59-4f75-85b4-68db928f6318",
+        "target": "445c21db-0388-4235-a3f6-150ac61290bc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "95342a58-0cf4-40cd-9aac-1354c7895674": {
+        "id": "95342a58-0cf4-40cd-9aac-1354c7895674",
+        "name": "",
+        "path": [
+          {
+            "x": 848,
+            "y": 400
+          },
+          {
+            "x": 848,
+            "y": 392
+          },
+          {
+            "x": 456,
+            "y": 392
+          },
+          {
+            "x": 456,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "b20b5b03-34b7-4f07-83a2-56bc7a040eb4",
+        "target": "a5825222-0a86-4c6a-a2f5-461735eac769",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9752b283-0c36-4724-b8aa-ef42cb6d0ec8": {
+        "id": "9752b283-0c36-4724-b8aa-ef42cb6d0ec8",
+        "name": "",
+        "path": [
+          {
+            "x": 560,
+            "y": 536
+          },
+          {
+            "x": 560,
+            "y": 560
+          },
+          {
+            "x": 960,
+            "y": 560
+          },
+          {
+            "x": 960,
+            "y": 552
+          }
+        ],
+        "type": "plain",
+        "source": "2ba5a31e-65a4-4405-9105-5fca83dcdcc6",
+        "target": "1c3587e5-cba7-466c-8f20-2488ab768be7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_files_processed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "97607dfe-293d-4172-be89-d8e9934bc199": {
+        "id": "97607dfe-293d-4172-be89-d8e9934bc199",
+        "name": "",
+        "path": [
+          {
+            "x": 1416,
+            "y": 200
+          },
+          {
+            "x": 1480,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "c035e389-f4c8-4b9c-97d1-12987c9291af",
+        "target": "bf5bb186-ce29-476b-9856-74514fd7e867",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9f5afe7f-7687-4233-8a6b-02b3cd7371c1": {
+        "id": "9f5afe7f-7687-4233-8a6b-02b3cd7371c1",
+        "name": "Иной",
+        "path": [
+          {
+            "x": 632,
+            "y": 536
+          },
+          {
+            "x": 632,
+            "y": 544
+          },
+          {
+            "x": 680,
+            "y": 544
+          },
+          {
+            "x": 680,
+            "y": 472
+          },
+          {
+            "x": 896,
+            "y": 472
+          },
+          {
+            "x": 896,
+            "y": 432
+          },
+          {
+            "x": 888,
+            "y": 432
+          }
+        ],
+        "type": "default",
+        "source": "75156ec5-8e7f-4e9f-b2c1-e16096677275",
+        "target": "b20b5b03-34b7-4f07-83a2-56bc7a040eb4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aa26ffe2-419c-4bb8-9bf5-4c74502ab3cf": {
+        "id": "aa26ffe2-419c-4bb8-9bf5-4c74502ab3cf",
+        "name": "",
+        "path": [
+          {
+            "x": 868,
+            "y": 488
+          },
+          {
+            "x": 868,
+            "y": 464
+          }
+        ],
+        "type": "plain",
+        "source": "0223e21e-1b84-4b3a-9879-e727ef8e16a9",
+        "target": "b20b5b03-34b7-4f07-83a2-56bc7a040eb4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b074b972-1fde-4c4e-92bc-5ababbbc7aa4": {
+        "id": "b074b972-1fde-4c4e-92bc-5ababbbc7aa4",
+        "name": "Да",
+        "path": [
+          {
+            "x": 640,
+            "y": 184
+          },
+          {
+            "x": 640,
+            "y": 132
+          },
+          {
+            "x": 1112,
+            "y": 132
+          },
+          {
+            "x": 1112,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "7e5f583f-d7e9-4750-a658-345f7580dd1f",
+        "target": "e43a8e84-99e2-45a6-8b12-1b9ac4b154e5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "staff_chief_app"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b79d9ba1-8832-40c9-8496-9b765144bbb4": {
+        "id": "b79d9ba1-8832-40c9-8496-9b765144bbb4",
+        "name": "Да",
+        "path": [
+          {
+            "x": 1112,
+            "y": 216
+          },
+          {
+            "x": 1112,
+            "y": 304
+          },
+          {
+            "x": 1672,
+            "y": 304
+          },
+          {
+            "x": 1672,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "e43a8e84-99e2-45a6-8b12-1b9ac4b154e5",
+        "target": "e00d2895-8d04-4e6c-a498-8a8eae0144e0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "send_existing_doc"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bba99b5a-ab1f-4a75-97a5-8335ba8a9c01": {
+        "id": "bba99b5a-ab1f-4a75-97a5-8335ba8a9c01",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 144
+          },
+          {
+            "x": 200,
+            "y": 320
+          },
+          {
+            "x": 296,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "aebefa9d-4a59-4f75-85b4-68db928f6318",
+        "target": "dae46334-8c48-48b5-9864-3b7d46930f71",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "send_existing_doc"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c13556ff-697b-45f0-939d-c71317bfa126": {
+        "id": "c13556ff-697b-45f0-939d-c71317bfa126",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 1128,
+            "y": 200
+          },
+          {
+            "x": 1200,
+            "y": 200
+          }
+        ],
+        "type": "default",
+        "source": "e43a8e84-99e2-45a6-8b12-1b9ac4b154e5",
+        "target": "146e2c65-373a-4fdf-a8f8-01f36ade8b79",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c7abfa3f-f30c-427b-af88-7a42b07ea363": {
+        "id": "c7abfa3f-f30c-427b-af88-7a42b07ea363",
+        "name": "",
+        "path": [
+          {
+            "x": 1280,
+            "y": 200
+          },
+          {
+            "x": 1336,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "146e2c65-373a-4fdf-a8f8-01f36ade8b79",
+        "target": "c035e389-f4c8-4b9c-97d1-12987c9291af",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cd9f4ac4-c3d0-40fe-968a-466f91c2ecbf": {
+        "id": "cd9f4ac4-c3d0-40fe-968a-466f91c2ecbf",
+        "name": "",
+        "path": [
+          {
+            "x": 792,
+            "y": 216
+          },
+          {
+            "x": 856,
+            "y": 216
+          }
+        ],
+        "type": "error",
+        "source": "69d10062-c8c7-411c-8ff4-b4af4d4c23b4",
+        "target": "3ca30a4a-1a2f-4c3d-8017-1ecb131bc5fb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e1e43342-8a61-441b-affd-c0f8933f01e2": {
+        "id": "e1e43342-8a61-441b-affd-c0f8933f01e2",
+        "name": "",
+        "path": [
+          {
+            "x": 1712,
+            "y": 200
+          },
+          {
+            "x": 1784,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "e00d2895-8d04-4e6c-a498-8a8eae0144e0",
+        "target": "bd6018dc-d02e-472a-ae27-afa1f356f54b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ed389264-696b-4368-92ea-af0b1dd2fea5": {
+        "id": "ed389264-696b-4368-92ea-af0b1dd2fea5",
+        "name": "",
+        "path": [
+          {
+            "x": 848,
+            "y": 488
+          },
+          {
+            "x": 848,
+            "y": 464
+          }
+        ],
+        "type": "error",
+        "source": "0223e21e-1b84-4b3a-9879-e727ef8e16a9",
+        "target": "b20b5b03-34b7-4f07-83a2-56bc7a040eb4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f89aeb67-dd90-4d2f-bb7d-4b09de653d70": {
+        "id": "f89aeb67-dd90-4d2f-bb7d-4b09de653d70",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 656,
+            "y": 200
+          },
+          {
+            "x": 712,
+            "y": 200
+          }
+        ],
+        "type": "default",
+        "source": "7e5f583f-d7e9-4750-a658-345f7580dd1f",
+        "target": "69d10062-c8c7-411c-8ff4-b4af4d4c23b4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fac4b645-8dbb-4f3a-a4b5-3eb88cd0d0df": {
+        "id": "fac4b645-8dbb-4f3a-a4b5-3eb88cd0d0df",
+        "name": "",
+        "path": [
+          {
+            "x": 576,
+            "y": 520
+          },
+          {
+            "x": 616,
+            "y": 520
+          }
+        ],
+        "type": "default",
+        "source": "2ba5a31e-65a4-4405-9105-5fca83dcdcc6",
+        "target": "75156ec5-8e7f-4e9f-b2c1-e16096677275",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fb5be1f0-dbb4-4d87-941b-d4ce7223ce76": {
+        "id": "fb5be1f0-dbb4-4d87-941b-d4ce7223ce76",
+        "name": "",
+        "path": [
+          {
+            "x": 376,
+            "y": 216
+          },
+          {
+            "x": 448,
+            "y": 216
+          }
+        ],
+        "type": "error",
+        "source": "445c21db-0388-4235-a3f6-150ac61290bc",
+        "target": "3fb7bb68-a3c5-4cde-9ba6-a44b95d84ab5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fee1c340-27d6-4435-9097-e9b161d0ceef": {
+        "id": "fee1c340-27d6-4435-9097-e9b161d0ceef",
+        "name": "DOCX или XLSX",
+        "path": [
+          {
+            "x": 632,
+            "y": 504
+          },
+          {
+            "x": 632,
+            "y": 464
+          }
+        ],
+        "type": "plain",
+        "source": "75156ec5-8e7f-4e9f-b2c1-e16096677275",
+        "target": "c9e562f4-d192-4068-b65e-dd8047ae04c5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 2
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "type fileJson = {\n    file_id: string,\n    doc_name: string,\n    doc_type: string,\n    doc_ns?: string\n};\n\ntype goskeyDocsMeta = {\n    docs_package_name: string,\n    files: fileJson[]\n};\n\ntype docContext = {\n    responsible_user: string[],\n    responsible: string,\n    staff?: string[],\n    kedo_staff?: string[],\n    __name: string,\n    line_file_name: string,\n    __file: string[]\n}\n\nconst namespaces = [\n    \"kedo\",\n    \"personnel_documents\",\n    \"absences\",\n    \"business_trips\",\n    \"time_tracking\"\n];\n\nconst otherDocumentsCode = \"other_documents\";\nconst otherDocumentsNs = \"personnel_documents\";\n\nasync function check_file_format(): Promise\u003cnumber\u003e {\n    const file = await Context.data.file!.fetch();\n    const file_name = file.data.__name;\n\n    if (file_name.endsWith('.pdf')) {\n        return 1;\n    } else if (file_name.endsWith('.docx') || file_name.endsWith('.xlsx')) {\n        return 2;\n    } else {\n        Context.data.incorrect_file_type = true;\n        return -1;\n    };\n};\n\nasync function create_document(): Promise\u003cvoid\u003e {\n    if (Context.data.document_type) {\n        const doc_type = await Context.data.document_type.fetch();\n        let doc;\n\n        if (doc_type.data.app_code) {\n            doc = await (await create_app_document(doc_type.data.app_code)).create();\n        } else {\n            doc = await (await create_app_document(\"other_documents\")).create();\n        }\n\n        doc.data.__name = Context.data.app_name;\n        doc.data.line_file_name = Context.data.app_name;\n        doc.data.__file = Context.data.file;\n        doc.data.staff = Context.data.signatory_app;\n        doc.data.kedo_staff = Context.data.signatory_app;\n        doc.data.responsible = (await Context.data.__createdBy.fetch()).data.__name;\n        doc.data.responsible_user = Context.data.__createdBy;\n        await doc.save();\n        //Context.data.document = doc;\n        Context.data.document_id = doc.id;\n    }\n}\n\nasync function create_app_document(doc_type: string): Promise\u003cany\u003e {\n    return (Namespace as any).factory.Global.ns.personnel_documents.app[doc_type]\n        || (Namespace as any).factory.Global.ns.kedo.app[doc_type]\n        || (Namespace as any).factory.Global.ns.absences.app[doc_type]\n        || (Namespace as any).factory.Global.ns.business_trips.app[doc_type]\n        || (Namespace as any).factory.Global.ns.time_tracking.app[doc_type];\n}\n\nasync function set_document(): Promise\u003cvoid\u003e {\n    const personnelDocument = await Context.fields.personnel_document.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.__id.eq(Context.data.document_id!)\n    ))\n        .first();\n    Context.data.personnel_document = personnelDocument;\n\n    const documentForEmployment = await Context.fields.documents_for_employment.app.search().where((f, g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.__id.eq(Context.data.document_id!)\n    ))\n        .first();\n    Context.data.documents_for_employment = documentForEmployment;\n\n    if (!personnelDocument \u0026\u0026 !documentForEmployment) {\n        throw new Error('Не найден кадровый документ');\n    };\n};\n\n/** Запуск подпроцесса через скрипт, чтобы была связь с созданным элементом приложения. */\nasync function run_sign_process(): Promise\u003cvoid\u003e {\n\n    let document: any;\n\n    if (Context.data.personnel_document) {\n        document = await Context.data.personnel_document!.fetch();\n    }\n\n    if (Context.data.documents_for_employment) {\n        document = await Context.data.documents_for_employment!.fetch();\n    }\n\n    const source = document.data.__sourceRef!;\n\n    const sign_proccess = Namespace.processes.signing_process;\n\n    if (Context.data.signatory_staffs_organization \u0026\u0026 Context.data.whom_send \u0026\u0026 Context.data.whom_send.code === 'all_staffs') {\n        const staffs = await Context.fields.signatory_staffs.app.search()\n            .size(10000)\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n                f.__status.eq(Context.fields.signatory_staffs.app.fields.__status.variants.signed_documents),\n                f.organization.link(Context.data.signatory_staffs_organization!)\n            ))\n            .all();\n        Context.data.signatory_staffs = staffs;\n    }\n\n    const context: any = {\n        personel_document: Context.data.personnel_document ? [Context.data.personnel_document.id] : [],\n        document_for_employment: Context.data.documents_for_employment ? [Context.data.documents_for_employment.id] : [],\n        staff_chief_kedo: Context.data.staff_chief_app ? [Context.data.staff_chief_app.id] : [],\n        signatory_staffs: Context.data.signatory_staffs ? Context.data.signatory_staffs.map(f =\u003e f.id) : [],\n        staff: [Context.data.signatory_app!.id],\n        chief_sign_required: Context.data.chief_sign_required,\n        limit: Context.data.limit ? Context.data.limit.format() : new Datetime().addDate(0, 0, 1).format(),\n        __item: {\n            id: source.id,\n            code: source.code,\n            namespace: source.namespace\n        },\n        sign_type: [{\n            name: Context.data.sign_type!.name,\n            code: Context.data.sign_type!.code\n        }],\n    };\n\n    Context.data.debug = JSON.stringify(context);\n\n    await sign_proccess.run(context);\n}\n\nasync function create_file_name(): Promise\u003cvoid\u003e {\n    const file = await Context.data.file!.fetch();\n    const file_name = file.data.__name.replace(/\\.[^.$]+$/, '');\n    Context.data.file_name = file_name;\n}\n\nasync function create_app_name(): Promise\u003cvoid\u003e {\n    if (Context.data.app_name) {\n        return;\n    }\n\n    Context.data.app_name = Context.data.file_name;\n}\n\nasync function timer_5(): Promise\u003cvoid\u003e {\n    let currentTime = new Datetime();\n    const needTime = currentTime.add(new Duration(5, 'seconds'));\n    while (!currentTime.after(needTime)) {\n        currentTime = new Datetime();\n    }\n}\n\nasync function setDocFromFile(): Promise\u003cvoid\u003e {\n    let doc: any;\n    if (Context.data.documents_for_employment) {\n        doc = await Context.data.documents_for_employment.fetch();\n    } else {\n        doc = await Context.data.personnel_document!.fetch();\n    };\n    const source = await doc.data.__sourceRef.fetch();\n    Context.data.file = source.data.__file;\n};\n\nasync function getDocsNamespaces(): Promise\u003cvoid\u003e {\n    let apps: any[] = [];\n    const tokenSetting = await Namespace.app.settings.search().where(f =\u003e f.code.eq(\"api_key\")).first();\n    if (!tokenSetting || !tokenSetting.data.value) {\n        throw new Error(\"Проверьте наличие и заполненность настройки 'Api-ключ для методов в модуле' в Меню настроек\");\n    };\n    const token = tokenSetting.data.value;\n    Context.data.token = token;\n    const baseUrl = System.getBaseUrl();\n\n    for (let ns of namespaces) {\n        let res: FetchResponse;\n        try {\n            res = await fetch(`${baseUrl}/pub/v1/scheme/namespaces/${ns}/apps`, {\n                headers: {\n                    Authorization: `Bearer ${token}`\n                }\n            });\n            if (!res.ok) {\n                continue;\n            };\n            const responseJson = await res.json();\n            apps.push(...responseJson.result.result);\n        } catch {\n            throw new Error(await res!.text())\n        };\n    };\n    try {\n        const jsonData = \u003cgoskeyDocsMeta\u003eJSON.parse(Context.data.goskey_docs_json!);\n        for (let item of jsonData.files) {\n            const appType = apps.find((app: any) =\u003e app.code === item.doc_type);\n\n            if (!appType) {\n                item.doc_type = otherDocumentsCode;\n                item.doc_ns = otherDocumentsNs;\n            } else {\n                item.doc_ns = appType.namespace;\n            };\n        };\n        Context.data.goskey_docs_json = JSON.stringify(jsonData);\n    } catch (err) {\n        throw new Error(`error at parse: ${err.message}`)\n    }\n};\n\nasync function createDocsByFiles(): Promise\u003cvoid\u003e {\n    const jsonData = \u003cgoskeyDocsMeta\u003eJSON.parse(Context.data.goskey_docs_json!);\n    const staff = await Context.data.signatory_app!.fetch()\n    const responsible = await Context.data.__createdBy.fetch();\n    const responsibleName = responsible.data.__name;\n    const baseUrl = System.getBaseUrl();\n    const token = Context.data.token;\n\n    let refItems: RefItem[] = [];\n\n    for (let item of jsonData.files) {\n        let context: docContext = {\n            responsible_user: [\n                responsible.id\n            ],\n            responsible: responsibleName,\n            staff: [\n                staff.id\n            ],\n            __name: item.doc_name,\n            line_file_name: item.doc_name,\n            __file: [\n                item.file_id\n            ]\n        };\n        let createFileResponse: FetchResponse;\n        try {\n            createFileResponse = await fetch(`${baseUrl}/pub/v1/app/${item.doc_ns}/${item.doc_type}/create`, {\n                method: \"POST\",\n                headers: {\n                    Authorization: `Bearer ${token}`\n                },\n                body: JSON.stringify({\n                    context: {\n                        responsible_user: [\n                            responsible.id\n                        ],\n                        responsible: responsibleName,\n                        staff: [\n                            staff.id\n                        ],\n                        __name: item.doc_name,\n                        line_file_name: item.doc_name,\n                        __file: [\n                            item.file_id\n                        ]\n                    }\n                })\n            });\n            if (!createFileResponse.ok) {\n                delete context[\"staff\"];\n                context.kedo_staff = [staff.id];\n                createFileResponse = await fetch(`${baseUrl}/pub/v1/app/${item.doc_ns}/${item.doc_type}/create`, {\n                    method: \"POST\",\n                    headers: {\n                        Authorization: `Bearer ${token}`\n                    },\n                    body: JSON.stringify(context)\n                });\n            };\n            const responseJson = await createFileResponse.json();\n            Context.data.debug = JSON.stringify(responseJson)\n            refItems.push(new RefItem(\n                item.doc_ns!,\n                item.doc_type,\n                responseJson.item.__id\n            ));\n\n        } catch (err) {\n            throw new Error(`Ошибка при создании документа ${item.doc_name}`);\n        };\n    };\n    Context.data.goskey_docs = refItems;\n};\n\nasync function getCurrentFile(): Promise\u003cvoid\u003e {\n    try {\n        const file = await Context.data.goskey_files![Context.data.iteration!++].fetch();\n        const fileName = file.data.__name.replace(/\\.[^.$]+$/, '');\n        Context.data.file = file;\n        Context.data.incorrect_file_type = false;\n        Context.data.file_name = fileName;\n    } catch {\n        Context.data.all_files_processed = true;\n    }\n};\n\nasync function refreshFileLink(): Promise\u003cvoid\u003e {\n    const docsJson = \u003cgoskeyDocsMeta\u003eJSON.parse(Context.data.goskey_docs_json!);\n\n    if (Context.data.incorrect_file_type) {\n        //@ts-ignore\n        docsJson.files.filter(item =\u003e item.file_id !== Context.data.file!.id);\n        Context.data.goskey_docs_json = JSON.stringify(docsJson);\n        return;\n    };\n\n    //@ts-ignore\n    const currentItem = docsJson.files.find(item =\u003e item.file_id === Context.data.file!.id);\n    //@ts-ignore\n    Context.data.debug += ` ${Context.data.file!.id} `\n    //@ts-ignore\n    currentItem!.file_id = Context.data.processed_file!.id;\n    Context.data.goskey_docs_json = JSON.stringify(docsJson);\n};\n\nasync function runGoskeyProcess(): Promise\u003cvoid\u003e {\n    const staff = await Context.data.signatory_app!.fetch();\n    const snils = staff.data.snils;\n    const goskeyFiles = Context.data.goskey_docs!.map(item =\u003e {\n        return {\n            namespace: item.namespace,\n            code: item.code,\n            id: item.id\n        }\n    });\n    const signExpiration = Context.data.limit ? Context.data.limit.format() : new Datetime().addDate(0, 0, 1).format();\n    const packageName = Context.data.package_name;\n    const userId = staff.data.ext_user!.id;\n    const signType = Context.data.goskey_sign_type;\n    const baseUrl = System.getBaseUrl();\n    const token = Context.data.token;\n    let runProcessResponse: FetchResponse;\n\n    try {\n        runProcessResponse = await fetch(`${baseUrl}/pub/v1/bpm/template/ext_7fb0a0d0-fc8d-452e-843f-6a7f2f28a8bf/send_docs_to_goskey/run`, {\n            method: \"POST\",\n            headers: {\n                Authorization: `Bearer ${token}`\n            },\n            body: JSON.stringify({\n                context: {\n                    snils,\n                    docs_for_sign: goskeyFiles,\n                    user: [\n                        userId\n                    ],\n                    sign_expiration: signExpiration,\n                    docs_description: packageName,\n                    sign_type: [\n                        {\n                            name: signType!.name,\n                            code: signType!.code,\n                        }\n                    ]\n                }\n            })\n        });\n        if (!runProcessResponse.ok) {\n            throw new Error(`Ошибка при запуске процесса: ${await runProcessResponse.text()}`);\n        };\n    } catch (err) {\n        Context.data.debug = await runProcessResponse!.text();\n    }\n};\n\nasync function getSignatoryApp(): Promise\u003cvoid\u003e {\n    if (!Context.data.signatories || Context.data.signatories.length == 0) {\n        return;\n    }\n\n    let staffs = await Namespace.app.staff.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.ext_user.in(Context.data.signatories!)\n        ))\n        .size(Context.data.signatories.length)\n        .all();\n\n    staffs = staffs.filter(s =\u003e s.id != Context.data.signatory_app?.id);\n\n    if (staffs.length != 0) {\n        Context.data.staff_chief_app = staffs[0];\n    }\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_586a133d-c62c-4d87-9f42-02156e696f63",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 4
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "limit": {
+        "enabled": false,
+        "conditions": []
+      },
+      "token": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "doc_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "file_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sign_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "whom_send": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "goskey_docs": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatories": {
+        "enabled": false,
+        "conditions": []
+      },
+      "goskey_files": {
+        "enabled": false,
+        "conditions": []
+      },
+      "package_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatory_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "processed_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_chief_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "goskey_docs_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "goskey_sign_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sign_wigh_goskey": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatory_staffs": {
+        "enabled": false,
+        "conditions": []
+      },
+      "send_existing_doc": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_chief_limit": {
+        "enabled": false,
+        "conditions": []
+      },
+      "personnel_document": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_files_processed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "chief_sign_required": {
+        "enabled": false,
+        "conditions": []
+      },
+      "incorrect_file_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employment_placement": {
+        "enabled": false,
+        "conditions": []
+      },
+      "documents_for_employment": {
+        "enabled": false,
+        "conditions": []
+      },
+      "send_staffs_organization": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatory_staffs_organization": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

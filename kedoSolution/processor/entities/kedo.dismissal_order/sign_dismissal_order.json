@@ -1,0 +1,1188 @@
+{
+  "__id": "018c8757-193c-7ec2-a57a-1656edf38d69",
+  "namespace": "kedo.dismissal_order",
+  "code": "sign_dismissal_order",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Подписать приказ на увольнение",
+  "type": "bpmn",
+  "draft": false,
+  "version": 9,
+  "context": [
+    {
+      "code": "kedo_status",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Статус",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "dismissal_order",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "dismissal_order",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приказ на увольнение"
+      }
+    },
+    {
+      "code": "dismissal_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "dismissal_app",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на увольнение",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "escalation_time",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Время эскалации задачи",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signatory",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписант",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудник (пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "hr_dep",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписанты",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "error",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "staff_users",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудники",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2022-10-20T06:57:54.97364524Z",
+  "__createdBy": "b3904ee1-c631-4888-88ee-3922dc2fcbea",
+  "__updatedAt": "2024-03-05T20:29:56.970814334Z",
+  "__updatedBy": "cc31283b-f390-46e0-85c1-612cce8051b2",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 72,
+        "y": 88,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["b59baabf-9359-45ba-ad65-57d1b32d716b"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Подписать приказ на увольнение ({$dismissal_order})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "362bfe9d-fa2c-4df7-8fcf-43897495c271": {
+        "x": 152,
+        "y": 72,
+        "id": "362bfe9d-fa2c-4df7-8fcf-43897495c271",
+        "icon": "system",
+        "lane": "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb",
+        "name": "Получить сотрудника",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["8fc929d2-e5e6-4d6e-88bb-6235cc9bb5b1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "dismissal_app.employment_placement.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "dismissal_app.employment_placement.staff.ext_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff_user"
+              }
+            }
+          ]
+        }
+      },
+      "7118207d-32b5-4355-9101-fd32bec6b349": {
+        "x": 280,
+        "y": 72,
+        "id": "7118207d-32b5-4355-9101-fd32bec6b349",
+        "lane": "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb",
+        "name": "Оповещение типовое",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["2fbabbe4-c622-4852-930b-63e689ffa62b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "notification",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "dismissal_order.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Приказ на увольнение"
+              },
+              "target": {
+                "kind": "context",
+                "value": "topic_of_the_letter"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "КЭДО"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_head"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Для вас подготовлен приказ на увольнение. Перейдите на портал КЭДО и ознакомьтесь."
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_body"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Для вас подготовлен приказ на увольнение. Перейдите в КЭДО. (ссылка)"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_text_for_sms"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "7dd70081-145c-41f9-af86-74b457361de2": {
+        "x": 408,
+        "y": 72,
+        "id": "7dd70081-145c-41f9-af86-74b457361de2",
+        "icon": "system",
+        "lane": "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb",
+        "name": "Выдача прав на приказ",
+        "type": "app_element_permissions",
+        "color": "#fde9a0",
+        "exits": ["17c71e22-26ce-4452-bf67-8a71efce888f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "delete": false,
+          "userVariableName": "staff_user",
+          "accessPermissions": ["read"],
+          "appElementVariableName": "dismissal_order"
+        }
+      },
+      "cc00fe84-ae9b-42b9-828f-5eb92a3e9c66": {
+        "x": 776,
+        "y": 72,
+        "id": "cc00fe84-ae9b-42b9-828f-5eb92a3e9c66",
+        "icon": "user",
+        "lane": "e10b904e-aa07-4989-99cc-766f573de5ae",
+        "name": "Распечатать, подписать и передать работодателю",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "1f8f31b8-acf4-429d-836b-ccf96c083f97",
+          "20328211-1daf-4729-8c52-7ba85adf9429"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Увольнение. Приказ. Распечатать и занести работодателю или зайти в отдел кадров для подписания",
+          "notify": true,
+          "formCode": "form_208a5a8d-b53c-4233-b103-550831d9c1e9",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "code": "escalation_time",
+                "days": 0,
+                "kind": "variable",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false,
+                "substraction": false
+              },
+              "action": {
+                "exit": "20328211-1daf-4729-8c52-7ba85adf9429",
+                "notify": false,
+                "interrupt": true,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [
+            {
+              "code": "dismissal_app",
+              "data": {
+                "listSettings": {
+                  "sort": {
+                    "field": "",
+                    "direction": "",
+                    "additionalSortSettings": null
+                  },
+                  "limit": 10,
+                  "buttons": [
+                    {
+                      "id": "72e04d3c-7a90-450f-aebe-2cdb8988e040",
+                      "code": "create",
+                      "type": "primary",
+                      "label": "+ Заявка на увольнение",
+                      "bindings": [],
+                      "immutable": false,
+                      "silentRun": false,
+                      "permission": "create",
+                      "skipRequired": false,
+                      "defaultValues": {},
+                      "useSimpleForm": false,
+                      "simpleFormSize": "default",
+                      "allowedGroupIds": [],
+                      "allowedStatusIds": [],
+                      "processLinkChanged": false,
+                      "showForAllowedStatuses": false,
+                      "showForAllowedStatusGroups": false
+                    }
+                  ],
+                  "aggregateField": "",
+                  "autoUpdateCards": false,
+                  "enabledMassActions": false
+                },
+                "tableSettings": {
+                  "displayFields": ["__name", "staff", "kedo_status"]
+                },
+                "createButtonId": "",
+                "showCreateItem": true,
+                "showSelectItem": true
+              },
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false,
+              "subfields": [
+                {
+                  "code": "staff",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "employment_placement",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "date_of_dismissal",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "reason_for_leaving",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                }
+              ]
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": false,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "isIgnoreSubstitutionTarget": "",
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "df5d781b-6b43-426c-a755-b5c371e7e3dc": {
+        "x": 1008,
+        "y": 88,
+        "id": "df5d781b-6b43-426c-a755-b5c371e7e3dc",
+        "icon": "end",
+        "lane": "e10b904e-aa07-4989-99cc-766f573de5ae",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "f12edfda-e980-44b1-b4eb-02668655a8cd": {
+        "x": 536,
+        "y": 72,
+        "id": "f12edfda-e980-44b1-b4eb-02668655a8cd",
+        "icon": "script",
+        "lane": "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb",
+        "name": "Расчет времени эскалации задачи",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["897f49ce-1884-4d10-b377-9f57d3c76da9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "calcEscalationTime",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": true,
+              "interrupt": false,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb": {
+        "x": 8,
+        "y": 8,
+        "id": "7472b1bc-9bf9-4a57-93cd-7d1f671b29eb",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 680,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "e10b904e-aa07-4989-99cc-766f573de5ae": {
+        "x": 688,
+        "y": 8,
+        "id": "e10b904e-aa07-4989-99cc-766f573de5ae",
+        "name": "Сотрудник",
+        "color": "#d6f0cc",
+        "width": 456,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "staff_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "17c71e22-26ce-4452-bf67-8a71efce888f": {
+        "id": "17c71e22-26ce-4452-bf67-8a71efce888f",
+        "name": "",
+        "path": [
+          {
+            "x": 488,
+            "y": 104
+          },
+          {
+            "x": 536,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "7dd70081-145c-41f9-af86-74b457361de2",
+        "target": "f12edfda-e980-44b1-b4eb-02668655a8cd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1f8f31b8-acf4-429d-836b-ccf96c083f97": {
+        "id": "1f8f31b8-acf4-429d-836b-ccf96c083f97",
+        "name": "Готово",
+        "path": [
+          {
+            "x": 856,
+            "y": 104
+          },
+          {
+            "x": 1008,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "cc00fe84-ae9b-42b9-828f-5eb92a3e9c66",
+        "target": "df5d781b-6b43-426c-a755-b5c371e7e3dc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "20328211-1daf-4729-8c52-7ba85adf9429": {
+        "id": "20328211-1daf-4729-8c52-7ba85adf9429",
+        "name": "",
+        "path": [
+          {
+            "x": 816,
+            "y": 136
+          },
+          {
+            "x": 816,
+            "y": 172
+          },
+          {
+            "x": 1024,
+            "y": 172
+          },
+          {
+            "x": 1024,
+            "y": 120
+          }
+        ],
+        "type": "timer",
+        "source": "cc00fe84-ae9b-42b9-828f-5eb92a3e9c66",
+        "target": "df5d781b-6b43-426c-a755-b5c371e7e3dc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2fbabbe4-c622-4852-930b-63e689ffa62b": {
+        "id": "2fbabbe4-c622-4852-930b-63e689ffa62b",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 104
+          },
+          {
+            "x": 408,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "7118207d-32b5-4355-9101-fd32bec6b349",
+        "target": "7dd70081-145c-41f9-af86-74b457361de2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "897f49ce-1884-4d10-b377-9f57d3c76da9": {
+        "id": "897f49ce-1884-4d10-b377-9f57d3c76da9",
+        "name": "",
+        "path": [
+          {
+            "x": 616,
+            "y": 104
+          },
+          {
+            "x": 776,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "f12edfda-e980-44b1-b4eb-02668655a8cd",
+        "target": "cc00fe84-ae9b-42b9-828f-5eb92a3e9c66",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8fc929d2-e5e6-4d6e-88bb-6235cc9bb5b1": {
+        "id": "8fc929d2-e5e6-4d6e-88bb-6235cc9bb5b1",
+        "name": "",
+        "path": [
+          {
+            "x": 232,
+            "y": 104
+          },
+          {
+            "x": 280,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "362bfe9d-fa2c-4df7-8fcf-43897495c271",
+        "target": "7118207d-32b5-4355-9101-fd32bec6b349",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b59baabf-9359-45ba-ad65-57d1b32d716b": {
+        "id": "b59baabf-9359-45ba-ad65-57d1b32d716b",
+        "name": "",
+        "path": [
+          {
+            "x": 104,
+            "y": 104
+          },
+          {
+            "x": 152,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "362bfe9d-fa2c-4df7-8fcf-43897495c271",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\nasync function line_status_set(): Promise\u003cvoid\u003e {\n    let doc = await Context.data.dismissal_order!.fetch();\n    doc.data.line_status = `${doc.data.__status!.code};${doc.data.__status!.name}`\n    await doc.save();\n}\n\nasync function createStatusObj(app: any, status: string): Promise\u003cvoid\u003e {\n    const obj_status = {\n        'app': {\n            'namespace': app.namespace,\n            'code': app.code,\n            'id': app.id,\n        },\n        'status': status,\n    }\n    Context.data.kedo_status = JSON.stringify(obj_status);\n}\n\nasync function createStatusCanceled(): Promise\u003cvoid\u003e {\n    createStatusObj(Context.data.dismissal_order, 'cancelled');\n}\n\n/** Расчет времени эскалации задачи. */\nasync function calcEscalationTime(): Promise\u003cvoid\u003e {\n    if (!Context.data.dismissal_app) {\n        throw new Error(\"Context.data.dismissal_app is undefined\");\n    }\n\n    const dismissal_app = await Context.data.dismissal_app.fetch();\n\n    if (!dismissal_app.data.date_of_dismissal) {\n        throw new Error(\"Не указана дата увольнения.\");\n    }\n\n    const dismissal_escalation_hr = await Namespace.app.settings.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq(\"dismissal_escalation_hr\")\n        ))\n        .first();\n\n    const hours = dismissal_escalation_hr \u0026\u0026 dismissal_escalation_hr.data.quantity ? dismissal_escalation_hr.data.quantity : 4;\n    \n    const dismissal_date = dismissal_app.data.date_of_dismissal;\n\n    // Получаем продолжительность рабочего дня.\n    const settings = await System.productionSchedule.getGeneralSettings();\n    const working_time = settings.daySchedule.workingTime;\n\n    /*\n        Вычисляем дату/время эскалации на отдел кадров.\n        - дату округляем до полуночи\n        - получаем дату завершения рабочего дня\n        - вычитаем количество часов, заданных настройкой\n    */\n    const escalation_date = dismissal_date\n        .asDatetime(new TTime(0, 0, 0, 0))\n        .add(new Duration(working_time.to, \"seconds\"))\n        .add(new Duration(-hours, \"hours\"))\n\n    Context.data.escalation_time = escalation_date;\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_208a5a8d-b53c-4233-b103-550831d9c1e9",
+      "name": "Распечатать, подписать и передать работодателю",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "7fa2e120-55ab-49b2-baf6-36ac8da51378",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "dismissal_order"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "kedo_status": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_users": {
+        "enabled": false,
+        "conditions": []
+      },
+      "dismissal_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "dismissal_order": {
+        "enabled": false,
+        "conditions": []
+      },
+      "escalation_time": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

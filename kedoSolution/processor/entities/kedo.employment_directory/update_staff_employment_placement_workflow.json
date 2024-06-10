@@ -1,0 +1,979 @@
+{
+  "__id": "018e89f8-23b6-790b-860b-51cf3b67fc2f",
+  "namespace": "kedo.employment_directory",
+  "code": "update_staff_employment_placement_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обновить места занятости сотрудника",
+  "type": "bpmn",
+  "draft": false,
+  "version": 2,
+  "context": [
+    {
+      "code": "iteration_count",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счетчик итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "employment_directory",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "employment_directory",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Справочник занятости"
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staffs",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники (несколько)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-04T09:33:24.535826636Z",
+  "__createdBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "__updatedAt": "2024-04-03T06:04:51.745711023Z",
+  "__updatedBy": "8c6e1940-a6f3-4603-aff7-7cdf41cc9799",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 160,
+        "y": 80,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["b57ced89-a2a0-40d6-adc7-17190dda3843"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обновить места занятости сотрудников",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "017117b1-4ae9-4d98-858a-2b81c48b05a0": {
+        "x": 512,
+        "y": 352,
+        "id": "017117b1-4ae9-4d98-858a-2b81c48b05a0",
+        "icon": "end",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "3fd00226-cfd4-416e-a08c-710cdbfc3f5e": {
+        "x": 688,
+        "y": 80,
+        "id": "3fd00226-cfd4-416e-a08c-710cdbfc3f5e",
+        "icon": "timer",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Отдых",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["395e421f-25ac-4e72-8472-2bba50db1d50"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "days": 0,
+            "kind": "duration",
+            "hours": 0,
+            "minutes": 2,
+            "absolute": true
+          }
+        }
+      },
+      "54115c4c-aebb-4523-94ca-f8b2eb7343d6": {
+        "x": 512,
+        "y": 200,
+        "id": "54115c4c-aebb-4523-94ca-f8b2eb7343d6",
+        "icon": "exclusive",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Есть сотрудники?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "d32b73b4-73b4-4c0b-949e-b46c5b647b73",
+          "995e56ce-b7ae-49a6-af82-e2afd64499d1"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "70b069dd-398a-4f8f-8fa0-3a2209334a68": {
+        "x": 440,
+        "y": 64,
+        "id": "70b069dd-398a-4f8f-8fa0-3a2209334a68",
+        "icon": "script",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Сбросить счетчик итераций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["428a3eaa-a268-45d4-8a1f-51b16344156c"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "resetIterationCounter",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "9d4c80b9-65b6-4bb5-8fb5-5af2207c913d": {
+        "x": 136,
+        "y": 328,
+        "id": "9d4c80b9-65b6-4bb5-8fb5-5af2207c913d",
+        "icon": "script",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Обновить таблицу занятости сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["9768b5ac-cac1-4815-9a4d-8461abc63f72"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateStaffEmployment",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "a7d4d562-0a85-4d8e-9717-2ff1307ffe02": {
+        "x": 160,
+        "y": 504,
+        "id": "a7d4d562-0a85-4d8e-9717-2ff1307ffe02",
+        "icon": "end",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "af4d5ccd-5150-4b09-8656-69bc692b8ec3": {
+        "x": 160,
+        "y": 200,
+        "id": "af4d5ccd-5150-4b09-8656-69bc692b8ec3",
+        "icon": "exclusive",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Неск. сотрудников?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "f6f697cc-6d69-49a2-af25-6856901cee29",
+          "da141306-8564-459d-8765-0101929bdba1",
+          "53f88108-dff4-416d-987b-3142ab0528bb"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "dc6b13b6-1ba2-4c32-bdaf-d9b284477e14": {
+        "x": 632,
+        "y": 184,
+        "id": "dc6b13b6-1ba2-4c32-bdaf-d9b284477e14",
+        "icon": "script",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Увеличить счетчик итераций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["8aba06f9-ff5a-4f6c-aeda-4c25ef32d79a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "incIterationCount",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "df00dbd0-a9c0-43d8-b106-bb2476c00894": {
+        "x": 320,
+        "y": 184,
+        "id": "df00dbd0-a9c0-43d8-b106-bb2476c00894",
+        "icon": "script",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Обработать пачку сотрудников",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3eb58b60-861c-4773-a63f-7ef4c1051c48"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateStaffsEmployment",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e179f4b3-8e3b-4b76-83d8-eafb0b8fbfd3": {
+        "x": 848,
+        "y": 200,
+        "id": "e179f4b3-8e3b-4b76-83d8-eafb0b8fbfd3",
+        "icon": "exclusive",
+        "lane": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Количество итераций",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "7383c8c6-a56e-4d1d-b5ec-6bb8d3f91bf2",
+          "2b077e9c-8b66-48e2-8be5-5a304946dc79"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      }
+    },
+    "lanes": {
+      "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7": {
+        "x": 8,
+        "y": 8,
+        "id": "5ca14b04-c8f0-4585-9cb7-06a32c47fcc7",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 904,
+        "height": 632,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "2b077e9c-8b66-48e2-8be5-5a304946dc79": {
+        "id": "2b077e9c-8b66-48e2-8be5-5a304946dc79",
+        "name": "\u003e= 90",
+        "path": [
+          {
+            "x": 864,
+            "y": 200
+          },
+          {
+            "x": 864,
+            "y": 96
+          },
+          {
+            "x": 720,
+            "y": 96
+          }
+        ],
+        "type": "default",
+        "source": "e179f4b3-8e3b-4b76-83d8-eafb0b8fbfd3",
+        "target": "3fd00226-cfd4-416e-a08c-710cdbfc3f5e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "395e421f-25ac-4e72-8472-2bba50db1d50": {
+        "id": "395e421f-25ac-4e72-8472-2bba50db1d50",
+        "name": "",
+        "path": [
+          {
+            "x": 688,
+            "y": 96
+          },
+          {
+            "x": 520,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "3fd00226-cfd4-416e-a08c-710cdbfc3f5e",
+        "target": "70b069dd-398a-4f8f-8fa0-3a2209334a68",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3eb58b60-861c-4773-a63f-7ef4c1051c48": {
+        "id": "3eb58b60-861c-4773-a63f-7ef4c1051c48",
+        "name": "",
+        "path": [
+          {
+            "x": 400,
+            "y": 216
+          },
+          {
+            "x": 512,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "df00dbd0-a9c0-43d8-b106-bb2476c00894",
+        "target": "54115c4c-aebb-4523-94ca-f8b2eb7343d6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "428a3eaa-a268-45d4-8a1f-51b16344156c": {
+        "id": "428a3eaa-a268-45d4-8a1f-51b16344156c",
+        "name": "",
+        "path": [
+          {
+            "x": 440,
+            "y": 96
+          },
+          {
+            "x": 360,
+            "y": 96
+          },
+          {
+            "x": 360,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "70b069dd-398a-4f8f-8fa0-3a2209334a68",
+        "target": "df00dbd0-a9c0-43d8-b106-bb2476c00894",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "53f88108-dff4-416d-987b-3142ab0528bb": {
+        "id": "53f88108-dff4-416d-987b-3142ab0528bb",
+        "name": "Поля пустые",
+        "path": [
+          {
+            "x": 160,
+            "y": 216
+          },
+          {
+            "x": 56,
+            "y": 216
+          },
+          {
+            "x": 56,
+            "y": 520
+          },
+          {
+            "x": 160,
+            "y": 520
+          }
+        ],
+        "type": "default",
+        "source": "af4d5ccd-5150-4b09-8656-69bc692b8ec3",
+        "target": "a7d4d562-0a85-4d8e-9717-2ff1307ffe02",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7383c8c6-a56e-4d1d-b5ec-6bb8d3f91bf2": {
+        "id": "7383c8c6-a56e-4d1d-b5ec-6bb8d3f91bf2",
+        "name": "\u003c 90",
+        "path": [
+          {
+            "x": 864,
+            "y": 200
+          },
+          {
+            "x": 864,
+            "y": 160
+          },
+          {
+            "x": 360,
+            "y": 160
+          },
+          {
+            "x": 360,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "e179f4b3-8e3b-4b76-83d8-eafb0b8fbfd3",
+        "target": "df00dbd0-a9c0-43d8-b106-bb2476c00894",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "iteration_count"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 90
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "less",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8aba06f9-ff5a-4f6c-aeda-4c25ef32d79a": {
+        "id": "8aba06f9-ff5a-4f6c-aeda-4c25ef32d79a",
+        "name": "",
+        "path": [
+          {
+            "x": 712,
+            "y": 216
+          },
+          {
+            "x": 848,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "dc6b13b6-1ba2-4c32-bdaf-d9b284477e14",
+        "target": "e179f4b3-8e3b-4b76-83d8-eafb0b8fbfd3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9768b5ac-cac1-4815-9a4d-8461abc63f72": {
+        "id": "9768b5ac-cac1-4815-9a4d-8461abc63f72",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 392
+          },
+          {
+            "x": 176,
+            "y": 504
+          }
+        ],
+        "type": "plain",
+        "source": "9d4c80b9-65b6-4bb5-8fb5-5af2207c913d",
+        "target": "a7d4d562-0a85-4d8e-9717-2ff1307ffe02",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "995e56ce-b7ae-49a6-af82-e2afd64499d1": {
+        "id": "995e56ce-b7ae-49a6-af82-e2afd64499d1",
+        "name": "Да",
+        "path": [
+          {
+            "x": 544,
+            "y": 216
+          },
+          {
+            "x": 632,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "54115c4c-aebb-4523-94ca-f8b2eb7343d6",
+        "target": "dc6b13b6-1ba2-4c32-bdaf-d9b284477e14",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "staffs"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b57ced89-a2a0-40d6-adc7-17190dda3843": {
+        "id": "b57ced89-a2a0-40d6-adc7-17190dda3843",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 112
+          },
+          {
+            "x": 176,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "af4d5ccd-5150-4b09-8656-69bc692b8ec3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d32b73b4-73b4-4c0b-949e-b46c5b647b73": {
+        "id": "d32b73b4-73b4-4c0b-949e-b46c5b647b73",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 528,
+            "y": 232
+          },
+          {
+            "x": 528,
+            "y": 352
+          }
+        ],
+        "type": "default",
+        "source": "54115c4c-aebb-4523-94ca-f8b2eb7343d6",
+        "target": "017117b1-4ae9-4d98-858a-2b81c48b05a0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "da141306-8564-459d-8765-0101929bdba1": {
+        "id": "da141306-8564-459d-8765-0101929bdba1",
+        "name": "Несколько сотрудников",
+        "path": [
+          {
+            "x": 192,
+            "y": 216
+          },
+          {
+            "x": 320,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "af4d5ccd-5150-4b09-8656-69bc692b8ec3",
+        "target": "df00dbd0-a9c0-43d8-b106-bb2476c00894",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "staffs"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f6f697cc-6d69-49a2-af25-6856901cee29": {
+        "id": "f6f697cc-6d69-49a2-af25-6856901cee29",
+        "name": "Один сотрудник",
+        "path": [
+          {
+            "x": 176,
+            "y": 232
+          },
+          {
+            "x": 176,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "af4d5ccd-5150-4b09-8656-69bc692b8ec3",
+        "target": "9d4c80b9-65b6-4bb5-8fb5-5af2207c913d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ntype Staff = ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e;\ntype EmploymentDirectory = ApplicationItem\u003cApplication$kedo$employment_directory$Data, Application$kedo$employment_directory$Params\u003e;\n\ntype EmploymentTable = TTable\u003cTable$kedo$staff$employment_table$Row, Table$kedo$staff$employment_table$Result\u003e;\ntype EmploymentTableRow = Table$kedo$staff$employment_table$Row\n\nconst PACK_SIZE = 30;\nconst PROMISE_SIZE = 20;\n\nasync function updateStaffsEmployment(): Promise\u003cvoid\u003e {\n    const staffs_app = (Context.data.staffs ?? []).splice(0, PACK_SIZE);\n\n    if (staffs_app.length == 0) {\n        Context.data.staffs = undefined;\n        return;\n    }\n\n    const staffs = await Context.fields.staffs.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__id.in(staffs_app.map(s =\u003e s.id))\n        ))\n        .size(staffs_app.length)\n        .all();\n\n    await Promise.all(staffs.map(s =\u003e dedublicateTable(s)));\n    await Promise.all(staffs.map(s =\u003e updateEmploymentTable(s)));\n}\n\nasync function updateStaffEmployment(): Promise\u003cvoid\u003e {\n    if (!Context.data.staff) {\n        throw new Error(\"Context.data.staff is undefined. Не указан сотрудник.\");\n    }\n\n    const staff = await Context.data.staff.fetch();\n\n    await dedublicateTable(staff)\n    await updateEmploymentTable(staff);\n}\n\nasync function updateEmploymentTable(staff: Staff): Promise\u003cvoid\u003e {\n    const employment_table = staff.data.employment_table;\n\n    if (!employment_table || employment_table.length == 0) {\n        return;\n    }\n\n    const staff_employment = await Context.fields.employment_directory.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.staff.link(staff)\n        ))\n        .size(1000)\n        .all();\n\n    let promises: Promise\u003cvoid\u003e[] = [];\n\n    for (const row of employment_table) {\n        let employment_app: EmploymentDirectory;\n\n        let employment_app_index = staff_employment.findIndex(f =\u003e f.id == row.employment_placement_app?.id);\n\n        if (employment_app_index === -1) {\n            employment_app = Context.fields.employment_directory.app.create();\n        } else {\n            employment_app = staff_employment[employment_app_index];\n            staff_employment.splice(employment_app_index, 1);\n        }\n\n        employment_app.data.staff = staff;\n        employment_app.data.position = row.position;\n        employment_app.data.type_employment = row.type_employment;\n        employment_app.data.subdivision = row.subdivision;\n        employment_app.data.organization = row.organization;\n        employment_app.data.id_1c = row.id_1c;\n        employment_app.data.admission_date_organization = row.admission_date_organization;\n        employment_app.data.admission_date_position = row.admission_date_position;\n        employment_app.data.date_by = row.date_by;\n        employment_app.data.staff_full_name = staff.data.__name;\n\n        promises.push(\n            employment_app.save()\n                .then(() =\u003e {\n                    row.employment_placement_app = employment_app;\n                })\n        );\n\n        if (promises.length \u003e PROMISE_SIZE) {\n            await Promise.all(promises);\n            promises = [];\n        }\n    }\n\n    await Promise.all(promises);\n\n    /** Все строки о местах занятости сотрудника, которых больше нет в таблице занятости переводим в статус \"Недействительно\" */\n    await Promise.all(staff_employment.map(f =\u003e f.setStatus(Context.fields.employment_directory.app.fields.__status.variants.not_valid)));\n\n    return staff.save();\n}\n\n/** Дедубликация таблицы занятости сотрудника. */\nasync function dedublicateTable(staff: Staff): Promise\u003cvoid\u003e {\n    function checkRow(row: EmploymentTableRow): number {\n        let score = 0;\n\n        if (row.id_1c \u0026\u0026 row.id_1c.length !== 0) {\n            score++;\n        }\n\n        if (row.admission_date_organization) {\n            score++;\n        }\n\n        if (row.admission_date_position) {\n            score++;\n        }\n\n        if (row.organization) {\n            score++;\n        }\n\n        if (row.subdivision) {\n            score++;\n        }\n\n        if (row.position) {\n            score++;\n        }\n\n        if (row.type_employment) {\n            score++;\n        }\n\n        return score;\n    }\n\n    const employment_table = staff.data.employment_table;\n\n    if (!employment_table || employment_table.length == 0) {\n        return;\n    }\n\n    for (let i = employment_table.length - 1; i \u003e= 0; i--) {\n        const row = employment_table[i];\n\n        // Проверяем таблицу занятости в карточке сотрудника на наличие дублирующих записей.\n        // Проверку на дубль выполняем по позиции и виду занятости, т.к. одна и та же позиция по одному и тому же виду занятости быть не может.\n        const duble_index = employment_table.findIndex((r, index) =\u003e r.position?.id == row.position?.id \u0026\u0026 r.type_employment?.code == row.type_employment?.code \u0026\u0026 index !== i);\n\n        if (duble_index !== -1) {\n            const duble = employment_table[duble_index];\n\n            // Для дубликата и текущей строки выполняем подсчет \"очков\":\n            // если в дубле больше данных, чем в текущей строке, то удаляем текущую строку, иначе удаляем дубль\n            const duble_score = checkRow(duble);\n            const current_row_score = checkRow(row);\n\n            if (duble_score \u003e current_row_score) {\n                employment_table.delete(i);\n            } else {\n                employment_table.delete(duble_index);\n            }\n        }\n    }\n\n    return staff.save();\n}\n\nasync function resetIterationCounter(): Promise\u003cvoid\u003e {\n    Context.data.iteration_count = 0;\n}\n\nasync function incIterationCount(): Promise\u003cvoid\u003e {\n    Context.data.iteration_count = (Context.data.iteration_count ?? 0) + 1;\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": false,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "employment_directory",
+          "data": {
+            "code": "employment_directory",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Справочник занятости"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "employment_directory"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": false,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staffs": {
+        "enabled": false,
+        "conditions": []
+      },
+      "iteration_count": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,1962 @@
+{
+  "__id": "018c8757-193c-7ee9-a7d7-56a976ce3e9b",
+  "namespace": "kedo.staff",
+  "code": "generation_revocation_certificate",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Генерация отзыва сертификата ЭП",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "reason",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Причина отзыва",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "number_of_certificates",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество сертификатов",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "certificates_length",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "не исп",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "staff_inn",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ИНН сотрудника",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staff_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудник (пользователь)",
+        "data": {}
+      }
+    },
+    {
+      "code": "external_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Внешний идентификатор",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "digital_signs_list",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "digital_signs_list",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Справочник сертификатов ЭП",
+        "data": {}
+      }
+    },
+    {
+      "code": "date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата отзыва",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл заявления",
+        "data": {}
+      }
+    },
+    {
+      "code": "initiator",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Инициатор процесса",
+        "data": {}
+      }
+    },
+    {
+      "code": "certificate",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "digital_signs_list",
+        "filter": {
+          "value": {
+            "tf": {
+              "inn": {
+                "context": "staff_inn"
+              }
+            }
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сертификат для отзыва",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-07-31T18:40:21.046207268Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2023-08-14T13:37:58.809864177Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 184,
+        "y": 64,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["791d8f5f-324a-488c-b7ef-1361aa292644"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Генерация отзыва сертификата ЭП ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0c2596af-84ff-4cef-9e1a-c9c5a4e16969": {
+        "x": 304,
+        "y": 616,
+        "id": "0c2596af-84ff-4cef-9e1a-c9c5a4e16969",
+        "icon": "system",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Перевод названия файла",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "697612f5-d106-4071-8a77-46f912b7607e",
+          "b1773688-d7fa-4b97-bbd9-cdb37f6b83e1"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "translate",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "b1773688-d7fa-4b97-bbd9-cdb37f6b83e1",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "17f80362-61c5-4672-8e54-1b89744f98a4": {
+        "x": 312,
+        "y": 720,
+        "id": "17f80362-61c5-4672-8e54-1b89744f98a4",
+        "icon": "user",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Передать заявление на отзыв ЭП в УЦ",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "07c7ba66-e8c6-4df6-b739-28b231de40f6",
+          "bc7be823-7002-40cb-a625-cb89b6236f3b"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Передать заявление на отзыв ЭП {$staff} в УЦ",
+          "notify": true,
+          "formCode": "form_c9b4aee2-bb02-45d1-9230-0b089dc2c393",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "18aef1d8-d0dd-4292-8223-76fb316ffb48": {
+        "x": 184,
+        "y": 240,
+        "id": "18aef1d8-d0dd-4292-8223-76fb316ffb48",
+        "icon": "exclusive",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Сертификаты найдены?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "b6c0fec4-b5ba-4467-a802-ad477fc235e6",
+          "217ec909-2425-44b4-8171-08384c1c089e",
+          "097fe4f3-5160-4a21-a257-7ebd70495567"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "25f7a6cf-1ef1-414f-8947-f9b357b4987e": {
+        "x": 160,
+        "y": 120,
+        "id": "25f7a6cf-1ef1-414f-8947-f9b357b4987e",
+        "icon": "script",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Поиск сертификатов сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["eac8e1ec-3eb3-4db7-b8d0-b479c7aade1b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "searchCertificates",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "388771aa-9bfe-4c4d-a6fe-6ae668c05a1b": {
+        "x": 176,
+        "y": 720,
+        "id": "388771aa-9bfe-4c4d-a6fe-6ae668c05a1b",
+        "icon": "system",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Согласие на КЭДО = нет",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["a53087bc-5bb2-4d4b-9813-1d578c91f9ee"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "kedo_agreement"
+              }
+            }
+          ],
+          "variable": "staff"
+        }
+      },
+      "44748f08-c422-4f8a-ac0d-517ecdf7f912": {
+        "x": 304,
+        "y": 320,
+        "id": "44748f08-c422-4f8a-ac0d-517ecdf7f912",
+        "icon": "script",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Получить id сертификата",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["272e211c-1b70-4608-a5e4-c846a6276c4b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getExternalId",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "5f2e3517-c0fb-4354-8f03-895a10808bcc": {
+        "x": 480,
+        "y": 616,
+        "id": "5f2e3517-c0fb-4354-8f03-895a10808bcc",
+        "icon": "user",
+        "lane": "b4cd0d69-a18b-4a90-9132-93ed7678e3c9",
+        "name": "Отзыв ЭП. Распечатать, подписать или зайти к работодателю",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "c5bbf938-7d41-43a1-b625-17c6b680480b",
+          "7279f6a4-39f6-4f31-bc3e-b2eeb65514f5"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Отзыв ЭП. Распечатать, подписать или зайти к работодателю",
+          "notify": true,
+          "formCode": "form_c9b4aee2-bb02-45d1-9230-0b089dc2c393",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "67498dd8-a7d8-40e6-99d0-896140918f02": {
+        "x": 304,
+        "y": 424,
+        "id": "67498dd8-a7d8-40e6-99d0-896140918f02",
+        "icon": "doctemplate",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Сгенерировать заявление на отзыв сертификата ЭП",
+        "type": "doc_template",
+        "color": "#f0f4c3",
+        "exits": ["9a5505d0-265e-4152-9268-096298254996"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "71176374-d5cd-419f-9dc7-08a1413ef446",
+          "toPDF": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "external_id"
+              },
+              "target": {
+                "kind": "context",
+                "value": "external_id"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "reason"
+              },
+              "target": {
+                "kind": "context",
+                "value": "reason"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "namespace": "kedo.staff",
+          "outputFileCode": "file",
+          "outputFileName": "Заявление на отзыв сертификата ЭП {$staff}.docx"
+        }
+      },
+      "688583c7-7b5f-4782-9d06-13ab37a541fa": {
+        "x": 64,
+        "y": 432,
+        "id": "688583c7-7b5f-4782-9d06-13ab37a541fa",
+        "icon": "end",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "8b4d70e7-a649-4246-bb1e-4aa46c04f3b3": {
+        "x": 96,
+        "y": 736,
+        "id": "8b4d70e7-a649-4246-bb1e-4aa46c04f3b3",
+        "icon": "end",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "af291fad-9b3d-443f-b859-fd78d73908d7": {
+        "x": 160,
+        "y": 320,
+        "id": "af291fad-9b3d-443f-b859-fd78d73908d7",
+        "icon": "user",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "У сотрудника несколько сертификатов ЭП",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": ["da6ef5b4-ec89-47f3-a493-d247a3939896"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "У сотрудника {$staff} несколько сертификатов ЭП. Укажите сертификат для отзыва",
+          "notify": true,
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [
+            {
+              "code": "digital_signs_list",
+              "data": {
+                "listSettings": {
+                  "sort": {
+                    "field": "",
+                    "direction": "",
+                    "additionalSortSettings": null
+                  },
+                  "limit": 10,
+                  "buttons": [
+                    {
+                      "id": "66d9a5ef-b7de-40e5-8f4e-f2961b653cf5",
+                      "code": "create",
+                      "type": "primary",
+                      "label": "+ Справочник сертификатов ЭП",
+                      "bindings": [],
+                      "immutable": false,
+                      "silentRun": false,
+                      "permission": "create",
+                      "defaultValues": {},
+                      "useSimpleForm": false,
+                      "simpleFormSize": "default",
+                      "allowedGroupIds": [],
+                      "allowedStatusIds": [],
+                      "processLinkChanged": false,
+                      "showForAllowedStatuses": false,
+                      "showForAllowedStatusGroups": false
+                    }
+                  ],
+                  "aggregateField": "",
+                  "autoUpdateCards": false,
+                  "enabledMassActions": true
+                },
+                "tableSettings": {
+                  "displayFields": [
+                    "status",
+                    "external_id",
+                    "user",
+                    "__createdAt"
+                  ]
+                },
+                "createButtonId": "",
+                "showCreateItem": true,
+                "showSelectItem": true
+              },
+              "display": "Сертификаты ЭП сотрудника",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "certificate",
+              "data": {
+                "listSettings": {
+                  "sort": {
+                    "field": "",
+                    "direction": "",
+                    "additionalSortSettings": null
+                  },
+                  "limit": 10,
+                  "buttons": [
+                    {
+                      "id": "66d9a5ef-b7de-40e5-8f4e-f2961b653cf5",
+                      "code": "create",
+                      "type": "primary",
+                      "label": "+ Справочник сертификатов ЭП",
+                      "bindings": [],
+                      "immutable": false,
+                      "silentRun": false,
+                      "permission": "create",
+                      "defaultValues": {},
+                      "useSimpleForm": false,
+                      "simpleFormSize": "default",
+                      "allowedGroupIds": [],
+                      "allowedStatusIds": [],
+                      "processLinkChanged": false,
+                      "showForAllowedStatuses": false,
+                      "showForAllowedStatusGroups": false
+                    }
+                  ],
+                  "aggregateField": "",
+                  "autoUpdateCards": false,
+                  "enabledMassActions": true
+                },
+                "tableSettings": {
+                  "displayFields": [
+                    "status",
+                    "external_id",
+                    "user",
+                    "__createdAt"
+                  ]
+                },
+                "createButtonId": "",
+                "showCreateItem": false,
+                "showSelectItem": true
+              },
+              "tooltip": "",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "ba1a35b2-1a81-4b54-b513-2b4ecd626f18": {
+        "x": 336,
+        "y": 832,
+        "id": "ba1a35b2-1a81-4b54-b513-2b4ecd626f18",
+        "icon": "end",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "bce1c304-0633-4976-be35-11f358535612": {
+        "x": 40,
+        "y": 320,
+        "id": "bce1c304-0633-4976-be35-11f358535612",
+        "icon": "user",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "У сотрудника отсутствуют сертификаты ЭП",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "80eb6a33-9b96-4e0c-ab50-28cfe53cce59",
+          "5d7116cf-aedf-4e9d-845c-c09ee2a5ae72"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "У сотрудника {$staff} отсутствуют сертификаты ЭП",
+          "notify": true,
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [
+            {
+              "code": "staff",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "cd488aaf-bcbd-441e-ad3f-bb9702ca12dd": {
+        "x": 624,
+        "y": 632,
+        "id": "cd488aaf-bcbd-441e-ad3f-bb9702ca12dd",
+        "icon": "end",
+        "lane": "b4cd0d69-a18b-4a90-9132-93ed7678e3c9",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "e77b9f97-b427-42ba-ad5d-b43c95255f51": {
+        "x": 304,
+        "y": 528,
+        "id": "e77b9f97-b427-42ba-ad5d-b43c95255f51",
+        "icon": "approval_list",
+        "lane": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Конвертация файла в PDF 1a",
+        "type": "pdf_convert",
+        "color": "#f0f4c3",
+        "exits": ["c8627f8c-59da-49a2-b1f3-4493d60a2582"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "inputFileCode": "file",
+          "outputFileCode": "file",
+          "outputFileName": "Заявление на отзыв сертификата ЭП {$staff}.pdf"
+        }
+      }
+    },
+    "lanes": {
+      "2a2da63e-f258-42f5-bc26-b2ef055ed75b": {
+        "x": 8,
+        "y": 8,
+        "id": "2a2da63e-f258-42f5-bc26-b2ef055ed75b",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 444,
+        "height": 976,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "b4cd0d69-a18b-4a90-9132-93ed7678e3c9": {
+        "x": 452,
+        "y": 8,
+        "id": "b4cd0d69-a18b-4a90-9132-93ed7678e3c9",
+        "name": "Сотрудник (пользователь)",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 976,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "staff_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "07c7ba66-e8c6-4df6-b739-28b231de40f6": {
+        "id": "07c7ba66-e8c6-4df6-b739-28b231de40f6",
+        "name": "Готово",
+        "path": [
+          {
+            "x": 312,
+            "y": 752
+          },
+          {
+            "x": 256,
+            "y": 752
+          }
+        ],
+        "type": "plain",
+        "source": "17f80362-61c5-4672-8e54-1b89744f98a4",
+        "target": "388771aa-9bfe-4c4d-a6fe-6ae668c05a1b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "097fe4f3-5160-4a21-a257-7ebd70495567": {
+        "id": "097fe4f3-5160-4a21-a257-7ebd70495567",
+        "name": "1 сертификат",
+        "path": [
+          {
+            "x": 216,
+            "y": 256
+          },
+          {
+            "x": 344,
+            "y": 256
+          },
+          {
+            "x": 344,
+            "y": 320
+          }
+        ],
+        "type": "default",
+        "source": "18aef1d8-d0dd-4292-8223-76fb316ffb48",
+        "target": "44748f08-c422-4f8a-ac0d-517ecdf7f912",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "217ec909-2425-44b4-8171-08384c1c089e": {
+        "id": "217ec909-2425-44b4-8171-08384c1c089e",
+        "name": "Больше 1 сертификата",
+        "path": [
+          {
+            "x": 200,
+            "y": 272
+          },
+          {
+            "x": 200,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "18aef1d8-d0dd-4292-8223-76fb316ffb48",
+        "target": "af291fad-9b3d-443f-b859-fd78d73908d7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "number_of_certificates"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 1
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "272e211c-1b70-4608-a5e4-c846a6276c4b": {
+        "id": "272e211c-1b70-4608-a5e4-c846a6276c4b",
+        "name": "",
+        "path": [
+          {
+            "x": 344,
+            "y": 384
+          },
+          {
+            "x": 344,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "44748f08-c422-4f8a-ac0d-517ecdf7f912",
+        "target": "67498dd8-a7d8-40e6-99d0-896140918f02",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5d7116cf-aedf-4e9d-845c-c09ee2a5ae72": {
+        "id": "5d7116cf-aedf-4e9d-845c-c09ee2a5ae72",
+        "name": "Отменить",
+        "path": [
+          {
+            "x": 80,
+            "y": 384
+          },
+          {
+            "x": 80,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "bce1c304-0633-4976-be35-11f358535612",
+        "target": "688583c7-7b5f-4782-9d06-13ab37a541fa",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "697612f5-d106-4071-8a77-46f912b7607e": {
+        "id": "697612f5-d106-4071-8a77-46f912b7607e",
+        "name": "",
+        "path": [
+          {
+            "x": 384,
+            "y": 664
+          },
+          {
+            "x": 480,
+            "y": 664
+          }
+        ],
+        "type": "plain",
+        "source": "0c2596af-84ff-4cef-9e1a-c9c5a4e16969",
+        "target": "5f2e3517-c0fb-4354-8f03-895a10808bcc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7279f6a4-39f6-4f31-bc3e-b2eeb65514f5": {
+        "id": "7279f6a4-39f6-4f31-bc3e-b2eeb65514f5",
+        "name": "Отмена",
+        "path": [
+          {
+            "x": 560,
+            "y": 648
+          },
+          {
+            "x": 624,
+            "y": 648
+          }
+        ],
+        "type": "plain",
+        "source": "5f2e3517-c0fb-4354-8f03-895a10808bcc",
+        "target": "cd488aaf-bcbd-441e-ad3f-bb9702ca12dd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "791d8f5f-324a-488c-b7ef-1361aa292644": {
+        "id": "791d8f5f-324a-488c-b7ef-1361aa292644",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 96
+          },
+          {
+            "x": 200,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "25f7a6cf-1ef1-414f-8947-f9b357b4987e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "80eb6a33-9b96-4e0c-ab50-28cfe53cce59": {
+        "id": "80eb6a33-9b96-4e0c-ab50-28cfe53cce59",
+        "name": "Повторить запрос",
+        "path": [
+          {
+            "x": 60,
+            "y": 320
+          },
+          {
+            "x": 60,
+            "y": 152
+          },
+          {
+            "x": 160,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "bce1c304-0633-4976-be35-11f358535612",
+        "target": "25f7a6cf-1ef1-414f-8947-f9b357b4987e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9a5505d0-265e-4152-9268-096298254996": {
+        "id": "9a5505d0-265e-4152-9268-096298254996",
+        "name": "",
+        "path": [
+          {
+            "x": 344,
+            "y": 488
+          },
+          {
+            "x": 344,
+            "y": 528
+          }
+        ],
+        "type": "plain",
+        "source": "67498dd8-a7d8-40e6-99d0-896140918f02",
+        "target": "e77b9f97-b427-42ba-ad5d-b43c95255f51",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a53087bc-5bb2-4d4b-9813-1d578c91f9ee": {
+        "id": "a53087bc-5bb2-4d4b-9813-1d578c91f9ee",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 752
+          },
+          {
+            "x": 128,
+            "y": 752
+          }
+        ],
+        "type": "plain",
+        "source": "388771aa-9bfe-4c4d-a6fe-6ae668c05a1b",
+        "target": "8b4d70e7-a649-4246-bb1e-4aa46c04f3b3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b1773688-d7fa-4b97-bbd9-cdb37f6b83e1": {
+        "id": "b1773688-d7fa-4b97-bbd9-cdb37f6b83e1",
+        "name": "",
+        "path": [
+          {
+            "x": 384,
+            "y": 648
+          },
+          {
+            "x": 480,
+            "y": 648
+          }
+        ],
+        "type": "error",
+        "source": "0c2596af-84ff-4cef-9e1a-c9c5a4e16969",
+        "target": "5f2e3517-c0fb-4354-8f03-895a10808bcc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b6c0fec4-b5ba-4467-a802-ad477fc235e6": {
+        "id": "b6c0fec4-b5ba-4467-a802-ad477fc235e6",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 184,
+            "y": 256
+          },
+          {
+            "x": 80,
+            "y": 256
+          },
+          {
+            "x": 80,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "18aef1d8-d0dd-4292-8223-76fb316ffb48",
+        "target": "bce1c304-0633-4976-be35-11f358535612",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "digital_signs_list"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bc7be823-7002-40cb-a625-cb89b6236f3b": {
+        "id": "bc7be823-7002-40cb-a625-cb89b6236f3b",
+        "name": "Отмена",
+        "path": [
+          {
+            "x": 352,
+            "y": 784
+          },
+          {
+            "x": 352,
+            "y": 832
+          }
+        ],
+        "type": "plain",
+        "source": "17f80362-61c5-4672-8e54-1b89744f98a4",
+        "target": "ba1a35b2-1a81-4b54-b513-2b4ecd626f18",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c5bbf938-7d41-43a1-b625-17c6b680480b": {
+        "id": "c5bbf938-7d41-43a1-b625-17c6b680480b",
+        "name": "Готово",
+        "path": [
+          {
+            "x": 520,
+            "y": 680
+          },
+          {
+            "x": 520,
+            "y": 752
+          },
+          {
+            "x": 392,
+            "y": 752
+          }
+        ],
+        "type": "plain",
+        "source": "5f2e3517-c0fb-4354-8f03-895a10808bcc",
+        "target": "17f80362-61c5-4672-8e54-1b89744f98a4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c8627f8c-59da-49a2-b1f3-4493d60a2582": {
+        "id": "c8627f8c-59da-49a2-b1f3-4493d60a2582",
+        "name": "",
+        "path": [
+          {
+            "x": 344,
+            "y": 592
+          },
+          {
+            "x": 344,
+            "y": 616
+          }
+        ],
+        "type": "plain",
+        "source": "e77b9f97-b427-42ba-ad5d-b43c95255f51",
+        "target": "0c2596af-84ff-4cef-9e1a-c9c5a4e16969",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "da6ef5b4-ec89-47f3-a493-d247a3939896": {
+        "id": "da6ef5b4-ec89-47f3-a493-d247a3939896",
+        "name": "Готово",
+        "path": [
+          {
+            "x": 240,
+            "y": 352
+          },
+          {
+            "x": 304,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "af291fad-9b3d-443f-b859-fd78d73908d7",
+        "target": "44748f08-c422-4f8a-ac0d-517ecdf7f912",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "eac8e1ec-3eb3-4db7-b8d0-b479c7aade1b": {
+        "id": "eac8e1ec-3eb3-4db7-b8d0-b479c7aade1b",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 184
+          },
+          {
+            "x": 200,
+            "y": 240
+          }
+        ],
+        "type": "plain",
+        "source": "25f7a6cf-1ef1-414f-8947-f9b357b4987e",
+        "target": "18aef1d8-d0dd-4292-8223-76fb316ffb48",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function searchCertificates(): Promise\u003cvoid\u003e {\n    const staff = await Context.data.staff!.fetch();\n    Context.data.staff_user = staff.data.ext_user;\n    Context.data.staff_inn = staff.data.inn;\n    const digital_signs_list = await Context.fields.digital_signs_list.app.search()\n    .where((f,g) =\u003e g.and(\n        f.__deletedAt.eq(null),\n        f.user.eq(Context.data.staff_user!)\n    ))\n    .all();\n    if (digital_signs_list \u0026\u0026 digital_signs_list.length \u003e 0) {\n        Context.data.digital_signs_list = digital_signs_list;\n        Context.data.number_of_certificates = digital_signs_list.length;\n        if (Context.data.number_of_certificates === 1) {\n            Context.data.certificate = digital_signs_list[0];\n        }\n    }\n}\n\nasync function getExternalId(): Promise \u003cvoid\u003e {\n    const certificate = await Context.data.certificate!.fetch();\n    Context.data.external_id = certificate.data.external_id;\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_c9b4aee2-bb02-45d1-9230-0b089dc2c393",
+      "name": "Отзыв ЭП. Распечатать, подписать или зайти к работодателю",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "f07aefcd-da55-44ad-a23e-b91b46e5b221",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "reason": {
+        "enabled": false,
+        "conditions": []
+      },
+      "initiator": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_inn": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "certificate": {
+        "enabled": false,
+        "conditions": []
+      },
+      "external_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "digital_signs_list": {
+        "enabled": false,
+        "conditions": []
+      },
+      "certificates_length": {
+        "enabled": false,
+        "conditions": []
+      },
+      "number_of_certificates": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    const refItem = new RefItem('kedo', 'organization', Context.data.organization.id);\n    const organiaztion = await refItem.fetch();\n    if (!organiaztion.data.position_head) {\n        throw new Error(\"Не указана должность руководителя организации\");\n    }\n    const position_head = await organiaztion.data.position_head.fetch();\n    const staff = position_head.data.staff;\n    if (staff && staff.length > 0) {\n        const head_staffs = await Promise.all(staff.map(f => f.fetch()));\n        for (const head_staff of head_staffs) {\n            if (head_staff.data.__status && head_staff.data.__status.code == head_staff.fields.__status.variants.signed_documents.code) {\n                Context.data.head_staff = head_staff;\n                Context.data.head_staff_user = head_staff.data.ext_user;\n                break;\n            }\n        }\n        if (!Context.data.head_staff)\n            throw new Error(\"На должности руководителя не найдено ни одного трудоустроенного сотрудника\");\n    }\n    else {\n        throw new Error(\"На должности руководителя организации не указаны сотрудники\");\n    }\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

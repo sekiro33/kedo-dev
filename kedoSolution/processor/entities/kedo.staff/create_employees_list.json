@@ -1,0 +1,332 @@
+{
+  "__id": "018c8757-193c-7ea7-b9e8-2c158f01b5ef",
+  "namespace": "kedo.staff",
+  "code": "create_employees_list",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Выдача прав на элемент в зависимости от организации",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "number_of_employees",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество сотрудников",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "current_iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер итерации",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "employees_to_create_and_update",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": true,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники на создание и обновление",
+        "data": {}
+      }
+    },
+    {
+      "code": "doc",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2022-11-07T04:38:20.878747742Z",
+  "__createdBy": "b3904ee1-c631-4888-88ee-3922dc2fcbea",
+  "__updatedAt": "2023-06-28T11:29:29.092074104Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 160,
+        "y": 80,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "cc3cbdf7-a21a-4fd1-bea0-8091f5311732",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["60be2073-e619-4bf0-85f8-74d04592e3aa"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Выдача прав ({$doc})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "6222f899-87fb-4d8b-9e09-ec5c6a14bd4b": {
+        "x": 160,
+        "y": 288,
+        "id": "6222f899-87fb-4d8b-9e09-ec5c6a14bd4b",
+        "icon": "end",
+        "lane": "cc3cbdf7-a21a-4fd1-bea0-8091f5311732",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "845da76e-f5c5-4c32-b3be-8168dfdda414": {
+        "x": 136,
+        "y": 168,
+        "id": "845da76e-f5c5-4c32-b3be-8168dfdda414",
+        "icon": "script",
+        "lane": "cc3cbdf7-a21a-4fd1-bea0-8091f5311732",
+        "name": "Выдаём права на элемент пользователям из этой организации",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["360d611f-9274-4618-bccf-8f285963e536"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setPermissions",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "cc3cbdf7-a21a-4fd1-bea0-8091f5311732": {
+        "x": 8,
+        "y": 8,
+        "id": "cc3cbdf7-a21a-4fd1-bea0-8091f5311732",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 376,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "360d611f-9274-4618-bccf-8f285963e536": {
+        "id": "360d611f-9274-4618-bccf-8f285963e536",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 232
+          },
+          {
+            "x": 176,
+            "y": 288
+          }
+        ],
+        "type": "plain",
+        "source": "845da76e-f5c5-4c32-b3be-8168dfdda414",
+        "target": "6222f899-87fb-4d8b-9e09-ec5c6a14bd4b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "60be2073-e619-4bf0-85f8-74d04592e3aa": {
+        "id": "60be2073-e619-4bf0-85f8-74d04592e3aa",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 112
+          },
+          {
+            "x": 176,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "845da76e-f5c5-4c32-b3be-8168dfdda414",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function setPermissions(): Promise\u003cvoid\u003e {\n    const nameSpace = 'testovyi';\n    const staff = await Context.data.staff!.fetch();\n    const organisation = staff.data.organization!;\n    const groups = await System.userGroups.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.namespace.eq(nameSpace)\n        ))\n        .size(10000)\n        .all();\n    const myGroup = groups.find(f =\u003e f.data.description == organisation.id);\n    if (myGroup) {\n        const app = await Context.data.doc!.fetch();\n        const perm = new Permissions([new PermissionValue(myGroup, [PermissionType.READ])]);\n        await app.setPermissions(perm)\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": false,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "doc": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "number_of_employees": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employees_to_create_and_update": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

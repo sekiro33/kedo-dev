@@ -1,0 +1,1284 @@
+{
+  "__id": "018c8757-193d-7f39-b882-44c36c8c7c76",
+  "namespace": "kedo_ext",
+  "code": "approval_dismissal",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Согласование заявления на увольнение",
+  "type": "bpmn",
+  "draft": false,
+  "version": 4,
+  "context": [
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "gr_dep",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Отдел кадров",
+        "data": {}
+      }
+    },
+    {
+      "code": "resignation_letter",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "letter_of_resignation",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявление на увольнение",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-04-11T06:16:49.145353767Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2024-01-31T11:20:56.115968552Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "249645fb-d885-41b8-96eb-7d5108da31da",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["6c81e5d8-006d-4eea-9716-2b03d205010e"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Согласование заявления на увольнение - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "06d93acb-5797-4bbc-91e6-9082e5e18195": {
+        "x": 80,
+        "y": 256,
+        "id": "06d93acb-5797-4bbc-91e6-9082e5e18195",
+        "icon": "notification",
+        "lane": "249645fb-d885-41b8-96eb-7d5108da31da",
+        "name": "Не удалось получить участников групп",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["ba54bb4e-56f7-424d-a362-6ad48b64fa29"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageHeader": "Не удалось получить участников групп"
+        }
+      },
+      "1a462508-5897-47b2-b218-ee1cd4d974e8": {
+        "x": 408,
+        "y": 160,
+        "id": "1a462508-5897-47b2-b218-ee1cd4d974e8",
+        "icon": "approval_list",
+        "lane": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "name": "Согласовано",
+        "type": "approval_list_close",
+        "color": "#f0f4c3",
+        "exits": ["d95419d2-eb7c-4d16-a78d-c42429b83210"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "approved": true,
+          "withoutNotify": false,
+          "targetFieldCode": "resignation_letter"
+        }
+      },
+      "41ec957a-2e37-4cee-8bce-2722adfe4859": {
+        "x": 80,
+        "y": 160,
+        "id": "41ec957a-2e37-4cee-8bce-2722adfe4859",
+        "icon": "system",
+        "lane": "249645fb-d885-41b8-96eb-7d5108da31da",
+        "name": "Получаем участников групп Отдел кадров",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "6b4482e4-5aa9-4e91-9f40-a38da8d77df5",
+          "ceb38cd9-b72c-478b-884b-ae20ef7078ef"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_users",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "resignation_letter.staff.organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "gr_dep"
+              },
+              "target": {
+                "kind": "context",
+                "value": "hr_dep"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "accounting"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "matching_finance"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "office_managers"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "signatories"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "ceb38cd9-b72c-478b-884b-ae20ef7078ef",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "boss": null,
+              "error": null,
+              "groups": null,
+              "hr_dep": {
+                "kind": "Mapped",
+                "path": ["gr_dep"]
+              },
+              "boss_app": null,
+              "accounting": null,
+              "signatories": null,
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "resignation_letter.staff.organization"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "organization"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "gr_dep"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "accounting"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "matching_finance"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "office_managers"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "signatories"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "error"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "approved",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Согласовано"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "gr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "resignation_letter",
+                    "data": {
+                      "code": "letter_of_resignation",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявление на увольнение"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "organization",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": true,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "accounting",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Бухгалтерия",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "matching_finance",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Ответственные за финансы ",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "office_managers",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Офис менеджеры",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatories",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "organization": {
+                "kind": "Mapped",
+                "path": ["resignation_letter", "staff", "organization"]
+              },
+              "office_managers": null,
+              "matching_finance": null,
+              "__dynamic_binding": {}
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "7bfb5e0b-5684-483f-8469-4003a527c1cb": {
+        "x": 560,
+        "y": 160,
+        "id": "7bfb5e0b-5684-483f-8469-4003a527c1cb",
+        "icon": "system",
+        "lane": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "name": "Согласовано = true",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["a7a4cde4-f7e4-4d5b-b2bf-42e38663cd1a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "80ec454e-2357-40d6-9408-8671da37ca55": {
+        "x": 280,
+        "y": 360,
+        "id": "80ec454e-2357-40d6-9408-8671da37ca55",
+        "icon": "system",
+        "lane": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "name": "Согласовано = false",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["c05f7d50-5f3a-4983-bb5d-08cd6614bff5"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "a2cb8ea8-8268-4abe-92ae-8c0586cb9937": {
+        "x": 280,
+        "y": 160,
+        "id": "a2cb8ea8-8268-4abe-92ae-8c0586cb9937",
+        "icon": "send_doc",
+        "lane": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "loop": "parallel",
+        "name": "Согласование заявления на увольнение",
+        "type": "approval_list_process",
+        "color": "#f0f4c3",
+        "exits": [
+          "4c634d31-5077-435b-ab11-970b033ac89d",
+          "6170c51f-3cbc-4d6e-a659-ba2f315aa3b2"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "cleanUp": false,
+          "taskName": "{$resignation_letter}: Согласовать",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 2,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [],
+          "settingSign": {
+            "isSign": "disabled"
+          },
+          "withoutNotify": false,
+          "targetFieldCode": "resignation_letter",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {}
+          },
+          "customStatusSettings": {
+            "customStatuses": [
+              {
+                "status": "approved",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              },
+              {
+                "status": "rejected",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              }
+            ]
+          }
+        }
+      },
+      "b490169c-b677-4993-a9fd-719a430bf725": {
+        "x": 584,
+        "y": 376,
+        "id": "b490169c-b677-4993-a9fd-719a430bf725",
+        "icon": "end",
+        "lane": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "e908c73f-7734-451e-b853-ab8fd2d86981": {
+        "x": 280,
+        "y": 264,
+        "id": "e908c73f-7734-451e-b853-ab8fd2d86981",
+        "icon": "approval_list",
+        "lane": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "name": "Отказано",
+        "type": "approval_list_close",
+        "color": "#f0f4c3",
+        "exits": ["90f7ad41-1a49-4dd6-ad90-cf36b403f24e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "approved": false,
+          "withoutNotify": false,
+          "targetFieldCode": "resignation_letter"
+        }
+      }
+    },
+    "lanes": {
+      "249645fb-d885-41b8-96eb-7d5108da31da": {
+        "x": 8,
+        "y": 8,
+        "id": "249645fb-d885-41b8-96eb-7d5108da31da",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "90e99805-fe8c-4d1b-b555-625e265cd2d9": {
+        "x": 232,
+        "y": 8,
+        "id": "90e99805-fe8c-4d1b-b555-625e265cd2d9",
+        "name": "Отдел кадров",
+        "color": "#d6f0cc",
+        "width": 540,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "gr_dep",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "4c634d31-5077-435b-ab11-970b033ac89d": {
+        "id": "4c634d31-5077-435b-ab11-970b033ac89d",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 192
+          },
+          {
+            "x": 408,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "a2cb8ea8-8268-4abe-92ae-8c0586cb9937",
+        "target": "1a462508-5897-47b2-b218-ee1cd4d974e8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__approvePercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6170c51f-3cbc-4d6e-a659-ba2f315aa3b2": {
+        "id": "6170c51f-3cbc-4d6e-a659-ba2f315aa3b2",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 224
+          },
+          {
+            "x": 320,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "a2cb8ea8-8268-4abe-92ae-8c0586cb9937",
+        "target": "e908c73f-7734-451e-b853-ab8fd2d86981",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__rejectPercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6b4482e4-5aa9-4e91-9f40-a38da8d77df5": {
+        "id": "6b4482e4-5aa9-4e91-9f40-a38da8d77df5",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 192
+          },
+          {
+            "x": 280,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "41ec957a-2e37-4cee-8bce-2722adfe4859",
+        "target": "a2cb8ea8-8268-4abe-92ae-8c0586cb9937",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6c81e5d8-006d-4eea-9716-2b03d205010e": {
+        "id": "6c81e5d8-006d-4eea-9716-2b03d205010e",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 160
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "41ec957a-2e37-4cee-8bce-2722adfe4859",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "90f7ad41-1a49-4dd6-ad90-cf36b403f24e": {
+        "id": "90f7ad41-1a49-4dd6-ad90-cf36b403f24e",
+        "name": "Отказано",
+        "path": [
+          {
+            "x": 320,
+            "y": 328
+          },
+          {
+            "x": 320,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "e908c73f-7734-451e-b853-ab8fd2d86981",
+        "target": "80ec454e-2357-40d6-9408-8671da37ca55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a7a4cde4-f7e4-4d5b-b2bf-42e38663cd1a": {
+        "id": "a7a4cde4-f7e4-4d5b-b2bf-42e38663cd1a",
+        "name": "",
+        "path": [
+          {
+            "x": 600,
+            "y": 224
+          },
+          {
+            "x": 600,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "7bfb5e0b-5684-483f-8469-4003a527c1cb",
+        "target": "b490169c-b677-4993-a9fd-719a430bf725",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ba54bb4e-56f7-424d-a362-6ad48b64fa29": {
+        "id": "ba54bb4e-56f7-424d-a362-6ad48b64fa29",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 288
+          },
+          {
+            "x": 184,
+            "y": 288
+          },
+          {
+            "x": 184,
+            "y": 208
+          },
+          {
+            "x": 280,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "06d93acb-5797-4bbc-91e6-9082e5e18195",
+        "target": "a2cb8ea8-8268-4abe-92ae-8c0586cb9937",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c05f7d50-5f3a-4983-bb5d-08cd6614bff5": {
+        "id": "c05f7d50-5f3a-4983-bb5d-08cd6614bff5",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 392
+          },
+          {
+            "x": 584,
+            "y": 392
+          }
+        ],
+        "type": "plain",
+        "source": "80ec454e-2357-40d6-9408-8671da37ca55",
+        "target": "b490169c-b677-4993-a9fd-719a430bf725",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ceb38cd9-b72c-478b-884b-ae20ef7078ef": {
+        "id": "ceb38cd9-b72c-478b-884b-ae20ef7078ef",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 224
+          },
+          {
+            "x": 120,
+            "y": 256
+          }
+        ],
+        "type": "error",
+        "source": "41ec957a-2e37-4cee-8bce-2722adfe4859",
+        "target": "06d93acb-5797-4bbc-91e6-9082e5e18195",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d95419d2-eb7c-4d16-a78d-c42429b83210": {
+        "id": "d95419d2-eb7c-4d16-a78d-c42429b83210",
+        "name": "Согласовано",
+        "path": [
+          {
+            "x": 488,
+            "y": 192
+          },
+          {
+            "x": 560,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "1a462508-5897-47b2-b218-ee1cd4d974e8",
+        "target": "7bfb5e0b-5684-483f-8469-4003a527c1cb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      },
+      "resignation_letter": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    const employeeApp = Namespace.params.fields.employee_app.app;\n    let employee = await employeeApp.search().where((f, g) => g.and(f.__deletedAt.eq(null), f.__id.eq(Context.data.employee_id))).first();\n    if (!employee) {\n        throw new Error('Нет сотрудника с указанным id!');\n    }\n    if (!employee.data.position) {\n        throw new Error('У сотрудника нет указанной должности!');\n    }\n    if (!employee.data.id_1c) {\n        throw new Error('У сотрудника нет id 1c!');\n    }\n    let job = await employee.data.position.fetch();\n    if (!job.data.ref_key) {\n        throw new Error('У должности нет указанного ref_key!');\n    }\n    let incomeStatementFile = await Context.data.income_statement.fetch();\n    let incomeStatementFileLink = await incomeStatementFile.getDownloadUrl();\n    let incomeStatementFileBuffer = await fetch(incomeStatementFileLink).then(doc => doc.arrayBuffer());\n    let incomeStatementFileB64String = btoa(String.fromCharCode(...new Uint8Array(incomeStatementFileBuffer)));\n    let vacationData = {\n        processID: Context.data.process_id,\n        employeeID: employee.data.id_1c,\n        firstName: employee.data.full_name ? employee.data.full_name.firstname : '',\n        lastName: employee.data.full_name ? employee.data.full_name.lastname : '',\n        middleName: employee.data.full_name ? employee.data.full_name.middlename : '',\n        jobID: job.data.ref_key,\n        incomeStatementFile: incomeStatementFileB64String\n    };\n    Context.data.json = JSON.stringify(vacationData);\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

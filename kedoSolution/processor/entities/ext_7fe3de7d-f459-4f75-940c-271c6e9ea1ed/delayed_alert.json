@@ -1,0 +1,326 @@
+{
+  "__id": "018c8757-193d-7f59-9a33-9448e8266e0c",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "code": "delayed_alert",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Отложенное оповещение",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "alert_text",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текст оповещения",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Пользователь",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-07-18T08:43:28.995724145Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2023-07-18T10:01:21.318408283Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "cef0ae7e-1cd7-4e45-b49b-d44c7f27fb7d",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["21d81cba-1af5-4fa3-a61b-2876fe23f128"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Отложенное оповещение - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "53da32de-76ca-4dee-93fa-9bf9219cf3ee": {
+        "x": 80,
+        "y": 152,
+        "id": "53da32de-76ca-4dee-93fa-9bf9219cf3ee",
+        "lane": "cef0ae7e-1cd7-4e45-b49b-d44c7f27fb7d",
+        "name": "Запуск процесса оповещения",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["e124f907-4881-462d-bab0-fc95b877feb9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "notification",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Напоминание о заявлении"
+              },
+              "target": {
+                "kind": "context",
+                "value": "topic_of_the_letter"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Напоминание о заявлении"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_head"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "__createdBy"
+              },
+              "target": {
+                "kind": "context",
+                "value": "user"
+              },
+              "convert": "to_array"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "alert_text"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_text"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "delayed_alert"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "alert_text"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_text_for_sms"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "alert_text"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_body"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "",
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "ad1e733b-59fc-44f5-99c3-3a9cbb919e47": {
+        "x": 104,
+        "y": 256,
+        "id": "ad1e733b-59fc-44f5-99c3-3a9cbb919e47",
+        "icon": "end",
+        "lane": "cef0ae7e-1cd7-4e45-b49b-d44c7f27fb7d",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "cef0ae7e-1cd7-4e45-b49b-d44c7f27fb7d": {
+        "x": 8,
+        "y": 8,
+        "id": "cef0ae7e-1cd7-4e45-b49b-d44c7f27fb7d",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "21d81cba-1af5-4fa3-a61b-2876fe23f128": {
+        "id": "21d81cba-1af5-4fa3-a61b-2876fe23f128",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "53da32de-76ca-4dee-93fa-9bf9219cf3ee",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e124f907-4881-462d-bab0-fc95b877feb9": {
+        "id": "e124f907-4881-462d-bab0-fc95b877feb9",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 216
+          },
+          {
+            "x": 120,
+            "y": 256
+          }
+        ],
+        "type": "plain",
+        "source": "53da32de-76ca-4dee-93fa-9bf9219cf3ee",
+        "target": "ad1e733b-59fc-44f5-99c3-3a9cbb919e47",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n**/",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "alert_text": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

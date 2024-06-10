@@ -1,0 +1,873 @@
+<style>
+  .spinner-svg {
+    animation: spin 1s linear infinite;
+    position: absolute;
+    right: -5rem;
+  }
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .trash-icon-container {
+    position: absolute;
+    right: -3.5rem;
+  }
+  .custom-trash-icon {
+    cursor: pointer;
+  }
+  .kedo-table {
+      border-collapse: separate;
+      border-spacing: 3rem;
+      white-space: normal;
+      width: 100%;
+  }
+  .inputfile {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
+  }
+  .custom-label {
+      display: inline-block;
+      margin-bottom: 0;
+      color: #787878;
+      font-size: 16px;
+      transition: all 0.5s;
+  }
+
+  .custom-label:hover {
+      cursor: pointer;
+      color: #5082E6;
+  }
+
+  .doc-row {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid #D9D9D9;
+      padding: 1rem;
+      justify-content: space-between;
+      position: relative;
+  }
+
+  .doc-row.required {
+    color: black;
+  }
+  .doc-row.required::after {
+    content: "*";
+    color: #F5222D;
+    right: 0rem;
+    position: absolute;
+  }
+
+  .doc-file {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+  }
+
+  .input-blocker {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 1000;
+  }
+
+  .input-blocker.hidden {
+    display: none;
+  }
+
+  .kedo__step3-content-btn-cancel-wrapper {
+    position: relative;
+  }
+  .button-add-element {
+    display: none;
+  }
+  .big-file-warning {
+    position: absolute;
+    color: red;
+    left: 27rem;
+    font-size: 13px;
+    top: 0rem;
+    opacity: 1;
+    transition: all 0.5s;
+  }
+  .big-file-warning.hidden {
+    transition: all 0.5s;
+    top: -1rem;
+    opacity: 0;
+  }
+  .kedo-form__wizard {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 70%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 80px;
+  }
+
+  .kedo-form__wizard-step {
+    width: 24px;
+    height: 24px;
+    margin: 0 10px;
+
+    border-radius: 50%;
+    border: 1px solid var(--light-gray);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: relative;
+  }
+
+  .kedo-form__step-container--active .kedo-form__wizard-step {
+    background-color: #5082E6;
+    border: 1px solid #5082E6;
+  }
+
+  .kedo-form__step-arrow {
+    max-width: 175px;
+    height: 2px;
+    background-color: var(--light-gray);
+    position: relative;
+    flex-grow: 1
+  }
+
+  .kedo-form__step-arrow--active {
+    background-color: #5082E6;
+  }
+
+  .kedo-form__step-arrow::after {
+    content: "";
+    border: solid var(--light-gray);
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 2px;
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    position: absolute;
+    right: 0;
+    top: -80%;
+  }
+
+  .kedo-form__step-arrow--active::after {
+    content: "";
+    border: solid #5082E6;
+    border-width: 0 2px 2px 0;
+    transform: rotate(-45deg);
+  }
+
+  .kedo-form__wizard-checkmark {
+    width: 12px;
+    height: 12px;
+    margin-bottom: 10px;
+  }
+
+  .kedo-form__wizard-checkmark svg path {
+    fill: white;
+  }
+
+  .kedo-form__container {
+    width: 100%;
+    display: flex;
+    margin-top: 32px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    background: white;
+  }
+
+  .kedo-form__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .kedo-form__title {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    text-align: center;
+
+    margin: 12px 0;
+  }
+  .kedo-form__description {
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-gray);
+    text-align: center;
+    width: 80%;
+
+    margin-bottom: 40px;
+  }
+
+  .kedo-form__step-container {
+    position: relative;
+  }
+
+  .kedo-form__step-name {
+    color: var(--text-light-gray);
+    font-size: 12px;
+    line-height: 130%;
+    text-align: center;
+    word-wrap: break-word;
+
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 12px 0;
+    width: 150px;
+  }
+
+  .kedo-form__step-container--active .kedo-form__step-name {
+    color: var(--text-gray);
+  }
+
+  .kedo-form__fields {
+    width: 100%;
+    padding: 0 40px 44px 56px;
+  }
+
+  .kedo-form__controls {
+  position: relative;
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: wrap;
+  width: 100%;
+  min-width: 100%;
+  margin: 25px 0 7px 0;
+}
+
+.kedo-form__pseudo-controls-element {
+  line-height: 1.1;
+  flex: 0 0 calc(146px + 2em);
+  max-width: calc(146px + 2em);
+  padding: 1rem 7px 1rem 0;
+  margin-right: 14px;
+}
+
+.kedo-form__next-btn {
+  border-radius: 4px;
+  transition: 0.3s;
+  font-weight: 600;
+  font-size: 17px;
+  line-height: 24px;
+
+  background: var(--kedo-main-color);
+  border: 1px solid var(--kedo-main-color);
+  color: #FFFFFF;
+  padding: 8px 16px;
+}
+
+.kedo-form__next-btn:hover {
+  cursor: pointer;
+  background: var(--kedo-main-color-hover);
+  border: 1px solid var(--kedo-main-color-hover);
+  color: #FFFFFF;
+  text-decoration: none;
+}
+
+.kedo-form__next-btn[disabled] {
+  background: #aaaaaa;
+  border: 1px solid #aaa;
+  cursor: default;
+}
+
+.kedo-form__prev-btn {
+  border: none;
+  background: none;
+  position: relative;
+
+  color: var(--kedo-main-color);
+  font-size: 15px;
+  line-height: 32px;
+
+  margin-left: 16px;
+  padding-left: 0;
+  cursor: pointer;
+}
+
+.kedo-form__prev-btn {
+  color: var(--color-theme-400)
+}
+
+.kedo-form__prev-btn::before {
+  content: "";
+
+  border: solid var(--kedo-main-color);
+  border-width: 0 2px 2px 0;
+  display: inline-block;
+  padding: 2px;
+  transform: rotate(135deg) translate(-50%, 0);
+  -webkit-transform: rotate(135deg) translate(-50%, 0);
+  position: relative;
+  top: 50%;
+  left: -12px;
+}
+
+.kedo-form__prev-btn:hover:before {
+  content: "";
+
+  border: solid var(--color-theme-400);
+  border-width: 0 2px 2px 0;
+}
+
+.kedo-form__control {
+  width: 100%;
+  flex-basis: 0;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  align-content: center;
+  flex-wrap: wrap;
+  min-width: 160px;
+  gap: 16px
+}
+
+.kedo-form__phantom-element {
+  display: none;
+}
+
+.kedo-form__group-title {
+  margin-top: 24px;
+
+  color: var(--text-gray);
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 22px;
+}
+
+.passport-hint__container {
+  display: flex;
+  margin-top: 28px;
+}
+
+.passport-hint__photo-container {
+  min-width: 197px
+}
+
+.passport-hint__photo {
+  width: 197px;
+  height: 132px;
+  object-fit: contain;
+}
+
+.passport-hint__content {
+  margin-left: 17px;
+}
+
+.passport-hint__list-title {
+  color: var(--text-gray);
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 22px;
+  margin: 0;
+  margin-bottom: 11px;
+}
+
+.passport-hint__list {
+  list-style: none;
+  padding-left: 0;
+
+  margin: 0;
+}
+
+.passport-hint__list-item {
+  font-size: 12px;
+  line-height: 130%;
+
+  margin-bottom: 11px;
+  margin-left: 20px;
+  position: relative;
+}
+
+.passport-hint__list-item:last-child {
+  margin-bottom: 0;
+}
+
+.passport-hint__list-item:before {
+  content: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE4LjEuMSwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgMTcuODM3IDE3LjgzNyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgMTcuODM3IDE3LjgzNzsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPGc+DQoJPHBhdGggc3R5bGU9ImZpbGw6IzFFNjU5OTsgd2lkdGg6IDEwcHg7IGhlaWdodDogMTBweDsiIGQ9Ik0xNi4xNDUsMi41NzFjLTAuMjcyLTAuMjczLTAuNzE4LTAuMjczLTAuOTksMEw2LjkyLDEwLjgwNGwtNC4yNDEtNC4yNw0KCQljLTAuMjcyLTAuMjc0LTAuNzE1LTAuMjc0LTAuOTg5LDBMMC4yMDQsOC4wMTljLTAuMjcyLDAuMjcxLTAuMjcyLDAuNzE3LDAsMC45OWw2LjIxNyw2LjI1OGMwLjI3MiwwLjI3MSwwLjcxNSwwLjI3MSwwLjk5LDANCgkJTDE3LjYzLDUuMDQ3YzAuMjc2LTAuMjczLDAuMjc2LTAuNzIsMC0wLjk5NEwxNi4xNDUsMi41NzF6Ii8+DQo8L2c+DQo8L3N2Zz4=");
+
+  width: 10px;
+  height: 10px;
+  position: absolute;
+  left: -20px;
+}
+
+.fileview {
+  background: #f9f9f9;
+  display: flex;
+  width: 100%;
+  height: 49px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fileview__name {
+  width: 170px;
+  flex-grow: 1;
+  text-decoration: none;
+  color: var(--kedo-main-color);
+  font-size: 14px;
+
+  display: flex;
+  padding-left: 24px;
+  align-items: center;
+  height: 100%;
+}
+
+.fileview__name-text {
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 100%;
+}
+
+.fileview__download-container {
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 100%;
+
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.fileview__download-container:hover {
+  text-decoration: none
+}
+
+.fileview__download-text {
+  color: var(--kedo-main-color);
+  margin: 0
+}
+
+.fileview__doc-img {
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+}
+
+.fileview__download-icon {
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE0IDEzVjEwLjM3NUMxNCAxMC4xNjg3IDEzLjgzMTMgMTAgMTMuNjI1IDEwSDEyLjg3NUMxMi42Njg3IDEwIDEyLjUgMTAuMTY4NyAxMi41IDEwLjM3NVYxM0MxMi41IDEzLjgyODEgMTEuODI4MSAxNC41IDExIDE0LjVINUM0LjE3MTg4IDE0LjUgMy41IDEzLjgyODEgMy41IDEzVjEwLjM3NUMzLjUgMTAuMTY4NyAzLjMzMTI1IDEwIDMuMTI1IDEwSDIuMzc1QzIuMTY4NzUgMTAgMiAxMC4xNjg3IDIgMTAuMzc1TDIgMTNDMiAxNC42NTYyIDMuMzQzNzUgMTYgNSAxNkgxMUMxMi42NTYzIDE2IDE0IDE0LjY1NjIgMTQgMTNaTTIuNjA5MzggNS4yMjE4OEwzLjIyMTg3IDQuNjA5MzhDMy4zNzE4NyA0LjQ1OTM3IDMuNjEyNSA0LjQ2MjUgMy43NTYyNSA0LjYxNTYyTDcuMTg3NSA4LjE1TDcuMTg3NSAwLjM3NUM3LjE4NzUgMC4xNjg3NSA3LjM1NjI1IDAgNy41NjI1IDBMOC40Mzc1IDBDOC42NDM3NSAwIDguODEyNSAwLjE2ODc1IDguODEyNSAwLjM3NVY4LjE1TDEyLjI0MDYgNC42MTU2MkMxMi4zODc1IDQuNDY1NjIgMTIuNjI4MSA0LjQ2MjUgMTIuNzc1IDQuNjA5MzdMMTMuMzg3NSA1LjIyMTg4QzEzLjUzNDQgNS4zNjg3NSAxMy41MzQ0IDUuNjA2MjUgMTMuMzg3NSA1Ljc1MzEzTDguMjYyNSAxMC44OTA2QzguMTE1NjIgMTEuMDM3NSA3Ljg3ODEyIDExLjAzNzUgNy43MzEyNSAxMC44OTA2TDIuNjA2MjUgNS43NTMxM0MyLjQ2MjUgNS42MDYyNSAyLjQ2MjUgNS4zNjg3NSAyLjYwOTM4IDUuMjIxODhaIiBmaWxsPSIjMUU2NTk5Ii8+Cjwvc3ZnPgo=)
+    no-repeat center;
+  width: 20px;
+  height: 20px;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+.kedo-form__btn--danger {
+  background: #fff;
+  border: 1px solid var(--danger-color);
+  color: var(--danger-color);
+  border-radius: 4px;
+}
+
+.kedo-form__btn--danger:hover {
+  cursor: pointer;
+  color: #fff;
+  background: #E62D32;
+  border: 1px solid var(--danger-color);
+}
+
+app-item-select {
+  margin: 0 !important; 
+}
+
+.kedo-form__doc-error-container {
+  background: #fff;
+  width: 400px;
+  padding: 16px;
+  margin: 0 0 8px 0;
+  border-radius: 0.4rem;
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  z-index: 20;
+  transform: translate(-50%, 0);
+  display: none;
+}
+
+.kedo-form__doc-error-container--active {
+  display: block;
+}
+
+.kedo-form__doc-error-container::after {
+  content: "";
+  border-width: 8px 10px;
+  border-style: solid;
+  position: absolute;
+  width: 0;
+  height: 0;
+  margin-top: -1px;
+  border-color: #fff transparent transparent;
+  top: 100%;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.kedo-form__doc-error-input {
+  border: 1px solid #d9d9d9;
+  border-radius: 0.4rem;
+  width: 100%;
+  display: block;
+  height: 8rem;
+  resize: none;
+  margin-right: 2px;
+}
+
+.kedo-form__doc-error-input--invalid, .kedo-form__doc-error-input--invalid:focus {
+  box-shadow: 0 0 0 0.2rem #df352c80;
+  border-color: #df352c;
+}
+
+.kedo-form__popup-text {
+  margin: 0;
+  color: #666;
+  font-size: 1.3rem;
+  padding-bottom: 0.4rem;
+}
+
+.kedo-form__text-emphasis {
+  color: #df352c;
+}
+
+.kedo-form__popup-btn-container {
+  padding: 24px 0 32px;
+  display: flex;
+  gap: 12px;
+}
+
+.kedo-form__confirm-popup {
+  background: #fff;
+  border: 1px solid var(--kedo-main-color);
+  color: var(--kedo-main-color);
+  font-size: 1.5rem;
+  padding: 6px 12px;
+}
+
+.kedo-form__cancel-popup {
+  color: var(--danger-color);
+  background: #fff;
+  border: 1px solid var(--danger-color);
+  font-size: 1.5rem;
+  padding: 6px 12px;
+}
+
+.kedo-form__confirm-popup:hover {
+  background: var(--kedo-main-color);
+  color: #fff;
+  border: 1px solid var(--kedo-main-color);
+}
+.kedo-form__cancel-popup:hover {
+  background: var(--danger-color);
+  color: #fff;
+  border: 1px solid var(--danger-color);
+}
+
+.kedo-form__btn-popover-container {
+  position: relative;
+}
+
+.kedo-form__backdrop {
+  position: absolute;
+  background: #000;
+  opacity: 0.5;
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+
+  display: none;
+}
+
+.kedo-form__backdrop--active {
+  display: block;
+}
+
+.kedo-form__required-text {
+  margin-bottom: 0;
+  margin-left: 6px;
+  color: var(--danger-color);
+  visibility: hidden;
+}
+
+.kedo-form__required-text--show {
+  visibility: visible;
+}
+
+.kedo-form__wizard-exlamation {
+    margin-left: 8px;
+}
+.kedo-form__step-container--error .kedo-form__wizard-step {
+  background: var(--danger-color);
+  border: 1px solid var(--danger-color);
+}
+
+.kedo-form__step-container--success .kedo-form__wizard-step {
+  background: #5082E6;
+  border: 1px solid #5082E6;
+}
+
+.kedo-form__step-arrow--success {
+  background-color: #5082E6;
+}
+
+.kedo-form__step-arrow--success::after {
+  content: "";
+  border: solid #5082E6;
+  border-width: 0 2px 2px 0;
+  transform: rotate(-45deg);
+}
+
+.kedo-form__step-name--error {
+  color: var(--danger-color) !important;
+}
+
+.kedo-form__error-container {
+  width: 100%;
+  background: #fceaea;
+  border: 1px solid var(--danger-color);
+  border-radius: 4px;
+  margin-bottom: 24px;
+  padding: 8px 12px 16px 12px;
+
+  display: flex;
+}
+
+.kedo-form__error-icon {
+  min-width: 16px;
+  width: 16px;
+  height: 16px;
+  margin-top: 5px;
+  margin-right: 12px;
+  background-repeat: no-repeat;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTciIGhlaWdodD0iMTciIHZpZXdCb3g9IjAgMCAxNyAxNyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGcgY2xpcC1wYXRoPSJ1cmwoI2NsaXAwXzQ4OF8xNTk4KSI+CjxwYXRoIGQ9Ik04LjE2MDE2IDAuNDA5OTEyQzMuODc4OTEgMC40MDk5MTIgMC40MTAxNTYgMy44Nzg2NiAwLjQxMDE1NiA4LjE1OTkxQzAuNDEwMTU2IDEyLjQ0MTIgMy44Nzg5MSAxNS45MDk5IDguMTYwMTYgMTUuOTA5OUMxMi40NDE0IDE1LjkwOTkgMTUuOTEwMiAxMi40NDEyIDE1LjkxMDIgOC4xNTk5MUMxNS45MTAyIDMuODc4NjYgMTIuNDQxNCAwLjQwOTkxMiA4LjE2MDE2IDAuNDA5OTEyWk04LjE2MDE2IDE0LjQwOTlDNC43MDcwMyAxNC40MDk5IDEuOTEwMTYgMTEuNjEzIDEuOTEwMTYgOC4xNTk5MUMxLjkxMDE2IDQuNzA2NzkgNC43MDcwMyAxLjkwOTkxIDguMTYwMTYgMS45MDk5MUMxMS42MTMzIDEuOTA5OTEgMTQuNDEwMiA0LjcwNjc5IDE0LjQxMDIgOC4xNTk5MUMxNC40MTAyIDExLjYxMyAxMS42MTMzIDE0LjQwOTkgOC4xNjAxNiAxNC40MDk5Wk0xMS4zNDE0IDYuMjE2MTZMOS4zOTc2NiA4LjE1OTkxTDExLjM0MTQgMTAuMTAzN0MxMS40ODgzIDEwLjI1MDUgMTEuNDg4MyAxMC40ODggMTEuMzQxNCAxMC42MzQ5TDEwLjYzNTIgMTEuMzQxMkMxMC40ODgzIDExLjQ4OCAxMC4yNTA4IDExLjQ4OCAxMC4xMDM5IDExLjM0MTJMOC4xNjAxNiA5LjM5NzQxTDYuMjE2NDEgMTEuMzQxMkM2LjA2OTUzIDExLjQ4OCA1LjgzMjAzIDExLjQ4OCA1LjY4NTE2IDExLjM0MTJMNC45Nzg5MSAxMC42MzQ5QzQuODMyMDMgMTAuNDg4IDQuODMyMDMgMTAuMjUwNSA0Ljk3ODkxIDEwLjEwMzdMNi45MjI2NiA4LjE1OTkxTDQuOTc4OTEgNi4yMTYxNkM0LjgzMjAzIDYuMDY5MjkgNC44MzIwMyA1LjgzMTc5IDQuOTc4OTEgNS42ODQ5MUw1LjY4NTE2IDQuOTc4NjZDNS44MzIwMyA0LjgzMTc5IDYuMDY5NTMgNC44MzE3OSA2LjIxNjQxIDQuOTc4NjZMOC4xNjAxNiA2LjkyMjQxTDEwLjEwMzkgNC45Nzg2NkMxMC4yNTA4IDQuODMxNzkgMTAuNDg4MyA0LjgzMTc5IDEwLjYzNTIgNC45Nzg2NkwxMS4zNDE0IDUuNjg0OTFDMTEuNDg4MyA1LjgzMTc5IDExLjQ4ODMgNi4wNjkyOSAxMS4zNDE0IDYuMjE2MTZaIiBmaWxsPSIjRTYyRDMxIi8+CjwvZz4KPGRlZnM+CjxjbGlwUGF0aCBpZD0iY2xpcDBfNDg4XzE1OTgiPgo8cmVjdCB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIGZpbGw9IndoaXRlIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjE2MDE1NiAwLjE1OTkxMikiLz4KPC9jbGlwUGF0aD4KPC9kZWZzPgo8L3N2Zz4K");
+}
+
+.kedo-form__error-text-container {
+
+}
+
+.kedo-form__error-text-header {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 24px;
+  margin: 0;
+}
+
+.kedo-form__error-text {
+  font-size: 14px;
+  line-height: 24px;
+  margin: 0;
+}
+
+.kedo-form__loader-img {
+  width: 101px;
+  height: 24px;
+  background: url(data:image/svg+xml;charset=utf-8,%3Csvg%20version%3D%221.1%22%20id%3D%22L9%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%20%20viewBox%3D%220%200%20100%20100%22%20enable-background%3D%22new%200%200%200%200%22%20xml%3Aspace%3D%22preserve%22%3E%0A%20%20%20%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M73%2C50c0-12.7-10.3-23-23-23S27%2C37.3%2C27%2C50%20M30.9%2C50c0-10.5%2C8.5-19.1%2C19.1-19.1S69.1%2C39.5%2C69.1%2C50%22%3E%0A%20%20%20%20%20%20%3CanimateTransform%20%0A%20%20%20%20%20%20%20%20%20attributeName%3D%22transform%22%20%0A%20%20%20%20%20%20%20%20%20attributeType%3D%22XML%22%20%0A%20%20%20%20%20%20%20%20%20type%3D%22rotate%22%0A%20%20%20%20%20%20%20%20%20dur%3D%221s%22%20%0A%20%20%20%20%20%20%20%20%20from%3D%220%2050%2050%22%0A%20%20%20%20%20%20%20%20%20to%3D%22360%2050%2050%22%20%0A%20%20%20%20%20%20%20%20%20repeatCount%3D%22indefinite%22%20%2F%3E%0A%20%20%3C%2Fpath%3E%0A%3C%2Fsvg%3E) no-repeat center / contain;
+}
+
+@media (max-width: 1040px){
+  .kedo-form__pseudo-controls-element {
+    display: none;
+  }
+
+  .kedo-form__step-name {
+    width: 9vw;
+  }
+
+}
+
+@media (max-width: 930px){
+  .kedo-form__step-name {
+    display: none;
+  }
+
+  .kedo-form__wizard {
+    margin-bottom: 20px
+  }
+
+  .passport-hint__content {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 24px;
+  }
+
+  .passport-hint__container {
+    flex-direction: column-reverse;
+    margin-top: 8px;
+  }
+
+  .fileview__download-text {
+    display: none;
+  }
+
+  .fileview__name {
+    width: 170px;
+  }
+}
+
+@media (max-width: 767px){
+  .kedo-form__pseudo-controls-element {
+    display: block;
+  }
+
+  .kedo-form__step-name {
+    display: block;
+  }
+
+  .kedo-form__wizard {
+    margin-bottom: 80px
+  }
+
+  .passport-hint__content {
+    width: auto;
+    margin-left: 17px;
+    margin-bottom: 0;
+  }
+
+  .passport-hint__container {
+    flex-direction: row;
+    margin-top: 24px;
+  }
+
+  .passport-hint__container .kedo-form__pseudo-controls-element {
+    display: none;
+  }
+}
+
+@media (max-width: 695px){
+  .kedo-form__pseudo-controls-element {
+    display: none;
+  }
+
+  .kedo-form__step-name {
+    display: none;
+  }
+
+  .kedo-form__wizard {
+    margin-bottom: 20px
+  }
+}
+
+@media (max-width: 631px){
+  .passport-hint__content {
+    width: 100%;
+    margin-left: 0;
+    margin-bottom: 24px;
+  }
+
+  .passport-hint__container {
+    flex-direction: column-reverse;
+    margin-top: 8px;
+  }
+
+  .fileview__download-container {
+    padding: 0 18px;
+  }
+
+  .fileview__name {
+    padding-left: 16px;
+  }
+
+  .kedo-form__doc-error-container {
+    width: 350px;
+  }
+}
+
+@media (max-width: 478px){
+  .kedo-form__wizard-step {
+    width: 16px;
+    height: 16px;
+    margin: 0 4px;
+  }
+
+  .kedo-form__btn--danger {
+    width: 100%;
+  }
+
+  .kedo-form__step-container:last-child .kedo-form__wizard-step {
+    margin-right: 0px;
+  }
+
+  .kedo-form__step-container:first-child .kedo-form__wizard-step {
+    margin-left: 0px;
+  }
+
+  .kedo-form__wizard {
+    width: 100%;
+  }
+
+  .kedo-form__container {
+    padding: 31px 24px 40px;
+    margin: 0;
+  }
+
+  .kedo-form__fields {
+    padding: 0;
+  }
+
+  .kedo-form__description {
+    margin-bottom: 24px;
+    width: 100%;
+  }
+
+  .kedo-form__title {
+    margin-top: 0;
+    margin-bottom: 4px;
+    font-size: 20px;
+  }
+
+  .kedo-form__next-btn {
+    width: 100%;
+  }
+
+  .kedo-form__prev-btn {
+    margin-left: 12px;
+  }
+
+  .kedo-form__controls {
+    margin-top: 15px;
+  }
+
+  .kedo-form__btn-popover-container {
+    width: 100%;
+  }
+
+  .kedo-form__doc-error-container {
+    width: 100%;
+  }
+
+  .kedo-form__wizard-checkmark svg, .kedo-form__wizard-checkmark {
+    width: 10px;
+  }
+
+  .kedo-form__wizard-exlamation {
+    margin-left: 0px;
+  }
+
+  .kedo-form__wizard-exlamation svg {
+    height: 10px;
+  }
+
+  .kedo-form__loader-img {
+    width: auto;
+  }
+}
+</style>

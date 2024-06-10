@@ -1,0 +1,757 @@
+{
+  "__id": "018e89f8-23b6-797b-bd52-7a6b3022e322",
+  "namespace": "kedo.staff",
+  "code": "parttime_dismissal",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Уволить с совместительства",
+  "type": "bpmn",
+  "draft": false,
+  "version": 1,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "dissmissal_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата увольнения",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "position_index",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "old_Индекс удаляемой строки",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "have_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "old_Дата заполнена?",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "is_date",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата заполнена?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "firing_position_ref",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "firing_position_ref",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-11-10T13:14:39.515274978Z",
+  "__createdBy": "64f25f8e-6bb3-406b-84b3-4dd5d32e5537",
+  "__updatedAt": "2024-01-23T06:28:37.476477297Z",
+  "__updatedBy": "d78f4b2f-13a2-4903-aeeb-fdb72d5b9d0c",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 48,
+        "y": 88,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["223d548c-0b91-4eb7-ab6d-0d1f5fe29605"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Уволить с совместительства ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "1c3c2a8f-228b-4d66-9f80-0689b4238222": {
+        "x": 584,
+        "y": 72,
+        "id": "1c3c2a8f-228b-4d66-9f80-0689b4238222",
+        "icon": "script",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "Сценарий удаления позиции совмещения из карточки",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "af1bbdc6-2cc5-4462-ae90-d705e805e7bf",
+          "a7105c6f-212c-43ca-b28d-35021e1ded50"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parttimeDismissal",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "a7105c6f-212c-43ca-b28d-35021e1ded50",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "638f1701-bec9-40ed-bd7a-f78da8b31339": {
+        "x": 112,
+        "y": 72,
+        "id": "638f1701-bec9-40ed-bd7a-f78da8b31339",
+        "icon": "script",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "Проверка входных данных",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "c2aad20a-61c2-4c50-9c1f-3409fe8f3f71",
+          "027fce39-652e-4bbe-baef-e760c01a7e54"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "validate",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "027fce39-652e-4bbe-baef-e760c01a7e54",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "67cc7232-e1c9-4656-bc0a-621ec84fb057": {
+        "x": 584,
+        "y": 312,
+        "id": "67cc7232-e1c9-4656-bc0a-621ec84fb057",
+        "icon": "notification",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "При загрузке сотрудников из 1С возникла ошибка",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["56b4df18-ecfc-49d5-a699-868a66901bc9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            },
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageHeader": "При загрузке сотрудников из 1С возникла ошибка"
+        }
+      },
+      "77806851-ba60-4121-9f96-b17372bd8ad9": {
+        "x": 280,
+        "y": 88,
+        "id": "77806851-ba60-4121-9f96-b17372bd8ad9",
+        "icon": "exclusive",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "Дата заполнена?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "b673eda6-7948-4aa7-ad49-75cdaea9b151",
+          "82a471b4-b87c-46dc-8832-15f6e083ee29"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "7836785e-81c3-4c76-84ef-214c7d6fa9b4": {
+        "x": 488,
+        "y": 88,
+        "id": "7836785e-81c3-4c76-84ef-214c7d6fa9b4",
+        "icon": "timer",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "Таймер увольнения с совмещения",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["d2fce953-e49e-4468-b78c-5b010ce91623"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "code": "dissmissal_date",
+            "days": 1,
+            "kind": "variable",
+            "hours": 0,
+            "minutes": 0,
+            "absolute": false,
+            "substraction": false
+          }
+        }
+      },
+      "e371e1a6-82b6-4d54-aa0c-73f826316078": {
+        "x": 800,
+        "y": 216,
+        "id": "e371e1a6-82b6-4d54-aa0c-73f826316078",
+        "icon": "end",
+        "lane": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "cd782b0e-756f-4450-b7d6-3929c0eafbac": {
+        "x": 8,
+        "y": 8,
+        "id": "cd782b0e-756f-4450-b7d6-3929c0eafbac",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 908,
+        "height": 616,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "027fce39-652e-4bbe-baef-e760c01a7e54": {
+        "id": "027fce39-652e-4bbe-baef-e760c01a7e54",
+        "name": "Ошибка",
+        "path": [
+          {
+            "x": 152,
+            "y": 136
+          },
+          {
+            "x": 152,
+            "y": 344
+          },
+          {
+            "x": 584,
+            "y": 344
+          }
+        ],
+        "type": "error",
+        "source": "638f1701-bec9-40ed-bd7a-f78da8b31339",
+        "target": "67cc7232-e1c9-4656-bc0a-621ec84fb057",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "223d548c-0b91-4eb7-ab6d-0d1f5fe29605": {
+        "id": "223d548c-0b91-4eb7-ab6d-0d1f5fe29605",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 104
+          },
+          {
+            "x": 112,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "638f1701-bec9-40ed-bd7a-f78da8b31339",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "56b4df18-ecfc-49d5-a699-868a66901bc9": {
+        "id": "56b4df18-ecfc-49d5-a699-868a66901bc9",
+        "name": "",
+        "path": [
+          {
+            "x": 664,
+            "y": 344
+          },
+          {
+            "x": 816,
+            "y": 344
+          },
+          {
+            "x": 816,
+            "y": 248
+          }
+        ],
+        "type": "plain",
+        "source": "67cc7232-e1c9-4656-bc0a-621ec84fb057",
+        "target": "e371e1a6-82b6-4d54-aa0c-73f826316078",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "82a471b4-b87c-46dc-8832-15f6e083ee29": {
+        "id": "82a471b4-b87c-46dc-8832-15f6e083ee29",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 296,
+            "y": 120
+          },
+          {
+            "x": 296,
+            "y": 232
+          },
+          {
+            "x": 800,
+            "y": 232
+          }
+        ],
+        "type": "default",
+        "source": "77806851-ba60-4121-9f96-b17372bd8ad9",
+        "target": "e371e1a6-82b6-4d54-aa0c-73f826316078",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a7105c6f-212c-43ca-b28d-35021e1ded50": {
+        "id": "a7105c6f-212c-43ca-b28d-35021e1ded50",
+        "name": "Ошибка",
+        "path": [
+          {
+            "x": 624,
+            "y": 136
+          },
+          {
+            "x": 624,
+            "y": 312
+          }
+        ],
+        "type": "error",
+        "source": "1c3c2a8f-228b-4d66-9f80-0689b4238222",
+        "target": "67cc7232-e1c9-4656-bc0a-621ec84fb057",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "af1bbdc6-2cc5-4462-ae90-d705e805e7bf": {
+        "id": "af1bbdc6-2cc5-4462-ae90-d705e805e7bf",
+        "name": "",
+        "path": [
+          {
+            "x": 664,
+            "y": 104
+          },
+          {
+            "x": 816,
+            "y": 104
+          },
+          {
+            "x": 816,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "1c3c2a8f-228b-4d66-9f80-0689b4238222",
+        "target": "e371e1a6-82b6-4d54-aa0c-73f826316078",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b673eda6-7948-4aa7-ad49-75cdaea9b151": {
+        "id": "b673eda6-7948-4aa7-ad49-75cdaea9b151",
+        "name": "Да",
+        "path": [
+          {
+            "x": 312,
+            "y": 104
+          },
+          {
+            "x": 488,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "77806851-ba60-4121-9f96-b17372bd8ad9",
+        "target": "7836785e-81c3-4c76-84ef-214c7d6fa9b4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_date"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c2aad20a-61c2-4c50-9c1f-3409fe8f3f71": {
+        "id": "c2aad20a-61c2-4c50-9c1f-3409fe8f3f71",
+        "name": "",
+        "path": [
+          {
+            "x": 192,
+            "y": 104
+          },
+          {
+            "x": 280,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "638f1701-bec9-40ed-bd7a-f78da8b31339",
+        "target": "77806851-ba60-4121-9f96-b17372bd8ad9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d2fce953-e49e-4468-b78c-5b010ce91623": {
+        "id": "d2fce953-e49e-4468-b78c-5b010ce91623",
+        "name": "",
+        "path": [
+          {
+            "x": 520,
+            "y": 104
+          },
+          {
+            "x": 584,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "7836785e-81c3-4c76-84ef-214c7d6fa9b4",
+        "target": "1c3c2a8f-228b-4d66-9f80-0689b4238222",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function parttimeDismissal(): Promise\u003cvoid\u003e {\n\n    Context.data.debug = ' in val ';\n    Context.data.debug += Context.data.firing_position_ref;\n\n    if (Context.data.staff \u0026\u0026 Context.data.firing_position_ref) {\n        Context.data.debug += ' in if '\n        const employee = await Context.data.staff.fetch();\n        const index = employee.data.employment_table!.findIndex(elem =\u003e elem.id_1c === Context.data.firing_position_ref)\n        Context.data.debug += index;\n\n        if (index != -1) {\n            employee.data.employment_table!.delete(index);\n            await employee.save();\n\n            Context.data.debug += ' saved ';\n        }\n    }\n\n    Context.data.debug += ' out ';\n}\n\nasync function validate(): Promise\u003cvoid\u003e {\n\n    if (Context.data.dissmissal_date) {\n        Context.data.is_date = true;\n    } else {\n        Context.data.is_date = false;\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "have_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "position_index": {
+        "enabled": false,
+        "conditions": []
+      },
+      "dissmissal_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "firing_position_ref": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

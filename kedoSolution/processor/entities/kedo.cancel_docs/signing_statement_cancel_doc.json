@@ -1,0 +1,928 @@
+{
+  "__id": "018e89f8-23b6-7900-a4d1-28bf463e1e87",
+  "namespace": "kedo.cancel_docs",
+  "code": "signing_statement_cancel_doc",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Подписание заявления на отмену документов",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "xml_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "XML-файл заявления",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "statement_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Заявление подписано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "text"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование заявки",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемая заявка",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_docs",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_docs",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявление об отмене подписанного документа"
+      }
+    },
+    {
+      "code": "statement_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл заявления",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signatory_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписант (Пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-21T06:50:30.26740465Z",
+  "__createdBy": "dbf3495b-ce41-49f5-ba21-cdd11a052281",
+  "__updatedAt": "2024-03-29T15:00:00.043338773Z",
+  "__updatedBy": "1a8a4a0b-7e7e-4e0e-895e-ab2a0a301d1e",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 32,
+        "y": 168,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["068195c1-5a5e-44cf-b8e2-271a5eb96a9b"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Подписание заявления на отмену документов ({$cancel_docs})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0c21bf63-f33b-4c4c-9b5d-9929fd97a22d": {
+        "x": 592,
+        "y": 168,
+        "id": "0c21bf63-f33b-4c4c-9b5d-9929fd97a22d",
+        "icon": "end",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "1ab2bba8-eb5e-4f3b-b2fe-47a6dc39715d": {
+        "x": 408,
+        "y": 152,
+        "id": "1ab2bba8-eb5e-4f3b-b2fe-47a6dc39715d",
+        "icon": "script",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "Успешное подписание: обновление контекста БП",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["9b344f61-74dd-4681-9a1c-80630122c1c1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateContext",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "2b5efd2a-ad2e-471e-8416-3bea98794942": {
+        "x": 120,
+        "y": 152,
+        "id": "2b5efd2a-ad2e-471e-8416-3bea98794942",
+        "icon": "send_doc",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "Подписание заяления",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "55b83c1c-4054-4092-98c1-fd6e77f7daf6",
+          "1bd30c75-5d7b-4edb-99bf-5d259719f9ec"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "cancel_docs",
+          "name": "Подписать заявление на отмену документа(-ов) по заявке: {$app_name}",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "cancel_docs"
+              }
+            }
+          ],
+          "target": "cancel_docs",
+          "signExit": "1bd30c75-5d7b-4edb-99bf-5d259719f9ec",
+          "namespace": "kedo",
+          "cancelExit": "55b83c1c-4054-4092-98c1-fd6e77f7daf6",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 4,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "showComment": "disabled",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "allowReassign": true,
+          "isIgnoreSubstitutionTarget": ""
+        }
+      },
+      "3442ec4a-2da4-4b32-b2b2-62403ece4e4d": {
+        "x": 216,
+        "y": 152,
+        "id": "3442ec4a-2da4-4b32-b2b2-62403ece4e4d",
+        "icon": "system",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "Генерация XML",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "3be134b8-a367-49ad-9515-a4ec395f7bfb",
+          "f4966c89-cec0-480c-87c7-2022044a7abf"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_xml",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "statement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "cancel_docs.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "debug"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "f4966c89-cec0-480c-87c7-2022044a7abf",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "9b7bf300-9777-4c50-bbfc-96136421e390": {
+        "x": 216,
+        "y": 232,
+        "id": "9b7bf300-9777-4c50-bbfc-96136421e390",
+        "icon": "notification",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "Оповещение администраторов",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["6a4a67b4-2eff-403b-94d5-a4627fe1ab7f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$debug}",
+          "messageHeader": "XML-файл не сформировался"
+        }
+      },
+      "d1c85ffc-db7d-4457-941b-fcada9cfd111": {
+        "x": 312,
+        "y": 152,
+        "id": "d1c85ffc-db7d-4457-941b-fcada9cfd111",
+        "icon": "system",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "Запись XML файла заявления",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["8424ce21-b25c-4f6b-b616-125ec8d5dc68"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "notify": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file_doc"
+              }
+            }
+          ],
+          "variable": "cancel_docs"
+        }
+      },
+      "e0b54573-2de0-4617-b07f-a0a7debd45bd": {
+        "x": 144,
+        "y": 376,
+        "id": "e0b54573-2de0-4617-b07f-a0a7debd45bd",
+        "icon": "end",
+        "lane": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "ec225972-aa5e-4329-872d-055559e832da": {
+        "x": 8,
+        "y": 8,
+        "id": "ec225972-aa5e-4329-872d-055559e832da",
+        "name": "Подписант (Пользователь)",
+        "color": "#d6f0cc",
+        "width": 912,
+        "height": 640,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "signatory_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "068195c1-5a5e-44cf-b8e2-271a5eb96a9b": {
+        "id": "068195c1-5a5e-44cf-b8e2-271a5eb96a9b",
+        "name": "",
+        "path": [
+          {
+            "x": 64,
+            "y": 184
+          },
+          {
+            "x": 120,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "2b5efd2a-ad2e-471e-8416-3bea98794942",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1bd30c75-5d7b-4edb-99bf-5d259719f9ec": {
+        "id": "1bd30c75-5d7b-4edb-99bf-5d259719f9ec",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 184
+          },
+          {
+            "x": 216,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "2b5efd2a-ad2e-471e-8416-3bea98794942",
+        "target": "3442ec4a-2da4-4b32-b2b2-62403ece4e4d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3be134b8-a367-49ad-9515-a4ec395f7bfb": {
+        "id": "3be134b8-a367-49ad-9515-a4ec395f7bfb",
+        "name": "",
+        "path": [
+          {
+            "x": 296,
+            "y": 184
+          },
+          {
+            "x": 312,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "3442ec4a-2da4-4b32-b2b2-62403ece4e4d",
+        "target": "d1c85ffc-db7d-4457-941b-fcada9cfd111",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "55b83c1c-4054-4092-98c1-fd6e77f7daf6": {
+        "id": "55b83c1c-4054-4092-98c1-fd6e77f7daf6",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 216
+          },
+          {
+            "x": 160,
+            "y": 376
+          }
+        ],
+        "type": "default",
+        "source": "2b5efd2a-ad2e-471e-8416-3bea98794942",
+        "target": "e0b54573-2de0-4617-b07f-a0a7debd45bd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6a4a67b4-2eff-403b-94d5-a4627fe1ab7f": {
+        "id": "6a4a67b4-2eff-403b-94d5-a4627fe1ab7f",
+        "name": "",
+        "path": [
+          {
+            "x": 296,
+            "y": 264
+          },
+          {
+            "x": 400,
+            "y": 264
+          },
+          {
+            "x": 400,
+            "y": 184
+          },
+          {
+            "x": 408,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "9b7bf300-9777-4c50-bbfc-96136421e390",
+        "target": "1ab2bba8-eb5e-4f3b-b2fe-47a6dc39715d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8424ce21-b25c-4f6b-b616-125ec8d5dc68": {
+        "id": "8424ce21-b25c-4f6b-b616-125ec8d5dc68",
+        "name": "",
+        "path": [
+          {
+            "x": 392,
+            "y": 184
+          },
+          {
+            "x": 408,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "d1c85ffc-db7d-4457-941b-fcada9cfd111",
+        "target": "1ab2bba8-eb5e-4f3b-b2fe-47a6dc39715d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9b344f61-74dd-4681-9a1c-80630122c1c1": {
+        "id": "9b344f61-74dd-4681-9a1c-80630122c1c1",
+        "name": "",
+        "path": [
+          {
+            "x": 488,
+            "y": 184
+          },
+          {
+            "x": 592,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "1ab2bba8-eb5e-4f3b-b2fe-47a6dc39715d",
+        "target": "0c21bf63-f33b-4c4c-9b5d-9929fd97a22d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f4966c89-cec0-480c-87c7-2022044a7abf": {
+        "id": "f4966c89-cec0-480c-87c7-2022044a7abf",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 216
+          },
+          {
+            "x": 256,
+            "y": 232
+          }
+        ],
+        "type": "error",
+        "source": "3442ec4a-2da4-4b32-b2b2-62403ece4e4d",
+        "target": "9b7bf300-9777-4c50-bbfc-96136421e390",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "\n\nasync function updateContext(): Promise\u003cvoid\u003e {\n    Context.data.statement_signed = true;\n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "cancel_docs",
+          "data": {
+            "code": "cancel_docs",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Заявление об отмене подписанного документа"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "cancel_docs"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "xml_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatory_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "statement_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "statement_signed": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

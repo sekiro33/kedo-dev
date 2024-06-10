@@ -1,0 +1,148 @@
+{
+  "__id": "6e35bcec-8358-48eb-ae83-decfd5b8608d",
+  "__name": "Отпуск без сохранения заработной платы",
+  "code": "unpaid_vacation",
+  "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "vacation_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные отпуска (JSON)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Имя подключения 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "additional_info",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дополнительная информация",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "integration_app_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID приложения интеграции",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "app",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Приложение-источник",
+        "data": {},
+        "input": true,
+        "output": false
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\ninterface IStaffData {\n\tname: string,\n\tid_1c: string,\n\tindividual_id_1c: string,\n\torganization_id: string,\n\tposition_id: string,\n}\n\ninterface IUnpaidVacation {\n\tstaff: IStaffData,\n\tvacation_type: string,\n\tstart_date: string,\n\tend_date: string,\n\tduration: number,\n\tpart_during: boolean,\n\tstatement: string,\n\tcomment?: string,\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tif (!Context.data.vacation_data) {\n\t\tthrow new Error(\"Context.data.vacation_data is undefined\");\n\t}\n\n\tconst current_date = new Datetime();\n\tconst vacation_data: IUnpaidVacation = JSON.parse(Context.data.vacation_data);\n\n\tlet body: any = {\n\t\t\"Date\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n\t\t\"ПериодРегистрации\": current_date.format(\"YYYY-MM-01T00:00:00\"),\n\t\t\"Организация_Key\": vacation_data.staff.organization_id,\n\t\t\"Сотрудник_Key\": vacation_data.staff.id_1c,\n\t\t\"ФизическоеЛицо_Key\": vacation_data.staff.individual_id_1c,\n\t\t\"ВидОтпуска_Key\": vacation_data.vacation_type,\n\t\t\"ДатаНачала\": vacation_data.start_date,\n\t\t\"ДатаОтсутствия\": vacation_data.start_date,\n\t\t\"ДатаОкончания\": vacation_data.end_date,\n\t\t\"ОтсутствиеВТечениеЧастиСмены\": vacation_data.part_during,\n\t\t\"Основание\": vacation_data.statement,\n\t\t\"Комментарий\": vacation_data.comment,\n\t\t\"ПорядокВыплаты\": \"Межрасчет\",\n\t};\n\n\t// Если отсутствие в течение дня (т.е. несколько часов), то указываем количество часов отпуска.\n\tif (vacation_data.part_during == true) {\n\t\tbody = {\n\t\t\t...body,\n\t\t\t\"ЧасовОтпуска\": vacation_data.duration,\n\t\t}\n\t}\n\n\tconst accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n\tconst integration_app = Namespace.params.fields.integration_app.app.create();\n\n\tintegration_app.data.__name = `Отпуск без сохранения оплаты (${vacation_data.staff.name})`;\n\tintegration_app.data.document_odata_name = \"Document_ОтпускБезСохраненияОплаты\";\n\tintegration_app.data.accounting_systems = accounting1c;\n\tintegration_app.data.personal_guid_1c = JSON.stringify([vacation_data.staff.individual_id_1c]);\n\tintegration_app.data.document_creation_data = JSON.stringify(body);\n\tintegration_app.data.additional_info = Context.data.additional_info ?? \"\";\n\tintegration_app.data.base_1c_name = Context.data.connection_name;\n\tintegration_app.data.related_element = Context.data.app;\n\n\tawait integration_app.save()\n\n\tContext.data.integration_app_id = integration_app.data.__id;\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-03-29T11:28:45.19496115Z",
+  "__createdBy": "d78f4b2f-13a2-4903-aeeb-fdb72d5b9d0c",
+  "__updatedAt": "2024-04-09T07:27:01.993723537Z",
+  "__updatedBy": "8c6e1940-a6f3-4603-aff7-7cdf41cc9799",
+  "__deletedAt": null
+}

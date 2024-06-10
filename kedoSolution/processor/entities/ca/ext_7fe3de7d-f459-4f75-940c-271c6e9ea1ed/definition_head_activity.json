@@ -1,0 +1,104 @@
+{
+  "__id": "8fd4509d-dd8e-4850-a2cb-1cb3e91d16c6",
+  "__name": "Определение руководителя",
+  "code": "definition_head",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "organization",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Организация",
+        "data": {},
+        "input": true
+      }
+    },
+    {
+      "code": "head_staff",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Руководитель",
+        "data": {},
+        "output": true
+      }
+    },
+    {
+      "code": "head_staff_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель (пользователь)",
+        "data": {},
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n    async function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n    async function action(): Promise\u003cvoid\u003e;\n    async function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n    async function action(url: string): Promise\u003cvoid\u003e;\n    async function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\nasync function action(): Promise\u003cvoid\u003e {\n    const refItem = new RefItem\u003cApplicationItem\u003cApplication$kedo$organization$Data, Application$kedo$organization$Params\u003e\u003e('kedo', 'organization', Context.data.organization!.id);\n    const organiaztion = await refItem.fetch();\n\n    if (!organiaztion.data.position_head) {\n        throw new Error(\"Не указана должность руководителя организации\");\n    }\n\n    const position_head = await organiaztion.data.position_head.fetch();\n    const staff = position_head.data.staff;\n    if (staff \u0026\u0026 staff.length \u003e 0) {\n        const head_staffs = await Promise.all(staff.map(f =\u003e f.fetch()));\n        for (const head_staff of head_staffs) {\n            if (head_staff.data.__status \u0026\u0026 head_staff.data.__status.code == head_staff.fields.__status.variants.signed_documents.code) {\n                Context.data.head_staff = head_staff;\n                Context.data.head_staff_user = head_staff.data.ext_user;\n                break;\n            }\n        }\n        if (!Context.data.head_staff)\n            throw new Error(\"На должности руководителя не найдено ни одного трудоустроенного сотрудника\");\n    } else {\n        throw new Error(\"На должности руководителя организации не указаны сотрудники\");\n    }\n}\n",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:02.128482178Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:55.293866058Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}
