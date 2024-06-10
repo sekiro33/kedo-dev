@@ -1,0 +1,5221 @@
+{
+  "__id": "018c8757-193c-7ec8-b44e-82dd5d6343d5",
+  "namespace": "kedo.medical_request",
+  "code": "create_med_request",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обработка заявки на медосмотры",
+  "type": "bpmn",
+  "draft": false,
+  "version": 4,
+  "context": [
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "xml_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "xml_file",
+        "data": {}
+      }
+    },
+    {
+      "code": "starting_from_working_with_candidate",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Запуск из работы с кандидатом",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "sort_of_medical_examination",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "preliminary_examination",
+            "name": "Предварительный",
+            "checked": false
+          },
+          {
+            "code": "periodic_examination",
+            "name": "Периодический",
+            "checked": false
+          },
+          {
+            "code": "special_examination",
+            "name": "Внеочередной",
+            "checked": false
+          },
+          {
+            "code": "pre_trip_examination",
+            "name": "Предрейсовый",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Вид медосмотра",
+        "data": {}
+      }
+    },
+    {
+      "code": "periodic_med_exams",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Периодические медосмотры",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "sort_med_exam",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Вид медосмотра",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Периодический",
+          "yesValue": "Трудоустройство/перевод"
+        }
+      }
+    },
+    {
+      "code": "ignore_substitution",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Игнорировать замещение?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "is_it_employment_process",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Запуск из процесса трудоустройства?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "transfer_application",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "transfer_application",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "(не исп) Заявление на перевод",
+        "data": {}
+      }
+    },
+    {
+      "code": "med_exam",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "medical_examination",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Медосмотры",
+        "data": {}
+      }
+    },
+    {
+      "code": "position",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "position",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Позиция ШР",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "error",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "kedo_status",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "КЭДО статус",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "hr_dep",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Отдел кадров",
+        "data": {}
+      }
+    },
+    {
+      "code": "need_med_exam",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Медосмотры нужны?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "medical_request",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "medical_request",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на медосмотр"
+      }
+    },
+    {
+      "code": "organization",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Организация",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-03-22T13:48:47.616739558Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2024-02-06T06:39:48.705973752Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 56,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["cdbe9114-5b77-4404-a1a0-fcfc2e7081b8"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "transfer_application",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "medical_request",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Формирование заявки на медосмотры ({$medical_request})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "05a524b9-2e1d-4742-9761-055c8db16f3f": {
+        "x": 304,
+        "y": 880,
+        "id": "05a524b9-2e1d-4742-9761-055c8db16f3f",
+        "icon": "exclusive",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "9beb52d7-4243-40d4-a9d8-abe7acc0974d",
+          "27dc28bb-4ae1-4156-9d28-496f6a6a4735"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "1a30644a-cfbf-42e6-9d15-b9239d574694": {
+        "x": 792,
+        "y": 536,
+        "id": "1a30644a-cfbf-42e6-9d15-b9239d574694",
+        "icon": "user",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Направить на медосмотр",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": ["30017ca6-2c4e-43fa-a711-96194566c516"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Направить сотрудника {$medical_request.staff} на медосмотр",
+          "notify": true,
+          "formCode": "",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            }
+          },
+          "formFields": [
+            {
+              "code": "medical_request",
+              "data": {
+                "listSettings": {
+                  "sort": {
+                    "field": "",
+                    "direction": "",
+                    "additionalSortSettings": null
+                  },
+                  "limit": 10,
+                  "buttons": [
+                    {
+                      "id": "75b34682-24cb-4b70-b963-ecd665ac0984",
+                      "code": "create",
+                      "type": "primary",
+                      "label": "+ Заявка на медосмотр",
+                      "bindings": [],
+                      "immutable": false,
+                      "silentRun": false,
+                      "permission": "create",
+                      "skipRequired": false,
+                      "defaultValues": {},
+                      "useSimpleForm": false,
+                      "simpleFormSize": "default",
+                      "allowedGroupIds": [],
+                      "allowedStatusIds": [],
+                      "processLinkChanged": false,
+                      "showForAllowedStatuses": false,
+                      "showForAllowedStatusGroups": false
+                    }
+                  ],
+                  "aggregateField": "",
+                  "autoUpdateCards": false,
+                  "enabledMassActions": false
+                },
+                "tableSettings": {
+                  "displayFields": ["__name"]
+                },
+                "createButtonId": "",
+                "showCreateItem": true,
+                "showSelectItem": true
+              },
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false,
+              "subfields": [
+                {
+                  "code": "staff",
+                  "data": {
+                    "listSettings": {
+                      "sort": {
+                        "field": "",
+                        "direction": "",
+                        "additionalSortSettings": null
+                      },
+                      "limit": 10,
+                      "buttons": [
+                        {
+                          "id": "47e6f238-74e0-48f4-b6fe-cacdb77def81",
+                          "code": "create",
+                          "type": "primary",
+                          "label": "+ Сотрудник",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "skipRequired": false,
+                          "defaultValues": {
+                            "inn": null,
+                            "sex": null,
+                            "city": null,
+                            "home": null,
+                            "note": null,
+                            "email": null,
+                            "phone": null,
+                            "snils": null,
+                            "entity": null,
+                            "region": null,
+                            "street": null,
+                            "address": null,
+                            "housing": null,
+                            "ext_user": null,
+                            "inn_file": null,
+                            "marriage": null,
+                            "position": null,
+                            "apartment": null,
+                            "full_name": null,
+                            "issued_by": null,
+                            "scan_soev": null,
+                            "note_files": null,
+                            "snils_file": null,
+                            "__directory": null,
+                            "is_employed": null,
+                            "__externalId": null,
+                            "notification": null,
+                            "staff_access": true,
+                            "date_of_birth": null,
+                            "date_of_issue": null,
+                            "external_user": null,
+                            "staff_comment": null,
+                            "document_table": null,
+                            "invalid_fields": null,
+                            "passport_number": null,
+                            "passport_series": null,
+                            "personal_number": null,
+                            "disclaimer_comment": null,
+                            "employment_documents": null,
+                            "__externalProcessMeta": null,
+                            "structural_subdivision": null,
+                            "passport_department_code": null,
+                            "photo_with_unfolded_passport": null,
+                            "passport_page_with_photo_and_data": null,
+                            "the_passport_page_with_current_registration": null
+                          },
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        },
+                        {
+                          "id": "377e8253-14a2-4996-a0f6-c9bf66fa54ab",
+                          "code": "create",
+                          "type": "default",
+                          "label": "+ Сотрудник бэк-офиса",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "skipRequired": false,
+                          "defaultValues": {
+                            "inn": null,
+                            "sex": null,
+                            "city": null,
+                            "home": null,
+                            "note": null,
+                            "email": null,
+                            "phone": null,
+                            "snils": null,
+                            "entity": null,
+                            "region": null,
+                            "street": null,
+                            "address": null,
+                            "housing": null,
+                            "ext_user": null,
+                            "inn_file": null,
+                            "marriage": null,
+                            "position": null,
+                            "apartment": null,
+                            "full_name": null,
+                            "issued_by": null,
+                            "scan_soev": null,
+                            "note_files": null,
+                            "snils_file": null,
+                            "__directory": null,
+                            "is_employed": null,
+                            "__externalId": null,
+                            "notification": null,
+                            "staff_access": false,
+                            "date_of_birth": null,
+                            "date_of_issue": null,
+                            "external_user": null,
+                            "staff_comment": null,
+                            "document_table": null,
+                            "invalid_fields": null,
+                            "passport_number": null,
+                            "passport_series": null,
+                            "personal_number": null,
+                            "disclaimer_comment": null,
+                            "employment_documents": null,
+                            "__externalProcessMeta": null,
+                            "structural_subdivision": null,
+                            "passport_department_code": null,
+                            "photo_with_unfolded_passport": null,
+                            "passport_page_with_photo_and_data": null,
+                            "the_passport_page_with_current_registration": null
+                          },
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        },
+                        {
+                          "id": "e7878e60-015d-4b4d-a99f-254188a243ed",
+                          "type": "default",
+                          "label": "Загрузить сотрудников из 1С",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "processCode": "load_employee_list",
+                          "processField": "staff",
+                          "skipRequired": false,
+                          "useSimpleForm": true,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processNamespace": "kedo.staff",
+                          "processLinkChanged": true,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        }
+                      ],
+                      "aggregateField": "",
+                      "autoUpdateCards": false,
+                      "enabledMassActions": true
+                    },
+                    "tableSettings": {
+                      "columnsWidth": {
+                        "__name": "257px",
+                        "__status": "300px",
+                        "ext_user": "300px",
+                        "position": "525px",
+                        "__createdAt": "300px",
+                        "__createdBy": "300px",
+                        "access_group": "300px",
+                        "organization": "272px",
+                        "staff_member": "300px",
+                        "kedo_agreement": "164px",
+                        "staff_categories": "300px",
+                        "structural_subdivision": "300px",
+                        "time_acceptance_agreement": "300px"
+                      },
+                      "displayFields": [
+                        "__name",
+                        "kedo_agreement",
+                        "organization",
+                        "position",
+                        "structural_subdivision",
+                        "__status",
+                        "__createdAt",
+                        "ext_user",
+                        "access_group",
+                        "time_acceptance_agreement"
+                      ]
+                    },
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "candidate",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "sort_of_medical_examination",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "old_postion",
+                  "data": {
+                    "listSettings": {
+                      "sort": {
+                        "field": "__name",
+                        "direction": "asc",
+                        "additionalSortSettings": null
+                      },
+                      "limit": 10,
+                      "buttons": [
+                        {
+                          "id": "c11842c6-68a1-4160-a3c9-d711fb19d898",
+                          "code": "create",
+                          "type": "primary",
+                          "label": "+ Позиция ШР",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "skipRequired": false,
+                          "defaultValues": {},
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        }
+                      ],
+                      "aggregateField": "",
+                      "autoUpdateCards": false,
+                      "enabledMassActions": true
+                    },
+                    "tableSettings": {
+                      "columnsWidth": {
+                        "__name": "522px",
+                        "__createdAt": "391.5px",
+                        "subdivision": "485px",
+                        "organization": "693px"
+                      },
+                      "displayFields": [
+                        "__name",
+                        "subdivision",
+                        "organization",
+                        "__createdAt"
+                      ]
+                    },
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "harmful_factors",
+                  "data": {
+                    "listSettings": {
+                      "sort": {
+                        "field": "",
+                        "direction": "",
+                        "additionalSortSettings": null
+                      },
+                      "limit": 10,
+                      "buttons": [
+                        {
+                          "id": "0321a84e-7af7-456a-8f00-4cbff8e9d82f",
+                          "code": "create",
+                          "type": "primary",
+                          "label": "+ Фактор вредности производства",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "skipRequired": false,
+                          "defaultValues": {},
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        }
+                      ],
+                      "aggregateField": "",
+                      "autoUpdateCards": false,
+                      "enabledMassActions": false
+                    },
+                    "tableSettings": {
+                      "displayFields": ["__name", "factor_category"]
+                    },
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "display": "Факторы вредности текущей должности",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "categories_table",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "transfer_application",
+                  "data": {
+                    "listSettings": {
+                      "sort": {
+                        "field": "",
+                        "direction": "",
+                        "additionalSortSettings": null
+                      },
+                      "limit": 10,
+                      "buttons": [
+                        {
+                          "id": "6005ab4f-c20f-4595-ae53-be2c86a2659d",
+                          "code": "create",
+                          "type": "primary",
+                          "label": "+ Заявка на перевод",
+                          "bindings": [],
+                          "immutable": false,
+                          "silentRun": false,
+                          "permission": "create",
+                          "skipRequired": false,
+                          "defaultValues": {},
+                          "useSimpleForm": false,
+                          "simpleFormSize": "default",
+                          "allowedGroupIds": [],
+                          "allowedStatusIds": [],
+                          "processLinkChanged": false,
+                          "showForAllowedStatuses": false,
+                          "showForAllowedStatusGroups": false
+                        }
+                      ],
+                      "aggregateField": "",
+                      "autoUpdateCards": false,
+                      "enabledMassActions": false
+                    },
+                    "tableSettings": {
+                      "columnsWidth": {
+                        "staff": "300px",
+                        "__name": "300px",
+                        "__status": "300px",
+                        "kedo_status": "300px",
+                        "responsible": "300px",
+                        "transfer_type": "300px",
+                        "date_of_creation": "300px",
+                        "responsible_user": "300px"
+                      },
+                      "displayFields": [
+                        "__name",
+                        "transfer_type",
+                        "date_of_creation",
+                        "__status",
+                        "responsible",
+                        "staff",
+                        "responsible_user",
+                        "kedo_status"
+                      ]
+                    },
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "transfer_date",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "new_position",
+                  "data": {
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "harmful_factors_new",
+                  "data": {
+                    "createButtonId": "",
+                    "showCreateItem": true,
+                    "showSelectItem": true
+                  },
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": true
+                },
+                {
+                  "code": "structure",
+                  "data": {
+                    "columnsView": {
+                      "due_date": {
+                        "key": false,
+                        "font": {
+                          "bold": false,
+                          "color": "",
+                          "italic": false,
+                          "underline": false
+                        },
+                        "align": "left",
+                        "width": 175,
+                        "hidden": false,
+                        "tensile": false,
+                        "readonly": false,
+                        "required": true,
+                        "compression": false,
+                        "verticalAlign": "middle",
+                        "backgroundColor": ""
+                      },
+                      "med_type": {
+                        "key": false,
+                        "font": {
+                          "bold": false,
+                          "color": "",
+                          "italic": false,
+                          "underline": false
+                        },
+                        "align": "left",
+                        "width": 175,
+                        "hidden": false,
+                        "tensile": false,
+                        "readonly": true,
+                        "required": false,
+                        "compression": false,
+                        "verticalAlign": "middle",
+                        "backgroundColor": ""
+                      },
+                      "valid_up_to": {
+                        "key": false,
+                        "font": {
+                          "bold": false,
+                          "color": "",
+                          "italic": false,
+                          "underline": false
+                        },
+                        "align": "left",
+                        "width": 175,
+                        "hidden": true,
+                        "tensile": false,
+                        "readonly": false,
+                        "required": false,
+                        "compression": false,
+                        "verticalAlign": "middle",
+                        "backgroundColor": ""
+                      },
+                      "med_organization": {
+                        "key": false,
+                        "font": {
+                          "bold": false,
+                          "color": "",
+                          "italic": false,
+                          "underline": false
+                        },
+                        "align": "left",
+                        "width": 175,
+                        "hidden": false,
+                        "tensile": false,
+                        "readonly": false,
+                        "required": true,
+                        "compression": false,
+                        "verticalAlign": "middle",
+                        "backgroundColor": ""
+                      }
+                    },
+                    "allowDeleteRows": true
+                  },
+                  "tooltip": "",
+                  "readonly": false,
+                  "required": true,
+                  "hideEmpty": false
+                }
+              ]
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": false,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "isIgnoreSubstitutionTarget": "ignore_substitution",
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "1fff0aa0-9300-4598-ad30-efbb78235453": {
+        "x": 1024,
+        "y": 536,
+        "id": "1fff0aa0-9300-4598-ad30-efbb78235453",
+        "icon": "script",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Запись статуса кэдо",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["cca9dc45-ae2c-4f02-9539-242d4ea5fe80"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setStatusPending",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "2963ee25-4a66-449b-bb3f-e6fa36ab36f5": {
+        "x": 64,
+        "y": 616,
+        "id": "2963ee25-4a66-449b-bb3f-e6fa36ab36f5",
+        "icon": "exclusive",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "06ef5fd9-8962-4db8-8882-6d1415f862e8",
+          "6f333082-4979-48b7-af68-a4a83894cc9c"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "2a901bc4-cf58-44c4-9796-5c61b4b506f0": {
+        "x": 40,
+        "y": 704,
+        "id": "2a901bc4-cf58-44c4-9796-5c61b4b506f0",
+        "icon": "script",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Запись статуса кэдо",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["202695dd-69a6-4e39-8690-cda5f446dfc1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setStatusApproval",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "2b5711a1-90ea-4c74-8579-d0a1a7d838b1": {
+        "x": 40,
+        "y": 120,
+        "id": "2b5711a1-90ea-4c74-8579-d0a1a7d838b1",
+        "icon": "system",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Присваивание вида медосмотра и сотрудника",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["bbabab86-ac5c-4328-9e5d-9f9d197558a5"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "medical_request.sort_of_medical_examination"
+              },
+              "target": {
+                "kind": "context",
+                "value": "sort_of_medical_examination"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "medical_request.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "medical_request.starting_from_working_with_candidate"
+              },
+              "target": {
+                "kind": "context",
+                "value": "starting_from_working_with_candidate"
+              }
+            }
+          ]
+        }
+      },
+      "2efb03e6-d643-45a3-a12d-e42891b58548": {
+        "x": 280,
+        "y": 536,
+        "id": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "icon": "system",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Получаем участников группы \"Отдел кадров\"",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "699548b1-2bf2-4655-98a6-220b555b9f9b",
+          "011d00aa-9da5-4342-bd84-65877d32b6b9"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_users",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "hr_dep"
+              },
+              "target": {
+                "kind": "context",
+                "value": "hr_dep"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "accounting"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "matching_finance"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "office_managers"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "signatories"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss_app"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "011d00aa-9da5-4342-bd84-65877d32b6b9",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "boss": null,
+              "error": {
+                "kind": "Mapped",
+                "path": ["error"]
+              },
+              "groups": null,
+              "hr_dep": {
+                "kind": "Mapped",
+                "path": ["hr_dep"]
+              },
+              "boss_app": null,
+              "accounting": null,
+              "signatories": null,
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "organization"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "organization"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "accounting"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "matching_finance"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "office_managers"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "signatories"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss_app"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "error"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "error"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "is_it_employment_process",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Запуск из процесса трудоустройства?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "sort_med_exam",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Периодический",
+                        "yesValue": "Трудоустройство/перевод",
+                        "additionalType": "radio"
+                      },
+                      "name": "Вид медосмотра"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "kedo_status",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "КЭДО статус"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "ignore_substitution",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Игнорировать замещение?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": true,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "approved",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Согласовано"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Сотрудник"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "position",
+                    "data": {
+                      "code": "position",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Позиция ШР"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "sort_of_medical_examination",
+                    "data": {
+                      "enumItems": [
+                        {
+                          "code": "preliminary_examination",
+                          "name": "Предварительный",
+                          "checked": false
+                        },
+                        {
+                          "code": "periodic_examination",
+                          "name": "Периодический",
+                          "checked": false
+                        },
+                        {
+                          "code": "special_examination",
+                          "name": "Внеочередной",
+                          "checked": false
+                        },
+                        {
+                          "code": "pre_trip_examination",
+                          "name": "Предрейсовый",
+                          "checked": false
+                        }
+                      ]
+                    },
+                    "type": "ENUM",
+                    "view": {
+                      "data": {},
+                      "name": "Вид медосмотра"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "xml_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "xml_file"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "need_med_exam",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Медосмотры нужны?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "debug",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "debug"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "medical_request",
+                    "data": {
+                      "code": "medical_request",
+                      "filter": null,
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "name": "Заявка на медосмотр"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "transfer_application",
+                    "data": {
+                      "code": "transfer_application",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "(не исп) Заявление на перевод"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "periodic_med_exams",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Периодические медосмотры"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "med_exam",
+                    "data": {
+                      "code": "medical_examination",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Медосмотры"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "id": 18,
+                    "code": "organization",
+                    "data": {
+                      "code": "organization",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "isNewField": true,
+                    "searchable": false,
+                    "calcByFormula": false,
+                    "isNameChanged": true
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "organization",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true,
+                      "output": false
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": true,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "accounting",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Бухгалтерия",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "matching_finance",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Ответственные за финансы ",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "office_managers",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Офис менеджеры",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatories",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss_app",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании (app)",
+                      "input": false,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "organization": {
+                "kind": "Mapped",
+                "path": ["organization"]
+              },
+              "office_managers": null,
+              "matching_finance": null,
+              "__dynamic_binding": {}
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "3485a7f0-f825-41c8-b059-96b45b7ddc0c": {
+        "x": 280,
+        "y": 216,
+        "id": "3485a7f0-f825-41c8-b059-96b45b7ddc0c",
+        "icon": "script",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Запись статуса кэдо",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["c2ed173a-5a18-440f-acf4-51e87fe1ca6e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setStatusCancelled",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "389335dd-ba11-4eb1-a131-328d984d4af9": {
+        "x": 1336,
+        "y": 640,
+        "id": "389335dd-ba11-4eb1-a131-328d984d4af9",
+        "icon": "notification",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Оповещение администраторов",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["ef7c6383-c672-4249-816b-f370bceb64ef"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$debug}",
+          "messageHeader": "XML-файл не сформировался"
+        }
+      },
+      "3c503da6-4a3e-4f37-bff4-00da1191682d": {
+        "x": 280,
+        "y": 1096,
+        "id": "3c503da6-4a3e-4f37-bff4-00da1191682d",
+        "icon": "system",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Смена статуса кэдо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "e65f5942-2d0e-456b-8e28-faca482962b1",
+          "eab75bff-6582-479b-8f5a-c1be95b8bac0"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "change_status",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_status"
+              },
+              "target": {
+                "kind": "context",
+                "value": "status_string"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "eab75bff-6582-479b-8f5a-c1be95b8bac0",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "4b6062d4-cac5-4e4a-bac3-80ebf7855692": {
+        "x": 280,
+        "y": 936,
+        "id": "4b6062d4-cac5-4e4a-bac3-80ebf7855692",
+        "icon": "change",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Заявка на медосмотр -\u003e Заявка отклонена",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["0480edc4-e293-4cd4-8eb6-910e4d48b21c"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 4,
+          "variable": "medical_request",
+          "keepInCurrentGroup": false
+        }
+      },
+      "5029d694-90ae-4a30-8ea6-d6739da507ad": {
+        "x": 1144,
+        "y": 536,
+        "id": "5029d694-90ae-4a30-8ea6-d6739da507ad",
+        "icon": "system",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Смена статуса кэдо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "75db0b6f-10db-49e9-b042-7fa58cd90079",
+          "8df8a5b7-e7a5-41a2-8ed6-55e9efc952b1"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "change_status",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_status"
+              },
+              "target": {
+                "kind": "context",
+                "value": "status_string"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "8df8a5b7-e7a5-41a2-8ed6-55e9efc952b1",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "5415fd95-016c-4e7f-98a7-08032f9668f4": {
+        "x": 144,
+        "y": 408,
+        "id": "5415fd95-016c-4e7f-98a7-08032f9668f4",
+        "icon": "script",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Получение медосмотров и формирование таблицы",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["a440aad7-d2bf-4fcf-b4bb-c66f34dd7c52"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getAllMedExam",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "5527c551-e468-4c48-9f64-8152a2ba533b": {
+        "x": 568,
+        "y": 536,
+        "id": "5527c551-e468-4c48-9f64-8152a2ba533b",
+        "icon": "system",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Выдача прав отделу кадров",
+        "type": "app_element_permissions",
+        "color": "#fde9a0",
+        "exits": ["a5f50e22-e138-4868-9ce8-05dd97655df2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "delete": false,
+          "userVariableName": "hr_dep",
+          "accessPermissions": ["read"],
+          "appElementVariableName": "medical_request"
+        }
+      },
+      "59938ca9-3874-4ecb-84cf-b8be51d28ae0": {
+        "x": 64,
+        "y": 424,
+        "id": "59938ca9-3874-4ecb-84cf-b8be51d28ae0",
+        "icon": "exclusive",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "f31316fd-1411-4f76-b515-bc0d884f6215",
+          "bdaed15e-2d10-460e-b885-538afe6acb06",
+          "fabaad37-17d1-4aae-b85b-58a9c745d18e"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "5a62e1cb-32ad-479d-bb69-4e03a2755085": {
+        "x": 392,
+        "y": 648,
+        "id": "5a62e1cb-32ad-479d-bb69-4e03a2755085",
+        "icon": "notification",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Не удалось получить участников групп",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["b1e9755c-0f2d-4095-a9a2-1ac43fae6a58"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Не удалось получить участников групп"
+        }
+      },
+      "5b482601-2d7a-418a-af93-248e05e9380e": {
+        "x": 920,
+        "y": 536,
+        "id": "5b482601-2d7a-418a-af93-248e05e9380e",
+        "icon": "change",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Заявка на медосмотр -\u003e Прохождение медосмотров",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["4003d4e7-6be2-4dda-9560-2b5c8fb02aac"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 2,
+          "variable": "medical_request",
+          "keepInCurrentGroup": false
+        }
+      },
+      "5f33096c-d58b-4cea-9ed2-444d19786312": {
+        "x": 1912,
+        "y": 536,
+        "id": "5f33096c-d58b-4cea-9ed2-444d19786312",
+        "icon": "script",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Запись статуса кэдо",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["e6567c00-29dd-47e2-b07b-b1c9ae650c8d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setStatusIssued",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "7a5ee98f-12db-478a-a31c-e72421eeaff2": {
+        "x": 1456,
+        "y": 536,
+        "id": "7a5ee98f-12db-478a-a31c-e72421eeaff2",
+        "icon": "system",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Запись xml-файла",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["c6fc2172-f95c-4897-9e67-adbcfb5ac0ab"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            }
+          ],
+          "variable": "medical_request"
+        }
+      },
+      "7d9c157b-4f56-474c-89c7-4642b673ac9d": {
+        "x": 280,
+        "y": 1016,
+        "id": "7d9c157b-4f56-474c-89c7-4642b673ac9d",
+        "icon": "script",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Запись статуса кэдо",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["2e76e5e7-5b59-4e27-bbd6-17572c422527"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setStatusCancelled",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "7e3ff957-6ab7-4d05-a6af-d6bbe1d9da2b": {
+        "x": 280,
+        "y": 328,
+        "id": "7e3ff957-6ab7-4d05-a6af-d6bbe1d9da2b",
+        "icon": "change",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Заявка на медосмотр -\u003e Заявка отклонена",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["4b57d4ec-5855-4b74-b92a-e9a5e8ab86d9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 4,
+          "variable": "medical_request",
+          "keepInCurrentGroup": false
+        }
+      },
+      "8a666e58-9036-4a77-bfc0-6b1487c66fc9": {
+        "x": 40,
+        "y": 784,
+        "id": "8a666e58-9036-4a77-bfc0-6b1487c66fc9",
+        "icon": "system",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Смена статуса кэдо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "e68ac534-c210-44a3-97c7-be8a9beb06d9",
+          "227f76b6-4aa9-46fb-ab7b-590d5589fe17"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "change_status",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_status"
+              },
+              "target": {
+                "kind": "context",
+                "value": "status_string"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "e68ac534-c210-44a3-97c7-be8a9beb06d9",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "b0fbb88d-6558-4de2-88fe-b2761d5d4ef8": {
+        "x": 2232,
+        "y": 552,
+        "id": "b0fbb88d-6558-4de2-88fe-b2761d5d4ef8",
+        "icon": "end",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "b849553e-a013-4f6e-b8d2-bf968b202248": {
+        "x": 1568,
+        "y": 536,
+        "id": "b849553e-a013-4f6e-b8d2-bf968b202248",
+        "icon": "script",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Создание карточек медосмотров",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["5e46f6fb-39eb-4899-8aa2-796c49f87f30"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createMedExamCards",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "bf1111c7-d90f-4b05-89ac-4d4c3a58ba84": {
+        "x": 680,
+        "y": 536,
+        "id": "bf1111c7-d90f-4b05-89ac-4d4c3a58ba84",
+        "icon": "system",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Выдача прав инициатору (сотруднику)",
+        "type": "app_element_permissions",
+        "color": "#fde9a0",
+        "exits": ["d0af1d0a-b19d-41db-b8c8-feb851885bfe"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "delete": false,
+          "userVariableName": "__createdBy",
+          "accessPermissions": ["read"],
+          "appElementVariableName": "medical_request"
+        }
+      },
+      "c507e226-8782-4adf-b119-0f887540aa56": {
+        "x": 2016,
+        "y": 536,
+        "id": "c507e226-8782-4adf-b119-0f887540aa56",
+        "icon": "system",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Смена статуса кэдо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "25b6274c-610a-4a8d-b1f3-51f6e69ab876",
+          "bcd04756-9076-4935-afb3-315cb3e2248d"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "change_status",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_status"
+              },
+              "target": {
+                "kind": "context",
+                "value": "status_string"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "bcd04756-9076-4935-afb3-315cb3e2248d",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "d2a75a49-49f6-498d-8da0-135a4529554b": {
+        "x": 1680,
+        "y": 536,
+        "id": "d2a75a49-49f6-498d-8da0-135a4529554b",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Запуск процессов прохождения медосмотра",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["3e8ea786-8bfd-4ab4-90da-dfc9061462a4"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "start_med_exam",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "is_it_employment_process"
+              },
+              "target": {
+                "kind": "context",
+                "value": "is_it_employment_process"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "starting_from_working_with_candidate"
+              },
+              "target": {
+                "kind": "context",
+                "value": "starting_from_working_with_candidate"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "med_exam",
+          "namespace": "kedo.medical_examination",
+          "subProcessTargetFieldCode": "medical_examination"
+        }
+      },
+      "d46a7c9c-51a8-4435-9d97-f5eb605ab41d": {
+        "x": 144,
+        "y": 864,
+        "id": "d46a7c9c-51a8-4435-9d97-f5eb605ab41d",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Запуск процесса согласования внеочередного медосмотра",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["f9d1069e-2a37-4e57-af7a-dd3c13fa1570"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "approval_extraordinary_med_exam",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "__createdBy"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__createdBy"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "medical_request"
+              },
+              "target": {
+                "kind": "context",
+                "value": "medical_request"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "approved"
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ],
+          "linkCode": "medical_request",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": "medical_request"
+        }
+      },
+      "d4f0df43-53fd-4d80-9434-bfc7def8bb4a": {
+        "x": 304,
+        "y": 56,
+        "id": "d4f0df43-53fd-4d80-9434-bfc7def8bb4a",
+        "icon": "end",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "d5d863df-5f4d-4272-9e52-26e552a84604": {
+        "x": 304,
+        "y": 424,
+        "id": "d5d863df-5f4d-4272-9e52-26e552a84604",
+        "icon": "exclusive",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "caa0b529-d9b8-46fb-b873-a31cc2dacc37",
+          "48d28ace-6768-443f-b40d-8f5faf1f39a4"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d873df36-5096-4e40-a18c-b763fb67c9ed": {
+        "x": 280,
+        "y": 112,
+        "id": "d873df36-5096-4e40-a18c-b763fb67c9ed",
+        "icon": "system",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Смена статуса кэдо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "c14c2b71-0661-4a1a-a2fb-deb87b691f64",
+          "b30b2b3f-92c3-4739-8999-8a8c8e83cd4b"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "change_status",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_status"
+              },
+              "target": {
+                "kind": "context",
+                "value": "status_string"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "b30b2b3f-92c3-4739-8999-8a8c8e83cd4b",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "e39f7891-3e3e-4f02-b4f6-1fea42285e0d": {
+        "x": 1808,
+        "y": 536,
+        "id": "e39f7891-3e3e-4f02-b4f6-1fea42285e0d",
+        "icon": "change",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Заявка на медосмотр -\u003e Медосмотры пройдены",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["bd06ab4b-dab9-4a9b-bf6b-64e8543c97fc"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 3,
+          "variable": "medical_request",
+          "keepInCurrentGroup": false
+        }
+      },
+      "e8ef014d-f74c-44be-be3f-1c249c897205": {
+        "x": 304,
+        "y": 1192,
+        "id": "e8ef014d-f74c-44be-be3f-1c249c897205",
+        "icon": "end",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "f022c6f5-cfe3-4183-8b27-f80bc8f31091": {
+        "x": 40,
+        "y": 208,
+        "id": "f022c6f5-cfe3-4183-8b27-f80bc8f31091",
+        "icon": "script",
+        "lane": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Получение организации",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["bdd4db35-860c-4b8f-a90c-a0f4cd6503ad"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getOrganization",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fa5a9cf2-ff9d-431b-aa22-21aa44ea76a0": {
+        "x": 1336,
+        "y": 536,
+        "id": "fa5a9cf2-ff9d-431b-aa22-21aa44ea76a0",
+        "icon": "system",
+        "lane": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Генерация XML",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "e6c30e6d-c21f-47e9-bb0e-1d0510c4377f",
+          "4b6d6b72-9a7b-4755-8df7-d41e6cccb3ed"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_xml",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "medical_request"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "medical_request.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "debug"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "4b6d6b72-9a7b-4755-8df7-d41e6cccb3ed",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      }
+    },
+    "lanes": {
+      "77d9da36-1dc9-4964-b878-2a02101859f1": {
+        "x": 8,
+        "y": 8,
+        "id": "77d9da36-1dc9-4964-b878-2a02101859f1",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 520,
+        "height": 1236,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae": {
+        "x": 528,
+        "y": 8,
+        "id": "9ce00966-1c08-4c7f-b197-54a3c0bbe1ae",
+        "name": "Отдел кадров",
+        "color": "#d6f0cc",
+        "width": 1836,
+        "height": 1236,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "hr_dep",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "011d00aa-9da5-4342-bd84-65877d32b6b9": {
+        "id": "011d00aa-9da5-4342-bd84-65877d32b6b9",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 584
+          },
+          {
+            "x": 432,
+            "y": 584
+          },
+          {
+            "x": 432,
+            "y": 648
+          }
+        ],
+        "type": "error",
+        "source": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "target": "5a62e1cb-32ad-479d-bb69-4e03a2755085",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0480edc4-e293-4cd4-8eb6-910e4d48b21c": {
+        "id": "0480edc4-e293-4cd4-8eb6-910e4d48b21c",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 1000
+          },
+          {
+            "x": 320,
+            "y": 1016
+          }
+        ],
+        "type": "plain",
+        "source": "4b6062d4-cac5-4e4a-bac3-80ebf7855692",
+        "target": "7d9c157b-4f56-474c-89c7-4642b673ac9d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "06ef5fd9-8962-4db8-8882-6d1415f862e8": {
+        "id": "06ef5fd9-8962-4db8-8882-6d1415f862e8",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 648
+          },
+          {
+            "x": 80,
+            "y": 704
+          }
+        ],
+        "type": "default",
+        "source": "2963ee25-4a66-449b-bb3f-e6fa36ab36f5",
+        "target": "2a901bc4-cf58-44c4-9796-5c61b4b506f0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "202695dd-69a6-4e39-8690-cda5f446dfc1": {
+        "id": "202695dd-69a6-4e39-8690-cda5f446dfc1",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 768
+          },
+          {
+            "x": 80,
+            "y": 784
+          }
+        ],
+        "type": "plain",
+        "source": "2a901bc4-cf58-44c4-9796-5c61b4b506f0",
+        "target": "8a666e58-9036-4a77-bfc0-6b1487c66fc9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "227f76b6-4aa9-46fb-ab7b-590d5589fe17": {
+        "id": "227f76b6-4aa9-46fb-ab7b-590d5589fe17",
+        "name": "",
+        "path": [
+          {
+            "x": 100,
+            "y": 848
+          },
+          {
+            "x": 100,
+            "y": 880
+          },
+          {
+            "x": 144,
+            "y": 880
+          }
+        ],
+        "type": "plain",
+        "source": "8a666e58-9036-4a77-bfc0-6b1487c66fc9",
+        "target": "d46a7c9c-51a8-4435-9d97-f5eb605ab41d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "25b6274c-610a-4a8d-b1f3-51f6e69ab876": {
+        "id": "25b6274c-610a-4a8d-b1f3-51f6e69ab876",
+        "name": "",
+        "path": [
+          {
+            "x": 2096,
+            "y": 568
+          },
+          {
+            "x": 2232,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "c507e226-8782-4adf-b119-0f887540aa56",
+        "target": "b0fbb88d-6558-4de2-88fe-b2761d5d4ef8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "27dc28bb-4ae1-4156-9d28-496f6a6a4735": {
+        "id": "27dc28bb-4ae1-4156-9d28-496f6a6a4735",
+        "name": "Отказано",
+        "path": [
+          {
+            "x": 320,
+            "y": 912
+          },
+          {
+            "x": 320,
+            "y": 936
+          }
+        ],
+        "type": "default",
+        "source": "05a524b9-2e1d-4742-9761-055c8db16f3f",
+        "target": "4b6062d4-cac5-4e4a-bac3-80ebf7855692",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2e76e5e7-5b59-4e27-bbd6-17572c422527": {
+        "id": "2e76e5e7-5b59-4e27-bbd6-17572c422527",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 1080
+          },
+          {
+            "x": 320,
+            "y": 1096
+          }
+        ],
+        "type": "plain",
+        "source": "7d9c157b-4f56-474c-89c7-4642b673ac9d",
+        "target": "3c503da6-4a3e-4f37-bff4-00da1191682d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "30017ca6-2c4e-43fa-a711-96194566c516": {
+        "id": "30017ca6-2c4e-43fa-a711-96194566c516",
+        "name": "Отправить на мед.осмотр",
+        "path": [
+          {
+            "x": 872,
+            "y": 568
+          },
+          {
+            "x": 920,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "1a30644a-cfbf-42e6-9d15-b9239d574694",
+        "target": "5b482601-2d7a-418a-af93-248e05e9380e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3e8ea786-8bfd-4ab4-90da-dfc9061462a4": {
+        "id": "3e8ea786-8bfd-4ab4-90da-dfc9061462a4",
+        "name": "",
+        "path": [
+          {
+            "x": 1760,
+            "y": 568
+          },
+          {
+            "x": 1808,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "d2a75a49-49f6-498d-8da0-135a4529554b",
+        "target": "e39f7891-3e3e-4f02-b4f6-1fea42285e0d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4003d4e7-6be2-4dda-9560-2b5c8fb02aac": {
+        "id": "4003d4e7-6be2-4dda-9560-2b5c8fb02aac",
+        "name": "",
+        "path": [
+          {
+            "x": 1000,
+            "y": 568
+          },
+          {
+            "x": 1024,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "5b482601-2d7a-418a-af93-248e05e9380e",
+        "target": "1fff0aa0-9300-4598-ad30-efbb78235453",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "48d28ace-6768-443f-b40d-8f5faf1f39a4": {
+        "id": "48d28ace-6768-443f-b40d-8f5faf1f39a4",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 424
+          },
+          {
+            "x": 320,
+            "y": 392
+          }
+        ],
+        "type": "default",
+        "source": "d5d863df-5f4d-4272-9e52-26e552a84604",
+        "target": "7e3ff957-6ab7-4d05-a6af-d6bbe1d9da2b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4b57d4ec-5855-4b74-b92a-e9a5e8ab86d9": {
+        "id": "4b57d4ec-5855-4b74-b92a-e9a5e8ab86d9",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 328
+          },
+          {
+            "x": 320,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "7e3ff957-6ab7-4d05-a6af-d6bbe1d9da2b",
+        "target": "3485a7f0-f825-41c8-b059-96b45b7ddc0c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4b6d6b72-9a7b-4755-8df7-d41e6cccb3ed": {
+        "id": "4b6d6b72-9a7b-4755-8df7-d41e6cccb3ed",
+        "name": "",
+        "path": [
+          {
+            "x": 1376,
+            "y": 600
+          },
+          {
+            "x": 1376,
+            "y": 640
+          }
+        ],
+        "type": "error",
+        "source": "fa5a9cf2-ff9d-431b-aa22-21aa44ea76a0",
+        "target": "389335dd-ba11-4eb1-a131-328d984d4af9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5e46f6fb-39eb-4899-8aa2-796c49f87f30": {
+        "id": "5e46f6fb-39eb-4899-8aa2-796c49f87f30",
+        "name": "",
+        "path": [
+          {
+            "x": 1648,
+            "y": 568
+          },
+          {
+            "x": 1680,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "b849553e-a013-4f6e-b8d2-bf968b202248",
+        "target": "d2a75a49-49f6-498d-8da0-135a4529554b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "699548b1-2bf2-4655-98a6-220b555b9f9b": {
+        "id": "699548b1-2bf2-4655-98a6-220b555b9f9b",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 568
+          },
+          {
+            "x": 568,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "target": "5527c551-e468-4c48-9f64-8152a2ba533b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6f333082-4979-48b7-af68-a4a83894cc9c": {
+        "id": "6f333082-4979-48b7-af68-a4a83894cc9c",
+        "name": "Медосмотр кандидата",
+        "path": [
+          {
+            "x": 96,
+            "y": 632
+          },
+          {
+            "x": 300,
+            "y": 632
+          },
+          {
+            "x": 300,
+            "y": 600
+          }
+        ],
+        "type": "plain",
+        "source": "2963ee25-4a66-449b-bb3f-e6fa36ab36f5",
+        "target": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "starting_from_working_with_candidate"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "75db0b6f-10db-49e9-b042-7fa58cd90079": {
+        "id": "75db0b6f-10db-49e9-b042-7fa58cd90079",
+        "name": "",
+        "path": [
+          {
+            "x": 1224,
+            "y": 568
+          },
+          {
+            "x": 1336,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "5029d694-90ae-4a30-8ea6-d6739da507ad",
+        "target": "fa5a9cf2-ff9d-431b-aa22-21aa44ea76a0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8df8a5b7-e7a5-41a2-8ed6-55e9efc952b1": {
+        "id": "8df8a5b7-e7a5-41a2-8ed6-55e9efc952b1",
+        "name": "",
+        "path": [
+          {
+            "x": 1224,
+            "y": 552
+          },
+          {
+            "x": 1336,
+            "y": 552
+          }
+        ],
+        "type": "error",
+        "source": "5029d694-90ae-4a30-8ea6-d6739da507ad",
+        "target": "fa5a9cf2-ff9d-431b-aa22-21aa44ea76a0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9beb52d7-4243-40d4-a9d8-abe7acc0974d": {
+        "id": "9beb52d7-4243-40d4-a9d8-abe7acc0974d",
+        "name": "Согласовано",
+        "path": [
+          {
+            "x": 320,
+            "y": 880
+          },
+          {
+            "x": 320,
+            "y": 600
+          }
+        ],
+        "type": "plain",
+        "source": "05a524b9-2e1d-4742-9761-055c8db16f3f",
+        "target": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "approved"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a440aad7-d2bf-4fcf-b4bb-c66f34dd7c52": {
+        "id": "a440aad7-d2bf-4fcf-b4bb-c66f34dd7c52",
+        "name": "",
+        "path": [
+          {
+            "x": 224,
+            "y": 440
+          },
+          {
+            "x": 304,
+            "y": 440
+          }
+        ],
+        "type": "plain",
+        "source": "5415fd95-016c-4e7f-98a7-08032f9668f4",
+        "target": "d5d863df-5f4d-4272-9e52-26e552a84604",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a5f50e22-e138-4868-9ce8-05dd97655df2": {
+        "id": "a5f50e22-e138-4868-9ce8-05dd97655df2",
+        "name": "",
+        "path": [
+          {
+            "x": 648,
+            "y": 568
+          },
+          {
+            "x": 680,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "5527c551-e468-4c48-9f64-8152a2ba533b",
+        "target": "bf1111c7-d90f-4b05-89ac-4d4c3a58ba84",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b1e9755c-0f2d-4095-a9a2-1ac43fae6a58": {
+        "id": "b1e9755c-0f2d-4095-a9a2-1ac43fae6a58",
+        "name": "",
+        "path": [
+          {
+            "x": 472,
+            "y": 680
+          },
+          {
+            "x": 560,
+            "y": 680
+          },
+          {
+            "x": 560,
+            "y": 584
+          },
+          {
+            "x": 568,
+            "y": 584
+          }
+        ],
+        "type": "plain",
+        "source": "5a62e1cb-32ad-479d-bb69-4e03a2755085",
+        "target": "5527c551-e468-4c48-9f64-8152a2ba533b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b30b2b3f-92c3-4739-8999-8a8c8e83cd4b": {
+        "id": "b30b2b3f-92c3-4739-8999-8a8c8e83cd4b",
+        "name": "",
+        "path": [
+          {
+            "x": 340,
+            "y": 112
+          },
+          {
+            "x": 340,
+            "y": 96
+          },
+          {
+            "x": 344,
+            "y": 96
+          },
+          {
+            "x": 344,
+            "y": 72
+          },
+          {
+            "x": 336,
+            "y": 72
+          }
+        ],
+        "type": "error",
+        "source": "d873df36-5096-4e40-a18c-b763fb67c9ed",
+        "target": "d4f0df43-53fd-4d80-9434-bfc7def8bb4a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bbabab86-ac5c-4328-9e5d-9f9d197558a5": {
+        "id": "bbabab86-ac5c-4328-9e5d-9f9d197558a5",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 184
+          },
+          {
+            "x": 80,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "2b5711a1-90ea-4c74-8579-d0a1a7d838b1",
+        "target": "f022c6f5-cfe3-4183-8b27-f80bc8f31091",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bcd04756-9076-4935-afb3-315cb3e2248d": {
+        "id": "bcd04756-9076-4935-afb3-315cb3e2248d",
+        "name": "",
+        "path": [
+          {
+            "x": 2096,
+            "y": 552
+          },
+          {
+            "x": 2224,
+            "y": 552
+          },
+          {
+            "x": 2224,
+            "y": 544
+          },
+          {
+            "x": 2248,
+            "y": 544
+          },
+          {
+            "x": 2248,
+            "y": 552
+          }
+        ],
+        "type": "error",
+        "source": "c507e226-8782-4adf-b119-0f887540aa56",
+        "target": "b0fbb88d-6558-4de2-88fe-b2761d5d4ef8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bd06ab4b-dab9-4a9b-bf6b-64e8543c97fc": {
+        "id": "bd06ab4b-dab9-4a9b-bf6b-64e8543c97fc",
+        "name": "",
+        "path": [
+          {
+            "x": 1888,
+            "y": 568
+          },
+          {
+            "x": 1912,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "e39f7891-3e3e-4f02-b4f6-1fea42285e0d",
+        "target": "5f33096c-d58b-4cea-9ed2-444d19786312",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bdaed15e-2d10-460e-b885-538afe6acb06": {
+        "id": "bdaed15e-2d10-460e-b885-538afe6acb06",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 456
+          },
+          {
+            "x": 80,
+            "y": 616
+          }
+        ],
+        "type": "plain",
+        "source": "59938ca9-3874-4ecb-84cf-b8be51d28ae0",
+        "target": "2963ee25-4a66-449b-bb3f-e6fa36ab36f5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "sort_of_medical_examination"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "special_examination",
+                    "name": "Внеочередной"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bdd4db35-860c-4b8f-a90c-a0f4cd6503ad": {
+        "id": "bdd4db35-860c-4b8f-a90c-a0f4cd6503ad",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 272
+          },
+          {
+            "x": 80,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "f022c6f5-cfe3-4183-8b27-f80bc8f31091",
+        "target": "59938ca9-3874-4ecb-84cf-b8be51d28ae0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c14c2b71-0661-4a1a-a2fb-deb87b691f64": {
+        "id": "c14c2b71-0661-4a1a-a2fb-deb87b691f64",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 112
+          },
+          {
+            "x": 320,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "d873df36-5096-4e40-a18c-b763fb67c9ed",
+        "target": "d4f0df43-53fd-4d80-9434-bfc7def8bb4a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c2ed173a-5a18-440f-acf4-51e87fe1ca6e": {
+        "id": "c2ed173a-5a18-440f-acf4-51e87fe1ca6e",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 216
+          },
+          {
+            "x": 320,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "3485a7f0-f825-41c8-b059-96b45b7ddc0c",
+        "target": "d873df36-5096-4e40-a18c-b763fb67c9ed",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c6fc2172-f95c-4897-9e67-adbcfb5ac0ab": {
+        "id": "c6fc2172-f95c-4897-9e67-adbcfb5ac0ab",
+        "name": "",
+        "path": [
+          {
+            "x": 1536,
+            "y": 568
+          },
+          {
+            "x": 1568,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "7a5ee98f-12db-478a-a31c-e72421eeaff2",
+        "target": "b849553e-a013-4f6e-b8d2-bf968b202248",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "caa0b529-d9b8-46fb-b873-a31cc2dacc37": {
+        "id": "caa0b529-d9b8-46fb-b873-a31cc2dacc37",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 456
+          },
+          {
+            "x": 320,
+            "y": 536
+          }
+        ],
+        "type": "plain",
+        "source": "d5d863df-5f4d-4272-9e52-26e552a84604",
+        "target": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "need_med_exam"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cca9dc45-ae2c-4f02-9539-242d4ea5fe80": {
+        "id": "cca9dc45-ae2c-4f02-9539-242d4ea5fe80",
+        "name": "",
+        "path": [
+          {
+            "x": 1104,
+            "y": 568
+          },
+          {
+            "x": 1144,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "1fff0aa0-9300-4598-ad30-efbb78235453",
+        "target": "5029d694-90ae-4a30-8ea6-d6739da507ad",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cdbe9114-5b77-4404-a1a0-fcfc2e7081b8": {
+        "id": "cdbe9114-5b77-4404-a1a0-fcfc2e7081b8",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 88
+          },
+          {
+            "x": 80,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "2b5711a1-90ea-4c74-8579-d0a1a7d838b1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d0af1d0a-b19d-41db-b8c8-feb851885bfe": {
+        "id": "d0af1d0a-b19d-41db-b8c8-feb851885bfe",
+        "name": "",
+        "path": [
+          {
+            "x": 760,
+            "y": 568
+          },
+          {
+            "x": 792,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "bf1111c7-d90f-4b05-89ac-4d4c3a58ba84",
+        "target": "1a30644a-cfbf-42e6-9d15-b9239d574694",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e6567c00-29dd-47e2-b07b-b1c9ae650c8d": {
+        "id": "e6567c00-29dd-47e2-b07b-b1c9ae650c8d",
+        "name": "",
+        "path": [
+          {
+            "x": 1992,
+            "y": 568
+          },
+          {
+            "x": 2016,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "5f33096c-d58b-4cea-9ed2-444d19786312",
+        "target": "c507e226-8782-4adf-b119-0f887540aa56",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e65f5942-2d0e-456b-8e28-faca482962b1": {
+        "id": "e65f5942-2d0e-456b-8e28-faca482962b1",
+        "name": "",
+        "path": [
+          {
+            "x": 320,
+            "y": 1160
+          },
+          {
+            "x": 320,
+            "y": 1192
+          }
+        ],
+        "type": "plain",
+        "source": "3c503da6-4a3e-4f37-bff4-00da1191682d",
+        "target": "e8ef014d-f74c-44be-be3f-1c249c897205",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e68ac534-c210-44a3-97c7-be8a9beb06d9": {
+        "id": "e68ac534-c210-44a3-97c7-be8a9beb06d9",
+        "name": "",
+        "path": [
+          {
+            "x": 80,
+            "y": 848
+          },
+          {
+            "x": 80,
+            "y": 896
+          },
+          {
+            "x": 144,
+            "y": 896
+          }
+        ],
+        "type": "error",
+        "source": "8a666e58-9036-4a77-bfc0-6b1487c66fc9",
+        "target": "d46a7c9c-51a8-4435-9d97-f5eb605ab41d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e6c30e6d-c21f-47e9-bb0e-1d0510c4377f": {
+        "id": "e6c30e6d-c21f-47e9-bb0e-1d0510c4377f",
+        "name": "",
+        "path": [
+          {
+            "x": 1416,
+            "y": 568
+          },
+          {
+            "x": 1456,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "fa5a9cf2-ff9d-431b-aa22-21aa44ea76a0",
+        "target": "7a5ee98f-12db-478a-a31c-e72421eeaff2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "eab75bff-6582-479b-8f5a-c1be95b8bac0": {
+        "id": "eab75bff-6582-479b-8f5a-c1be95b8bac0",
+        "name": "",
+        "path": [
+          {
+            "x": 340,
+            "y": 1160
+          },
+          {
+            "x": 340,
+            "y": 1184
+          },
+          {
+            "x": 320,
+            "y": 1184
+          },
+          {
+            "x": 320,
+            "y": 1192
+          }
+        ],
+        "type": "error",
+        "source": "3c503da6-4a3e-4f37-bff4-00da1191682d",
+        "target": "e8ef014d-f74c-44be-be3f-1c249c897205",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ef7c6383-c672-4249-816b-f370bceb64ef": {
+        "id": "ef7c6383-c672-4249-816b-f370bceb64ef",
+        "name": "",
+        "path": [
+          {
+            "x": 1416,
+            "y": 672
+          },
+          {
+            "x": 1496,
+            "y": 672
+          },
+          {
+            "x": 1496,
+            "y": 600
+          }
+        ],
+        "type": "plain",
+        "source": "389335dd-ba11-4eb1-a131-328d984d4af9",
+        "target": "7a5ee98f-12db-478a-a31c-e72421eeaff2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f31316fd-1411-4f76-b515-bc0d884f6215": {
+        "id": "f31316fd-1411-4f76-b515-bc0d884f6215",
+        "name": "Периодические медосмотры",
+        "path": [
+          {
+            "x": 80,
+            "y": 456
+          },
+          {
+            "x": 80,
+            "y": 568
+          },
+          {
+            "x": 280,
+            "y": 568
+          }
+        ],
+        "type": "plain",
+        "source": "59938ca9-3874-4ecb-84cf-b8be51d28ae0",
+        "target": "2efb03e6-d643-45a3-a12d-e42891b58548",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "sort_of_medical_examination"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "periodic_examination",
+                    "name": "Периодический"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f9d1069e-2a37-4e57-af7a-dd3c13fa1570": {
+        "id": "f9d1069e-2a37-4e57-af7a-dd3c13fa1570",
+        "name": "",
+        "path": [
+          {
+            "x": 224,
+            "y": 896
+          },
+          {
+            "x": 304,
+            "y": 896
+          }
+        ],
+        "type": "plain",
+        "source": "d46a7c9c-51a8-4435-9d97-f5eb605ab41d",
+        "target": "05a524b9-2e1d-4742-9761-055c8db16f3f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fabaad37-17d1-4aae-b85b-58a9c745d18e": {
+        "id": "fabaad37-17d1-4aae-b85b-58a9c745d18e",
+        "name": "",
+        "path": [
+          {
+            "x": 96,
+            "y": 440
+          },
+          {
+            "x": 144,
+            "y": 440
+          }
+        ],
+        "type": "default",
+        "source": "59938ca9-3874-4ecb-84cf-b8be51d28ae0",
+        "target": "5415fd95-016c-4e7f-98a7-08032f9668f4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "\n\nasync function getAllMedExam(): Promise\u003cvoid\u003e {\n    let med_exam_array: TApplication\u003cApplication$kedo$Types_medical_examinations$Data, Application$kedo$Types_medical_examinations$Params, Application$kedo$Types_medical_examinations$Processes\u003e[] = [];\n    let position: ApplicationItem\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e;\n    const medical_request = await Context.data.medical_request!.fetch();\n    const staff = await medical_request.data.staff!.fetch();\n    medical_request.data.old_postion = staff.data.position;\n    medical_request.data.categories_table = staff.data.categories_table;\n    if (medical_request.data.new_position) {\n        position = await medical_request.data.new_position.fetch()\n    } else {\n        position = await medical_request.data.old_postion!.fetch()\n    }\n    if (position.data.harmful_production_factors \u0026\u0026 position.data.harmful_production_factors.length \u003e 0) {\n        Context.data.need_med_exam = true;\n        const factors = await Promise.all(position.data.harmful_production_factors.map(x =\u003e x.fetch()));\n        for (let factor of factors) {\n            med_exam_array = med_exam_array.concat(factor.data.necessary_preliminary_examinations!);\n        }\n        med_exam_array = med_exam_array.filter((f, i, s) =\u003e i === s.findIndex(t =\u003e t.id === f.id));\n    }\n    const activ_med_exams = await Namespace.app.medical_examination.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__status.neq(Namespace.app.medical_examination.fields.__status.variants.passed),\n            f.staff.link(staff)\n        ))\n        .size(10000)\n        .all();\n    if (activ_med_exams \u0026\u0026 activ_med_exams.length \u003e 0)\n        med_exam_array = med_exam_array.filter((f) =\u003e !activ_med_exams.find(j =\u003e j.id === f.id));\n    if (med_exam_array \u0026\u0026 med_exam_array.length \u003e 0) {\n        const med_exams = await Promise.all(med_exam_array.map(f =\u003e f.fetch()));\n        for (const med_exam of med_exams) {\n            const row_structure = medical_request.data.structure!.insert();\n            row_structure.med_type = med_exam;\n        }\n    }\n    medical_request.data.harmful_factors = position.data.harmful_production_factors;\n    await medical_request.save();\n}\n\nasync function createMedExamCards(): Promise\u003cvoid\u003e {\n    Context.data.med_exam = [];\n    let promises: Promise\u003cvoid\u003e[] = [];\n    const medical_request = await Context.data.medical_request!.fetch();\n    if (medical_request.data.structure \u0026\u0026 medical_request.data.structure.length \u003e 0) {\n        for (let row of medical_request.data.structure) {\n            const med_exam = Context.fields.med_exam.app.create();\n            med_exam.data.med_request = medical_request;\n            med_exam.data.staff = medical_request.data.staff;\n            med_exam.data.candidate = medical_request.data.candidate;\n            if (medical_request.data.old_postion) {\n                med_exam.data.position = medical_request.data.old_postion;\n            } else {\n                med_exam.data.position = medical_request.data.new_position;\n            }\n            med_exam.data.harmful_factors = medical_request.data.harmful_factors;\n            med_exam.data.categories_table = medical_request.data.categories_table;\n            med_exam.data.type_of_medical_examination = row.med_type;\n            med_exam.data.due_date = row.due_date;\n            med_exam.data.medical_organization = row.med_organization;\n            med_exam.data.med_organization = Context.data.organization;\n            promises.push(med_exam.save());\n            Context.data.med_exam.push(med_exam);\n        }\n        await Promise.all(promises);\n    }\n}\n\nasync function setStatusCancelled(): Promise\u003cvoid\u003e {\n    if (!Context.data.medical_request) {\n        throw new Error(\"Context.data.medical_request is undefined\");\n    }\n\n    const obj_status = {\n        app: {\n            namespace: Context.data.medical_request.namespace,\n            code: Context.data.medical_request.code,\n            id: Context.data.medical_request.id,\n        },\n        status: \"cancelled\",\n    };\n\n    Context.data.kedo_status = JSON.stringify(obj_status);\n}\n\nasync function setStatusPending(): Promise\u003cvoid\u003e {\n    if (!Context.data.medical_request) {\n        throw new Error(\"Context.data.medical_request is undefined\");\n    }\n\n    const obj_status = {\n        app: {\n            namespace: Context.data.medical_request.namespace,\n            code: Context.data.medical_request.code,\n            id: Context.data.medical_request.id,\n        },\n        status: \"pending\",\n    };\n\n    Context.data.kedo_status = JSON.stringify(obj_status);\n}\n\nasync function setStatusIssued(): Promise\u003cvoid\u003e {\n    if (!Context.data.medical_request) {\n        throw new Error(\"Context.data.medical_request is undefined\");\n    }\n\n    const obj_status = {\n        app: {\n            namespace: Context.data.medical_request.namespace,\n            code: Context.data.medical_request.code,\n            id: Context.data.medical_request.id,\n        },\n        status: \"issued\",\n    };\n\n    Context.data.kedo_status = JSON.stringify(obj_status);\n}\n\nasync function setStatusApproval(): Promise\u003cvoid\u003e {\n    if (!Context.data.medical_request) {\n        throw new Error(\"Context.data.medical_request is undefined\");\n    }\n\n    const obj_status = {\n        app: {\n            namespace: Context.data.medical_request.namespace,\n            code: Context.data.medical_request.code,\n            id: Context.data.medical_request.id,\n        },\n        status: \"approval\",\n    };\n\n    Context.data.kedo_status = JSON.stringify(obj_status);\n}\n\n//Получаем организацию\nasync function getOrganization(): Promise\u003cvoid\u003e {\n    const medical_request = await Context.data.medical_request!.fetch();\n    \n    //Если есть сотрудник\n    if (medical_request.data.staff) {\n        const staff = await medical_request.data.staff.fetch();\n        if (staff.data.organization) {\n            Context.data.organization = staff.data.organization;\n        }\n    }\n\n    //Если есть кандидат\n    if (medical_request.data.candidate) {\n        const candidate = await medical_request.data.candidate.fetch();\n        if (candidate.data.planned_position) {\n            const position = await candidate.data.planned_position.fetch();\n            if (position.data.organization) {\n                Context.data.organization = position.data.organization\n            }\n        }\n    }\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_466fd9f0-f489-4da2-9edd-5777b1c3ce2a",
+      "name": "Направить на медосмотр",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": 4
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "bd77d335-2eb9-43ef-9fb6-111529ff2a35",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "medical_request"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "hr_dep": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      },
+      "med_exam": {
+        "enabled": false,
+        "conditions": []
+      },
+      "position": {
+        "enabled": false,
+        "conditions": []
+      },
+      "xml_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "kedo_status": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization": {
+        "enabled": false,
+        "conditions": []
+      },
+      "need_med_exam": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sort_med_exam": {
+        "enabled": false,
+        "conditions": []
+      },
+      "medical_request": {
+        "enabled": false,
+        "conditions": []
+      },
+      "periodic_med_exams": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_application": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_it_employment_process": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sort_of_medical_examination": {
+        "enabled": false,
+        "conditions": []
+      },
+      "starting_from_working_with_candidate": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,846 @@
+{
+  "__id": "018f94d4-806d-72c6-bfa0-84c483d34293",
+  "namespace": "kedo",
+  "code": "inner_users_migration",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Миграция пользователей",
+  "type": "bpmn",
+  "draft": false,
+  "version": 7,
+  "context": [
+    {
+      "code": "partial_migrate",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отдельный запуск процесса",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "organization_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Организации",
+        "data": {}
+      }
+    },
+    {
+      "code": "users_exists",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Пользователи существуют",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "id_chunks",
+      "type": "JSON",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Массив идентификаторов сотрудников",
+        "data": {}
+      }
+    },
+    {
+      "code": "access_rights_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "access_settings_organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Права доступа организации",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Сотрудники",
+        "data": {}
+      }
+    },
+    {
+      "code": "all_staff_processed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Все сотрудники обработаны",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staff_with_roles",
+      "type": "JSON",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Идентификаторы пользователей с назначенными ролями",
+        "data": {}
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Итерация",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "chunk_size",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 100,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество объектов за итерацию",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "add_hr_and_accounting_to_inner_users",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Добавить отдел кадров и бухгалтерию в группу Внутренние сотрудники",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-09-30T07:23:54.04213079Z",
+  "__createdBy": "5d4a0602-0470-4d58-9ba2-89062f72b084",
+  "__updatedAt": "2024-05-21T13:49:36.177342983Z",
+  "__updatedBy": "15e86d51-328d-4620-a8d4-5551b25854ae",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 160,
+        "y": 56,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["28fb2efd-b433-4ca4-ab8c-378b9a1f1dff"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            },
+            {
+              "code": "chunk_size",
+              "tooltip": "Количество объектов, которое система будет обрабатывать за одну итерацию (по умолчанию: 100), если у вас слабая система, вы можете задать количество вручную.",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "add_hr_and_accounting_to_inner_users",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "Будет запущен процесс распределения пользователей по группам доступа.",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Миграция внутренних пользователей - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "282d5689-1f02-4a10-9cbc-3b6ad335f153": {
+        "x": 136,
+        "y": 264,
+        "id": "282d5689-1f02-4a10-9cbc-3b6ad335f153",
+        "icon": "script",
+        "lane": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "name": "Обработать чанк",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["a325cebd-7ccb-4eb0-95c4-0f74efa06554"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "migrateInnerUsers",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "62d8be3b-2238-4a5d-929d-ae5b075d679b": {
+        "x": 136,
+        "y": 104,
+        "id": "62d8be3b-2238-4a5d-929d-ae5b075d679b",
+        "icon": "script",
+        "lane": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "name": "Найти и разделить пользователей на чанки",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["18450a1a-be3b-45a8-8bd3-7543611cffe6"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getAndSplitUsers",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "8b3d2d49-1d8f-4dae-87e9-c5b137fbc45d": {
+        "x": 160,
+        "y": 200,
+        "id": "8b3d2d49-1d8f-4dae-87e9-c5b137fbc45d",
+        "icon": "exclusive",
+        "lane": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "c8719534-194c-44f5-844f-ebdb05c28017",
+          "6a787b92-f207-4467-900f-16ee5ce88948"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "b720eb47-f26b-4bd3-96b6-c5bb1a2d6ddb": {
+        "x": 160,
+        "y": 432,
+        "id": "b720eb47-f26b-4bd3-96b6-c5bb1a2d6ddb",
+        "icon": "end",
+        "lane": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "bf052e1e-e8ac-46e4-afc0-cd0c3aa08ede": {
+        "x": 160,
+        "y": 368,
+        "id": "bf052e1e-e8ac-46e4-afc0-cd0c3aa08ede",
+        "icon": "exclusive",
+        "lane": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "eb4e1f83-6afa-447a-ba37-f107324e784a",
+          "0067b27c-ff88-4960-a72d-9bd1dac2a62e"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      }
+    },
+    "lanes": {
+      "19406d71-74f6-4841-92c7-2c1638c5ac91": {
+        "x": 8,
+        "y": 24,
+        "id": "19406d71-74f6-4841-92c7-2c1638c5ac91",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 476,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0067b27c-ff88-4960-a72d-9bd1dac2a62e": {
+        "id": "0067b27c-ff88-4960-a72d-9bd1dac2a62e",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 400
+          },
+          {
+            "x": 176,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "bf052e1e-e8ac-46e4-afc0-cd0c3aa08ede",
+        "target": "b720eb47-f26b-4bd3-96b6-c5bb1a2d6ddb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "all_staff_processed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "18450a1a-be3b-45a8-8bd3-7543611cffe6": {
+        "id": "18450a1a-be3b-45a8-8bd3-7543611cffe6",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 168
+          },
+          {
+            "x": 176,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "62d8be3b-2238-4a5d-929d-ae5b075d679b",
+        "target": "8b3d2d49-1d8f-4dae-87e9-c5b137fbc45d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "28fb2efd-b433-4ca4-ab8c-378b9a1f1dff": {
+        "id": "28fb2efd-b433-4ca4-ab8c-378b9a1f1dff",
+        "name": "Начать миграцию",
+        "path": [
+          {
+            "x": 176,
+            "y": 88
+          },
+          {
+            "x": 176,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "62d8be3b-2238-4a5d-929d-ae5b075d679b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6a787b92-f207-4467-900f-16ee5ce88948": {
+        "id": "6a787b92-f207-4467-900f-16ee5ce88948",
+        "name": "",
+        "path": [
+          {
+            "x": 192,
+            "y": 216
+          },
+          {
+            "x": 232,
+            "y": 216
+          },
+          {
+            "x": 232,
+            "y": 444
+          },
+          {
+            "x": 200,
+            "y": 444
+          },
+          {
+            "x": 200,
+            "y": 448
+          },
+          {
+            "x": 192,
+            "y": 448
+          }
+        ],
+        "type": "default",
+        "source": "8b3d2d49-1d8f-4dae-87e9-c5b137fbc45d",
+        "target": "b720eb47-f26b-4bd3-96b6-c5bb1a2d6ddb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a325cebd-7ccb-4eb0-95c4-0f74efa06554": {
+        "id": "a325cebd-7ccb-4eb0-95c4-0f74efa06554",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 328
+          },
+          {
+            "x": 176,
+            "y": 368
+          }
+        ],
+        "type": "plain",
+        "source": "282d5689-1f02-4a10-9cbc-3b6ad335f153",
+        "target": "bf052e1e-e8ac-46e4-afc0-cd0c3aa08ede",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c8719534-194c-44f5-844f-ebdb05c28017": {
+        "id": "c8719534-194c-44f5-844f-ebdb05c28017",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 232
+          },
+          {
+            "x": 176,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "8b3d2d49-1d8f-4dae-87e9-c5b137fbc45d",
+        "target": "282d5689-1f02-4a10-9cbc-3b6ad335f153",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "users_exists"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "eb4e1f83-6afa-447a-ba37-f107324e784a": {
+        "id": "eb4e1f83-6afa-447a-ba37-f107324e784a",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 384
+          },
+          {
+            "x": 128,
+            "y": 384
+          },
+          {
+            "x": 128,
+            "y": 296
+          },
+          {
+            "x": 136,
+            "y": 296
+          }
+        ],
+        "type": "default",
+        "source": "bf052e1e-e8ac-46e4-afc0-cd0c3aa08ede",
+        "target": "282d5689-1f02-4a10-9cbc-3b6ad335f153",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "const chunkSize = Context.data.chunk_size!;\n\n//Миграция пользователей в группы доступа\nasync function migrateInnerUsers(): Promise\u003cvoid\u003e {\n    const allStaff = await Context.fields.staff_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all().then(r =\u003e r.filter(s =\u003e s.data.ext_user));\n    const allOrgs = await Context.fields.organization_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allGroups = await System.userGroups.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allOrgRights = await Context.fields.access_rights_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allUsers = await System.users.search().size(10000).all();\n    const staffChunk: {id: string, access: string}[] = Context.data.id_chunks[Context.data.iteration!];\n    const promises: Promise\u003cvoid\u003e[] = [];\n    let idsWithPositions: string[] = [];\n    \n    if (Context.data.staff_with_roles) {\n        idsWithPositions = Context.data.staff_with_roles;\n    } else if (!Context.data.add_hr_and_accounting_to_inner_users) {\n        idsWithPositions = [].concat.apply([], Array.from(new Set(allOrgs.map(org =\u003e {\n            const hrIds = org.data.hr_department \u0026\u0026 org.data.hr_department.length \u003e 0 ? org.data.hr_department.map(item =\u003e {\n                const staff = allStaff.find(s =\u003e s.id === item.id);\n                if (staff \u0026\u0026 staff.data.ext_user) {\n                    const user = allUsers.find(u =\u003e u.id === staff.data.ext_user!.id);\n                    if (user) {\n                        return user.id\n                    }\n                }\n                return \"\";\n            }) : [];\n            const accountingIds = org.data.accounting \u0026\u0026 org.data.accounting.length \u003e 0 ? org.data.accounting.map(item =\u003e {\n                const staff = allStaff.find(s =\u003e s.id === item.id);\n                if (staff \u0026\u0026 staff.data.ext_user) {\n                    const user = allUsers.find(u =\u003e u.id === staff.data.ext_user!.id);\n                    if (user) {\n                        return user.id\n                    }\n                }\n                return \"\";\n            }) : [];\n            const specialsIds = org.data.special_access_new \u0026\u0026 org.data.special_access_new.length \u003e 0 ? org.data.special_access_new.map(item =\u003e {\n                const staff = allStaff.find(s =\u003e s.id === item.id);\n                if (staff \u0026\u0026 staff.data.ext_user) {\n                    const user = allUsers.find(u =\u003e u.id === staff.data.ext_user!.id);\n                    if (user) {\n                        return user.id\n                    }\n                }\n                return \"\";\n            }) : [];\n            return [].concat.apply([], [...hrIds, ...accountingIds, ...specialsIds])\n        }))));\n        Context.data.staff_with_roles = idsWithPositions\n    };\n\n    for (let item of staffChunk) {\n        const staff = allStaff.find(s =\u003e s.id === item.id);\n        if (!staff || !staff.data.organization || !staff.data.ext_user) {\n            Context.data.debug += `no organization at staff ${item.id} or no staff `\n            continue;\n        };\n        if (idsWithPositions.indexOf(staff.data.ext_user!.id) != -1) {\n            Context.data.debug += `skip staff ${staff.data.__name}`\n            continue;\n        };\n        const staffAccessNamespace = item.access;\n        if (staff.data.employment_table \u0026\u0026 staff.data.employment_table.length \u003e 1) {\n            const staffOrgsIds = staff.data.employment_table.filter(row =\u003e row.organization).map(row =\u003e row.organization.id);\n            const staffAccessIds = allOrgs.filter(org =\u003e staffOrgsIds.indexOf(org.id) != -1 \u0026\u0026 org.data.access_settings_organization).map(org =\u003e org.data.access_settings_organization!.id);\n            const staffAccess = allOrgRights.filter(access =\u003e staffAccessIds.indexOf(access.id) != -1 \u0026\u0026 access.data.inner_org_users);\n            for (let access of staffAccess) {\n                let userGroup: UserGroupItem;\n                if (staffAccessNamespace === \"portal\") {\n                    userGroup = allGroups.find(g =\u003e g.id === access.data.external_org_users![0].code)!;\n                } else {\n                    userGroup = allGroups.find(g =\u003e g.id === access.data.inner_org_users![0].code)!;\n                }\n                if (userGroup) {\n                    const user = allUsers.find(u =\u003e u.id === staff.data.ext_user!.id);\n                    if (!userGroup.data.subOrgunitIds || userGroup.data.subOrgunitIds.length \u003c 1) {\n                        userGroup.data.subOrgunitIds = [];\n                    };\n                    if (userGroup.data.subOrgunitIds.indexOf(staff.data.ext_user!.id) === -1) {\n                        userGroup.data.subOrgunitIds.push(staff.data.ext_user!.id);\n                        await userGroup.save().catch(err =\u003e {\n                            Context.data.debug += `error at userId ${user!.id}: ${err}`\n                        });\n                    };\n                };\n            };\n            continue;\n        }\n        const org = allOrgs.find(org =\u003e org.id === staff.data.organization!.id);\n        if (!org!.data.access_settings_organization) {\n            Context.data.debug += `no access settings at org ${staff.data.organization!.id} or no org `\n            continue;\n        };\n        const orgRights = allOrgRights.find(right =\u003e right.id === org!.data.access_settings_organization!.id);\n        if (!orgRights!.data.inner_org_users || orgRights!.data.inner_org_users.length \u003c 1) {\n            Context.data.debug += `no inner user role at access settings ${org!.data.access_settings_organization!.id} or no access settings `\n            continue;\n        };\n        let userGroup: UserGroupItem;\n        if (staffAccessNamespace === \"portal\") {\n            userGroup = allGroups.find(g =\u003e g.id === orgRights!.data.external_org_users![0].code)!;\n        } else {\n            userGroup = allGroups.find(g =\u003e g.id === orgRights!.data.inner_org_users![0].code)!;\n        }\n        if (userGroup) {\n            const user = allUsers.find(u =\u003e u.id === staff.data.ext_user!.id);\n            if (user \u0026\u0026 !user.data.__deletedAt) {\n                if (!userGroup.data.subOrgunitIds || userGroup.data.subOrgunitIds.length \u003c 1) {\n                    userGroup.data.subOrgunitIds = [];\n                };\n                if (userGroup.data.subOrgunitIds.indexOf(staff.data.ext_user!.id) === -1) {\n                    userGroup.data.subOrgunitIds.push(staff.data.ext_user!.id);\n                    await userGroup.save().catch(err =\u003e {\n                        Context.data.debug += `error at userId ${user!.id}: ${err}`\n                    });\n                };\n                // promises.push(innerUsersGroup.save());\n            } else {\n                Context.data.debug += `deleted user at staffId ${item.id}`\n            }\n        };\n    };\n    // await Promise.all(promises);\n    Context.data.iteration!++;\n    if (staffChunk.length \u003c chunkSize) {\n        Context.data.all_staff_processed = true;\n        // Context.data.debug = `items processed: ${[].concat.apply([], (Context.data.id_chunks)).length}`;\n    };\n};\n\n//Находим всех пользователей и разделяем на чанки\nasync function getAndSplitUsers(): Promise\u003cvoid\u003e {\n    let staffIdsChunks: {id: string, access: string}[][] = [];\n    const allStaff = await Context.fields.staff_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all().then(r =\u003e r.filter(s =\u003e s.data.ext_user));\n    const mappedStaff = allStaff.map(s =\u003e {\n        return {\n            id: s.id,\n            access: s.data.staff_access ? \"portal\" : \"system\"\n        }\n    });\n    for (let i = 0; i \u003c mappedStaff.length; i += chunkSize) {\n        const chunk = mappedStaff.slice(i, i + chunkSize)\n        staffIdsChunks.push(chunk)\n    };\n    if (staffIdsChunks.length \u003e 0) {\n        Context.data.users_exists = true;\n        Context.data.id_chunks = staffIdsChunks;\n    };\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "id_chunks": {
+        "enabled": false,
+        "conditions": []
+      },
+      "iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "chunk_size": {
+        "enabled": false,
+        "conditions": []
+      },
+      "users_exists": {
+        "enabled": false,
+        "conditions": []
+      },
+      "partial_migrate": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_with_roles": {
+        "enabled": false,
+        "conditions": []
+      },
+      "access_rights_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "all_staff_processed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "add_hr_and_accounting_to_inner_users": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

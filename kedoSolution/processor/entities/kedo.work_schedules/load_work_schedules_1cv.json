@@ -1,0 +1,1048 @@
+{
+  "__id": "018f09bb-bf48-7e82-a30b-71a438d09d9f",
+  "namespace": "kedo.work_schedules",
+  "code": "load_work_schedules_1cv",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1C) Загрузить графики работы",
+  "type": "bpmn",
+  "draft": false,
+  "version": 11,
+  "context": [
+    {
+      "code": "work_schedule_table",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "work_schedule_table",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "work_schedules",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "work_schedules",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "График работы"
+      }
+    },
+    {
+      "code": "continue",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Продолжать",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "loop_counter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 1,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счётчик цикла",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "wait",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Подождать, чтобы избежать ошибки",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "schedules_object",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Объект расписаний",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "no_1C_schedules",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Нет графиков работы из 1С",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-05-09T10:49:18.556408329Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-05-07T12:51:14.932164558Z",
+  "__updatedBy": "7e61e9a9-edda-49a3-baa2-87b36c4fbb6c",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 48,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["050608e2-72ac-46b5-a8fb-38f63595dcbe"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "(1C) Загрузить графики работы ({$work_schedules})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "341bf322-318e-4506-98fb-26a608d88b98": {
+        "x": 80,
+        "y": 192,
+        "id": "341bf322-318e-4506-98fb-26a608d88b98",
+        "icon": "script",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Создать объект с графиками",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["70950f3d-cd9c-42ce-806b-174d659882f9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createSchedulesObject",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3dd513e0-5317-476b-bd5c-738308469be0": {
+        "x": 104,
+        "y": 704,
+        "id": "3dd513e0-5317-476b-bd5c-738308469be0",
+        "icon": "end",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "3e872e4a-6fad-485b-92c7-585a2f76bb2b": {
+        "x": 296,
+        "y": 456,
+        "id": "3e872e4a-6fad-485b-92c7-585a2f76bb2b",
+        "icon": "timer",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Таймер ухода от Too many loops",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["355d2b56-2446-4bb5-8eb0-6344d7564466"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "days": 0,
+            "kind": "duration",
+            "hours": 0,
+            "minutes": 1,
+            "absolute": false
+          }
+        }
+      },
+      "6aec6219-ba7d-498a-abb3-39eae1394320": {
+        "x": 80,
+        "y": 608,
+        "id": "6aec6219-ba7d-498a-abb3-39eae1394320",
+        "icon": "notification",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Загрузка графиков работы из 1С завершена",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["c6eebca6-06dd-4385-aa1a-a828c910ee12"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Загрузка графиков работы из 1С завершена"
+        }
+      },
+      "ab606510-4059-4c0f-8a3f-7ceed0e35551": {
+        "x": 80,
+        "y": 96,
+        "id": "ab606510-4059-4c0f-8a3f-7ceed0e35551",
+        "icon": "script",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Получить графики",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["8984a6d4-c390-4bc8-8bfd-e11ccc707cc0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSchedules",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "be9c6340-9eb7-4f8c-98dc-d040f9e8083c": {
+        "x": 80,
+        "y": 344,
+        "id": "be9c6340-9eb7-4f8c-98dc-d040f9e8083c",
+        "icon": "script",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Заполнить данные о выходных/рабочих днях",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["464b5846-9acf-4458-8e32-8ae294c70cc1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillSchedules",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "c90915aa-f4cd-459a-8bce-7743bf2c368a": {
+        "x": 104,
+        "y": 280,
+        "id": "c90915aa-f4cd-459a-8bce-7743bf2c368a",
+        "icon": "exclusive",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "438cab0b-83b8-4f1f-b795-97e15625727c",
+          "7d7fce9f-b4a6-44a5-805b-b657dc5c418f"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d564c48c-5ecc-43a8-8664-ab84c26173bb": {
+        "x": 232,
+        "y": 456,
+        "id": "d564c48c-5ecc-43a8-8664-ab84c26173bb",
+        "icon": "exclusive",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "bdd7dace-e341-4ea2-8b13-531c95c24aec",
+          "c3d50665-9ce5-4a21-b22f-74904432ca5d"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "fd94b6f1-a2f4-4d21-b231-f653450ede99": {
+        "x": 104,
+        "y": 456,
+        "id": "fd94b6f1-a2f4-4d21-b231-f653450ede99",
+        "icon": "exclusive",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "aa96160b-c264-4b7b-bf0b-54d1a76a10fd",
+          "c76fc300-c6de-4cc3-bda8-8d9972e9a95c"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "fda63364-ed9e-4e2a-9067-2f856424fe05": {
+        "x": 80,
+        "y": 512,
+        "id": "fda63364-ed9e-4e2a-9067-2f856424fe05",
+        "icon": "script",
+        "lane": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Заполнить данные в графиках",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["e80546a2-d6df-4a4c-aaa9-e10cbd976c3a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "addJSONToSchedules",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "18db92da-380f-4986-baee-161069a95e0c": {
+        "x": 8,
+        "y": 8,
+        "id": "18db92da-380f-4986-baee-161069a95e0c",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 808,
+        "height": 848,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "050608e2-72ac-46b5-a8fb-38f63595dcbe": {
+        "id": "050608e2-72ac-46b5-a8fb-38f63595dcbe",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 80
+          },
+          {
+            "x": 120,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "ab606510-4059-4c0f-8a3f-7ceed0e35551",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "355d2b56-2446-4bb5-8eb0-6344d7564466": {
+        "id": "355d2b56-2446-4bb5-8eb0-6344d7564466",
+        "name": "",
+        "path": [
+          {
+            "x": 328,
+            "y": 472
+          },
+          {
+            "x": 336,
+            "y": 472
+          },
+          {
+            "x": 336,
+            "y": 360
+          },
+          {
+            "x": 160,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "3e872e4a-6fad-485b-92c7-585a2f76bb2b",
+        "target": "be9c6340-9eb7-4f8c-98dc-d040f9e8083c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "438cab0b-83b8-4f1f-b795-97e15625727c": {
+        "id": "438cab0b-83b8-4f1f-b795-97e15625727c",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 312
+          },
+          {
+            "x": 120,
+            "y": 344
+          }
+        ],
+        "type": "default",
+        "source": "c90915aa-f4cd-459a-8bce-7743bf2c368a",
+        "target": "be9c6340-9eb7-4f8c-98dc-d040f9e8083c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "464b5846-9acf-4458-8e32-8ae294c70cc1": {
+        "id": "464b5846-9acf-4458-8e32-8ae294c70cc1",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 408
+          },
+          {
+            "x": 120,
+            "y": 456
+          }
+        ],
+        "type": "plain",
+        "source": "be9c6340-9eb7-4f8c-98dc-d040f9e8083c",
+        "target": "fd94b6f1-a2f4-4d21-b231-f653450ede99",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "70950f3d-cd9c-42ce-806b-174d659882f9": {
+        "id": "70950f3d-cd9c-42ce-806b-174d659882f9",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 256
+          },
+          {
+            "x": 120,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "341bf322-318e-4506-98fb-26a608d88b98",
+        "target": "c90915aa-f4cd-459a-8bce-7743bf2c368a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7d7fce9f-b4a6-44a5-805b-b657dc5c418f": {
+        "id": "7d7fce9f-b4a6-44a5-805b-b657dc5c418f",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 296
+          },
+          {
+            "x": 436,
+            "y": 296
+          },
+          {
+            "x": 436,
+            "y": 720
+          },
+          {
+            "x": 136,
+            "y": 720
+          }
+        ],
+        "type": "plain",
+        "source": "c90915aa-f4cd-459a-8bce-7743bf2c368a",
+        "target": "3dd513e0-5317-476b-bd5c-738308469be0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "no_1C_schedules"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8984a6d4-c390-4bc8-8bfd-e11ccc707cc0": {
+        "id": "8984a6d4-c390-4bc8-8bfd-e11ccc707cc0",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 160
+          },
+          {
+            "x": 120,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "ab606510-4059-4c0f-8a3f-7ceed0e35551",
+        "target": "341bf322-318e-4506-98fb-26a608d88b98",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aa96160b-c264-4b7b-bf0b-54d1a76a10fd": {
+        "id": "aa96160b-c264-4b7b-bf0b-54d1a76a10fd",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 488
+          },
+          {
+            "x": 120,
+            "y": 512
+          }
+        ],
+        "type": "default",
+        "source": "fd94b6f1-a2f4-4d21-b231-f653450ede99",
+        "target": "fda63364-ed9e-4e2a-9067-2f856424fe05",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bdd7dace-e341-4ea2-8b13-531c95c24aec": {
+        "id": "bdd7dace-e341-4ea2-8b13-531c95c24aec",
+        "name": "Достигли максимального числа итераций",
+        "path": [
+          {
+            "x": 264,
+            "y": 472
+          },
+          {
+            "x": 296,
+            "y": 472
+          }
+        ],
+        "type": "plain",
+        "source": "d564c48c-5ecc-43a8-8664-ab84c26173bb",
+        "target": "3e872e4a-6fad-485b-92c7-585a2f76bb2b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "wait"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c3d50665-9ce5-4a21-b22f-74904432ca5d": {
+        "id": "c3d50665-9ce5-4a21-b22f-74904432ca5d",
+        "name": "",
+        "path": [
+          {
+            "x": 248,
+            "y": 456
+          },
+          {
+            "x": 248,
+            "y": 376
+          },
+          {
+            "x": 160,
+            "y": 376
+          }
+        ],
+        "type": "default",
+        "source": "d564c48c-5ecc-43a8-8664-ab84c26173bb",
+        "target": "be9c6340-9eb7-4f8c-98dc-d040f9e8083c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c6eebca6-06dd-4385-aa1a-a828c910ee12": {
+        "id": "c6eebca6-06dd-4385-aa1a-a828c910ee12",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 672
+          },
+          {
+            "x": 120,
+            "y": 704
+          }
+        ],
+        "type": "plain",
+        "source": "6aec6219-ba7d-498a-abb3-39eae1394320",
+        "target": "3dd513e0-5317-476b-bd5c-738308469be0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c76fc300-c6de-4cc3-bda8-8d9972e9a95c": {
+        "id": "c76fc300-c6de-4cc3-bda8-8d9972e9a95c",
+        "name": "Продолжаем цикл",
+        "path": [
+          {
+            "x": 136,
+            "y": 472
+          },
+          {
+            "x": 232,
+            "y": 472
+          }
+        ],
+        "type": "plain",
+        "source": "fd94b6f1-a2f4-4d21-b231-f653450ede99",
+        "target": "d564c48c-5ecc-43a8-8664-ab84c26173bb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "continue"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e80546a2-d6df-4a4c-aaa9-e10cbd976c3a": {
+        "id": "e80546a2-d6df-4a4c-aaa9-e10cbd976c3a",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 576
+          },
+          {
+            "x": 120,
+            "y": 608
+          }
+        ],
+        "type": "plain",
+        "source": "fda63364-ed9e-4e2a-9067-2f856424fe05",
+        "target": "6aec6219-ba7d-498a-abb3-39eae1394320",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ninterface IScheduleDay {\n  date: string,\n  dateForCalendar: string,\n  description: string,\n  isDayOff: boolean,\n  isHoliday: boolean,\n  isPreDayOff: boolean\n}\n\ntype TSchedule = ApplicationItem\u003cApplication$kedo$work_schedules$Data, Application$kedo$work_schedules$Params\u003e;\n\nasync function getSchedules(): Promise\u003cvoid\u003e {\n  const tables = await Namespace.app.posted_1c_data.search()\n    .where((f, g) =\u003e g.and(\n      f.__deletedAt.eq(null),\n      f.table_name.eq(\"Catalog_ГрафикиРаботыСотрудников\"),\n    ))\n    .where((f, g) =\u003e g.or(\n      f.is_processed.eq(null),\n      f.is_processed.eq(false),\n    ))\n    \n    .size(10000)\n    .all();\n\n  if (tables.length \u003e 0) {\n    const sortedApps = tables.sort((a, b) =\u003e {\n      const aDate: any = a.data.__createdAt.asDate()\n      const bDate: any = b.data.__createdAt.asDate()\n      return aDate - bDate\n    });\n\n    const baseArray: any[] = [];\n    const workSchedules = baseArray.concat(...(sortedApps.filter(item =\u003e item.data.table_name === \"Catalog_ГрафикиРаботыСотрудников\" \u0026\u0026 !!item.data.table_data).map(item =\u003e JSON.parse(item.data.table_data!))));\n\n    let promises: Promise\u003cany\u003e[] = [];\n    for (let i = 0; i \u003c workSchedules.length; i++) {\n      const existsingGraphs = await Namespace.app.work_schedules.search()\n        .where((f, g) =\u003e g.and(\n          f.__deletedAt.eq(null)\n        )).size(10000).all();\n      const item = workSchedules[i].data;\n      let graph = existsingGraphs.find((graphItem) =\u003e graphItem.data.id_1c === item[\"Ref\"]);\n\n      if (!graph)\n        graph = Namespace.app.work_schedules.create();\n\n      graph.data.__name = item[\"Description\"];\n      graph.data.id_1c = item[\"Ref\"];\n      graph.data.working_hours_week = Number(item[\"ДлительностьРабочейНедели\"]);\n      graph.data.work_days = Number(item[\"РабочихДнейВНеделе\"]);\n      graph.data.day_offs = 7 - Number(item[\"РабочихДнейВНеделе\"]);\n      graph.data.utc = graph.fields.utc.variants[\"3\"];\n      let dateNow = new Date().toISOString();\n      let datetimeNow = new Datetime(dateNow);\n      if (datetimeNow) {\n        graph.data.start_date = new TDate(datetimeNow.year, 1, 1);\n        graph.data.year_string = String(datetimeNow.year);\n        graph.data.year = datetimeNow.year;\n      }\n\n      Context.data.debug = ` ${item[\"Description\"]} `;\n      await graph.save();\n      // promises.push(graph.save())\n      // if (promises.length \u003e= 50) {\n      //   await Promise.all(promises)\n      //   promises = []\n      // }\n    }\n    await Promise.all(promises)\n    promises = []\n\n    for (let app of tables) {\n      app.data.is_processed = true\n      promises.push(app.save())\n      if (promises.length \u003e= 20) {\n        await Promise.all(promises)\n        promises = []\n      }\n    }\n\n    await Promise.all(promises)\n  }\n\n}\n\n//процедура для создания объекта по графикам \"айди 1С\" : [массив с данными по дням]\nasync function createSchedulesObject(): Promise\u003cvoid\u003e {\n\n  let schedulesObject = {};\n\n  const existsingSchedules = await Namespace.app.work_schedules.search()\n    .where((f, g) =\u003e g.and(\n      f.__deletedAt.eq(null)\n    )).size(10000).all();\n\n  let haveIds = false;\n\n  //ищем графики из 1С. Если нашли, добавляем их в объект\n  for (let schedule of existsingSchedules) {\n    if (schedule.data.id_1c) {\n      //@ts-ignore\n      schedulesObject[schedule.data.id_1c as string] = [];\n      haveIds = true;\n    }\n  }\n\n  if (haveIds) {\n    Context.data.schedules_object = JSON.stringify(schedulesObject);\n    Context.data.no_1C_schedules = false;\n  } else {\n    Context.data.no_1C_schedules = true;\n  }\n\n}\n\n//количество запашиваемых пакетов за раз\nconst batchSize = 10;\n//количество итераций цикла в бп\nconst mainLoopMaxCount = 50;\n\n//процедура по заполнению данных о рабочих/выходных/праздничных днях в графике\nasync function fillSchedules(): Promise\u003cvoid\u003e {\n\n  //переменная для ухода от ошибки too many loops\n  Context.data.wait = false;\n\n  //итератор\n  Context.data.loop_counter! += 1;\n\n  if (Context.data.loop_counter! % mainLoopMaxCount === 0) {\n    Context.data.wait = true;\n  }\n\n  //переменная для работы с циклом\n  Context.data.continue = true;\n\n  //получаем данные графиков (с данными о типах дней). Получаем только часть данных (количество - batchSize)\n  const tables = await Namespace.app.posted_1c_data.search()\n    .where((f, g) =\u003e g.and(\n      f.__deletedAt.eq(null),\n      f.table_name.eq(\"InformationRegister_ГрафикиРаботыПоВидамВремени\"),\n    ))\n    .where((f, g) =\u003e g.or(\n      f.is_processed.eq(false),\n      f.is_processed.eq(null),\n    ))\n    .size(batchSize)\n    .all();\n\n  //справочник по типам дней (рабочий день, выходной день, праздник)\n  const types = await Namespace.app.posted_1c_data.search()\n    .where(f =\u003e f.__deletedAt.eq(null))\n    .where((f, g) =\u003e g.and(\n      f.__deletedAt.eq(null),\n      f.table_name.eq(\"Catalog_ВидыИспользованияРабочегоВремени\"),\n    ))\n    .size(10000)\n    .all();\n\n  if (types.length === 0) {\n    Context.data.debug += ' no types ';\n    Context.data.continue = false;\n    return;\n  }\n\n  //маппим типы дней. Игнор, потому что тайпскрипт не любит метод флэт\n  //@ts-ignore\n  let mappedTypes = types.map((item: any) =\u003e JSON.parse(item.data.table_data!)).flat().map((item: any) =\u003e item[\"data\"]);\n\n  if (tables.length === 0) {\n    Context.data.continue = false;\n    return;\n  }\n\n  //объект, в котором храним все полученные и отобранные данные\n  let schedulesObject = JSON.parse(Context.data.schedules_object!);\n\n  //уже загруженные графики работы\n  const existsingSchedules = await Namespace.app.work_schedules.search()\n    .where((f, g) =\u003e g.and(\n      f.__deletedAt.eq(null)\n    )).size(10000).all();\n\n  //маппим данные о графиках. Игнор, потому что тайпскрипт не любит метод флэт\n  //@ts-ignore\n  const mappedData = tables.map((item: any) =\u003e JSON.parse(item.data.table_data!)).flat().map((item: any) =\u003e item[\"data\"][\"Record\"]).flat();\n\n  //текущая дата\n  let now = new Datetime();\n\n  for (let obj of mappedData) {\n    for (let existingSchedule of existsingSchedules) {\n\n      //ищем только актуальные данные \n      if (existingSchedule.data.id_1c === obj[\"ГрафикРаботы\"][\"data\"] \u0026\u0026 obj[\"Дата\"].slice(0, 4) === String(now.year)) {\n\n        //ищем тип дня\n        let dayType = mappedTypes.find((item: any) =\u003e item[\"Ref\"] === obj[\"ВидУчетаВремени\"]);\n\n        if (!dayType) {\n          Context.data.debug += ` !dayType `;\n          continue;\n        }\n\n        //заполняем структуру\n        let day: IScheduleDay = {\n          date: new Datetime(obj[\"Дата\"].split(\"T\")[0]).format(\"DD.MM.YYYY\"),\n          dateForCalendar: obj[\"Дата\"].split(\"T\")[0],\n          description: dayType[\"Description\"],\n          isDayOff: dayType[\"Description\"] === \"Выходные дни\" || dayType[\"Description\"] === \"Дополнительные выходные дни (оплачиваемые)\" || dayType[\"Description\"] === \"Дополнительные выходные дни (неоплачиваемые)\" ? true : false,\n          isHoliday: dayType[\"Description\"] === \"Праздники без повышенной оплаты\" || dayType[\"Description\"] === \"Праздники\" ? true : false,\n          isPreDayOff: false\n        };\n\n        //пушим данные в нужный график\n        schedulesObject[existingSchedule.data.id_1c!].push(day);\n        break;\n      }\n    }\n  }\n\n  Context.data.schedules_object = JSON.stringify(schedulesObject);\n\n  //пакеты переводим в Обработано\n  for (let table of tables) {\n    table.data.is_processed = true;\n    await table.save();\n  }\n}\n\n//эта процедура добавляем данные по выходным/рабочим/праздничным дням в элемент приложения \"Графики работы\"\nasync function addJSONToSchedules(): Promise\u003cvoid\u003e {\n\n  const existsingSchedules = await Namespace.app.work_schedules.search()\n    .where((f, g) =\u003e g.and(\n      f.__deletedAt.eq(null)\n    )).size(10000).all();\n\n  let schedulesObject = JSON.parse(Context.data.schedules_object!);\n\n  //заполняем json данные в график, чтобы построить календарь\n  for (let id in schedulesObject) {\n    let arrayOfDays = schedulesObject[id];\n    let schedule = existsingSchedules.find((item: TSchedule) =\u003e item.data.id_1c === id);\n\n    if (schedule) {\n      Context.data.debug += ` added json to ${schedule.data.__name} `;\n      schedule.data.json_data = JSON.stringify(arrayOfDays);\n      await schedule.save();\n    }\n  }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "work_schedules"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "wait": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "continue": {
+        "enabled": false,
+        "conditions": []
+      },
+      "loop_counter": {
+        "enabled": false,
+        "conditions": []
+      },
+      "no_1C_schedules": {
+        "enabled": false,
+        "conditions": []
+      },
+      "schedules_object": {
+        "enabled": false,
+        "conditions": []
+      },
+      "work_schedule_table": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

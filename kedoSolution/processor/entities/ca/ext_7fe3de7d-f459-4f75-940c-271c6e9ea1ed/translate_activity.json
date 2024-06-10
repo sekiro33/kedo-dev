@@ -1,0 +1,60 @@
+{
+  "__id": "51f505fd-fa86-4022-ab1b-ff71763badb4",
+  "__name": "Перевод названия файла",
+  "code": "translate",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл документа",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n    async function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n    async function action(): Promise\u003cvoid\u003e;\n    async function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n    async function action(url: string): Promise\u003cvoid\u003e;\n    async function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\nconst dict = {\" \": \"_\", \"Ё\": \"YO\", \"Й\": \"I\", \"Ц\": \"TS\", \"У\": \"U\", \"К\": \"K\", \"Е\": \"E\", \"Н\": \"N\", \"Г\": \"G\", \"Ш\": \"SH\", \"Щ\": \"SCH\", \"З\": \"Z\", \"Х\": \"H\", \"Ъ\": \"'\", \"ё\": \"yo\", \"й\": \"i\", \"ц\": \"ts\", \"у\": \"u\", \"к\": \"k\", \"е\": \"e\", \"н\": \"n\", \"г\": \"g\", \"ш\": \"sh\", \"щ\": \"sch\", \"з\": \"z\", \"х\": \"h\", \"ъ\": \"'\", \"Ф\": \"F\", \"Ы\": \"I\", \"В\": \"V\", \"А\": \"A\", \"П\": \"P\", \"Р\": \"R\", \"О\": \"O\", \"Л\": \"L\", \"Д\": \"D\", \"Ж\": \"ZH\", \"Э\": \"E\", \"ф\": \"f\", \"ы\": \"i\", \"в\": \"v\", \"а\": \"a\", \"п\": \"p\", \"р\": \"r\", \"о\": \"o\", \"л\": \"l\", \"д\": \"d\", \"ж\": \"zh\", \"э\": \"e\", \"Я\": \"Ya\", \"Ч\": \"CH\", \"С\": \"S\", \"М\": \"M\", \"И\": \"I\", \"Т\": \"T\", \"Ь\": \"'\", \"Б\": \"B\", \"Ю\": \"YU\", \"я\": \"ya\", \"ч\": \"ch\", \"с\": \"s\", \"м\": \"m\", \"и\": \"i\", \"т\": \"t\", \"ь\": \"'\", \"б\": \"b\", \"ю\": \"yu\" };\ntype dictKey = keyof typeof dict;\n\nasync function action(): Promise\u003cvoid\u003e {\n    const file = await Context.data.file!.fetch();\n    const url = await Context.data.file!.getDownloadUrl();\n    const buffer = await fetch(url).then(r =\u003e r.arrayBuffer());\n\n    let newName = file.data.__name.split('').map((char) =\u003e {\n        return dict[char as dictKey] || char;\n    }).join(\"\").replace(/[^a-zA-Z0-9_.]/g, \"\");\n    \n    file.data.__name = newName;\n    await file.addVersion(newName, buffer);\n    Context.data.file = file;\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:02.141849258Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:55.424636825Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

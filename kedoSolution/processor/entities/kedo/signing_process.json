@@ -1,0 +1,5760 @@
+{
+  "__id": "018e89f8-23b6-7972-93c7-be33e672c896",
+  "namespace": "kedo",
+  "code": "signing_process",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Универсальный процесс подписания",
+  "type": "bpmn",
+  "draft": false,
+  "version": 2,
+  "context": [
+    {
+      "code": "alert_body_email",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Тело оповещения (Email)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "limit",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Подписать сотруднику до",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        }
+      }
+    },
+    {
+      "code": "chief_sign_required",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Необходимо подписание со стороны работодателя?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "personnel_document",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "personnel_documents",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "__oldКадровые документы",
+        "data": {}
+      }
+    },
+    {
+      "code": "document",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ",
+        "data": {}
+      }
+    },
+    {
+      "code": "file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл",
+        "data": {}
+      }
+    },
+    {
+      "code": "document_for_employment",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "documents_for_employment",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Документы для трудоустройства",
+        "data": {}
+      }
+    },
+    {
+      "code": "xml_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "XML-файл",
+        "data": {}
+      }
+    },
+    {
+      "code": "doc_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ подписан",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "decision",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "transfered_in_paper",
+            "name": "Оформлено в бумаге",
+            "checked": false
+          },
+          {
+            "code": "correction",
+            "name": "Корректировка",
+            "checked": false
+          },
+          {
+            "code": "cancelled",
+            "name": "Отменено",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Решение",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_chief_kedo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Работодатель (КЭДО)",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "personel_document",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "personnel_documents",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "personnel_documents",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Кадровый документы (Приказы и заявления)",
+        "data": {}
+      }
+    },
+    {
+      "code": "document_type",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "document_types",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Вид документа",
+        "data": {}
+      }
+    },
+    {
+      "code": "sign_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписант (пользователь)",
+        "data": {}
+      }
+    },
+    {
+      "code": "signatory_staffs",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "sign_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "elma",
+            "name": "ELMA",
+            "checked": false
+          },
+          {
+            "code": "work_in_russia",
+            "name": "Работа в России",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Вид подписания",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {
+              "__status": {
+                "const": [6]
+              }
+            }
+          },
+          "enabled": true
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Подписант",
+        "data": {}
+      }
+    },
+    {
+      "code": "document_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID документа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "alert_body_sms",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Тело оповещения (SMS)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staff_chief",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Подписант cо стороны работодателя",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-05-15T07:05:08.020026454Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-04-05T13:06:20.298146833Z",
+  "__updatedBy": "8c6e1940-a6f3-4603-aff7-7cdf41cc9799",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 80,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["5ed82fcb-ee47-427f-9ff9-c290b5a21146"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formCode": "",
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Универсальный процесс подписания - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0783fabe-0f16-4363-b8c9-fdfadf0b7c41": {
+        "x": 2432,
+        "y": 296,
+        "id": "0783fabe-0f16-4363-b8c9-fdfadf0b7c41",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Установить статус \"Подписан\"",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f5e15c43-1796-4561-ad9f-1949717daf67"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "set_signed_status",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "0b864ed2-de9c-426e-9c82-87b7e4c0e34e": {
+        "x": 1880,
+        "y": 1088,
+        "id": "0b864ed2-de9c-426e-9c82-87b7e4c0e34e",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Установить статус \"Отменен\"",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3d9b4968-f2aa-41a3-9722-9a61818a30e5"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "set_rejected_status",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "0c1e36d5-36fe-4e97-8f88-cdbb009b1cc4": {
+        "x": 2336,
+        "y": 296,
+        "id": "0c1e36d5-36fe-4e97-8f88-cdbb009b1cc4",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Записать XML в документ",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["22538778-590d-42e9-89e0-8ee9e87cb726"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "set_xml",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "17e82f13-7a5a-4349-a334-0201262df030": {
+        "x": 1688,
+        "y": 624,
+        "id": "17e82f13-7a5a-4349-a334-0201262df030",
+        "icon": "exclusive",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "5c3464f4-f69d-4668-9dfc-b5f8f102eeea",
+          "7e7c9806-8317-47bc-8b37-2a69b13b4cc6"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "18d45678-7b84-4e42-8521-b6dc33977397": {
+        "x": 1008,
+        "y": 152,
+        "id": "18d45678-7b84-4e42-8521-b6dc33977397",
+        "icon": "send_doc",
+        "lane": "ef9c9ce0-6526-47d9-ad24-4c5a556f7f4b",
+        "name": "Подписать документ",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "7a45c57d-71b3-4b8d-8f7a-ce4b85fe0bc3",
+          "49f9b380-3c99-4f7f-b0d4-a6676674ea6e"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "documents_for_employment",
+          "name": "Подписать документ по {ToString({$staff.full_name}, short, Д)}",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "document_for_employment"
+              }
+            }
+          ],
+          "target": "document_for_employment",
+          "provider": {
+            "code": "CryptoPro",
+            "namespace": "system.__digital_sign_provider"
+          },
+          "signExit": "7a45c57d-71b3-4b8d-8f7a-ce4b85fe0bc3",
+          "namespace": "kedo",
+          "cancelExit": "49f9b380-3c99-4f7f-b0d4-a6676674ea6e",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 8,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "code": "staff_chief",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "allowReassign": true
+        }
+      },
+      "19afd32a-6f9c-494b-84a0-a6eb47b4e943": {
+        "x": 1880,
+        "y": 64,
+        "id": "19afd32a-6f9c-494b-84a0-a6eb47b4e943",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Перевод в бумагу",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["43bd3f21-0012-4828-bb59-49b05b9e01ec"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "transfer_to_paper",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "personel_document"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "sign_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__createdBy"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "decision"
+              },
+              "target": {
+                "kind": "context",
+                "value": "decision"
+              }
+            }
+          ],
+          "linkCode": "personel_document",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "250bb4c8-f614-4f4c-8ab9-6b09390aa787": {
+        "x": 1552,
+        "y": 64,
+        "id": "250bb4c8-f614-4f4c-8ab9-6b09390aa787",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Оповещение типовое",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["e4234498-e7c9-4bea-8f50-002e55fd31f3"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "notification",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Оповещение"
+              },
+              "target": {
+                "kind": "context",
+                "value": "topic_of_the_letter"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Оповещение"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_head"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "alert_body_sms"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_text_for_sms"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "alert_body_email"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_body"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "",
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "43fb8366-d97b-492c-999a-f35ca8e510de": {
+        "x": 2336,
+        "y": 168,
+        "id": "43fb8366-d97b-492c-999a-f35ca8e510de",
+        "icon": "notification",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "XML-файл не сформировался",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["20778006-d7ed-4d58-97b5-acb8c76646b6"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "code": "personel_document",
+            "kind": "object"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "XML-файл не сформировался"
+        }
+      },
+      "49dcb808-9830-424c-9dde-1aa7b3015729": {
+        "x": 368,
+        "y": 64,
+        "id": "49dcb808-9830-424c-9dde-1aa7b3015729",
+        "icon": "script",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Заполнение строки статуса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f2ec4010-3583-4cfa-a8b9-a8f81dbb7d6a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "line_status_set",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "4c26d32b-d093-473b-ade0-1393b0e7735a": {
+        "x": 1664,
+        "y": 808,
+        "id": "4c26d32b-d093-473b-ade0-1393b0e7735a",
+        "icon": "send_doc",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Подписать документ",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "00987afb-c61b-431a-b3bb-8509ef4e8e3e",
+          "e34c2fac-4391-4775-a45e-bc828c1fa070",
+          "304d7563-4f49-4ec9-9cc7-07b9c7c29be1"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "documents_for_employment",
+          "name": "Подписать документ по {ToString({$staff.full_name}, short, Д)}",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "document_for_employment"
+              }
+            }
+          ],
+          "target": "document_for_employment",
+          "signExit": "e34c2fac-4391-4775-a45e-bc828c1fa070",
+          "namespace": "kedo",
+          "cancelExit": "00987afb-c61b-431a-b3bb-8509ef4e8e3e",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 8,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "exit": "304d7563-4f49-4ec9-9cc7-07b9c7c29be1",
+                "notify": true,
+                "interrupt": true,
+                "receivers": [
+                  {
+                    "code": "staff_chief",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "allowReassign": true
+        }
+      },
+      "4c902f89-6403-4734-bab9-a29c9234c596": {
+        "x": 2064,
+        "y": 312,
+        "id": "4c902f89-6403-4734-bab9-a29c9234c596",
+        "icon": "exclusive",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "afb78f5e-75a8-430a-a079-6123e3dbff52",
+          "b79fabbd-f708-4f08-9340-fc0d7e122918"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3": {
+        "x": 1880,
+        "y": 984,
+        "id": "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3",
+        "icon": "notification",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Документ не был подписан",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["efb9198d-1915-400f-b5bc-44a586d49b34"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "code": "personel_document",
+            "kind": "object"
+          },
+          "receivers": [
+            {
+              "code": "__createdBy",
+              "kind": "context"
+            }
+          ],
+          "messageBody": "Подписант {$staff.full_name} отказал в подписании документа",
+          "messageHeader": "Документ не был подписан"
+        }
+      },
+      "5980c1c9-02cb-4ff3-80d0-26ecaf708d3b": {
+        "x": 160,
+        "y": 64,
+        "id": "5980c1c9-02cb-4ff3-80d0-26ecaf708d3b",
+        "icon": "system",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Получить подписанта и подписанта со стороны работодателя",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["81f056ca-c775-44cf-957a-467f1cba082e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.ext_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "sign_user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_chief_kedo.ext_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff_chief"
+              }
+            }
+          ]
+        }
+      },
+      "59dc1aad-6b4a-4533-ae72-6dc89e424823": {
+        "x": 1880,
+        "y": 1168,
+        "id": "59dc1aad-6b4a-4533-ae72-6dc89e424823",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Заполнение строки статуса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["ec97dc65-ba77-4591-aab4-facd10f06dc2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "line_status_set",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "5af9f2df-04df-4da0-b205-273e337094a2": {
+        "x": 2624,
+        "y": 312,
+        "id": "5af9f2df-04df-4da0-b205-273e337094a2",
+        "icon": "end",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "623878af-ba6a-41aa-9620-80fd70f9c622": {
+        "x": 688,
+        "y": 80,
+        "id": "623878af-ba6a-41aa-9620-80fd70f9c622",
+        "icon": "exclusive",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Необходимо подписание со стороны работодателя?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "373987f5-cb87-4d0d-b5ed-eed5e034d5f6",
+          "22391685-fff4-4183-ac8c-a8211ec5d246"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "6f6f573e-0786-4db2-b7c9-7a6e86ce5be6": {
+        "x": 1760,
+        "y": 608,
+        "id": "6f6f573e-0786-4db2-b7c9-7a6e86ce5be6",
+        "icon": "system",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "(РвРФ) Отправить документ на сайт Работа в России",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "16c37f29-3f0c-4374-bb55-a8959ced3149",
+          "ea4ca1cf-0254-4cf5-ac47-03a387402c9a"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "send_doc_to_signing",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "sign_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_chief"
+              },
+              "target": {
+                "kind": "context",
+                "value": "responsible_user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.snils"
+              },
+              "target": {
+                "kind": "context",
+                "value": "snils"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_for_employment"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "limit"
+              },
+              "target": {
+                "kind": "context",
+                "value": "time_limit"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "doc_signed"
+              },
+              "target": {
+                "kind": "context",
+                "value": "signed_successfully"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "ea4ca1cf-0254-4cf5-ac47-03a387402c9a",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "__createdBy",
+                  "kind": "context"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "73167731-b61c-4dad-9252-c1a64f23262e": {
+        "x": 1688,
+        "y": 192,
+        "id": "73167731-b61c-4dad-9252-c1a64f23262e",
+        "icon": "exclusive",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "3e831784-dd15-4199-97ef-3e1ccd131843",
+          "bf121ca6-446e-4c8d-a93f-670fd8ce4511"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "747a6105-b26b-4d70-9e8f-867f49f51209": {
+        "x": 1008,
+        "y": 328,
+        "id": "747a6105-b26b-4d70-9e8f-867f49f51209",
+        "icon": "send_doc",
+        "lane": "ef9c9ce0-6526-47d9-ad24-4c5a556f7f4b",
+        "name": "Подписать документ",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "dfb997de-5d10-4458-b169-a43040010ab2",
+          "3e158bec-7ea3-45d9-aa85-f229ed881fad"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "personnel_documents",
+          "name": "Подписать документ по {ToString({$staff.full_name}, short, Д)}",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "personel_document"
+              }
+            }
+          ],
+          "target": "personel_document",
+          "provider": {
+            "code": "CryptoPro",
+            "namespace": "system.__digital_sign_provider"
+          },
+          "signExit": "3e158bec-7ea3-45d9-aa85-f229ed881fad",
+          "namespace": "personnel_documents",
+          "cancelExit": "dfb997de-5d10-4458-b169-a43040010ab2",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 8,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "code": "staff_chief",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "allowReassign": true
+        }
+      },
+      "7d5747b5-e67d-40b7-a405-77433cf9992f": {
+        "x": 1784,
+        "y": 192,
+        "id": "7d5747b5-e67d-40b7-a405-77433cf9992f",
+        "icon": "exclusive",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "bc3a60d8-0f4d-44c7-8cbd-e4d7a11c8f30",
+          "fe272802-27ef-48a6-95af-b7ee5f8e80cd"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "89380513-b9cc-473a-be80-fe2ff5131aac": {
+        "x": 1760,
+        "y": 296,
+        "id": "89380513-b9cc-473a-be80-fe2ff5131aac",
+        "icon": "system",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "(РвРФ) Отправить документ в Работу в России",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "b88b6c7b-078d-460b-ad34-c435cf940b9a",
+          "f182cd49-92bd-435d-99b3-efb0fb8bf19f"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "send_doc_to_signing",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "sign_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_chief"
+              },
+              "target": {
+                "kind": "context",
+                "value": "responsible_user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.snils"
+              },
+              "target": {
+                "kind": "context",
+                "value": "snils"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "personel_document"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "limit"
+              },
+              "target": {
+                "kind": "context",
+                "value": "time_limit"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "doc_signed"
+              },
+              "target": {
+                "kind": "context",
+                "value": "signed_successfully"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "f182cd49-92bd-435d-99b3-efb0fb8bf19f",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "__createdBy",
+                  "kind": "context"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "8b368dd5-d2cc-4e39-b06b-3e8b32b21571": {
+        "x": 1248,
+        "y": 64,
+        "id": "8b368dd5-d2cc-4e39-b06b-3e8b32b21571",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Расчет времени подписания",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["b8aa6a7a-3ad4-48df-aa81-e52250ae4655"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "calcOverdueDate",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "8e5bd21a-90af-4e3a-a0ac-0db6f1a958b9": {
+        "x": 2000,
+        "y": 824,
+        "id": "8e5bd21a-90af-4e3a-a0ac-0db6f1a958b9",
+        "icon": "exclusive",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8a60a93c-be30-46ea-90a9-d39c55f295ee",
+          "c51b89ce-b9c2-4805-96d3-4d9c510e295d"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "9458aac0-c0a6-4d6e-8176-4ef9793dc410": {
+        "x": 264,
+        "y": 64,
+        "id": "9458aac0-c0a6-4d6e-8176-4ef9793dc410",
+        "icon": "script",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Установить статус \"На подписании\"",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["18371862-4757-42df-acc5-aac29619770e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "set_on_sign_status",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "a13d8cfa-b2e2-43cb-aad8-144911c94baa": {
+        "x": 1664,
+        "y": 64,
+        "id": "a13d8cfa-b2e2-43cb-aad8-144911c94baa",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Напоминание",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["af644cbf-8dd3-4330-b927-00076b688774"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "reminder",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "a9ff07da-dc88-44ef-a965-afb7fd46ee7a": {
+        "x": 824,
+        "y": 168,
+        "id": "a9ff07da-dc88-44ef-a965-afb7fd46ee7a",
+        "icon": "exclusive",
+        "lane": "ef9c9ce0-6526-47d9-ad24-4c5a556f7f4b",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "c1cf7abe-5d0a-4ff8-98bd-1846efd0fb88",
+          "f37c143c-9ca3-483c-afb6-e0be203f13ee"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "ac2e5328-b770-442a-9757-29cf59ba01cb": {
+        "x": 1664,
+        "y": 912,
+        "id": "ac2e5328-b770-442a-9757-29cf59ba01cb",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Перевод в бумагу",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["dc4845b7-e1f5-408b-a7d2-d7e0d1299b39"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "transfer_to_paper",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_for_employment"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "sign_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__createdBy"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "decision"
+              },
+              "target": {
+                "kind": "context",
+                "value": "decision"
+              }
+            }
+          ],
+          "linkCode": "document_for_employment",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "c21cbc19-a01d-4226-8941-255c4e9bb248": {
+        "x": 664,
+        "y": 256,
+        "id": "c21cbc19-a01d-4226-8941-255c4e9bb248",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Подписание документа сотрудниками организации",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["f195cb13-2fd7-4ac5-b47f-f03a17313eb5"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "signing_doc_by_staffs_workflow",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "personel_document"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personel_document"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "document_for_employment"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_for_employment"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "limit"
+              },
+              "target": {
+                "kind": "context",
+                "value": "limit"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "signatory_staffs",
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": "staff"
+        }
+      },
+      "c2f9f629-babe-4203-b339-c2142c006555": {
+        "x": 2344,
+        "y": 400,
+        "id": "c2f9f629-babe-4203-b339-c2142c006555",
+        "icon": "notification",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Документ не подписан",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["1d22e0f1-35ae-439a-a0e0-f0a4ed7a0855"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "",
+          "messageHeader": "Документ на сайте Работы в России не подписан"
+        }
+      },
+      "c4c67127-768c-4fdc-8051-0c1aaf25b53e": {
+        "x": 1448,
+        "y": 224,
+        "id": "c4c67127-768c-4fdc-8051-0c1aaf25b53e",
+        "icon": "notification",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Документ не был подписан",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["8adc4c21-72f3-4a74-b49c-ffe1c27aea30"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "code": "personel_document",
+            "kind": "object"
+          },
+          "receivers": [
+            {
+              "code": "__createdBy",
+              "kind": "context"
+            }
+          ],
+          "messageBody": "Руководитель {$staff_chief_kedo.full_name} отказал в подписании документа",
+          "messageHeader": "Документ не был подписан"
+        }
+      },
+      "d6d71d54-1c59-4a82-90f0-92a5e7b8e242": {
+        "x": 1448,
+        "y": 64,
+        "id": "d6d71d54-1c59-4a82-90f0-92a5e7b8e242",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Проверка замещения",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["2c7893d8-74ee-44fe-bd63-84ab30747340"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "waiting_end_staff_replacement",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "",
+          "namespace": "kedo.staff",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "d7c90b55-d0d7-482a-954e-3b284c644a9e": {
+        "x": 688,
+        "y": 168,
+        "id": "d7c90b55-d0d7-482a-954e-3b284c644a9e",
+        "icon": "exclusive",
+        "lane": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Отправить сотрудникам организации?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "cdca0c56-2ac2-474a-b527-097472bb837c",
+          "8c4fc1df-9381-4646-88f4-5bb45cd0f160"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "ddc14093-baa2-4ca4-a01a-d644e050cece": {
+        "x": 2192,
+        "y": 928,
+        "id": "ddc14093-baa2-4ca4-a01a-d644e050cece",
+        "icon": "exclusive",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "03dddc0b-35c0-4b43-b0dc-255add3a2d74",
+          "c637ed40-0b3b-452e-8260-722a08b7524a"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "df77253e-7cf5-4d5b-b787-16cef15ff2cf": {
+        "x": 1344,
+        "y": 64,
+        "id": "df77253e-7cf5-4d5b-b787-16cef15ff2cf",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Генерация оповещения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["32a83a79-65a3-4650-94ce-cc69f20a1cf5"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "generate_alert",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e977a9bc-9531-4bf5-b27b-263324ab9553": {
+        "x": 2240,
+        "y": 296,
+        "id": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "icon": "system",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Генерация XML",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "ab0839f0-0e3e-40ea-a4b3-0a0c7571272c",
+          "3e2ce651-a91e-4b03-8ef9-f92d975cc841"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_xml",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "personel_document"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "xml_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "xml_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "ab0839f0-0e3e-40ea-a4b3-0a0c7571272c",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "e9f39c14-545a-4515-b81a-6cf67c6aba90": {
+        "x": 1880,
+        "y": 176,
+        "id": "e9f39c14-545a-4515-b81a-6cf67c6aba90",
+        "icon": "send_doc",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Подписать документ",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "3c89902d-2772-45b6-895e-0c2fcf41260d",
+          "ca8f45c7-1d9f-46e0-83e0-3b8b5f914b02",
+          "607ae62f-bde9-4329-98ef-6fd1841d6725"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "personnel_documents",
+          "name": "Подписать документ по {ToString({$staff.full_name}, short, Д)}",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "personel_document"
+              }
+            }
+          ],
+          "target": "personel_document",
+          "signExit": "ca8f45c7-1d9f-46e0-83e0-3b8b5f914b02",
+          "namespace": "personnel_documents",
+          "cancelExit": "3c89902d-2772-45b6-895e-0c2fcf41260d",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "code": "limit",
+                "days": 0,
+                "kind": "variable",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": true,
+                "substraction": false
+              },
+              "action": {
+                "exit": "607ae62f-bde9-4329-98ef-6fd1841d6725",
+                "notify": true,
+                "interrupt": true,
+                "receivers": [
+                  {
+                    "code": "sign_user",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "allowReassign": true
+        }
+      },
+      "f46c97a1-7bec-4008-93f8-2dc1c9ab04e7": {
+        "x": 1760,
+        "y": 512,
+        "id": "f46c97a1-7bec-4008-93f8-2dc1c9ab04e7",
+        "icon": "notification",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Ошибка при отправке документа",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["f8a572ea-44bd-469d-a2d3-7153914c2ffd"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Ошибка при отправке документа в Работу в России"
+        }
+      },
+      "f9b0a30f-5e31-4dfb-9d35-a4f0ae07062b": {
+        "x": 1904,
+        "y": 1248,
+        "id": "f9b0a30f-5e31-4dfb-9d35-a4f0ae07062b",
+        "icon": "end",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "fdfaa391-6383-47b6-a057-b26acdf516ab": {
+        "x": 2528,
+        "y": 296,
+        "id": "fdfaa391-6383-47b6-a057-b26acdf516ab",
+        "icon": "script",
+        "lane": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Заполнение строки статуса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["c578ac6e-5cb4-4ec9-9655-f21d2f391ef8"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "line_status_set",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "573c16d2-7794-47b4-8f0e-f8669da7914a": {
+        "x": 8,
+        "y": 8,
+        "id": "573c16d2-7794-47b4-8f0e-f8669da7914a",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 784,
+        "height": 1368,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc": {
+        "x": 1232,
+        "y": 8,
+        "id": "aeee0f5e-0c65-40ca-97fd-8a23723ce8dc",
+        "name": "Подписант",
+        "color": "#d6f0cc",
+        "width": 1928,
+        "height": 1368,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "sign_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "ef9c9ce0-6526-47d9-ad24-4c5a556f7f4b": {
+        "x": 792,
+        "y": 8,
+        "id": "ef9c9ce0-6526-47d9-ad24-4c5a556f7f4b",
+        "name": "Подписант  cо стороны работодателя",
+        "color": "#d6f0cc",
+        "width": 440,
+        "height": 1368,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "staff_chief",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "00987afb-c61b-431a-b3bb-8509ef4e8e3e": {
+        "id": "00987afb-c61b-431a-b3bb-8509ef4e8e3e",
+        "name": "",
+        "path": [
+          {
+            "x": 1744,
+            "y": 840
+          },
+          {
+            "x": 1920,
+            "y": 840
+          },
+          {
+            "x": 1920,
+            "y": 984
+          }
+        ],
+        "type": "default",
+        "source": "4c26d32b-d093-473b-ade0-1393b0e7735a",
+        "target": "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "03dddc0b-35c0-4b43-b0dc-255add3a2d74": {
+        "id": "03dddc0b-35c0-4b43-b0dc-255add3a2d74",
+        "name": "",
+        "path": [
+          {
+            "x": 2208,
+            "y": 960
+          },
+          {
+            "x": 2208,
+            "y": 1016
+          },
+          {
+            "x": 1960,
+            "y": 1016
+          }
+        ],
+        "type": "default",
+        "source": "ddc14093-baa2-4ca4-a01a-d644e050cece",
+        "target": "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "16c37f29-3f0c-4374-bb55-a8959ced3149": {
+        "id": "16c37f29-3f0c-4374-bb55-a8959ced3149",
+        "name": "",
+        "path": [
+          {
+            "x": 1840,
+            "y": 640
+          },
+          {
+            "x": 2056,
+            "y": 640
+          },
+          {
+            "x": 2056,
+            "y": 328
+          },
+          {
+            "x": 2064,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "6f6f573e-0786-4db2-b7c9-7a6e86ce5be6",
+        "target": "4c902f89-6403-4734-bab9-a29c9234c596",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "18371862-4757-42df-acc5-aac29619770e": {
+        "id": "18371862-4757-42df-acc5-aac29619770e",
+        "name": "",
+        "path": [
+          {
+            "x": 344,
+            "y": 96
+          },
+          {
+            "x": 368,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "9458aac0-c0a6-4d6e-8176-4ef9793dc410",
+        "target": "49dcb808-9830-424c-9dde-1aa7b3015729",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1d22e0f1-35ae-439a-a0e0-f0a4ed7a0855": {
+        "id": "1d22e0f1-35ae-439a-a0e0-f0a4ed7a0855",
+        "name": "",
+        "path": [
+          {
+            "x": 2424,
+            "y": 432
+          },
+          {
+            "x": 2640,
+            "y": 432
+          },
+          {
+            "x": 2640,
+            "y": 344
+          }
+        ],
+        "type": "plain",
+        "source": "c2f9f629-babe-4203-b339-c2142c006555",
+        "target": "5af9f2df-04df-4da0-b205-273e337094a2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "20778006-d7ed-4d58-97b5-acb8c76646b6": {
+        "id": "20778006-d7ed-4d58-97b5-acb8c76646b6",
+        "name": "",
+        "path": [
+          {
+            "x": 2376,
+            "y": 232
+          },
+          {
+            "x": 2376,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "43fb8366-d97b-492c-999a-f35ca8e510de",
+        "target": "0c1e36d5-36fe-4e97-8f88-cdbb009b1cc4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "22391685-fff4-4183-ac8c-a8211ec5d246": {
+        "id": "22391685-fff4-4183-ac8c-a8211ec5d246",
+        "name": "",
+        "path": [
+          {
+            "x": 704,
+            "y": 112
+          },
+          {
+            "x": 704,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "623878af-ba6a-41aa-9620-80fd70f9c622",
+        "target": "d7c90b55-d0d7-482a-954e-3b284c644a9e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "chief_sign_required"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "22538778-590d-42e9-89e0-8ee9e87cb726": {
+        "id": "22538778-590d-42e9-89e0-8ee9e87cb726",
+        "name": "",
+        "path": [
+          {
+            "x": 2416,
+            "y": 328
+          },
+          {
+            "x": 2432,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "0c1e36d5-36fe-4e97-8f88-cdbb009b1cc4",
+        "target": "0783fabe-0f16-4363-b8c9-fdfadf0b7c41",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2c7893d8-74ee-44fe-bd63-84ab30747340": {
+        "id": "2c7893d8-74ee-44fe-bd63-84ab30747340",
+        "name": "",
+        "path": [
+          {
+            "x": 1528,
+            "y": 96
+          },
+          {
+            "x": 1552,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "d6d71d54-1c59-4a82-90f0-92a5e7b8e242",
+        "target": "250bb4c8-f614-4f4c-8ab9-6b09390aa787",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "304d7563-4f49-4ec9-9cc7-07b9c7c29be1": {
+        "id": "304d7563-4f49-4ec9-9cc7-07b9c7c29be1",
+        "name": "",
+        "path": [
+          {
+            "x": 1704,
+            "y": 872
+          },
+          {
+            "x": 1704,
+            "y": 912
+          }
+        ],
+        "type": "timer",
+        "source": "4c26d32b-d093-473b-ade0-1393b0e7735a",
+        "target": "ac2e5328-b770-442a-9757-29cf59ba01cb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "32a83a79-65a3-4650-94ce-cc69f20a1cf5": {
+        "id": "32a83a79-65a3-4650-94ce-cc69f20a1cf5",
+        "name": "",
+        "path": [
+          {
+            "x": 1424,
+            "y": 96
+          },
+          {
+            "x": 1448,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "df77253e-7cf5-4d5b-b787-16cef15ff2cf",
+        "target": "d6d71d54-1c59-4a82-90f0-92a5e7b8e242",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "373987f5-cb87-4d0d-b5ed-eed5e034d5f6": {
+        "id": "373987f5-cb87-4d0d-b5ed-eed5e034d5f6",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 720,
+            "y": 96
+          },
+          {
+            "x": 1248,
+            "y": 96
+          }
+        ],
+        "type": "default",
+        "source": "623878af-ba6a-41aa-9620-80fd70f9c622",
+        "target": "8b368dd5-d2cc-4e39-b06b-3e8b32b21571",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3c89902d-2772-45b6-895e-0c2fcf41260d": {
+        "id": "3c89902d-2772-45b6-895e-0c2fcf41260d",
+        "name": "Отказать",
+        "path": [
+          {
+            "x": 1920,
+            "y": 240
+          },
+          {
+            "x": 1920,
+            "y": 984
+          }
+        ],
+        "type": "default",
+        "source": "e9f39c14-545a-4515-b81a-6cf67c6aba90",
+        "target": "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3d9b4968-f2aa-41a3-9722-9a61818a30e5": {
+        "id": "3d9b4968-f2aa-41a3-9722-9a61818a30e5",
+        "name": "",
+        "path": [
+          {
+            "x": 1920,
+            "y": 1152
+          },
+          {
+            "x": 1920,
+            "y": 1168
+          }
+        ],
+        "type": "plain",
+        "source": "0b864ed2-de9c-426e-9c82-87b7e4c0e34e",
+        "target": "59dc1aad-6b4a-4533-ae72-6dc89e424823",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3e158bec-7ea3-45d9-aa85-f229ed881fad": {
+        "id": "3e158bec-7ea3-45d9-aa85-f229ed881fad",
+        "name": "Подписать",
+        "path": [
+          {
+            "x": 1088,
+            "y": 344
+          },
+          {
+            "x": 1216,
+            "y": 344
+          },
+          {
+            "x": 1216,
+            "y": 96
+          },
+          {
+            "x": 1248,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "747a6105-b26b-4d70-9e8f-867f49f51209",
+        "target": "8b368dd5-d2cc-4e39-b06b-3e8b32b21571",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3e2ce651-a91e-4b03-8ef9-f92d975cc841": {
+        "id": "3e2ce651-a91e-4b03-8ef9-f92d975cc841",
+        "name": "",
+        "path": [
+          {
+            "x": 2320,
+            "y": 328
+          },
+          {
+            "x": 2336,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "target": "0c1e36d5-36fe-4e97-8f88-cdbb009b1cc4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3e831784-dd15-4199-97ef-3e1ccd131843": {
+        "id": "3e831784-dd15-4199-97ef-3e1ccd131843",
+        "name": "",
+        "path": [
+          {
+            "x": 1720,
+            "y": 208
+          },
+          {
+            "x": 1784,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "73167731-b61c-4dad-9252-c1a64f23262e",
+        "target": "7d5747b5-e67d-40b7-a405-77433cf9992f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "43bd3f21-0012-4828-bb59-49b05b9e01ec": {
+        "id": "43bd3f21-0012-4828-bb59-49b05b9e01ec",
+        "name": "",
+        "path": [
+          {
+            "x": 1960,
+            "y": 96
+          },
+          {
+            "x": 2016,
+            "y": 96
+          },
+          {
+            "x": 2016,
+            "y": 824
+          }
+        ],
+        "type": "plain",
+        "source": "19afd32a-6f9c-494b-84a0-a6eb47b4e943",
+        "target": "8e5bd21a-90af-4e3a-a0ac-0db6f1a958b9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "49f9b380-3c99-4f7f-b0d4-a6676674ea6e": {
+        "id": "49f9b380-3c99-4f7f-b0d4-a6676674ea6e",
+        "name": "Отказать",
+        "path": [
+          {
+            "x": 1048,
+            "y": 216
+          },
+          {
+            "x": 1048,
+            "y": 256
+          },
+          {
+            "x": 1448,
+            "y": 256
+          }
+        ],
+        "type": "default",
+        "source": "18d45678-7b84-4e42-8521-b6dc33977397",
+        "target": "c4c67127-768c-4fdc-8051-0c1aaf25b53e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5c3464f4-f69d-4668-9dfc-b5f8f102eeea": {
+        "id": "5c3464f4-f69d-4668-9dfc-b5f8f102eeea",
+        "name": "",
+        "path": [
+          {
+            "x": 1704,
+            "y": 656
+          },
+          {
+            "x": 1704,
+            "y": 808
+          }
+        ],
+        "type": "default",
+        "source": "17e82f13-7a5a-4349-a334-0201262df030",
+        "target": "4c26d32b-d093-473b-ade0-1393b0e7735a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5ed82fcb-ee47-427f-9ff9-c290b5a21146": {
+        "id": "5ed82fcb-ee47-427f-9ff9-c290b5a21146",
+        "name": "",
+        "path": [
+          {
+            "x": 96,
+            "y": 96
+          },
+          {
+            "x": 160,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "5980c1c9-02cb-4ff3-80d0-26ecaf708d3b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "607ae62f-bde9-4329-98ef-6fd1841d6725": {
+        "id": "607ae62f-bde9-4329-98ef-6fd1841d6725",
+        "name": "",
+        "path": [
+          {
+            "x": 1920,
+            "y": 176
+          },
+          {
+            "x": 1920,
+            "y": 128
+          }
+        ],
+        "type": "timer",
+        "source": "e9f39c14-545a-4515-b81a-6cf67c6aba90",
+        "target": "19afd32a-6f9c-494b-84a0-a6eb47b4e943",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7a45c57d-71b3-4b8d-8f7a-ce4b85fe0bc3": {
+        "id": "7a45c57d-71b3-4b8d-8f7a-ce4b85fe0bc3",
+        "name": "Подписать",
+        "path": [
+          {
+            "x": 1088,
+            "y": 184
+          },
+          {
+            "x": 1216,
+            "y": 184
+          },
+          {
+            "x": 1216,
+            "y": 96
+          },
+          {
+            "x": 1248,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "18d45678-7b84-4e42-8521-b6dc33977397",
+        "target": "8b368dd5-d2cc-4e39-b06b-3e8b32b21571",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7e7c9806-8317-47bc-8b37-2a69b13b4cc6": {
+        "id": "7e7c9806-8317-47bc-8b37-2a69b13b4cc6",
+        "name": "",
+        "path": [
+          {
+            "x": 1720,
+            "y": 640
+          },
+          {
+            "x": 1760,
+            "y": 640
+          }
+        ],
+        "type": "plain",
+        "source": "17e82f13-7a5a-4349-a334-0201262df030",
+        "target": "6f6f573e-0786-4db2-b7c9-7a6e86ce5be6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "sign_type"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "work_in_russia",
+                    "name": "Работа в России"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "81f056ca-c775-44cf-957a-467f1cba082e": {
+        "id": "81f056ca-c775-44cf-957a-467f1cba082e",
+        "name": "",
+        "path": [
+          {
+            "x": 240,
+            "y": 96
+          },
+          {
+            "x": 264,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "5980c1c9-02cb-4ff3-80d0-26ecaf708d3b",
+        "target": "9458aac0-c0a6-4d6e-8176-4ef9793dc410",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8a60a93c-be30-46ea-90a9-d39c55f295ee": {
+        "id": "8a60a93c-be30-46ea-90a9-d39c55f295ee",
+        "name": "",
+        "path": [
+          {
+            "x": 2032,
+            "y": 840
+          },
+          {
+            "x": 2232,
+            "y": 840
+          },
+          {
+            "x": 2232,
+            "y": 328
+          },
+          {
+            "x": 2240,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "8e5bd21a-90af-4e3a-a0ac-0db6f1a958b9",
+        "target": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "decision"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "transfered_in_paper",
+                    "name": "Оформлено в бумаге"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8adc4c21-72f3-4a74-b49c-ffe1c27aea30": {
+        "id": "8adc4c21-72f3-4a74-b49c-ffe1c27aea30",
+        "name": "",
+        "path": [
+          {
+            "x": 1488,
+            "y": 288
+          },
+          {
+            "x": 1488,
+            "y": 1120
+          },
+          {
+            "x": 1880,
+            "y": 1120
+          }
+        ],
+        "type": "plain",
+        "source": "c4c67127-768c-4fdc-8051-0c1aaf25b53e",
+        "target": "0b864ed2-de9c-426e-9c82-87b7e4c0e34e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8c4fc1df-9381-4646-88f4-5bb45cd0f160": {
+        "id": "8c4fc1df-9381-4646-88f4-5bb45cd0f160",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 720,
+            "y": 184
+          },
+          {
+            "x": 824,
+            "y": 184
+          }
+        ],
+        "type": "default",
+        "source": "d7c90b55-d0d7-482a-954e-3b284c644a9e",
+        "target": "a9ff07da-dc88-44ef-a965-afb7fd46ee7a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ab0839f0-0e3e-40ea-a4b3-0a0c7571272c": {
+        "id": "ab0839f0-0e3e-40ea-a4b3-0a0c7571272c",
+        "name": "",
+        "path": [
+          {
+            "x": 2280,
+            "y": 296
+          },
+          {
+            "x": 2280,
+            "y": 200
+          },
+          {
+            "x": 2336,
+            "y": 200
+          }
+        ],
+        "type": "error",
+        "source": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "target": "43fb8366-d97b-492c-999a-f35ca8e510de",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "af644cbf-8dd3-4330-b927-00076b688774": {
+        "id": "af644cbf-8dd3-4330-b927-00076b688774",
+        "name": "",
+        "path": [
+          {
+            "x": 1704,
+            "y": 128
+          },
+          {
+            "x": 1704,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "a13d8cfa-b2e2-43cb-aad8-144911c94baa",
+        "target": "73167731-b61c-4dad-9252-c1a64f23262e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "afb78f5e-75a8-430a-a079-6123e3dbff52": {
+        "id": "afb78f5e-75a8-430a-a079-6123e3dbff52",
+        "name": "",
+        "path": [
+          {
+            "x": 2080,
+            "y": 344
+          },
+          {
+            "x": 2080,
+            "y": 432
+          },
+          {
+            "x": 2344,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "4c902f89-6403-4734-bab9-a29c9234c596",
+        "target": "c2f9f629-babe-4203-b339-c2142c006555",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "doc_signed"
+              },
+              "b": {
+                "kind": "manual",
+                "value": false
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b79fabbd-f708-4f08-9340-fc0d7e122918": {
+        "id": "b79fabbd-f708-4f08-9340-fc0d7e122918",
+        "name": "",
+        "path": [
+          {
+            "x": 2096,
+            "y": 328
+          },
+          {
+            "x": 2240,
+            "y": 328
+          }
+        ],
+        "type": "default",
+        "source": "4c902f89-6403-4734-bab9-a29c9234c596",
+        "target": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b88b6c7b-078d-460b-ad34-c435cf940b9a": {
+        "id": "b88b6c7b-078d-460b-ad34-c435cf940b9a",
+        "name": "",
+        "path": [
+          {
+            "x": 1840,
+            "y": 328
+          },
+          {
+            "x": 2064,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "89380513-b9cc-473a-be80-fe2ff5131aac",
+        "target": "4c902f89-6403-4734-bab9-a29c9234c596",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b8aa6a7a-3ad4-48df-aa81-e52250ae4655": {
+        "id": "b8aa6a7a-3ad4-48df-aa81-e52250ae4655",
+        "name": "",
+        "path": [
+          {
+            "x": 1328,
+            "y": 96
+          },
+          {
+            "x": 1344,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "8b368dd5-d2cc-4e39-b06b-3e8b32b21571",
+        "target": "df77253e-7cf5-4d5b-b787-16cef15ff2cf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bc3a60d8-0f4d-44c7-8cbd-e4d7a11c8f30": {
+        "id": "bc3a60d8-0f4d-44c7-8cbd-e4d7a11c8f30",
+        "name": "",
+        "path": [
+          {
+            "x": 1816,
+            "y": 208
+          },
+          {
+            "x": 1880,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "7d5747b5-e67d-40b7-a405-77433cf9992f",
+        "target": "e9f39c14-545a-4515-b81a-6cf67c6aba90",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bf121ca6-446e-4c8d-a93f-670fd8ce4511": {
+        "id": "bf121ca6-446e-4c8d-a93f-670fd8ce4511",
+        "name": "",
+        "path": [
+          {
+            "x": 1704,
+            "y": 224
+          },
+          {
+            "x": 1704,
+            "y": 624
+          }
+        ],
+        "type": "plain",
+        "source": "73167731-b61c-4dad-9252-c1a64f23262e",
+        "target": "17e82f13-7a5a-4349-a334-0201262df030",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "document_for_employment"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c1cf7abe-5d0a-4ff8-98bd-1846efd0fb88": {
+        "id": "c1cf7abe-5d0a-4ff8-98bd-1846efd0fb88",
+        "name": "Кадровый документ",
+        "path": [
+          {
+            "x": 840,
+            "y": 200
+          },
+          {
+            "x": 840,
+            "y": 360
+          },
+          {
+            "x": 1008,
+            "y": 360
+          }
+        ],
+        "type": "default",
+        "source": "a9ff07da-dc88-44ef-a965-afb7fd46ee7a",
+        "target": "747a6105-b26b-4d70-9e8f-867f49f51209",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c51b89ce-b9c2-4805-96d3-4d9c510e295d": {
+        "id": "c51b89ce-b9c2-4805-96d3-4d9c510e295d",
+        "name": "",
+        "path": [
+          {
+            "x": 2000,
+            "y": 840
+          },
+          {
+            "x": 1924,
+            "y": 840
+          },
+          {
+            "x": 1924,
+            "y": 976
+          },
+          {
+            "x": 1920,
+            "y": 976
+          },
+          {
+            "x": 1920,
+            "y": 984
+          }
+        ],
+        "type": "default",
+        "source": "8e5bd21a-90af-4e3a-a0ac-0db6f1a958b9",
+        "target": "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c578ac6e-5cb4-4ec9-9655-f21d2f391ef8": {
+        "id": "c578ac6e-5cb4-4ec9-9655-f21d2f391ef8",
+        "name": "",
+        "path": [
+          {
+            "x": 2608,
+            "y": 328
+          },
+          {
+            "x": 2624,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "fdfaa391-6383-47b6-a057-b26acdf516ab",
+        "target": "5af9f2df-04df-4da0-b205-273e337094a2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c637ed40-0b3b-452e-8260-722a08b7524a": {
+        "id": "c637ed40-0b3b-452e-8260-722a08b7524a",
+        "name": "",
+        "path": [
+          {
+            "x": 2208,
+            "y": 928
+          },
+          {
+            "x": 2208,
+            "y": 332
+          },
+          {
+            "x": 2232,
+            "y": 332
+          },
+          {
+            "x": 2232,
+            "y": 328
+          },
+          {
+            "x": 2240,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "ddc14093-baa2-4ca4-a01a-d644e050cece",
+        "target": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "decision"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "transfered_in_paper",
+                    "name": "Оформлено в бумаге"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ca8f45c7-1d9f-46e0-83e0-3b8b5f914b02": {
+        "id": "ca8f45c7-1d9f-46e0-83e0-3b8b5f914b02",
+        "name": "Подписано",
+        "path": [
+          {
+            "x": 1960,
+            "y": 208
+          },
+          {
+            "x": 2232,
+            "y": 208
+          },
+          {
+            "x": 2232,
+            "y": 328
+          },
+          {
+            "x": 2240,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "e9f39c14-545a-4515-b81a-6cf67c6aba90",
+        "target": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cdca0c56-2ac2-474a-b527-097472bb837c": {
+        "id": "cdca0c56-2ac2-474a-b527-097472bb837c",
+        "name": "Да",
+        "path": [
+          {
+            "x": 704,
+            "y": 200
+          },
+          {
+            "x": 704,
+            "y": 256
+          }
+        ],
+        "type": "plain",
+        "source": "d7c90b55-d0d7-482a-954e-3b284c644a9e",
+        "target": "c21cbc19-a01d-4226-8941-255c4e9bb248",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "signatory_staffs"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "dc4845b7-e1f5-408b-a7d2-d7e0d1299b39": {
+        "id": "dc4845b7-e1f5-408b-a7d2-d7e0d1299b39",
+        "name": "",
+        "path": [
+          {
+            "x": 1744,
+            "y": 944
+          },
+          {
+            "x": 2192,
+            "y": 944
+          }
+        ],
+        "type": "plain",
+        "source": "ac2e5328-b770-442a-9757-29cf59ba01cb",
+        "target": "ddc14093-baa2-4ca4-a01a-d644e050cece",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "dfb997de-5d10-4458-b169-a43040010ab2": {
+        "id": "dfb997de-5d10-4458-b169-a43040010ab2",
+        "name": "Отказать",
+        "path": [
+          {
+            "x": 1048,
+            "y": 328
+          },
+          {
+            "x": 1048,
+            "y": 256
+          },
+          {
+            "x": 1448,
+            "y": 256
+          }
+        ],
+        "type": "default",
+        "source": "747a6105-b26b-4d70-9e8f-867f49f51209",
+        "target": "c4c67127-768c-4fdc-8051-0c1aaf25b53e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e34c2fac-4391-4775-a45e-bc828c1fa070": {
+        "id": "e34c2fac-4391-4775-a45e-bc828c1fa070",
+        "name": "",
+        "path": [
+          {
+            "x": 1744,
+            "y": 824
+          },
+          {
+            "x": 1992,
+            "y": 824
+          },
+          {
+            "x": 1992,
+            "y": 352
+          },
+          {
+            "x": 2228,
+            "y": 352
+          },
+          {
+            "x": 2228,
+            "y": 328
+          },
+          {
+            "x": 2240,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "4c26d32b-d093-473b-ade0-1393b0e7735a",
+        "target": "e977a9bc-9531-4bf5-b27b-263324ab9553",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e4234498-e7c9-4bea-8f50-002e55fd31f3": {
+        "id": "e4234498-e7c9-4bea-8f50-002e55fd31f3",
+        "name": "",
+        "path": [
+          {
+            "x": 1632,
+            "y": 96
+          },
+          {
+            "x": 1664,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "250bb4c8-f614-4f4c-8ab9-6b09390aa787",
+        "target": "a13d8cfa-b2e2-43cb-aad8-144911c94baa",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ea4ca1cf-0254-4cf5-ac47-03a387402c9a": {
+        "id": "ea4ca1cf-0254-4cf5-ac47-03a387402c9a",
+        "name": "",
+        "path": [
+          {
+            "x": 1800,
+            "y": 608
+          },
+          {
+            "x": 1800,
+            "y": 576
+          }
+        ],
+        "type": "error",
+        "source": "6f6f573e-0786-4db2-b7c9-7a6e86ce5be6",
+        "target": "f46c97a1-7bec-4008-93f8-2dc1c9ab04e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ec97dc65-ba77-4591-aab4-facd10f06dc2": {
+        "id": "ec97dc65-ba77-4591-aab4-facd10f06dc2",
+        "name": "",
+        "path": [
+          {
+            "x": 1920,
+            "y": 1232
+          },
+          {
+            "x": 1920,
+            "y": 1248
+          }
+        ],
+        "type": "plain",
+        "source": "59dc1aad-6b4a-4533-ae72-6dc89e424823",
+        "target": "f9b0a30f-5e31-4dfb-9d35-a4f0ae07062b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "efb9198d-1915-400f-b5bc-44a586d49b34": {
+        "id": "efb9198d-1915-400f-b5bc-44a586d49b34",
+        "name": "",
+        "path": [
+          {
+            "x": 1920,
+            "y": 1048
+          },
+          {
+            "x": 1920,
+            "y": 1088
+          }
+        ],
+        "type": "plain",
+        "source": "4df93eab-b0b1-47ae-9a22-2d4cbdfeb8d3",
+        "target": "0b864ed2-de9c-426e-9c82-87b7e4c0e34e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f182cd49-92bd-435d-99b3-efb0fb8bf19f": {
+        "id": "f182cd49-92bd-435d-99b3-efb0fb8bf19f",
+        "name": "",
+        "path": [
+          {
+            "x": 1800,
+            "y": 360
+          },
+          {
+            "x": 1800,
+            "y": 512
+          }
+        ],
+        "type": "error",
+        "source": "89380513-b9cc-473a-be80-fe2ff5131aac",
+        "target": "f46c97a1-7bec-4008-93f8-2dc1c9ab04e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f195cb13-2fd7-4ac5-b47f-f03a17313eb5": {
+        "id": "f195cb13-2fd7-4ac5-b47f-f03a17313eb5",
+        "name": "",
+        "path": [
+          {
+            "x": 744,
+            "y": 288
+          },
+          {
+            "x": 792,
+            "y": 288
+          },
+          {
+            "x": 792,
+            "y": 184
+          },
+          {
+            "x": 824,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "c21cbc19-a01d-4226-8941-255c4e9bb248",
+        "target": "a9ff07da-dc88-44ef-a965-afb7fd46ee7a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f2ec4010-3583-4cfa-a8b9-a8f81dbb7d6a": {
+        "id": "f2ec4010-3583-4cfa-a8b9-a8f81dbb7d6a",
+        "name": "",
+        "path": [
+          {
+            "x": 448,
+            "y": 96
+          },
+          {
+            "x": 688,
+            "y": 96
+          }
+        ],
+        "type": "plain",
+        "source": "49dcb808-9830-424c-9dde-1aa7b3015729",
+        "target": "623878af-ba6a-41aa-9620-80fd70f9c622",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f37c143c-9ca3-483c-afb6-e0be203f13ee": {
+        "id": "f37c143c-9ca3-483c-afb6-e0be203f13ee",
+        "name": "Документ для трудоустройства",
+        "path": [
+          {
+            "x": 856,
+            "y": 184
+          },
+          {
+            "x": 1008,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "a9ff07da-dc88-44ef-a965-afb7fd46ee7a",
+        "target": "18d45678-7b84-4e42-8521-b6dc33977397",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "document_for_employment"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f5e15c43-1796-4561-ad9f-1949717daf67": {
+        "id": "f5e15c43-1796-4561-ad9f-1949717daf67",
+        "name": "",
+        "path": [
+          {
+            "x": 2512,
+            "y": 328
+          },
+          {
+            "x": 2528,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "0783fabe-0f16-4363-b8c9-fdfadf0b7c41",
+        "target": "fdfaa391-6383-47b6-a057-b26acdf516ab",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f8a572ea-44bd-469d-a2d3-7153914c2ffd": {
+        "id": "f8a572ea-44bd-469d-a2d3-7153914c2ffd",
+        "name": "",
+        "path": [
+          {
+            "x": 1840,
+            "y": 544
+          },
+          {
+            "x": 2636,
+            "y": 544
+          },
+          {
+            "x": 2636,
+            "y": 352
+          },
+          {
+            "x": 2640,
+            "y": 352
+          },
+          {
+            "x": 2640,
+            "y": 344
+          }
+        ],
+        "type": "plain",
+        "source": "f46c97a1-7bec-4008-93f8-2dc1c9ab04e7",
+        "target": "5af9f2df-04df-4da0-b205-273e337094a2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fe272802-27ef-48a6-95af-b7ee5f8e80cd": {
+        "id": "fe272802-27ef-48a6-95af-b7ee5f8e80cd",
+        "name": "",
+        "path": [
+          {
+            "x": 1800,
+            "y": 224
+          },
+          {
+            "x": 1800,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "7d5747b5-e67d-40b7-a405-77433cf9992f",
+        "target": "89380513-b9cc-473a-be80-fe2ff5131aac",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "sign_type"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "work_in_russia",
+                    "name": "Работа в России"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function set_xml(): Promise\u003cvoid\u003e {\n    let doc: any;\n\n    if (Context.data.personel_document) {\n        const pd = await Context.data.personel_document.fetch();\n        doc = await pd.data.__sourceRef!.fetch();\n    }\n\n    if (Context.data.document_for_employment) {\n        const de = await Context.data.document_for_employment.fetch();\n        doc = await de.data.__sourceRef!.fetch();\n    }\n\n    if (doc) {\n        doc.data.xml_file = Context.data.xml_file;\n        await doc.save();\n    }\n}\n\nasync function set_signed_status(): Promise\u003cvoid\u003e {\n    let doc: any;\n\n    if (Context.data.personel_document) {\n        const pd = await Context.data.personel_document.fetch();\n        doc = await pd.data.__sourceRef!.fetch();\n    }\n\n    if (Context.data.document_for_employment) {\n        const de = await Context.data.document_for_employment.fetch();\n        doc = await de.data.__sourceRef!.fetch();\n    }\n\n    if (doc.fields.__status \u0026\u0026 doc.fields.__status.variants.signed) {\n        await doc.setStatus(doc.fields.__status.variants.signed);\n    }\n}\n\nasync function set_rejected_status(): Promise\u003cvoid\u003e {\n    let doc: any;\n\n    if (Context.data.personel_document) {\n        const pd = await Context.data.personel_document.fetch();\n        doc = await pd.data.__sourceRef!.fetch();\n    }\n\n    if (Context.data.document_for_employment) {\n        const de = await Context.data.document_for_employment.fetch();\n        doc = await de.data.__sourceRef!.fetch();\n    }\n\n    if (doc.fields.__status \u0026\u0026 doc.fields.__status.variants.rejected) {\n        await doc.setStatus(doc.fields.__status.variants.rejected);\n    }\n}\n\nasync function set_on_sign_status(): Promise\u003cvoid\u003e {\n    let doc: any;\n\n    if (Context.data.personel_document) {\n        const pd = await Context.data.personel_document.fetch();\n        doc = await pd.data.__sourceRef!.fetch();\n    }\n\n    if (Context.data.document_for_employment) {\n        const de = await Context.data.document_for_employment.fetch();\n        doc = await de.data.__sourceRef!.fetch();\n    }\n\n    if (doc.fields.__status \u0026\u0026 doc.fields.__status.variants.signing) {\n        await doc.setStatus(doc.fields.__status.variants.signing);\n    }\n}\n\n//Не используется после изменений по тикету 1731\n// async function get_org_head_app(): Promise\u003cvoid\u003e {\n//     const org_head = await Context.fields.staff_chief_kedo.app.search()\n//         .where((f, g) =\u003e g.and(\n//             f.__deletedAt.eq(null),\n//             f.ext_user.eq(Context.data.staff_chief!),\n//             f.__status.eq(Context.fields.staff_chief_kedo.app.fields.__status.variants.signed_documents),\n//         ))\n//         .first();\n\n//     Context.data.staff_chief_kedo = org_head;\n// }\n\nasync function add_to_signers_group(): Promise\u003cvoid\u003e {\n    const signers_group = await System.userGroups.search().where((f, g) =\u003e\n        g.and(\n            f.__deletedAt.eq(null),\n            f.__id.eq('721d2836-3d06-42ec-ac3d-e8002d2d897e'),\n        )).first();\n\n    if (signers_group) {\n        signers_group.addItem(Context.data.staff_chief!);\n        await signers_group.save();\n    }\n}\n\nasync function delete_from_signers_group(): Promise\u003cvoid\u003e {\n    const signers_group = await System.userGroups.search().where((f, g) =\u003e\n        g.and(\n            f.__deletedAt.eq(null),\n            f.__id.eq('721d2836-3d06-42ec-ac3d-e8002d2d897e'),\n        )).first();\n\n    const subOrgunitIds = signers_group!.data.subOrgunitIds;\n    subOrgunitIds!.filter(f =\u003e f != Context.data.staff_chief!.id);\n    signers_group!.data.subOrgunitIds = subOrgunitIds;\n}\n\nasync function line_status_set(): Promise\u003cvoid\u003e {\n    let doc: any;\n\n    if (Context.data.personel_document) {\n        const pd = await Context.data.personel_document.fetch();\n        doc = await pd.data.__sourceRef!.fetch();\n    }\n\n    if (Context.data.document_for_employment) {\n        const de = await Context.data.document_for_employment.fetch();\n        doc = await de.data.__sourceRef!.fetch();\n    }\n\n    doc.data.line_status = `${doc.data.__status!.code};${doc.data.__status!.name}`\n    await doc.save();\n}\n\n\nasync function generate_alert(): Promise\u003cvoid\u003e {\n    Context.data.alert_body_email = `Вам поступил документ на подписание на портале КЭДО. Подпишите документ до ${Context.data.limit!.format('DD.MM.YYYY HH:mm')}.`;\n    Context.data.alert_body_sms = `Вам поступил документ на подписание на портале КЭДО. Подпишите документ до ${Context.data.limit!.format('DD.MM.YYYY HH:mm')}. (ссылка)`\n}\n\nasync function calcOverdueDate(): Promise\u003cvoid\u003e {\n    const overdue_date = await System.productionSchedule.calcDate(new Datetime(), new Duration(1, \"days\"));\n    Context.data.limit = overdue_date;\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_dcc5a841-73d0-4fc8-b32a-fdd7fb8f93f0",
+      "name": "Подписать документ",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "28ea52f3-49a6-49e0-bea4-fca62e9a8556",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_e8ed5796-63d3-4406-a13e-bea48e44d8ca",
+      "name": "Подписать документ",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": 4
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "3b5527ff-2c3c-48ba-86e1-6820fc6970dc",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_45791788-ff26-4655-ab5d-28774dc3662e",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_99ea4667-71a5-4970-8566-5ca8af1ce6b6",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_2423cba2-69f4-4859-b514-baf1753b48f7",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_5d9296d2-3f49-4179-8a27-f5f95bba2897",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_21fca40d-b963-46c4-858d-d3db8f023860",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_01112226-ea3b-4c30-a51e-b8cc31c13ff6",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_cef17b79-885e-4e4f-9160-994a95f55224",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 1
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": "personnel_document"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "limit": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "decision": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document": {
+        "enabled": false,
+        "conditions": []
+      },
+      "xml_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sign_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sign_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "doc_signed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_chief": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "alert_body_sms": {
+        "enabled": false,
+        "conditions": []
+      },
+      "doc_not_signed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "alert_body_email": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signatory_staffs": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_chief_kedo": {
+        "enabled": false,
+        "conditions": []
+      },
+      "personel_document": {
+        "enabled": false,
+        "conditions": []
+      },
+      "personnel_document": {
+        "enabled": false,
+        "conditions": []
+      },
+      "chief_sign_required": {
+        "enabled": false,
+        "conditions": []
+      },
+      "sign_order_deadline": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_for_employment": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,50 @@
+<script>
+    var unselectButton = document.querySelector(".unselect-button");
+    var selectAllButton = document.querySelector(".select-all-button")
+    var dropdown = document.querySelector(".hidden-types");
+    var showButton = document.querySelector(".show-types");
+    var variantLabels = document.querySelectorAll(".document-variant");
+    var variantCheckboxes = document.querySelectorAll(".document-variant__checkbox");
+    var restrictVariants = [
+        "document-variant",
+        "document-variant__label",
+        "document-variant__checkbox",
+        "flag"
+    ];
+
+
+    function showVariants(e) {
+        if (dropdown.classList.contains("expand")) {
+            variantCheckboxes.forEach(variant => variant.style.display = "none")
+            showButton.style.border = ""
+            showButton.style.boxShadow = ""
+            dropdown.classList.remove("expand")
+        } else {
+            variantCheckboxes.forEach(variant => variant.style.display = "block")
+            showButton.style.border = "1px solid #1e6599"
+            showButton.style.boxShadow = "0px 0px 3px 1px rgb(66 136 186)"
+            dropdown.classList.add("expand")
+        }
+    };
+    
+    function hideVariants(e) {
+        if (e.target != showButton && e.target != unselectButton && e.target != selectAllButton && !restrictVariants.includes(e.target.className)) {
+            variantCheckboxes.forEach(variant => variant.style.display = "none")
+            showButton.style.border = ""
+            showButton.style.boxShadow = ""
+            dropdown.classList.remove("expand")
+        }
+    }
+
+    showButton.addEventListener("click", showVariants);
+    window.addEventListener("click", hideVariants);
+    variantCheckboxes.forEach(el => el.addEventListener("click", <%= Scripts%>.getDocTypes));
+    
+    unselectButton.addEventListener("click", () => {
+        variantCheckboxes.forEach(el => el.checked = false)
+    });
+
+    selectAllButton.addEventListener("click", () => {
+        variantCheckboxes.forEach(el => el.checked = true)
+    })
+</script>

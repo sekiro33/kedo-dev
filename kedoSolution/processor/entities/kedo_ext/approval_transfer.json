@@ -1,0 +1,1016 @@
+{
+  "__id": "018e89f8-23b6-79c0-af41-a0fd882122f6",
+  "namespace": "kedo_ext",
+  "code": "approval_transfer",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Согласование заявления на перевод",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "transfer_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "transfer_another_position",
+            "name": "Перевод в другое подразделение / должность",
+            "checked": false
+          },
+          {
+            "code": "work_condition_change",
+            "name": "Изменение условий труда",
+            "checked": false
+          },
+          {
+            "code": "change_of_schedule",
+            "name": "Изменение графика работы",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Вид перевода",
+        "data": {}
+      }
+    },
+    {
+      "code": "head",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководители",
+        "data": {}
+      }
+    },
+    {
+      "code": "new_head",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Новый руководитель",
+        "data": {}
+      }
+    },
+    {
+      "code": "hr_dep",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Отдел кадров",
+        "data": {}
+      }
+    },
+    {
+      "code": "transfer_application",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "transfer_application",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявление на перевод",
+        "data": {}
+      }
+    },
+    {
+      "code": "document_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "statement",
+            "name": "Заявление",
+            "checked": false
+          },
+          {
+            "code": "memo",
+            "name": "Служебная записка",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Тип документа",
+        "data": {}
+      }
+    },
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-04-11T06:49:13.886571749Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2024-04-12T09:47:05.755780865Z",
+  "__updatedBy": "1a8a4a0b-7e7e-4e0e-895e-ab2a0a301d1e",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 144,
+        "y": 160,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "587310b5-fd39-4905-b4e6-f55c861fe7c6",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["2eed3866-d8d9-4cba-aab8-93858bc2d877"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Согласование перевода - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "3bf2fb4c-d137-4886-a642-9ea6013cbf8e": {
+        "x": 808,
+        "y": 144,
+        "id": "3bf2fb4c-d137-4886-a642-9ea6013cbf8e",
+        "icon": "send_doc",
+        "lane": "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69",
+        "name": "Согласование ",
+        "type": "approval_list_process",
+        "color": "#f0f4c3",
+        "exits": [
+          "f33a8176-72e0-4507-8b71-5c6dcc644429",
+          "457f56a7-60ef-434e-af83-d121e6725ad7"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "cleanUp": false,
+          "taskName": "{$transfer_application}: Согласовать",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 2,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            },
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          },
+          "formFields": [],
+          "settingSign": {
+            "isSign": "disabled"
+          },
+          "withoutNotify": false,
+          "targetFieldCode": "transfer_application",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {}
+          },
+          "autoApprovalSettings": {
+            "comment": "",
+            "enabled": false,
+            "approved": true
+          },
+          "customStatusSettings": {
+            "customStatuses": [
+              {
+                "status": "approved",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              },
+              {
+                "status": "rejected",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              }
+            ]
+          }
+        }
+      },
+      "54f39554-16d5-41f6-baf0-61a16ba517df": {
+        "x": 1032,
+        "y": 144,
+        "id": "54f39554-16d5-41f6-baf0-61a16ba517df",
+        "icon": "system",
+        "lane": "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69",
+        "name": "Согласовано = true",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["8903b72e-4947-427b-bb3e-ebae38991635"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "8a6ebc4c-1b61-4336-a33b-b9da6217528e": {
+        "x": 1056,
+        "y": 336,
+        "id": "8a6ebc4c-1b61-4336-a33b-b9da6217528e",
+        "icon": "end",
+        "lane": "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "b57cc030-7af6-405e-ae88-9a0f6f2df184": {
+        "x": 544,
+        "y": 160,
+        "id": "b57cc030-7af6-405e-ae88-9a0f6f2df184",
+        "icon": "exclusive",
+        "lane": "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69",
+        "name": "Вид перевода",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "e89b4eaa-1f3e-4b41-afe4-f6b2c7d18a00",
+          "9ae43573-cd7b-4cee-9a89-e5419047ca53"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d960a80e-394f-43c8-84f8-b9c87c4ba7fc": {
+        "x": 944,
+        "y": 320,
+        "id": "d960a80e-394f-43c8-84f8-b9c87c4ba7fc",
+        "icon": "system",
+        "lane": "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69",
+        "name": "Согласовано = false",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["d2ca65c0-76f0-4c95-bf53-cdb1f2e9fe83"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "dcb2f7d7-a821-4400-adfa-3dc49d046b04": {
+        "x": 296,
+        "y": 144,
+        "id": "dcb2f7d7-a821-4400-adfa-3dc49d046b04",
+        "icon": "send_doc",
+        "lane": "87e1b778-db5c-4b49-90bb-91e8e7549fc3",
+        "loop": "parallel",
+        "name": "Согласование",
+        "type": "approval_list_process",
+        "color": "#f0f4c3",
+        "exits": [
+          "bd65c631-b4e2-4d20-bd20-dcc4fd4e589a",
+          "4057bed5-2419-4b5f-9ec3-e3487cb29276"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "cleanUp": true,
+          "taskName": "{$transfer_application}: Согласовать",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 2,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            },
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          },
+          "formFields": [],
+          "settingSign": {
+            "isSign": "disabled"
+          },
+          "withoutNotify": false,
+          "targetFieldCode": "transfer_application",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {}
+          },
+          "autoApprovalSettings": {
+            "comment": "",
+            "enabled": false,
+            "approved": true
+          },
+          "customStatusSettings": {
+            "customStatuses": [
+              {
+                "status": "approved",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              },
+              {
+                "status": "rejected",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              }
+            ]
+          }
+        }
+      }
+    },
+    "lanes": {
+      "587310b5-fd39-4905-b4e6-f55c861fe7c6": {
+        "x": 8,
+        "y": 8,
+        "id": "587310b5-fd39-4905-b4e6-f55c861fe7c6",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "87e1b778-db5c-4b49-90bb-91e8e7549fc3": {
+        "x": 232,
+        "y": 8,
+        "id": "87e1b778-db5c-4b49-90bb-91e8e7549fc3",
+        "name": "Руководители",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "head",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      },
+      "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69": {
+        "x": 456,
+        "y": 8,
+        "id": "b08aaf9e-6bb2-42cf-a3fc-5d07b7213a69",
+        "name": "Новый руководитель",
+        "color": "#d6f0cc",
+        "width": 748,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "new_head",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "2eed3866-d8d9-4cba-aab8-93858bc2d877": {
+        "id": "2eed3866-d8d9-4cba-aab8-93858bc2d877",
+        "name": "",
+        "path": [
+          {
+            "x": 176,
+            "y": 176
+          },
+          {
+            "x": 296,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "dcb2f7d7-a821-4400-adfa-3dc49d046b04",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4057bed5-2419-4b5f-9ec3-e3487cb29276": {
+        "id": "4057bed5-2419-4b5f-9ec3-e3487cb29276",
+        "name": "Отказано",
+        "path": [
+          {
+            "x": 336,
+            "y": 208
+          },
+          {
+            "x": 336,
+            "y": 352
+          },
+          {
+            "x": 944,
+            "y": 352
+          }
+        ],
+        "type": "default",
+        "source": "dcb2f7d7-a821-4400-adfa-3dc49d046b04",
+        "target": "d960a80e-394f-43c8-84f8-b9c87c4ba7fc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__rejectPercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "457f56a7-60ef-434e-af83-d121e6725ad7": {
+        "id": "457f56a7-60ef-434e-af83-d121e6725ad7",
+        "name": "Отказано",
+        "path": [
+          {
+            "x": 848,
+            "y": 208
+          },
+          {
+            "x": 848,
+            "y": 352
+          },
+          {
+            "x": 944,
+            "y": 352
+          }
+        ],
+        "type": "default",
+        "source": "3bf2fb4c-d137-4886-a642-9ea6013cbf8e",
+        "target": "d960a80e-394f-43c8-84f8-b9c87c4ba7fc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__rejectPercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8903b72e-4947-427b-bb3e-ebae38991635": {
+        "id": "8903b72e-4947-427b-bb3e-ebae38991635",
+        "name": "",
+        "path": [
+          {
+            "x": 1072,
+            "y": 208
+          },
+          {
+            "x": 1072,
+            "y": 336
+          }
+        ],
+        "type": "plain",
+        "source": "54f39554-16d5-41f6-baf0-61a16ba517df",
+        "target": "8a6ebc4c-1b61-4336-a33b-b9da6217528e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9ae43573-cd7b-4cee-9a89-e5419047ca53": {
+        "id": "9ae43573-cd7b-4cee-9a89-e5419047ca53",
+        "name": "Перевод в другое подразделение / должность",
+        "path": [
+          {
+            "x": 576,
+            "y": 176
+          },
+          {
+            "x": 808,
+            "y": 176
+          }
+        ],
+        "type": "default",
+        "source": "b57cc030-7af6-405e-ae88-9a0f6f2df184",
+        "target": "3bf2fb4c-d137-4886-a642-9ea6013cbf8e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bd65c631-b4e2-4d20-bd20-dcc4fd4e589a": {
+        "id": "bd65c631-b4e2-4d20-bd20-dcc4fd4e589a",
+        "name": "Согласовано",
+        "path": [
+          {
+            "x": 376,
+            "y": 176
+          },
+          {
+            "x": 544,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "dcb2f7d7-a821-4400-adfa-3dc49d046b04",
+        "target": "b57cc030-7af6-405e-ae88-9a0f6f2df184",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__approvePercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d2ca65c0-76f0-4c95-bf53-cdb1f2e9fe83": {
+        "id": "d2ca65c0-76f0-4c95-bf53-cdb1f2e9fe83",
+        "name": "",
+        "path": [
+          {
+            "x": 1024,
+            "y": 352
+          },
+          {
+            "x": 1056,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "d960a80e-394f-43c8-84f8-b9c87c4ba7fc",
+        "target": "8a6ebc4c-1b61-4336-a33b-b9da6217528e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e89b4eaa-1f3e-4b41-afe4-f6b2c7d18a00": {
+        "id": "e89b4eaa-1f3e-4b41-afe4-f6b2c7d18a00",
+        "name": "Изменение условий труда/графика работы",
+        "path": [
+          {
+            "x": 560,
+            "y": 160
+          },
+          {
+            "x": 560,
+            "y": 136
+          },
+          {
+            "x": 1072,
+            "y": 136
+          },
+          {
+            "x": 1072,
+            "y": 144
+          }
+        ],
+        "type": "plain",
+        "source": "b57cc030-7af6-405e-ae88-9a0f6f2df184",
+        "target": "54f39554-16d5-41f6-baf0-61a16ba517df",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "transfer_type"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "work_condition_change",
+                    "name": "Изменение условий труда"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            },
+            {
+              "a": {
+                "kind": "context",
+                "value": "transfer_type"
+              },
+              "b": {
+                "kind": "manual",
+                "value": [
+                  {
+                    "code": "change_of_schedule",
+                    "name": "Изменение графика работы"
+                  }
+                ]
+              },
+              "type": "ENUM",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f33a8176-72e0-4507-8b71-5c6dcc644429": {
+        "id": "f33a8176-72e0-4507-8b71-5c6dcc644429",
+        "name": "Согласовано",
+        "path": [
+          {
+            "x": 888,
+            "y": 176
+          },
+          {
+            "x": 1032,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "3bf2fb4c-d137-4886-a642-9ea6013cbf8e",
+        "target": "54f39554-16d5-41f6-baf0-61a16ba517df",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__approvePercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "head": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_type": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_application": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

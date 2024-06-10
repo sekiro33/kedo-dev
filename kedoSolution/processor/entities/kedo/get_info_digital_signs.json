@@ -1,0 +1,1038 @@
+{
+  "__id": "018fed2c-cc16-7b0a-b064-0af541a3e2c7",
+  "namespace": "kedo",
+  "code": "get_info_digital_signs",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Сбор информации о сертификатах (ЭП)",
+  "type": "bpmn",
+  "draft": false,
+  "version": 4,
+  "context": [
+    {
+      "code": "days_offset",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Срок до истечения сертификата",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_list",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудники с истекающими сертификатами",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "certs_info_table",
+      "type": "TABLE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "fields": [
+          {
+            "code": "__count",
+            "data": null,
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "Количество элементов",
+              "system": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "__index",
+            "data": {
+              "result": {}
+            },
+            "type": "FLOAT",
+            "view": {
+              "data": {
+                "additionalType": "integer"
+              },
+              "name": "№",
+              "disabled": true
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": true,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "user",
+            "data": {
+              "filter": {
+                "value": {
+                  "tf": {}
+                },
+                "enabled": false
+              }
+            },
+            "type": "SYS_USER",
+            "view": {
+              "data": {},
+              "name": "Пользователь"
+            },
+            "array": true,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "end_date",
+            "data": {},
+            "type": "DATETIME",
+            "view": {
+              "data": {
+                "additionalType": "datetime",
+                "defaultTimeType": "startOfDay"
+              },
+              "name": "Срок действия"
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          },
+          {
+            "code": "currect_date",
+            "data": {},
+            "type": "DATETIME",
+            "view": {
+              "data": {
+                "additionalType": "datetime",
+                "defaultTimeType": "startOfDay"
+              },
+              "name": "Срок действия с вычетом дней из меню настроек"
+            },
+            "array": false,
+            "single": true,
+            "deleted": false,
+            "formula": "",
+            "indexed": false,
+            "required": false,
+            "searchable": false,
+            "defaultValue": null,
+            "calcByFormula": false
+          }
+        ],
+        "result": {
+          "user": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__count": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "__index": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "end_date": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          },
+          "currect_date": {
+            "kind": "none",
+            "label": "",
+            "formula": "sum"
+          }
+        }
+      },
+      "view": {
+        "name": "Информация об истекающих сертификатах (Таблица)",
+        "data": {
+          "allowDeleteRows": false,
+          "collapseNestedHeaders": false,
+          "columnsView": {
+            "currect_date": {
+              "align": "left",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "end_date": {
+              "align": "left",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            },
+            "user": {
+              "align": "left",
+              "compression": false,
+              "font": {
+                "bold": false,
+                "color": "",
+                "italic": false,
+                "underline": false
+              },
+              "hidden": false,
+              "readonly": false,
+              "required": false,
+              "tensile": false,
+              "verticalAlign": "middle",
+              "width": 175
+            }
+          },
+          "footerHidden": false,
+          "groupingSettings": {
+            "code": "",
+            "kind": "None",
+            "sort": "asc"
+          },
+          "headerHidden": false,
+          "maxRowCount": 0,
+          "relativeWidth": false,
+          "rowMinHeight": 35,
+          "showOrderNumbers": false,
+          "viewTemplate": "Элементов: {$__count}",
+          "viewVariant": "table"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "current_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текущая дата",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "is_reissue",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Перевыпуск",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "settings_kedo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Настройки (КЭДО)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "automatic_reissue_active",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Включен автоматический перевыпуск?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2024-06-03T10:18:56.645801597Z",
+  "__createdBy": "40489035-c2e3-4dba-8113-51ef4cb9dad3",
+  "__updatedAt": "2024-06-07T06:05:37.352191767Z",
+  "__updatedBy": "a303a2b1-1eb7-4827-93b0-68b5de6f8abe",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 40,
+        "y": 264,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["bf7c9eee-23f4-46ba-b9c1-3726f947b110"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "schedule": {
+            "begin": "2024-06-03T05:00:00.000Z",
+            "repeat": {
+              "kind": "daily",
+              "every": 1
+            },
+            "resume": false,
+            "workRound": "ignore"
+          },
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Сбор информации о сертификатах (ЭП) - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "026ebd27-2599-43fd-a914-631d9db056eb": {
+        "x": 688,
+        "y": 248,
+        "id": "026ebd27-2599-43fd-a914-631d9db056eb",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "Выпуск НЭП",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["df8fc4a2-929e-444a-bae8-ad8b973b6907"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "signme_release",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_list"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "is_reissue"
+              },
+              "target": {
+                "kind": "context",
+                "value": "automatic_reissue"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "staff_list",
+          "namespace": "kedo.staff",
+          "subProcessTargetFieldCode": "staff"
+        }
+      },
+      "06cc26bd-de32-42f6-bedf-80fadc500c45": {
+        "x": 120,
+        "y": 248,
+        "id": "06cc26bd-de32-42f6-bedf-80fadc500c45",
+        "icon": "script",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "Получить настройки КЭДО",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["610d1392-9f07-4399-89a2-10cc19c5c144"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSettingsKedo",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3b620e26-7241-4b47-96dc-4878efa23d88": {
+        "x": 624,
+        "y": 264,
+        "id": "3b620e26-7241-4b47-96dc-4878efa23d88",
+        "icon": "exclusive",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "Найдены сертификаты?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "83cc138a-f3fb-4759-a754-9cced5b27db4",
+          "44f273d9-61d8-43b9-b411-8e3ff590c467"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "9a0ecc38-f892-43fa-b399-e3d377c6c1cc": {
+        "x": 792,
+        "y": 408,
+        "id": "9a0ecc38-f892-43fa-b399-e3d377c6c1cc",
+        "icon": "end",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "a130524a-d34a-48a3-87f0-baf22a9610cf": {
+        "x": 376,
+        "y": 264,
+        "id": "a130524a-d34a-48a3-87f0-baf22a9610cf",
+        "icon": "exclusive",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "Включен автоматический перевыпуск?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "a2904cf8-b6c6-44d3-aae8-cb3cd8c86019",
+          "c1647f88-08f7-49db-9731-181ca3ef6cc2"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d5f52f03-972b-4407-8fb2-7fdae0e2b3e4": {
+        "x": 440,
+        "y": 248,
+        "id": "d5f52f03-972b-4407-8fb2-7fdae0e2b3e4",
+        "icon": "script",
+        "lane": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "Сбор информации о сертификатах",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["ee10cf69-5bf7-4e9f-baf8-5115bf338508"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getCertificates",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "a55985f1-0c3d-40cc-a5e6-f981a7b0b686": {
+        "x": 8,
+        "y": 8,
+        "id": "a55985f1-0c3d-40cc-a5e6-f981a7b0b686",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 908,
+        "height": 640,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "44f273d9-61d8-43b9-b411-8e3ff590c467": {
+        "id": "44f273d9-61d8-43b9-b411-8e3ff590c467",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 640,
+            "y": 296
+          },
+          {
+            "x": 640,
+            "y": 420
+          },
+          {
+            "x": 784,
+            "y": 420
+          },
+          {
+            "x": 784,
+            "y": 424
+          },
+          {
+            "x": 792,
+            "y": 424
+          }
+        ],
+        "type": "default",
+        "source": "3b620e26-7241-4b47-96dc-4878efa23d88",
+        "target": "9a0ecc38-f892-43fa-b399-e3d377c6c1cc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "610d1392-9f07-4399-89a2-10cc19c5c144": {
+        "id": "610d1392-9f07-4399-89a2-10cc19c5c144",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 280
+          },
+          {
+            "x": 376,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "06cc26bd-de32-42f6-bedf-80fadc500c45",
+        "target": "a130524a-d34a-48a3-87f0-baf22a9610cf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "83cc138a-f3fb-4759-a754-9cced5b27db4": {
+        "id": "83cc138a-f3fb-4759-a754-9cced5b27db4",
+        "name": "Да",
+        "path": [
+          {
+            "x": 656,
+            "y": 280
+          },
+          {
+            "x": 688,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "3b620e26-7241-4b47-96dc-4878efa23d88",
+        "target": "026ebd27-2599-43fd-a914-631d9db056eb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "staff_list"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a2904cf8-b6c6-44d3-aae8-cb3cd8c86019": {
+        "id": "a2904cf8-b6c6-44d3-aae8-cb3cd8c86019",
+        "name": "Да",
+        "path": [
+          {
+            "x": 408,
+            "y": 280
+          },
+          {
+            "x": 440,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "a130524a-d34a-48a3-87f0-baf22a9610cf",
+        "target": "d5f52f03-972b-4407-8fb2-7fdae0e2b3e4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "automatic_reissue_active"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bf7c9eee-23f4-46ba-b9c1-3726f947b110": {
+        "id": "bf7c9eee-23f4-46ba-b9c1-3726f947b110",
+        "name": "",
+        "path": [
+          {
+            "x": 72,
+            "y": 280
+          },
+          {
+            "x": 120,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "06cc26bd-de32-42f6-bedf-80fadc500c45",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c1647f88-08f7-49db-9731-181ca3ef6cc2": {
+        "id": "c1647f88-08f7-49db-9731-181ca3ef6cc2",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 392,
+            "y": 296
+          },
+          {
+            "x": 392,
+            "y": 428
+          },
+          {
+            "x": 784,
+            "y": 428
+          },
+          {
+            "x": 784,
+            "y": 424
+          },
+          {
+            "x": 792,
+            "y": 424
+          }
+        ],
+        "type": "default",
+        "source": "a130524a-d34a-48a3-87f0-baf22a9610cf",
+        "target": "9a0ecc38-f892-43fa-b399-e3d377c6c1cc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "df8fc4a2-929e-444a-bae8-ad8b973b6907": {
+        "id": "df8fc4a2-929e-444a-bae8-ad8b973b6907",
+        "name": "",
+        "path": [
+          {
+            "x": 728,
+            "y": 312
+          },
+          {
+            "x": 728,
+            "y": 424
+          },
+          {
+            "x": 792,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "026ebd27-2599-43fd-a914-631d9db056eb",
+        "target": "9a0ecc38-f892-43fa-b399-e3d377c6c1cc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ee10cf69-5bf7-4e9f-baf8-5115bf338508": {
+        "id": "ee10cf69-5bf7-4e9f-baf8-5115bf338508",
+        "name": "",
+        "path": [
+          {
+            "x": 520,
+            "y": 280
+          },
+          {
+            "x": 624,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "d5f52f03-972b-4407-8fb2-7fdae0e2b3e4",
+        "target": "3b620e26-7241-4b47-96dc-4878efa23d88",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function getSettingsKedo(): Promise\u003cvoid\u003e {\n    const settings = await Context.fields.settings_kedo.app.search()\n        .where(field =\u003e field.__deletedAt.eq(null))\n        .size(10000)\n        .all();\n\n    const automatic_reissue = settings.find(field =\u003e field.data.code == 'automatic_reissue_certificates');\n    Context.data.automatic_reissue_active = automatic_reissue ? automatic_reissue.data.status : false;\n    Context.data.days_offset = automatic_reissue ? automatic_reissue.data.quantity : 7;\n}\n\nasync function getCertificates(): Promise\u003cvoid\u003e {\n    Context.data.staff_list = [];\n    const days_offset = Context.data.days_offset ?? 7;\n    const current_date = new Datetime();\n\n    const users = await System.users.search()\n        .where(field =\u003e field.__deletedAt.eq(null))\n        .size(10000)\n        .all();\n\n    const staffs = await Context.fields.staff.app.search()\n        .where(field =\u003e field.__deletedAt.eq(null))\n        .size(10000)\n        .all();\n\n    const signsAll = await System.signs.digitalSigns.search()\n            .where((field, group) =\u003e group.and(\n                field.__deletedAt.eq(null),\n                field.cert_status.like(\"released\"),\n            ))\n            .size(10000)\n            .all();\n\n    for (let user of users) {\n        let user_sing: DigitalSign;\n        const signs = signsAll.filter(field =\u003e field.data.__createdBy.id === user.id);\n\n        if (signs \u0026\u0026 signs.length \u003e 0) {\n            const sortSigns = signs.sort(\n                (itemFirst, itemSecond) =\u003e\n                    Date.parse(itemSecond.data.validUntilAt!.format(\"YYYY-MM-DDTHH:mm:ss.SSSZ\")) - Date.parse(itemFirst.data.validUntilAt!.format(\"YYYY-MM-DDTHH:mm:ss.SSSZ\"))\n            )\n            user_sing = sortSigns[0];\n\n            if (user_sing \u0026\u0026 user_sing.data.validUntilAt) {\n                const currection_date = user_sing.data.validUntilAt.add(new Duration(-days_offset, 'days'));\n\n                if (current_date.beforeOrEqual(user_sing.data.validUntilAt) \u0026\u0026 current_date.afterOrEqual(currection_date)) {\n                    const staff = staffs.find(field =\u003e field.data.ext_user?.id == user.id);\n                    if (staff) {\n                        Context.data.staff_list.push(staff);\n                    }\n                }\n            }\n        }\n    }\n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_reissue": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_list": {
+        "enabled": false,
+        "conditions": []
+      },
+      "days_offset": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "settings_kedo": {
+        "enabled": false,
+        "conditions": []
+      },
+      "certs_info_table": {
+        "enabled": false,
+        "conditions": []
+      },
+      "automatic_reissue_active": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

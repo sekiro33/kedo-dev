@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    var _a, _b, _c, _d, _e;\n    const currentDate = new Datetime();\n    const body = {\n        \"Date\": `${currentDate.format('YYYY-MM-DD')}T00:00:00`,\n        \"Организация_Key\": (_a = Context.data.organization_id_1c) !== null && _a !== void 0 ? _a : \"\",\n        \"ГрафикРаботы_Key\": (_b = Context.data.work_schedule_id_1c) !== null && _b !== void 0 ? _b : \"\",\n        \"ДатаИзменения\": `${Context.data.start_date_1c}T00:00:00`,\n        \"ДатаОкончания\": Context.data.end_date_1c ? `${Context.data.end_date_1c}T00:00:00` : \"\",\n        \"Комментарий\": (_c = Context.data.comment) !== null && _c !== void 0 ? _c : \"\",\n    };\n    const staffList = JSON.parse(Context.data.staff_list_1c_json);\n    body[\"Сотрудники\"] = staffList.map((staff, index) => {\n        return {\n            \"LineNumber\": index + 1,\n            \"Сотрудник_Key\": staff.id_1c,\n        };\n    });\n    body[\"ФизическиеЛица\"] = staffList.map((staff, index) => {\n        return {\n            \"LineNumber\": index + 1,\n            \"Сотрудник_Key\": staff.individual_id_1c,\n        };\n    });\n    const accounting1c = Namespace.params.fields.awaiting_docs_table_1c.app.fields.accounting_systems.variants.zup_1c;\n    const awaitingApp = Namespace.params.fields.awaiting_docs_table_1c.app.create();\n    awaitingApp.data.__name = \"Изменение графика работы списком\";\n    awaitingApp.data.document_odata_name = \"Document_ИзменениеГрафикаРаботыСписком\";\n    awaitingApp.data.personal_guid_1c = JSON.stringify([null]);\n    awaitingApp.data.accounting_systems = accounting1c;\n    awaitingApp.data.document_creation_data = JSON.stringify(body);\n    awaitingApp.data.additional_info = (_d = Context.data.additional_info) !== null && _d !== void 0 ? _d : \"\";\n    awaitingApp.data.base_1c_name = (_e = Context.data.connection_name) !== null && _e !== void 0 ? _e : undefined;\n    await awaitingApp.save();\n    Context.data.integration_app_id = awaitingApp.data.__id;\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

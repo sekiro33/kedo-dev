@@ -1,0 +1,783 @@
+{
+  "__id": "018f1057-bcbc-7311-882d-1537e42d354a",
+  "namespace": "kedo.staff",
+  "code": "check_staff_data_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "1.1. Проверка карточки сотрудника",
+  "type": "bpmn",
+  "draft": false,
+  "version": 22,
+  "context": [
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "personal_data_employee",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Личные данные вносит сотрудник?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-01-30T13:48:45.24134558Z",
+  "__createdBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "__updatedAt": "2024-05-07T06:22:09.615835559Z",
+  "__updatedBy": "e6fbb566-3df2-420e-a7f3-03b97d2ac599",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 112,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["a2928800-c1e4-4886-8e92-6432e178a816"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "1.1. Проверка карточки сотрудника ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "010a82d8-619d-446e-aaf9-cf3d1ebf9c9a": {
+        "x": 1312,
+        "y": 112,
+        "id": "010a82d8-619d-446e-aaf9-cf3d1ebf9c9a",
+        "icon": "end",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "24a92602-8ffc-4740-9a78-0e0b4463af3d": {
+        "x": 312,
+        "y": 96,
+        "id": "24a92602-8ffc-4740-9a78-0e0b4463af3d",
+        "icon": "script",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Проверка категорий сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["d01b91c4-7eae-479e-b47f-484ab2532bbf"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "checkStaffCategory",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "305335a1-359a-4749-aa38-856318703c41": {
+        "x": 160,
+        "y": 96,
+        "id": "305335a1-359a-4749-aa38-856318703c41",
+        "icon": "system",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Получить флаг - кто вносит данные",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["59a78876-f1c1-42e1-b7c5-d5f4da70e9b5"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.personal_data_employee"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personal_data_employee"
+              }
+            }
+          ]
+        }
+      },
+      "34894076-2a95-4212-aec7-671edf561d09": {
+        "x": 448,
+        "y": 96,
+        "id": "34894076-2a95-4212-aec7-671edf561d09",
+        "icon": "script",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Заполнение ФИО сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["79a29a6d-f2bc-4edc-98e2-85a4a1a3eb27"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setStaffFIO",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "85423da5-7aaa-46b3-a666-557ea745d4b9": {
+        "x": 1048,
+        "y": 96,
+        "id": "85423da5-7aaa-46b3-a666-557ea745d4b9",
+        "icon": "script",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Формирование строки адреса",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f9e552ed-0e24-4389-8875-a0136c577bb2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setAddress",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "8b529c1c-54ce-4ae3-a118-2be1aaae64fe": {
+        "x": 1176,
+        "y": 96,
+        "id": "8b529c1c-54ce-4ae3-a118-2be1aaae64fe",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Обновить справочник занятости",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["5f7285c4-f8fd-418d-96cd-07bc112fa30b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "update_staff_employment_placement_workflow",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "staff",
+          "namespace": "kedo.employment_directory",
+          "subProcessTargetFieldCode": "staff"
+        }
+      },
+      "a14bd982-70a8-40b0-80e1-2cfb066f00a3": {
+        "x": 936,
+        "y": 112,
+        "id": "a14bd982-70a8-40b0-80e1-2cfb066f00a3",
+        "icon": "exclusive",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Личные данные вносит сотрудник?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "e22636f0-59c6-4a28-8709-2d61dfc43096",
+          "64648dd7-8401-47b5-80de-86ecbfc76152"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "a205766b-8e14-4368-94d9-df99bddffebd": {
+        "x": 664,
+        "y": 240,
+        "id": "a205766b-8e14-4368-94d9-df99bddffebd",
+        "icon": "system",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Проверить заполненность полей сотрудника",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["8c84c013-7b5b-48a8-bd21-7705bc65e154"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Проверить заполненность полей карточки сотрудника {ToString({$staff}, Р, short)}",
+          "manual": true,
+          "notify": true,
+          "bindings": [],
+          "variable": "staff"
+        }
+      },
+      "e1ccf582-1dc7-4286-9c49-c4371bdf658e": {
+        "x": 688,
+        "y": 112,
+        "id": "e1ccf582-1dc7-4286-9c49-c4371bdf658e",
+        "icon": "exclusive",
+        "lane": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Основные поля заполнены?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "808b4086-98b4-4077-8c6a-b8234e923f5e",
+          "6775e490-aff3-4e3f-a96c-e512b5e91d3d"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "checkStaffFields",
+          "type": "exclusive",
+          "useFunc": true,
+          "funcType": "BOOLEAN",
+          "description": ""
+        }
+      }
+    },
+    "lanes": {
+      "defe9863-7851-4649-881a-19a249fb47b4": {
+        "x": 8,
+        "y": 8,
+        "id": "defe9863-7851-4649-881a-19a249fb47b4",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1400,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "59a78876-f1c1-42e1-b7c5-d5f4da70e9b5": {
+        "id": "59a78876-f1c1-42e1-b7c5-d5f4da70e9b5",
+        "name": "",
+        "path": [
+          {
+            "x": 240,
+            "y": 128
+          },
+          {
+            "x": 312,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "305335a1-359a-4749-aa38-856318703c41",
+        "target": "24a92602-8ffc-4740-9a78-0e0b4463af3d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5f7285c4-f8fd-418d-96cd-07bc112fa30b": {
+        "id": "5f7285c4-f8fd-418d-96cd-07bc112fa30b",
+        "name": "",
+        "path": [
+          {
+            "x": 1256,
+            "y": 128
+          },
+          {
+            "x": 1312,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "8b529c1c-54ce-4ae3-a118-2be1aaae64fe",
+        "target": "010a82d8-619d-446e-aaf9-cf3d1ebf9c9a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "64648dd7-8401-47b5-80de-86ecbfc76152": {
+        "id": "64648dd7-8401-47b5-80de-86ecbfc76152",
+        "name": "Да",
+        "path": [
+          {
+            "x": 952,
+            "y": 144
+          },
+          {
+            "x": 952,
+            "y": 188
+          },
+          {
+            "x": 1216,
+            "y": 188
+          },
+          {
+            "x": 1216,
+            "y": 160
+          }
+        ],
+        "type": "plain",
+        "source": "a14bd982-70a8-40b0-80e1-2cfb066f00a3",
+        "target": "8b529c1c-54ce-4ae3-a118-2be1aaae64fe",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "personal_data_employee"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6775e490-aff3-4e3f-a96c-e512b5e91d3d": {
+        "id": "6775e490-aff3-4e3f-a96c-e512b5e91d3d",
+        "name": "Да",
+        "path": [
+          {
+            "x": 720,
+            "y": 128
+          },
+          {
+            "x": 936,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "e1ccf582-1dc7-4286-9c49-c4371bdf658e",
+        "target": "a14bd982-70a8-40b0-80e1-2cfb066f00a3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "79a29a6d-f2bc-4edc-98e2-85a4a1a3eb27": {
+        "id": "79a29a6d-f2bc-4edc-98e2-85a4a1a3eb27",
+        "name": "",
+        "path": [
+          {
+            "x": 528,
+            "y": 128
+          },
+          {
+            "x": 688,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "34894076-2a95-4212-aec7-671edf561d09",
+        "target": "e1ccf582-1dc7-4286-9c49-c4371bdf658e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "808b4086-98b4-4077-8c6a-b8234e923f5e": {
+        "id": "808b4086-98b4-4077-8c6a-b8234e923f5e",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 704,
+            "y": 144
+          },
+          {
+            "x": 704,
+            "y": 240
+          }
+        ],
+        "type": "default",
+        "source": "e1ccf582-1dc7-4286-9c49-c4371bdf658e",
+        "target": "a205766b-8e14-4368-94d9-df99bddffebd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8c84c013-7b5b-48a8-bd21-7705bc65e154": {
+        "id": "8c84c013-7b5b-48a8-bd21-7705bc65e154",
+        "name": "Проверить и отправить приглашение",
+        "path": [
+          {
+            "x": 664,
+            "y": 272
+          },
+          {
+            "x": 152,
+            "y": 272
+          },
+          {
+            "x": 152,
+            "y": 144
+          },
+          {
+            "x": 160,
+            "y": 144
+          }
+        ],
+        "type": "plain",
+        "source": "a205766b-8e14-4368-94d9-df99bddffebd",
+        "target": "305335a1-359a-4749-aa38-856318703c41",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a2928800-c1e4-4886-8e92-6432e178a816": {
+        "id": "a2928800-c1e4-4886-8e92-6432e178a816",
+        "name": "",
+        "path": [
+          {
+            "x": 96,
+            "y": 128
+          },
+          {
+            "x": 160,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "305335a1-359a-4749-aa38-856318703c41",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d01b91c4-7eae-479e-b47f-484ab2532bbf": {
+        "id": "d01b91c4-7eae-479e-b47f-484ab2532bbf",
+        "name": "",
+        "path": [
+          {
+            "x": 392,
+            "y": 128
+          },
+          {
+            "x": 448,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "24a92602-8ffc-4740-9a78-0e0b4463af3d",
+        "target": "34894076-2a95-4212-aec7-671edf561d09",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e22636f0-59c6-4a28-8709-2d61dfc43096": {
+        "id": "e22636f0-59c6-4a28-8709-2d61dfc43096",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 968,
+            "y": 128
+          },
+          {
+            "x": 1048,
+            "y": 128
+          }
+        ],
+        "type": "default",
+        "source": "a14bd982-70a8-40b0-80e1-2cfb066f00a3",
+        "target": "85423da5-7aaa-46b3-a666-557ea745d4b9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f9e552ed-0e24-4389-8875-a0136c577bb2": {
+        "id": "f9e552ed-0e24-4389-8875-a0136c577bb2",
+        "name": "",
+        "path": [
+          {
+            "x": 1128,
+            "y": 128
+          },
+          {
+            "x": 1176,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "85423da5-7aaa-46b3-a666-557ea745d4b9",
+        "target": "8b529c1c-54ce-4ae3-a118-2be1aaae64fe",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\ntype EmployeesCategory = ApplicationItem\u003cApplication$kedo$employees_categories$Data, Application$kedo$employees_categories$Params\u003e;\n\n/** Проверка категорий сотрудника. */\nasync function checkStaffCategory(): Promise\u003cvoid\u003e {\n    const codes: string[] = [\n        \"employee_category\"\n    ];\n\n    const settings = await Namespace.app.settings.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.in(codes)\n        ))\n        .size(codes.length)\n        .all();\n\n    // Категория сотрудника по умолчанию.\n    const employee_category = settings.find(f =\u003e f.data.code == \"employee_category\");\n\n    /** Наверное ещё стоит рассмотреть кейс, когда настройка есть, а значения в ней нет. */\n    if (!employee_category) {\n        throw new Error(\"Не найдена категория по умолчанию. Выполните первичную настройку решения.\");\n    }\n\n    if (!Context.data.staff) {\n        throw new Error(\"Context.data.staff is undefined\");\n    }\n\n    const staff = await Context.data.staff.fetch();\n\n    if (!staff.data.staff_categories || staff.data.staff_categories.length == 0) {\n        const default_category = employee_category.data.feature;\n        const ref_default_category = new RefItem\u003cEmployeesCategory\u003e(\"kedo\", \"employees_categories\", default_category!.id);\n        const item = await ref_default_category.fetch();\n\n        // Таблица может быть пустой или undefined\n        // Поэтому для подстраховки создаем новый экземпляр таблицы.\n        staff.data.categories_table = staff.fields.categories_table.create();\n\n        const row = staff.data.categories_table.insert();\n        row.staff_categories = item;\n        row.assignment_date = new TDate();\n    }\n\n    await staff.save();\n}\n\nasync function setStaffFIO(): Promise\u003cvoid\u003e {\n    if (!Context.data.staff) {\n        throw new Error(\"Не указан сотрудник. Context.data.staff is undefined\");\n    }\n\n    const staff = await Context.data.staff.fetch();\n\n    // Заполняем ФИО сотрудника.\n    staff.data.full_name = {\n        firstname: staff.data.name ?? '',\n        lastname: staff.data.surname ?? '',\n        middlename: staff.data.middlename ?? '',\n    };\n\n    await staff.save();\n}\n\n/** Проверка заполненность полей сотрудника. */\nasync function checkStaffFields(): Promise\u003cboolean\u003e {\n    if (!Context.data.staff) {\n        throw new Error(\"Не указан сотрудник. Context.data.staff is undefined\");\n    }\n\n    const personal_data_employee = Context.data.personal_data_employee;\n\n    const staff = await Context.data.staff.fetch();\n\n    const main_fields =\n        !staff.data.name ||\n        !staff.data.surname ||\n        !staff.data.full_name ||\n        !staff.data.phone ||\n        ((staff.data.notification?.code == \"email\" || staff.data.notification?.code == \"email_and_sms\") \u0026\u0026 !staff.data.email) ||\n        !staff.data.employment_table ||\n        staff.data.employment_table.length == 0;\n\n    /** Если личные данные заполняет не сотрудник, то проверяем ещё и их. */\n    const personal_data =\n        !staff.data.inn ||\n        !staff.data.snils ||\n        !staff.data.passport_number ||\n        !staff.data.passport_series ||\n        !staff.data.date_of_issue ||\n        !staff.data.issued_by ||\n        !staff.data.passport_department_code ||\n        !staff.data.home ||\n        !staff.data.city ||\n        !staff.data.street;\n\n    if (main_fields || (personal_data_employee === false \u0026\u0026 personal_data)) {\n        return false;\n    }\n\n    return true;\n}\n\nasync function setAddress(): Promise\u003cvoid\u003e {\n    if (!Context.data.staff) {\n        throw new Error(\"Не указан сотрудник. Context.data.staff is undefined\");\n    }\n\n    const staff = await Context.data.staff.fetch();\n\n    const region_app = await staff.data.directory_of_regions?.fetch();\n\n    // Записываем адрес сотрудника.\n    const region = region_app ? `${region_app.data.__name},` : ``;\n    const housing = staff.data.housing ? ` к.${staff.data.housing}` : ``;\n    const apartment = staff.data.apartment ? ` кв.${staff.data.apartment}` : ``;\n\n    staff.data.address = `${region} г. ${staff.data.city}, ул. ${staff.data.street}, д.${staff.data.home}${housing}${apartment}`.trim();\n\n    await staff.save();\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": false,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": false,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "personal_data_employee": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

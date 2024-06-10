@@ -1,0 +1,122 @@
+{
+  "__id": "9af8f4b2-3e7e-49ac-a25e-6b441a5fbbab",
+  "__name": "(Контур) Генерация JSON для отправки отпуска в Контур",
+  "code": "kontur_generate_json_for_vacantion_activity",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "Генерация JSON для отправки отпуска в Контур",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "employee_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID Сотрудника",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    },
+    {
+      "code": "process_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID Процесса",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    },
+    {
+      "code": "income_statement",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл справки",
+        "data": {},
+        "input": true
+      }
+    },
+    {
+      "code": "json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Готовый JSON",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "//Справка БК / Предоставление сведений\ninterface IKonturVacationData {\n\tprocessID: string,\n\temployeeID: string,\n\tfirstName: string,\n\tlastName: string,\n\tmiddleName: string,\n\tjobID: string,\n\tincomeStatementFile: string\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tconst employeeApp = Namespace.params.fields.employee_app.app;\n\n\tlet employee = await employeeApp.search().where((f, g) =\u003e g.and (\n\t\tf.__deletedAt.eq(null),\n\t\tf.__id.eq(Context.data.employee_id as string)\n\t)).first();\n\n\tif (!employee){\n\t\tthrow new Error ('Нет сотрудника с указанным id!')\n\t}\n\tif (!employee.data.position){\n\t\tthrow new Error ('У сотрудника нет указанной должности!')\n\t}\n\tif (!employee.data.id_1c){\n\t\tthrow new Error ('У сотрудника нет id 1c!')\n\t}\n\tlet job = await employee.data.position.fetch();\n\tif (!job.data.ref_key){\n\t\tthrow new Error ('У должности нет указанного ref_key!')\n\t}\n\n\tlet incomeStatementFile = await Context.data.income_statement!.fetch();\n\tlet incomeStatementFileLink = await incomeStatementFile.getDownloadUrl();\n\tlet incomeStatementFileBuffer = await fetch(incomeStatementFileLink).then(doc =\u003e doc.arrayBuffer());\n\tlet incomeStatementFileB64String = btoa(String.fromCharCode(...new Uint8Array(incomeStatementFileBuffer)));\n\t\n\tlet vacationData: IKonturVacationData = {\n\t\tprocessID: Context.data.process_id!,\n\t\temployeeID: employee.data.id_1c,\n\t\tfirstName: employee.data.full_name ? employee.data.full_name.firstname : '',\n\t\tlastName: employee.data.full_name ? employee.data.full_name.lastname : '',\n\t\tmiddleName: employee.data.full_name ? employee.data.full_name.middlename : '',\n\t\tjobID: job.data.ref_key,\n\t\tincomeStatementFile: incomeStatementFileB64String\n\t}\n\tContext.data.json = JSON.stringify(vacationData);\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:02.108244522Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:55.2375348Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

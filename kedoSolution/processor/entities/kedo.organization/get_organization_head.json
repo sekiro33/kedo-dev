@@ -1,0 +1,507 @@
+{
+  "__id": "018e89f8-23b6-7937-8eca-63b2ca92f4b2",
+  "namespace": "kedo.organization",
+  "code": "get_organization_head",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Получить руководителя организации",
+  "type": "bpmn",
+  "draft": false,
+  "version": 2,
+  "context": [
+    {
+      "code": "text_error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текст ошибки",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "organization_head",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Руководитель организации",
+        "data": {}
+      }
+    },
+    {
+      "code": "organization_head_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель организации (пользователь)",
+        "data": {}
+      }
+    },
+    {
+      "code": "organization",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Организация"
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-06-29T13:32:59.093656439Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-04-03T06:20:56.45181233Z",
+  "__updatedBy": "8c6e1940-a6f3-4603-aff7-7cdf41cc9799",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "d50e1705-2357-42c5-9580-00abcb860846",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["035e24e1-cb0d-4b00-921a-700c37521dfb"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "organization",
+              "tooltip": "",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Получить руководителя организации ({$organization})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "1ed44033-3c6e-4fc3-8f64-c12bf7ea6ad6": {
+        "x": 312,
+        "y": 72,
+        "id": "1ed44033-3c6e-4fc3-8f64-c12bf7ea6ad6",
+        "icon": "end",
+        "lane": "d50e1705-2357-42c5-9580-00abcb860846",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "a39901dc-c13e-45c4-8293-5d0ccad8b2f7": {
+        "x": 184,
+        "y": 144,
+        "id": "a39901dc-c13e-45c4-8293-5d0ccad8b2f7",
+        "icon": "notification",
+        "lane": "d50e1705-2357-42c5-9580-00abcb860846",
+        "name": "Не удалось получить руководителя организации",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["6b95ab8a-4582-4d6b-8878-1c8533b4e189"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$text_error}\u003cbr/\u003eВ качестве руководителя организации назначен супервизор.",
+          "messageHeader": "Не удалось получить руководителя организации {$organization}"
+        }
+      },
+      "a9dbc39d-b677-4cb8-a2b4-232580462297": {
+        "x": 184,
+        "y": 232,
+        "id": "a9dbc39d-b677-4cb8-a2b4-232580462297",
+        "icon": "script",
+        "lane": "d50e1705-2357-42c5-9580-00abcb860846",
+        "name": "Получить супервизора системы",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f632406d-323f-402c-a8ad-3fe96f262975"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_supervisor",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e864d8e0-7204-4b31-8e52-df0a1b94be78": {
+        "x": 208,
+        "y": 328,
+        "id": "e864d8e0-7204-4b31-8e52-df0a1b94be78",
+        "icon": "end",
+        "lane": "d50e1705-2357-42c5-9580-00abcb860846",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "ed516441-aec2-4579-9e1d-531fc916993b": {
+        "x": 184,
+        "y": 56,
+        "id": "ed516441-aec2-4579-9e1d-531fc916993b",
+        "icon": "script",
+        "lane": "d50e1705-2357-42c5-9580-00abcb860846",
+        "name": "Получить руководителя организации",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "36dc8509-43eb-41a9-8884-a281b4b0872a",
+          "f1f33fec-16a0-45be-b02d-0591b70511d9"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_organization_head",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "36dc8509-43eb-41a9-8884-a281b4b0872a",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "d50e1705-2357-42c5-9580-00abcb860846": {
+        "x": 8,
+        "y": 8,
+        "id": "d50e1705-2357-42c5-9580-00abcb860846",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 840,
+        "height": 416,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "035e24e1-cb0d-4b00-921a-700c37521dfb": {
+        "id": "035e24e1-cb0d-4b00-921a-700c37521dfb",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 88
+          },
+          {
+            "x": 184,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "ed516441-aec2-4579-9e1d-531fc916993b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "36dc8509-43eb-41a9-8884-a281b4b0872a": {
+        "id": "36dc8509-43eb-41a9-8884-a281b4b0872a",
+        "name": "",
+        "path": [
+          {
+            "x": 224,
+            "y": 120
+          },
+          {
+            "x": 224,
+            "y": 144
+          }
+        ],
+        "type": "error",
+        "source": "ed516441-aec2-4579-9e1d-531fc916993b",
+        "target": "a39901dc-c13e-45c4-8293-5d0ccad8b2f7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6b95ab8a-4582-4d6b-8878-1c8533b4e189": {
+        "id": "6b95ab8a-4582-4d6b-8878-1c8533b4e189",
+        "name": "",
+        "path": [
+          {
+            "x": 224,
+            "y": 208
+          },
+          {
+            "x": 224,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "a39901dc-c13e-45c4-8293-5d0ccad8b2f7",
+        "target": "a9dbc39d-b677-4cb8-a2b4-232580462297",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f1f33fec-16a0-45be-b02d-0591b70511d9": {
+        "id": "f1f33fec-16a0-45be-b02d-0591b70511d9",
+        "name": "",
+        "path": [
+          {
+            "x": 264,
+            "y": 88
+          },
+          {
+            "x": 312,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "ed516441-aec2-4579-9e1d-531fc916993b",
+        "target": "1ed44033-3c6e-4fc3-8f64-c12bf7ea6ad6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f632406d-323f-402c-a8ad-3fe96f262975": {
+        "id": "f632406d-323f-402c-a8ad-3fe96f262975",
+        "name": "",
+        "path": [
+          {
+            "x": 224,
+            "y": 296
+          },
+          {
+            "x": 224,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "a9dbc39d-b677-4cb8-a2b4-232580462297",
+        "target": "e864d8e0-7204-4b31-8e52-df0a1b94be78",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function get_organization_head(): Promise\u003cvoid\u003e {\n    if (!Context.data.organization) {\n        Context.data.text_error = 'Организация не выбрана.';\n        throw new Error(Context.data.text_error);\n    }\n\n    // Получаем организацию.\n    const organization = await Context.data.organization.fetch();\n\n    if (!organization.data.position_head) {\n        Context.data.text_error = `Не указана должность руководителя организации ${organization.data.__name}`;\n        throw new Error(Context.data.text_error);\n    }\n\n    // Получаем должность руководителя организации.\n    const position_head = await organization.data.position_head.fetch();\n\n    const staffs = await Promise.all(\n        [\n            ...(position_head.data.staff ?? []),\n            ...(position_head.data.staff_internal_combination ?? []),\n            ...(position_head.data.staff_external_combination ?? [])\n        ].map(s =\u003e s.fetch())\n    );\n\n    if (staffs.length == 0) {\n        Context.data.text_error = `Не указаны сотрудники на должности руководителя организации ${organization.data.__name}`;\n        throw new Error(Context.data.text_error);\n    }\n\n    // Проводим фильтрацию: сотрудник в статусе \"Трудоустроен\" и есть пользователь.\n    const head_staffs = staffs.filter(f =\u003e f.data.__status?.code == f.fields.__status.variants.signed_documents.code \u0026\u0026 f.data.ext_user);\n\n    if (head_staffs \u0026\u0026 head_staffs.length == 0) {\n        Context.data.text_error = `Нет трудоустроенных сотрудников на должности руководителя организации ${organization.data.__name}`;\n        throw new Error(Context.data.text_error);\n    }\n\n    // Получаем первого сотрудника.\n    const head = head_staffs[0];\n\n    // Заполняем поля контектса.\n    Context.data.organization_head = head;\n    Context.data.organization_head_user = head.data.ext_user;\n}\n\nasync function get_supervisor(): Promise\u003cvoid\u003e {\n    const supervisor = await System.userGroups.search().where(f =\u003e f.__id.eq('331e62d2-072e-58ac-9581-74abcc67f050')).first();\n    const user = await System.users.search().where(f =\u003e f.groupIds.has(supervisor!)).first();\n    const staff = await Context.fields.organization_head.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.ext_user.eq(user!)\n        ))\n        .first();\n    Context.data.organization_head_user = user;\n    Context.data.organization_head = staff\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": false,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": "organization"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": false,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "text_error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_head": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_head_user": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,787 @@
+{
+  "__id": "018c8757-193d-7f3b-a32d-5fb317b62dd2",
+  "namespace": "kedo_ext",
+  "code": "approval_extraordinary_med_exam",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Согласование внеочередного медосмотра",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "approved",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласовано",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "medical_request",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "medical_request",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на медосмотр",
+        "data": {}
+      }
+    },
+    {
+      "code": "head",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-04-11T10:37:41.675857831Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2023-04-11T10:59:46.498117008Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "39f57b6b-fd1d-498f-89b2-82d66649a42c",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["78c0cf7d-58fc-4380-ace2-7b9414fea33b"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Согласование внеочередного медосмотра - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "18650d21-5a61-4a52-b3fa-863bf7b1d900": {
+        "x": 80,
+        "y": 200,
+        "id": "18650d21-5a61-4a52-b3fa-863bf7b1d900",
+        "icon": "system",
+        "lane": "39f57b6b-fd1d-498f-89b2-82d66649a42c",
+        "name": "Определение руководителя",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "40e3c752-4e49-4327-a79a-970087140d86",
+          "739473d3-33a9-477b-9360-faa9509dd3cf"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "definition_head",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "head"
+              },
+              "target": {
+                "kind": "context",
+                "value": "head_staff"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "739473d3-33a9-477b-9360-faa9509dd3cf",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "1ed4fa8b-1031-4879-b4c8-7c23cf1c8227": {
+        "x": 544,
+        "y": 408,
+        "id": "1ed4fa8b-1031-4879-b4c8-7c23cf1c8227",
+        "icon": "end",
+        "lane": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "35130b54-02f0-4588-98d0-cc0d69fc68d4": {
+        "x": 296,
+        "y": 392,
+        "id": "35130b54-02f0-4588-98d0-cc0d69fc68d4",
+        "icon": "system",
+        "lane": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "Согласование = false",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["e9242338-d2b2-4907-b246-ad206241bbfe"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      },
+      "4d5f6186-29e9-4e7e-83f0-32336199f8df": {
+        "x": 296,
+        "y": 296,
+        "id": "4d5f6186-29e9-4e7e-83f0-32336199f8df",
+        "icon": "approval_list",
+        "lane": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "Отказано",
+        "type": "approval_list_close",
+        "color": "#f0f4c3",
+        "exits": ["12e235b1-bf2a-426b-939f-aaccc8bd3b8c"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "approved": false,
+          "withoutNotify": false,
+          "targetFieldCode": "medical_request"
+        }
+      },
+      "74762f95-7b50-4c7b-b980-1fed014e068c": {
+        "x": 408,
+        "y": 200,
+        "id": "74762f95-7b50-4c7b-b980-1fed014e068c",
+        "icon": "approval_list",
+        "lane": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "Согласовано",
+        "type": "approval_list_close",
+        "color": "#f0f4c3",
+        "exits": ["ca1ae545-e1c9-4ac6-adaa-4a93caa17005"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "approved": true,
+          "withoutNotify": false,
+          "targetFieldCode": "medical_request"
+        }
+      },
+      "85bdde2c-8b20-4328-9331-400235254047": {
+        "x": 296,
+        "y": 200,
+        "id": "85bdde2c-8b20-4328-9331-400235254047",
+        "icon": "send_doc",
+        "lane": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "Согласование",
+        "type": "approval_list_process",
+        "color": "#f0f4c3",
+        "exits": [
+          "9ea468ea-2ef4-4af7-b92e-f2fa6e7189d9",
+          "4ef2cb18-9767-465f-97bf-92ba04db1198"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "cleanUp": false,
+          "taskName": "{$medical_request}: Согласовать",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 2,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "settingSign": {
+            "isSign": "disabled"
+          },
+          "withoutNotify": false,
+          "targetFieldCode": "medical_request",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {}
+          },
+          "customStatusSettings": {
+            "customStatuses": [
+              {
+                "status": "approved",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              },
+              {
+                "status": "rejected",
+                "enabled": false,
+                "buttonText": "",
+                "statusText": ""
+              }
+            ]
+          }
+        }
+      },
+      "f5bdae81-c13c-4db0-b4c5-b9b2cbb07785": {
+        "x": 520,
+        "y": 200,
+        "id": "f5bdae81-c13c-4db0-b4c5-b9b2cbb07785",
+        "icon": "system",
+        "lane": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "Согласование = true",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["5e02b146-0e67-4186-93db-9df59c3e3861"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "approved"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "lanes": {
+      "39f57b6b-fd1d-498f-89b2-82d66649a42c": {
+        "x": 8,
+        "y": 8,
+        "id": "39f57b6b-fd1d-498f-89b2-82d66649a42c",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "d8d0c9d0-baaf-4848-8a69-4765732d8eea": {
+        "x": 232,
+        "y": 8,
+        "id": "d8d0c9d0-baaf-4848-8a69-4765732d8eea",
+        "name": "Руководитель",
+        "color": "#d6f0cc",
+        "width": 476,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "head",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "12e235b1-bf2a-426b-939f-aaccc8bd3b8c": {
+        "id": "12e235b1-bf2a-426b-939f-aaccc8bd3b8c",
+        "name": "",
+        "path": [
+          {
+            "x": 336,
+            "y": 360
+          },
+          {
+            "x": 336,
+            "y": 392
+          }
+        ],
+        "type": "plain",
+        "source": "4d5f6186-29e9-4e7e-83f0-32336199f8df",
+        "target": "35130b54-02f0-4588-98d0-cc0d69fc68d4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "40e3c752-4e49-4327-a79a-970087140d86": {
+        "id": "40e3c752-4e49-4327-a79a-970087140d86",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 232
+          },
+          {
+            "x": 296,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "18650d21-5a61-4a52-b3fa-863bf7b1d900",
+        "target": "85bdde2c-8b20-4328-9331-400235254047",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4ef2cb18-9767-465f-97bf-92ba04db1198": {
+        "id": "4ef2cb18-9767-465f-97bf-92ba04db1198",
+        "name": "",
+        "path": [
+          {
+            "x": 376,
+            "y": 232
+          },
+          {
+            "x": 408,
+            "y": 232
+          }
+        ],
+        "type": "default",
+        "source": "85bdde2c-8b20-4328-9331-400235254047",
+        "target": "74762f95-7b50-4c7b-b980-1fed014e068c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5e02b146-0e67-4186-93db-9df59c3e3861": {
+        "id": "5e02b146-0e67-4186-93db-9df59c3e3861",
+        "name": "",
+        "path": [
+          {
+            "x": 560,
+            "y": 264
+          },
+          {
+            "x": 560,
+            "y": 408
+          }
+        ],
+        "type": "plain",
+        "source": "f5bdae81-c13c-4db0-b4c5-b9b2cbb07785",
+        "target": "1ed4fa8b-1031-4879-b4c8-7c23cf1c8227",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "739473d3-33a9-477b-9360-faa9509dd3cf": {
+        "id": "739473d3-33a9-477b-9360-faa9509dd3cf",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 216
+          },
+          {
+            "x": 296,
+            "y": 216
+          }
+        ],
+        "type": "error",
+        "source": "18650d21-5a61-4a52-b3fa-863bf7b1d900",
+        "target": "85bdde2c-8b20-4328-9331-400235254047",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "78c0cf7d-58fc-4380-ace2-7b9414fea33b": {
+        "id": "78c0cf7d-58fc-4380-ace2-7b9414fea33b",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "18650d21-5a61-4a52-b3fa-863bf7b1d900",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9ea468ea-2ef4-4af7-b92e-f2fa6e7189d9": {
+        "id": "9ea468ea-2ef4-4af7-b92e-f2fa6e7189d9",
+        "name": "",
+        "path": [
+          {
+            "x": 336,
+            "y": 264
+          },
+          {
+            "x": 336,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "85bdde2c-8b20-4328-9331-400235254047",
+        "target": "4d5f6186-29e9-4e7e-83f0-32336199f8df",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__rejectPercent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ca1ae545-e1c9-4ac6-adaa-4a93caa17005": {
+        "id": "ca1ae545-e1c9-4ac6-adaa-4a93caa17005",
+        "name": "",
+        "path": [
+          {
+            "x": 488,
+            "y": 232
+          },
+          {
+            "x": 520,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "74762f95-7b50-4c7b-b980-1fed014e068c",
+        "target": "f5bdae81-c13c-4db0-b4c5-b9b2cbb07785",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e9242338-d2b2-4907-b246-ad206241bbfe": {
+        "id": "e9242338-d2b2-4907-b246-ad206241bbfe",
+        "name": "",
+        "path": [
+          {
+            "x": 376,
+            "y": 424
+          },
+          {
+            "x": 544,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "35130b54-02f0-4588-98d0-cc0d69fc68d4",
+        "target": "1ed4fa8b-1031-4879-b4c8-7c23cf1c8227",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "approved": {
+        "enabled": false,
+        "conditions": []
+      },
+      "medical_request": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

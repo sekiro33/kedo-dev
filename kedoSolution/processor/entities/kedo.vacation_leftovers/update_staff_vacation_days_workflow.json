@@ -1,0 +1,798 @@
+{
+  "__id": "018f528d-ea12-7b7a-91cd-dcfde11ada25",
+  "namespace": "kedo.vacation_leftovers",
+  "code": "update_staff_vacation_days_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Обновить данные об остатках у сотрудников",
+  "type": "bpmn",
+  "draft": false,
+  "version": 4,
+  "context": [
+    {
+      "code": "from",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "from",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "size",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 100,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "size",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "iteration_count",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 0,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Счетчик итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "vacation_leftovers",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "vacation_leftovers",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Остаток отпуска"
+      }
+    },
+    {
+      "code": "staff_leftovers_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные по остаткам отпусков (JSON)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-07T10:17:09.588679014Z",
+  "__createdBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "__updatedAt": "2024-05-15T22:18:39.199717422Z",
+  "__updatedBy": "34ff56b9-aa7a-4000-8a60-8359f257b257",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 96,
+        "y": 104,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["ca1097c4-7796-440a-82be-54ad7e6223b4"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Обновить данные об остатках у сотрудников ({$vacation_leftovers})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "2166252d-e17b-48d1-bcab-af859ed99995": {
+        "x": 232,
+        "y": 88,
+        "id": "2166252d-e17b-48d1-bcab-af859ed99995",
+        "icon": "script",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Получить данные об остатках",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["b0dc1eba-2870-47a6-ae8f-8c477ff73c1f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getVacationLeftovers",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "46255b1c-6d43-4373-927f-33813e221367": {
+        "x": 728,
+        "y": 104,
+        "id": "46255b1c-6d43-4373-927f-33813e221367",
+        "icon": "end",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "56547914-0785-4fcb-b261-152b27338728": {
+        "x": 440,
+        "y": 288,
+        "id": "56547914-0785-4fcb-b261-152b27338728",
+        "icon": "timer",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Отдых",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["2dd6905b-3e97-4ceb-82d1-2c41edf926ad"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "days": 0,
+            "kind": "duration",
+            "hours": 0,
+            "minutes": 2,
+            "absolute": true
+          }
+        }
+      },
+      "714298e0-be65-417d-8c2d-9a0f77aa709f": {
+        "x": 440,
+        "y": 104,
+        "id": "714298e0-be65-417d-8c2d-9a0f77aa709f",
+        "icon": "exclusive",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Получены все данные?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "38f36cb4-8cca-4796-9d00-12b490ab989f",
+          "1c123f1e-e183-4d87-9437-dfd7aaf6c3ed"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "73dbb43d-573e-4b58-9ccd-6aa9b5ad2085": {
+        "x": 568,
+        "y": 88,
+        "id": "73dbb43d-573e-4b58-9ccd-6aa9b5ad2085",
+        "icon": "script",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Обновить данные об остатках в карточке сотрудника",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6252093c-55d4-46ea-8c3b-902931cac95b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "updateStaffLeftovers",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "993f0064-4a88-4521-a770-c0ab3dc94160": {
+        "x": 440,
+        "y": 208,
+        "id": "993f0064-4a88-4521-a770-c0ab3dc94160",
+        "icon": "exclusive",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Количество итераций",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "c219f34e-6a58-48d5-a977-e8d5e42b6305",
+          "48dae092-9a3a-4f87-8bfb-ce20ab15bbf9"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "a76cffa8-de4c-4a97-b76b-28ae49e0cef4": {
+        "x": 232,
+        "y": 192,
+        "id": "a76cffa8-de4c-4a97-b76b-28ae49e0cef4",
+        "icon": "script",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Увеличить счетчик итераций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["2c2bf816-feae-4036-9521-c38ec6ed2f74"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "incCounter",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "d618f397-4119-410a-b520-79caac2b0980": {
+        "x": 416,
+        "y": 384,
+        "id": "d618f397-4119-410a-b520-79caac2b0980",
+        "icon": "script",
+        "lane": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Сброс счетчика",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["42f347ea-3119-487b-8252-00d0a87b08f1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "resetCounter",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "62bf8394-2c69-4be6-8065-54d78ffac29d": {
+        "x": 8,
+        "y": 8,
+        "id": "62bf8394-2c69-4be6-8065-54d78ffac29d",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 900,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "1c123f1e-e183-4d87-9437-dfd7aaf6c3ed": {
+        "id": "1c123f1e-e183-4d87-9437-dfd7aaf6c3ed",
+        "name": "Да",
+        "path": [
+          {
+            "x": 472,
+            "y": 120
+          },
+          {
+            "x": 568,
+            "y": 120
+          }
+        ],
+        "type": "default",
+        "source": "714298e0-be65-417d-8c2d-9a0f77aa709f",
+        "target": "73dbb43d-573e-4b58-9ccd-6aa9b5ad2085",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2c2bf816-feae-4036-9521-c38ec6ed2f74": {
+        "id": "2c2bf816-feae-4036-9521-c38ec6ed2f74",
+        "name": "",
+        "path": [
+          {
+            "x": 272,
+            "y": 192
+          },
+          {
+            "x": 272,
+            "y": 152
+          }
+        ],
+        "type": "plain",
+        "source": "a76cffa8-de4c-4a97-b76b-28ae49e0cef4",
+        "target": "2166252d-e17b-48d1-bcab-af859ed99995",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2dd6905b-3e97-4ceb-82d1-2c41edf926ad": {
+        "id": "2dd6905b-3e97-4ceb-82d1-2c41edf926ad",
+        "name": "",
+        "path": [
+          {
+            "x": 456,
+            "y": 320
+          },
+          {
+            "x": 456,
+            "y": 384
+          }
+        ],
+        "type": "plain",
+        "source": "56547914-0785-4fcb-b261-152b27338728",
+        "target": "d618f397-4119-410a-b520-79caac2b0980",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "38f36cb4-8cca-4796-9d00-12b490ab989f": {
+        "id": "38f36cb4-8cca-4796-9d00-12b490ab989f",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 456,
+            "y": 136
+          },
+          {
+            "x": 456,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "714298e0-be65-417d-8c2d-9a0f77aa709f",
+        "target": "993f0064-4a88-4521-a770-c0ab3dc94160",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "vacation_leftovers"
+              },
+              "type": "SYS_COLLECTION",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "42f347ea-3119-487b-8252-00d0a87b08f1": {
+        "id": "42f347ea-3119-487b-8252-00d0a87b08f1",
+        "name": "",
+        "path": [
+          {
+            "x": 416,
+            "y": 416
+          },
+          {
+            "x": 272,
+            "y": 416
+          },
+          {
+            "x": 272,
+            "y": 256
+          }
+        ],
+        "type": "plain",
+        "source": "d618f397-4119-410a-b520-79caac2b0980",
+        "target": "a76cffa8-de4c-4a97-b76b-28ae49e0cef4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "48dae092-9a3a-4f87-8bfb-ce20ab15bbf9": {
+        "id": "48dae092-9a3a-4f87-8bfb-ce20ab15bbf9",
+        "name": "\u003e= 90",
+        "path": [
+          {
+            "x": 456,
+            "y": 240
+          },
+          {
+            "x": 456,
+            "y": 288
+          }
+        ],
+        "type": "default",
+        "source": "993f0064-4a88-4521-a770-c0ab3dc94160",
+        "target": "56547914-0785-4fcb-b261-152b27338728",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6252093c-55d4-46ea-8c3b-902931cac95b": {
+        "id": "6252093c-55d4-46ea-8c3b-902931cac95b",
+        "name": "",
+        "path": [
+          {
+            "x": 648,
+            "y": 120
+          },
+          {
+            "x": 728,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "73dbb43d-573e-4b58-9ccd-6aa9b5ad2085",
+        "target": "46255b1c-6d43-4373-927f-33813e221367",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b0dc1eba-2870-47a6-ae8f-8c477ff73c1f": {
+        "id": "b0dc1eba-2870-47a6-ae8f-8c477ff73c1f",
+        "name": "",
+        "path": [
+          {
+            "x": 312,
+            "y": 120
+          },
+          {
+            "x": 440,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "2166252d-e17b-48d1-bcab-af859ed99995",
+        "target": "714298e0-be65-417d-8c2d-9a0f77aa709f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c219f34e-6a58-48d5-a977-e8d5e42b6305": {
+        "id": "c219f34e-6a58-48d5-a977-e8d5e42b6305",
+        "name": "\u003c 90",
+        "path": [
+          {
+            "x": 440,
+            "y": 224
+          },
+          {
+            "x": 312,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "993f0064-4a88-4521-a770-c0ab3dc94160",
+        "target": "a76cffa8-de4c-4a97-b76b-28ae49e0cef4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "iteration_count"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 90
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "less",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ca1097c4-7796-440a-82be-54ad7e6223b4": {
+        "id": "ca1097c4-7796-440a-82be-54ad7e6223b4",
+        "name": "",
+        "path": [
+          {
+            "x": 128,
+            "y": 120
+          },
+          {
+            "x": 232,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "2166252d-e17b-48d1-bcab-af859ed99995",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ninterface IStaffLeftover {\n    staff_id: string,\n    leftovers: ILeftover[],\n}\n\ninterface ILeftover {\n    position_id: string,\n    remainder: number,\n}\n\nasync function getVacationLeftovers(): Promise\u003cvoid\u003e {\n    let from = Context.data.from \u0026\u0026 Context.data.from \u003e= 0 ? Context.data.from : 0;\n    let size = Context.data.size \u0026\u0026 Context.data.size \u003e 0 ? Context.data.size : 100;\n\n    let leftovers_data: IStaffLeftover[] = Context.data.staff_leftovers_data ? JSON.parse(Context.data.staff_leftovers_data) : [];\n\n    // Получаем пачку остатков отпусков.\n    const vacation_leftovers = await Context.fields.vacation_leftovers.app.search()\n        .where(f =\u003e f.__deletedAt.eq(null))\n        .from(from)\n        .size(size)\n        .all();\n\n    if (!vacation_leftovers || vacation_leftovers.length == 0) {\n        Context.data.vacation_leftovers = undefined;\n        return;\n    }\n\n    Context.data.vacation_leftovers = vacation_leftovers[0];\n\n    // Из пачки выбираем все уникальные guid'ы сотрудников\n    const staff_ids = [... new Set(\n        vacation_leftovers\n            .filter(f =\u003e f.data.staff !== undefined)\n            .map(f =\u003e f.data.staff!.id)\n    )];\n\n    const staffs = await Namespace.app.staff.search()\n        .where(f =\u003e f.__id.in(staff_ids))\n        .size(staff_ids.length)\n        .all();\n\n    // Для каждого сотрудника формируем запись о его текущих остатках\n    for (const staff of staffs) {\n        const main_position = (staff.data.employment_table ?? []).find(f =\u003e f.type_employment?.code == \"main_workplace\");\n\n        if (!main_position || !main_position.position) {\n            continue;\n        }\n\n        let staff_leftover = leftovers_data.find(f =\u003e f.staff_id == staff.id);\n\n        if (!staff_leftover) {\n            staff_leftover = {\n                staff_id: staff.id,\n                leftovers: [],\n            };\n\n            leftovers_data.push(staff_leftover);\n        }\n\n        const leftovers = vacation_leftovers.filter(f =\u003e f.data.staff?.id == staff.id \u0026\u0026 f.data.position?.id == main_position.position.id);\n\n        for (const leftover of leftovers) {\n            if (!leftover.data.position) {\n                continue;\n            }\n\n            let position_leftover = staff_leftover.leftovers.find(f =\u003e f.position_id == leftover.data.position?.id);\n\n            if (!position_leftover) {\n                position_leftover = {\n                    position_id: leftover.data.position.id,\n                    remainder: leftover.data.remainder ?? 0,\n                };\n\n                staff_leftover.leftovers.push(position_leftover);\n            } else {\n                position_leftover.remainder += leftover.data.remainder ?? 0;\n            }\n        }\n    }\n\n    Context.data.staff_leftovers_data = JSON.stringify(leftovers_data);\n    Context.data.from = from + size;\n}\n\nasync function updateStaffLeftovers(): Promise\u003cvoid\u003e {\n    const leftovers_data: IStaffLeftover[] = Context.data.staff_leftovers_data ? JSON.parse(Context.data.staff_leftovers_data) : [];\n\n    const staff_ids = leftovers_data.map(f =\u003e f.staff_id);\n    const staffs = await Namespace.app.staff.search()\n        .where(f =\u003e f.__id.in(staff_ids))\n        .size(staff_ids.length)\n        .all();\n\n    let promises: Promise\u003cvoid\u003e[] = [];\n\n    for (const leftover of leftovers_data) {\n        const staff = staffs.find(f =\u003e f.id == leftover.staff_id);\n\n        if (!staff) continue;\n\n        const leftovers_days = leftover.leftovers\n            .map(f =\u003e f.remainder)\n            .reduce((pr_val, cur_val) =\u003e pr_val += cur_val, 0);\n\n        staff.data.remaining_vacation_days = leftovers_days;\n\n        promises.push(staff.save());\n\n        if (promises.length \u003e 20) {\n            await Promise.all(promises);\n            promises = [];\n        }\n    }\n\n    await Promise.all(promises);\n}\n\nasync function resetCounter(): Promise\u003cvoid\u003e {\n    Context.data.iteration_count = 0;\n}\n\nasync function incCounter(): Promise\u003cvoid\u003e {\n    Context.data.iteration_count = (Context.data.iteration_count ?? 0) + 1;\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "vacation_leftovers",
+          "data": {
+            "code": "vacation_leftovers",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Остаток отпуска"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "vacation_leftovers"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
+    "fieldVisibilityConditions": {
+      "from": {
+        "enabled": false,
+        "conditions": []
+      },
+      "size": {
+        "enabled": false,
+        "conditions": []
+      },
+      "iteration_count": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_leftovers_data": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

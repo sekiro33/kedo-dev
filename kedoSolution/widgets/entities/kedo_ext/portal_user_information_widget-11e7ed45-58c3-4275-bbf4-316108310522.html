@@ -1,0 +1,474 @@
+<style>
+    .left-menu_user-info * {
+        margin: 0;
+        padding: 0;
+        font-family: 'SF Pro Display';
+        font-size: 16px;
+    }
+
+    .left-menu_user-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 100%;
+        /* закрепляем пользователя от скролла */
+        position: sticky;
+        bottom: 1.35rem;
+        padding: 10px;
+    }
+
+    .left-menu_user-info_img {
+        object-fit: cover;
+        border-radius: 50%;
+        width: 46px;
+        height: 46px;
+    }
+
+    .left-menu_user-info_data {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .left-menu_user-info_data-position_info {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 18rem;
+        white-space: nowrap;
+        margin: 0;
+    }
+
+    .left-menu_user-info_more {
+        padding: 1.5rem 1rem;
+        background-color: #f7f7f7;
+        transition: all .3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+    }
+
+    .left-menu_user-info_more-text {
+        user-select: none;
+    }
+
+    .left-menu_user-info_more:hover {
+        background-color: #dedede;
+        cursor: pointer;
+    }
+
+    .left-menu_user-info_popup {
+        position: absolute;
+        box-shadow: 0px 0px 19px 0px rgba(34, 60, 80, 0.2);
+        background-color: #FFF;
+        right: -6.7rem;
+        border-radius: 8px;
+        z-index: 100;
+        top: -13rem;
+    }
+
+    .left-menu_user-info_popup::after {
+        content: "";
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        background-color: white;
+        transform: rotateZ(45deg);
+        bottom: -7px;
+        left: 42%;
+    }
+
+    .left-menu_user-info_popup.hidden {
+        display: none;
+    }
+
+    .left-menu_user-info_popup .left-menu_user-info_popup-item:last-child:hover ::after {
+        background-color: #F5F6FA;
+    }
+
+    .left-menu_user-info_popup-item {
+        display: flex;
+        gap: 1rem;
+        padding: 1rem 2rem;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+
+    .left-menu_user-info_popup-item:hover {
+        background-color: #F5F6FA;
+        user-select: none;
+        cursor: pointer;
+    }
+
+    .left-menu_user-info_popup-item-img svg {
+        fill: none;
+    }
+
+    .settings_modal-container {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #00000033;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all .3s;
+        opacity: 1;
+        top: 0;
+    }
+
+    .settings_modal-container.hidden {
+        opacity: 0;
+        z-index: -1;
+    }
+
+    .settings_modal {
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 0;
+        gap: 1rem;
+        width: min-content;
+        min-width: 40%;
+        max-width: 100%;
+        background-color: #FFF;
+    }
+
+    .settings_modal-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 2rem;
+    }
+
+    .settings_modal-title_close {
+        color: #BFBFBF;
+        transition: color .3s;
+        user-select: none;
+    }
+
+    .settings_modal-title_close:hover {
+        color: #0055FF;
+        cursor: pointer;
+    }
+
+    .settings_modal-main {
+        padding: 2rem;
+        border-top: 1px solid #D9D9D9;
+        border-bottom: 1px solid #D9D9D9;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .settings_modal-main-items {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .settings_modal-main-item {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .settings_modal-main-item_title {
+        font-size: 16px;
+    }
+
+    .settings_modal-main-item_variants {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .choice_radio-container {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .choice_radio-container label {
+        margin-bottom: 0;
+    }
+
+    .settings_modal-footer {
+        padding: 0 2rem;
+        padding-top: 1rem;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .settings_modal-button {
+        padding: .5rem;
+        border-radius: 4px;
+        border: 1px solid #0055FF;
+    }
+
+    .settings_modal-button.confirm {
+        color: white;
+        background-color: #0055FF;
+    }
+
+    .settings_modal-button.cancel {
+        color: #0055FF;
+        background-color: white;
+    }
+
+    .qr-modal {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background-color: #00000033;
+        z-index: 100;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all .3s;
+        opacity: 1;
+        top: 0;
+    }
+
+    .qr-modal.hidden {
+        opacity: 0;
+        z-index: -1;
+    }
+
+    .app-qr-info {
+        display: flex;
+        background-color: white;
+        z-index: 99;
+        opacity: 1;
+        transition: all 0.3s;
+        max-width: 35%;
+        gap: 1rem;
+        padding: 2rem;
+    }
+
+    .app-qr-info.hidden {
+        z-index: -1;
+        opacity: 0;
+    }
+
+    .qr-code-info {
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 2;
+    }
+
+    .app-store-info {
+        display: flex;
+        gap: 1rem
+    }
+
+
+    @media (max-width: 450px) {
+        .settings_modal-container {
+            padding-top: 15rem;
+        }
+
+        .settings_modal {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .settings_modal {
+            min-width: 60%;
+        }
+    }
+</style>
+
+<template class="choice_radio-container-template">
+    <div class="choice_radio-container">
+        <input class="choice_radio" type="radio" id="" name="" value="" />
+        <label for=""></label>
+    </div>
+</template>
+
+<!--<div class="settings_modal-container hidden">
+    <div class="settings_modal">
+        <div class="settings_modal-title">
+            <h3 class="settings_modal-title_text">
+                Настройки портала ELMA365 КЭДО
+            </h3>
+            <h3 class="settings_modal-title_close">
+                ✖
+            </h3>
+        </div>
+        <div class="settings_modal-main">
+            <p class="settings_modal-main-description">
+                В данном окне вы можете выбрать пункты удобные для дальнейшего использования портала
+                ELMA365 КЭДО, так же в этом окне со временем будут появляться еще дополнительные
+                настройки для комфортного использования портала.
+            </p>
+            <div class="settings_modal-main-items">
+                <div id="notification_settings" class="settings_modal-main-item">
+                    <h4 class="settings_modal-main-item_title">
+                        Способ уведомления
+                    </h4>
+                    <div class="settings_modal-main-item_variants">
+                        <div class="choice_radio-container">
+                            <input class="choice_radio" type="radio" id="sms" name="notification_variant" value="sms" />
+                            <label for="sms">СМС</label>
+                        </div>
+                        <div class="choice_radio-container">
+                            <input class="choice_radio" type="radio" id="email" name="notification_variant" value="email" />
+                            <label for="sms">Почта</label>
+                        </div>
+                        <div class="choice_radio-container">
+                            <input class="choice_radio" type="radio" id="email_and_sms" name="notification_variant" value="email_and_sms" />
+                            <label for="sms">Почта и СМС</label>
+                        </div>
+                        <div class="choice_radio-container">
+                            <input class="choice_radio" type="radio" id="without-notification" name="notification_variant" value="without-notification" />
+                            <label for="sms">Без уведомлений</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="sign_type" class="settings_modal-main-item">
+                    <h4 class="settings_modal-main-item_title">
+                        Способ подписания документов
+                    </h4>
+                    <div class="settings_modal-main-item_variants">
+
+                    </div>
+                </div>
+                <div id="default_page" class="settings_modal-main-item">
+                    <h4 class="settings_modal-main-item_title">
+                        Страница для загрузки по умолчанию
+                    </h4>
+                    <div class="settings_modal-main-item_variants">
+                        <div class="choice_radio-container">
+                            <input checked class="choice_radio" type="radio" id="default_main" name="default_page_variant" value="default_main" />
+                            <label for="default_main">Главная</label>
+                        </div>
+                        <div class="choice_radio-container">
+                            <input class="choice_radio" type="radio" id="default_tasks" name="default_page_variant" value="default_tasks" />
+                            <label for="default_tasks">Задачи</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings_modal-footer">
+            <button class="settings_modal-button confirm">
+                Сохранить
+            </button>
+            <button class="settings_modal-button cancel">
+                Отмена
+            </button>
+        </div>
+    </div>
+</div>-->
+
+<div class="qr-modal hidden" onclick="<%= Scripts %>.handleAppContainer(this)">
+    <div class="app-qr-info">
+        <div class="qr-code-info">
+            <h3 class="qr-code-title">ELMA365 для смартфона</h3>
+            <div class="qr-code-description">
+                Отсканируйте QR-код, чтобы попасть в личный кабинет ELMA365 КЭДО в приложении.
+            </div>
+            <div class="app-store-info">
+                <a class="store-link" target="_blank" href="https://apps.apple.com/app/id1532438798">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1015 340'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill-rule:evenodd;%7D%3C/style%3E%3C/defs%3E%3Cg id='Слой_2' data-name='Слой 2'%3E%3Cg id='Rus'%3E%3Cpath d='M959.39,21c18.26,0,30.64,3.48,37.87,10.62S1008,51.05,1008,69.16v216c0,18.06-3.5,30.27-10.7,37.33S977.7,333,959.4,333H68.93c-18.19,0-30.45-3.4-37.48-10.41S21,303.37,21,285.23V69.16C21,48.4,23.27,37,28.58,30.92,34.53,24.15,47.37,21,69,21h890.4m0-14H69C15.85,7,7,25.4,7,69.16V285.23C7,329,25.2,347,68.93,347H959.4c43.76,0,62.6-18.07,62.6-61.83v-216C1022,25.4,1003.15,7,959.39,7Z' transform='translate(-7 -7)'/%3E%3Cpath class='cls-1' d='M271.63,218.64C266.52,230,264.07,235,257.49,245c-9.19,14-22.13,31.4-38.17,31.54-14.25.13-17.91-9.28-37.25-9.17s-23.38,9.34-37.64,9.21c-16-.15-28.3-15.88-37.49-29.85-25.68-39.1-28.36-85-12.53-109.37,11.26-17.34,29-27.48,45.71-27.48,17,0,27.69,9.32,41.75,9.32,13.63,0,21.94-9.34,41.59-9.34,14.86,0,30.6,8.09,41.82,22.08-36.75,20.14-30.78,72.63,6.35,86.66' transform='translate(-7 -7)'/%3E%3Cpath class='cls-1' d='M208.55,94.29c7.14-9.17,12.57-22.12,10.6-35.34-11.66.8-25.31,8.22-33.28,17.9-7.23,8.78-13.2,21.81-10.87,34.47,12.73.39,25.9-7.21,33.55-17' transform='translate(-7 -7)'/%3E%3Cpath class='cls-1' d='M931.37,237H879.74c.2,7,2.7,13.14,7.49,17.17,4.35,3.62,10,5.27,16.89,5.27A56.23,56.23,0,0,0,925,255.66l2.71,11.93c-7.3,3.21-16,4.75-26,4.75q-18,0-28.26-10.59t-10.3-28.43c0-11.71,3.2-21.41,9.56-29.2q10.08-12.41,27.1-12.41,16.79,0,25.34,12.41c4.55,6.6,6.85,15.07,6.85,24.73A45.1,45.1,0,0,1,931.37,237ZM858,208.59a26.88,26.88,0,0,0-5.55-.44c-6.06,0-10.78,2.28-14.08,6.84-2.88,4-4.37,9.07-4.37,15.28V270H817V217.81c0-8.87-.37-16.81-.67-24.81h15l.64,16h.47A27.45,27.45,0,0,1,841,196.4a21.18,21.18,0,0,1,12.58-4.32,28.42,28.42,0,0,1,4.4.12Zm-62.22,52.3q-10.71,11.76-28.36,11.76-17.07,0-27.21-11.31c-6.73-7.52-10.09-17.07-10.09-28.52q0-18,10.43-29.47c7-7.68,16.31-11.45,28.1-11.45,11.41,0,20.54,3.73,27.44,11.31C802.66,210.5,806,220,806,231.55,806,243.48,802.58,253.22,795.78,260.89ZM725,207H707v37c0,9.56,3,14.29,9.66,14.29a29.34,29.34,0,0,0,7.44-.75l.39,13a39.31,39.31,0,0,1-13.44,1.92c-6.76,0-12.29-2-16.11-6.22S689,255.18,689,245.41V207H678V193h11V179.28l18-5.1V193h18Zm-60.49,56.08q-10.54,9.42-29.26,9.4c-11.58,0-20.84-2.24-27.84-6.68l4-14.34a48.08,48.08,0,0,0,24.83,6.69c6.51,0,11.54-1.48,15.15-4.38a14.31,14.31,0,0,0,5.4-11.76,15,15,0,0,0-4.44-10.95c-3-3-7.9-5.71-14.82-8.29Q609.36,212.29,609.34,192a27.09,27.09,0,0,1,9.93-21.68q10-8.43,26.39-8.44,14.64,0,24.39,5.09l-4.35,14a42.58,42.58,0,0,0-20.61-4.94c-6.06,0-10.82,1.54-14.24,4.44a12.92,12.92,0,0,0-4.3,9.75,13.3,13.3,0,0,0,4.93,10.54q4.32,3.81,15.6,8.26c9.28,3.69,16,8.07,20.42,13.08S674,233.35,674,240.77C674,249.92,670.84,257.38,664.51,263.08Zm-99.43-.6a31.66,31.66,0,0,1-23.93,10.17c-10.25,0-17.15-3.65-22.15-11V303H502V218.9c0-8.27-.32-15.9-.73-25.9h15.1l1,13h.3c5.77-9,14.45-14,26.14-14a28.61,28.61,0,0,1,22.87,10.75q9.18,10.8,9.17,28.48C575.84,244.48,572.26,254.82,565.08,262.48Zm-85.08,0a31.56,31.56,0,0,1-23.88,10.17c-10.28,0-17.12-3.65-22.12-11V303H417V218.9c0-8.27-.39-15.9-.83-25.9h15.14l.95,13h.3c5.77-9,14.46-14,26.16-14,9.14,0,16.74,3.51,22.88,10.75s9.16,16.7,9.16,28.48C490.76,244.48,487.18,254.82,480,262.48ZM388,270l-10-31H343l-9.58,31H315.64l34.54-107h21.38l34.75,107Zm510.57-66.36c-5.62,0-10.18,2.88-13.71,7.52A24.65,24.65,0,0,0,879.74,225h35.84c.1-6-1-9.95-3.33-13.69A15.49,15.49,0,0,0,898.54,203.64ZM360.4,178h-.3c-1.08,5-2.76,11.66-5.12,20.59L346.06,227h28.83l-9-28.41C364.87,195.71,363,188,360.4,178Zm177.83,27.56a17.77,17.77,0,0,0-11.54,4.2,19.94,19.94,0,0,0-6.85,11.12,23.1,23.1,0,0,0-.84,5.27V239a20.69,20.69,0,0,0,5.23,14.29,17.31,17.31,0,0,0,13.47,5.79c6.51,0,11.56-2.48,15.18-7.48s5.44-11.58,5.44-19.79c0-7.52-1.71-13.74-5.1-18.61A17.74,17.74,0,0,0,538.23,205.56ZM768,204.48c-6.88,0-12.15,3.06-15.74,9.21-3.11,5.07-4.64,11.25-4.64,18.56,0,7.13,1.53,13.2,4.64,18.28q5.52,9.21,15.61,9.2c6.55,0,11.72-3.1,15.42-9.39,3.21-5.14,4.81-11.31,4.81-18.38s-1.54-13.2-4.6-18.27C779.86,207.54,774.72,204.48,768,204.48Zm-314.9,1.08a17.81,17.81,0,0,0-11.53,4.2,19.85,19.85,0,0,0-6.79,11.12,22.72,22.72,0,0,0-.8,5.27V239a20.65,20.65,0,0,0,5.18,14.29,17.29,17.29,0,0,0,13.46,5.79c6.47,0,11.55-2.48,15.16-7.48s5.4-11.58,5.4-19.79c0-7.52-1.68-13.74-5.08-18.61A17.72,17.72,0,0,0,453.12,205.56Z' transform='translate(-7 -7)'/%3E%3Cpath d='M364.84,134.84c-2.27,1.18-7.29,2.36-13.65,2.36-16.8,0-27-10.52-27-26.61,0-17.43,12.08-27.95,28.25-27.95,6.36,0,10.91,1.34,12.88,2.36l-2.12,7.69a25.7,25.7,0,0,0-10.36-2c-10.76,0-18.53,6.75-18.53,19.47,0,11.61,6.83,19.07,18.45,19.07a27.22,27.22,0,0,0,10.52-2Z' transform='translate(-7 -7)'/%3E%3Cpath d='M382.35,98.19V114h1.41l11.78-15.85H407L391.77,115c5.26.79,8.48,5,11.07,11.07,1.18,2.83,2.59,7.06,4.32,10.36H397.11a56.68,56.68,0,0,1-3.53-8.16c-2-5.18-4.95-7.7-10-7.7h-1.26v15.86H372.7V98.19Z' transform='translate(-7 -7)'/%3E%3Cpath d='M434.79,136.41l-.63-4.24h-.24a14.2,14.2,0,0,1-11.3,5.1c-7.69,0-12-5.57-12-11.38,0-9.65,8.56-14.52,22.68-14.44v-.63c0-2.51-1-6.67-7.77-6.67A20.24,20.24,0,0,0,415.24,107l-1.88-6.28a27.46,27.46,0,0,1,13.81-3.38c12.25,0,15.78,7.77,15.78,16.09v13.82a61.56,61.56,0,0,0,.55,9.18Zm-1.26-18.68c-6.83-.16-13.34,1.33-13.34,7.14,0,3.77,2.43,5.5,5.49,5.5a7.84,7.84,0,0,0,7.54-5.26,7.11,7.11,0,0,0,.31-2.12Z' transform='translate(-7 -7)'/%3E%3Cpath d='M461.24,98.19v12c0,4.56,1.65,7.23,6.67,7.23a11.57,11.57,0,0,0,6.52-2.12V98.19h9.65v38.22h-9.65V121.73h-.16a19.76,19.76,0,0,1-10,2.59c-7.77,0-12.71-4.24-12.71-13.11v-13Z' transform='translate(-7 -7)'/%3E%3Cpath d='M503.47,98.19v13.73c0,6-.23,10.13-.55,15.46h.24c2-4.47,3.22-7.3,5.18-11.3l9.42-17.89h11.69v38.22h-9.18V122.75c0-6.12.23-9,.63-16.17h-.32c-1.88,4.56-3.14,7.3-5,11-3,5.65-6.44,12.56-9.73,18.84H494.29V98.19Z' transform='translate(-7 -7)'/%3E%3Cpath d='M539.66,98.66a100.11,100.11,0,0,1,13.89-1c6.44,0,18.05.87,18.05,9.66,0,4.86-3.76,7.61-7.84,8.48V116c5.65.87,9.57,4,9.57,9.34,0,10.52-13.81,11.54-21.5,11.54-4.79,0-9.89-.31-12.17-.55ZM549,130.6a41.15,41.15,0,0,0,4.71.24c4.39,0,9.73-1.18,9.73-5.65,0-4.32-4.24-5.73-10.28-5.73H549Zm.08-16.95h4c4.95,0,9-1.42,9-5,0-3.06-2.67-4.7-8.4-4.7a38.54,38.54,0,0,0-4.63.31Z' transform='translate(-7 -7)'/%3E%3Cpath d='M602.93,136.41l-.63-4.24h-.24a14.2,14.2,0,0,1-11.3,5.1c-7.69,0-12-5.57-12-11.38,0-9.65,8.56-14.52,22.68-14.44v-.63c0-2.51-1-6.67-7.77-6.67A20.24,20.24,0,0,0,583.38,107l-1.88-6.28a27.46,27.46,0,0,1,13.81-3.38c12.25,0,15.78,7.77,15.78,16.09v13.82a61.56,61.56,0,0,0,.55,9.18Zm-1.26-18.68c-6.83-.16-13.34,1.33-13.34,7.14,0,3.77,2.43,5.5,5.49,5.5a7.84,7.84,0,0,0,7.54-5.26,7.11,7.11,0,0,0,.31-2.12Z' transform='translate(-7 -7)'/%3E%3Cpath d='M630.4,98.19v13.73c0,6-.23,10.13-.55,15.46h.24c2-4.47,3.21-7.3,5.18-11.3l9.42-17.89h11.69v38.22H647.2V122.75c0-6.12.23-9,.63-16.17h-.32c-1.88,4.56-3.14,7.3-5,11-3,5.65-6.44,12.56-9.73,18.84H621.22V98.19Zm4-15.62c.16,3.37,1.57,5.72,4.24,5.72,2.83,0,4.24-2.35,4.55-5.72h6.36C649.16,89.39,644.92,93,638.49,93c-7.07,0-10.21-4.31-10.52-10.43Z' transform='translate(-7 -7)'/%3E%3Cpath d='M694.69,98.19v7.45H683.23v30.77h-9.66V105.64H662.11V98.19Z' transform='translate(-7 -7)'/%3E%3Cpath d='M706.23,120c.23,6.9,5.65,9.89,11.77,9.89a28.72,28.72,0,0,0,10.6-1.73l1.41,6.67a36.09,36.09,0,0,1-13.34,2.36c-12.4,0-19.7-7.62-19.7-19.31,0-10.6,6.43-20.57,18.68-20.57s16.48,10.21,16.48,18.6a24.74,24.74,0,0,1-.31,4.09ZM723,113.26c.08-3.54-1.49-9.34-7.92-9.34-6,0-8.48,5.41-8.87,9.34Z' transform='translate(-7 -7)'/%3E%3Cpath d='M756.07,98.66a100.39,100.39,0,0,1,13.9-1c6.43,0,18,.87,18,9.66,0,4.86-3.77,7.61-7.85,8.48V116c5.65.87,9.58,4,9.58,9.34,0,10.52-13.82,11.54-21.51,11.54-4.79,0-9.89-.31-12.17-.55Zm9.34,31.94a41.15,41.15,0,0,0,4.71.24c4.4,0,9.74-1.18,9.74-5.65,0-4.32-4.24-5.73-10.29-5.73h-4.16Zm.08-16.95h4c5,0,9-1.42,9-5,0-3.06-2.67-4.7-8.4-4.7a38.54,38.54,0,0,0-4.63.31Z' transform='translate(-7 -7)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" class="store-image apple-store-img">
+                </a>
+                <a class="store-link" target="_blank"
+                    href="https://play.google.com/store/apps/details?id=com.elma.elma365.mobileapp">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1015 340'%3E%3Cdefs%3E%3Cstyle%3E.cls-1%7Bfill-rule:evenodd;%7D%3C/style%3E%3C/defs%3E%3Cg id='Слой_2' data-name='Слой 2'%3E%3Cg id='Rus'%3E%3Cpath d='M959.39,21c18.26,0,30.64,3.48,37.87,10.62S1008,51.05,1008,69.16v216c0,18.06-3.5,30.27-10.7,37.33S977.7,333,959.4,333H68.93c-18.19,0-30.45-3.4-37.48-10.41S21,303.37,21,285.23V69.16C21,48.4,23.27,37,28.58,30.92,34.53,24.15,47.37,21,69,21h890.4m0-14H69C15.85,7,7,25.4,7,69.16V285.23C7,329,25.2,347,68.93,347H959.4c43.76,0,62.6-18.07,62.6-61.83v-216C1022,25.4,1003.15,7,959.39,7Z' transform='translate(-7 -7)'/%3E%3Cpath d='M508.76,201.9c-18.62,0-33.36,14-33.36,33.36a33.11,33.11,0,0,0,33.36,33.36c18.62,0,33.36-14,33.36-33.36C542.12,215.09,527.38,201.9,508.76,201.9Zm0,52.75c-10.08,0-18.62-8.53-18.62-20.17s8.54-20.17,18.62-20.17,18.62,7.76,18.62,20.17C527.38,246.12,518.85,254.65,508.76,254.65ZM436.62,201.9c-18.62,0-33.36,14-33.36,33.36a33.11,33.11,0,0,0,33.36,33.36c18.62,0,33.35-14,33.35-33.36C470,215.09,455.24,201.9,436.62,201.9Zm0,52.75c-10.09,0-18.62-8.53-18.62-20.17s8.53-20.17,18.62-20.17,18.62,7.76,18.62,20.17C455.24,246.12,446.7,254.65,436.62,254.65ZM350.51,212v14h33.36c-.78,7.76-3.88,14-7.76,17.84-4.65,4.66-12.41,10.09-25.6,10.09-20.94,0-36.46-16.29-36.46-37.24s16.29-37.23,36.46-37.23c10.86,0,19.4,4.65,25.6,10.08l10.09-10.08c-8.54-7.76-19.4-14-34.91-14-27.93,0-52,23.28-52,51.2s24.05,51.2,52,51.2c15.51,0,26.37-4.65,35.68-14.74,9.31-9.31,12.41-22.5,12.41-32.58,0-3.1,0-6.21-.77-8.53Zm352.18,10.86c-3.1-7.76-10.86-20.95-27.92-20.95s-31,13.19-31,33.36c0,18.62,14,33.36,32.58,33.36,14.74,0,24-9.31,27.15-14.74l-10.86-7.76c-3.88,5.43-8.54,9.31-16.29,9.31s-12.41-3.11-16.29-10.09l44.21-18.61-1.55-3.88Zm-45,10.86c0-12.41,10.08-19.4,17.07-19.4,5.43,0,10.86,3.11,12.41,7L657.7,233.71Zm-36.46,31.8H636v-97H621.24ZM598,208.88a25.59,25.59,0,0,0-17.84-7.75c-16.29,0-31.81,14.74-31.81,33.35a32.12,32.12,0,0,0,31.81,32.58,22.26,22.26,0,0,0,17.06-7.75H598V264c0,12.41-7,19.39-17.84,19.39-8.54,0-14.74-6.2-16.29-11.63l-12.41,5.43c3.87,8.53,13.18,19.39,29.47,19.39,17.07,0,31-10.08,31-34.13v-59H598v5.43ZM580.9,254.65c-10.08,0-18.61-8.53-18.61-20.17s8.53-20.17,18.61-20.17,17.85,8.54,17.85,20.17S591,254.65,580.9,254.65Zm189.28-86.1H735.27v97H750V229.05h20.17c16.29,0,31.81-11.63,31.81-30.25S786.47,168.55,770.18,168.55Zm.78,46.54H750V181.73h21A17,17,0,0,1,788,198c-.77,8.54-7,17.07-17.06,17.07Zm89.2-14c-10.86,0-21.72,4.65-25.59,14.74l13.18,5.43c3.11-5.43,7.76-7,13.19-7,7.76,0,14.74,4.66,15.51,12.42v.77c-2.32-1.55-8.53-3.88-14.73-3.88-14,0-27.93,7.76-27.93,21.72,0,13.19,11.64,21.72,24.05,21.72,10.08,0,14.74-4.65,18.61-9.3h.78v7.75h14V228.28c-1.55-17.07-14.74-27.15-31-27.15Zm-1.55,53.52c-4.65,0-11.63-2.33-11.63-8.53,0-7.76,8.53-10.09,15.51-10.09,6.21,0,9.31,1.56,13.19,3.11C874.13,248.45,866.37,254.65,858.61,254.65Zm81.45-51.2-16.29,41.89H923l-17.07-41.89H890.42l25.6,59L901.28,295H916l39.56-91.54ZM809.74,265.51h14.74v-97H809.74Z' transform='translate(-7 -7)'/%3E%3Cpath d='M340.56,125.23c-4,4.59-8.73,6.82-14.4,6.82a17.8,17.8,0,0,1-12.9-5.15c-3.48-3.42-5.24-8-5.24-13.54s1.76-10.13,5.24-13.54a17.8,17.8,0,0,1,12.9-5.15c5.52,0,9.74,1.92,12.93,5.89l.68.85,5.88-5.69L345,95a23.83,23.83,0,0,0-18.87-8.4,26.17,26.17,0,0,0-26.61,26.75,26.17,26.17,0,0,0,26.61,26.75,27,27,0,0,0,11.51-2.47,25.16,25.16,0,0,0,8.82-6.7l.58-.7-5.81-5.81Z' transform='translate(-7 -7)'/%3E%3Cpath d='M409.75,88l-18.44,48.75-18.53-26.49L391,89.36V88H381l-21,23.73V88h-8v51h8V124.13l6.73-7.5L382.59,139h17l4.82-13h19.32l4.75,13h9.17L418.3,88Zm11,30H407.26L414,99.31Z' transform='translate(-7 -7)'/%3E%3Cpath d='M466,107.64c-2,2.94-5.56,4.37-9.79,4.37-2.93,0-5.27-.77-6.81-2.29a8.75,8.75,0,0,1-2.4-6.55V88h-8v16.27c0,4.78,1.51,8.64,4.7,11.49A17,17,0,0,0,455.46,120a16,16,0,0,0,10.77-3.69L466,117.9V139h9V88h-9Z' transform='translate(-7 -7)'/%3E%3Cpolygon points='482.01 117.01 482 110.56 482 81 474 81 474 132 482.22 132 506.05 94 506 100.3 506 132 514 132 514 81 504.8 81 482.01 117.01'/%3E%3Cpath d='M557.42,112.43a12.31,12.31,0,0,0,3.65-3.54,11.75,11.75,0,0,0,2-6.76,13.12,13.12,0,0,0-4.57-10.2A15.39,15.39,0,0,0,547.81,88H529v51h19.78A16.24,16.24,0,0,0,560,134.75,14,14,0,0,0,564.72,124a12.2,12.2,0,0,0-2.55-7.63A13.44,13.44,0,0,0,557.42,112.43Zm-4.6-5.56a6.43,6.43,0,0,1-5,2.13H537V96h11.09a6,6,0,0,1,4.8,1.89,6.52,6.52,0,0,1,1.84,4.48A6.45,6.45,0,0,1,552.82,106.87Zm1.41,21.89a6.57,6.57,0,0,1-5.18,2.24H537V117h11.78a7.12,7.12,0,0,1,7.47,6.9A7.06,7.06,0,0,1,554.23,128.76Z' transform='translate(-7 -7)'/%3E%3Cpath d='M584.65,88,565.3,139h9.17l4.82-13h19.32l4.75,13h9.18L593.19,88Zm11,30H582.15l6.77-18.69Z' transform='translate(-7 -7)'/%3E%3Cpolygon points='616.92 117.01 617 110.56 617 81 609 81 609 132 617.04 132 640.96 94 641 100.3 641 132 649 132 649 81 639.62 81 616.92 117.01'/%3E%3Cpath d='M635.68,86A9.4,9.4,0,0,0,645,76.31V75h-7v1.31a2.9,2.9,0,0,1-.59,2.1,2.22,2.22,0,0,1-1.83.83,2.35,2.35,0,0,1-1.91-.81,2.93,2.93,0,0,1-.67-2.12V75h-7v1.31a9,9,0,0,0,2.9,6.9A9.58,9.58,0,0,0,635.68,86Z' transform='translate(-7 -7)'/%3E%3Cpolygon points='653 89 667 89 667 132 676 132 676 89 689 89 689 81 653 81 653 89'/%3E%3Cpolygon points='694 132 725 132 725 124 703 124 703 110 723 110 723 102 703 102 703 89 725 89 725 81 694 81 694 132'/%3E%3Cpath d='M787.06,116.33a13.53,13.53,0,0,0-4.75-3.9,12.43,12.43,0,0,0,3.65-3.54,11.82,11.82,0,0,0,2-6.76,13.12,13.12,0,0,0-4.57-10.2A15.4,15.4,0,0,0,772.7,88H754v51h19.67a16.2,16.2,0,0,0,11.16-4.25A13.93,13.93,0,0,0,789.61,124,12.2,12.2,0,0,0,787.06,116.33Zm-9.35-9.46a6.46,6.46,0,0,1-5,2.13H762V96h11a6,6,0,0,1,4.8,1.89,6.52,6.52,0,0,1,1.84,4.48A6.45,6.45,0,0,1,777.71,106.87Zm1.41,21.89a6.57,6.57,0,0,1-5.18,2.24H762V117h11.67a7.1,7.1,0,0,1,7.46,6.9A7.09,7.09,0,0,1,779.12,128.76Z' transform='translate(-7 -7)'/%3E%3Cpolygon class='cls-1' points='216.74 140.06 95.24 70.16 191.21 165.63 216.74 140.06'/%3E%3Cpath class='cls-1' d='M91,77.87a6.1,6.1,0,0,0-1,2.89V278.57a6.06,6.06,0,0,0,.49,1.75L192.12,178.5Z' transform='translate(-7 -7)'/%3E%3Cpath class='cls-1' d='M198.23,184.36,98.59,284.18a7.49,7.49,0,0,0,.86-.41l125.9-72.44Z' transform='translate(-7 -7)'/%3E%3Cpath class='cls-1' d='M271.35,174.46l-40.17-23.11-27.09,27.13,28.71,28.57,38.55-22.18A6,6,0,0,0,271.35,174.46Z' transform='translate(-7 -7)'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E" class="store-image google-play-img">
+                </a>
+            </div>
+        </div>
+        <div class="qr-code">
+            <img class="qr-code-img">
+        </div>
+    </div>
+</div>
+
+<div class="left-menu_user-info">
+    <img class="left-menu_user-info_img" />
+    <div class="left-menu_user-info_data">
+        <div class="left-menu_user-info_data-name">
+
+        </div>
+        <div class="left-menu_user-info_data-position">
+            <p class="left-menu_user-info_data-position_info">
+
+            </p>
+        </div>
+    </div>
+    <%= UI.widget.popover( popoverOpenerUserInfo, { type: 'widgets' , size: 'default' , position: 'top' , },
+        panelContentUserInfo ) %>
+
+
+</div>
+<% $template panelContentUserInfo %>
+    <!--<div class="left-menu_user-info_popup-item settings">
+        <div class="left-menu_user-info_popup-item-img">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M6.85643 16.1895C5.59976 15.8154 4.48117 15.1208 3.59545 14.2004C3.92587 13.8088 4.125 13.3028 4.125 12.7503C4.125 11.5077 3.11764 10.5003 1.875 10.5003C1.79983 10.5003 1.72552 10.5041 1.65225 10.5113C1.55242 10.0232 1.5 9.51792 1.5 9.00034C1.5 8.21637 1.62029 7.46048 1.84342 6.75012C1.85393 6.75027 1.86446 6.75034 1.875 6.75034C3.11764 6.75034 4.125 5.74298 4.125 4.50034C4.125 4.14361 4.04197 3.80629 3.89422 3.5066C4.76156 2.70012 5.82019 2.09656 6.99454 1.77148C7.36665 2.50088 8.12501 3.00036 9 3.00036C9.87499 3.00036 10.6334 2.50088 11.0055 1.77148C12.1798 2.09656 13.2384 2.70012 14.1058 3.5066C13.958 3.80629 13.875 4.14361 13.875 4.50034C13.875 5.74298 14.8824 6.75034 16.125 6.75034C16.1355 6.75034 16.1461 6.75027 16.1566 6.75012C16.3797 7.46048 16.5 8.21637 16.5 9.00034C16.5 9.51792 16.4476 10.0232 16.3478 10.5113C16.2745 10.5041 16.2002 10.5003 16.125 10.5003C14.8824 10.5003 13.875 11.5077 13.875 12.7503C13.875 13.3028 14.0741 13.8088 14.4045 14.2004C13.5188 15.1208 12.4002 15.8154 11.1436 16.1895C10.8535 15.2823 10.0035 14.6253 9 14.6253C7.9965 14.6253 7.14645 15.2823 6.85643 16.1895Z"
+                    stroke="#333333" stroke-width="1.5" stroke-linejoin="round" />
+                <path
+                    d="M9 11.625C10.4497 11.625 11.625 10.4497 11.625 9C11.625 7.55025 10.4497 6.375 9 6.375C7.55025 6.375 6.375 7.55025 6.375 9C6.375 10.4497 7.55025 11.625 9 11.625Z"
+                    stroke="#333333" stroke-width="1.5" stroke-linejoin="round" />
+            </svg>
+
+        </div>
+        <div class="left-menu_user-info_popup-item-label">
+            Настройки
+        </div>
+    </div>-->
+    <div class="left-menu_user-info_popup-item elma-app" onclick="<%= Scripts %>.handleAppContainer(this)">
+        <div class="left-menu_user-info_popup-item-img">
+            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M2.25 9.99237V16.7393H15.75V9.98926" stroke="#323232" stroke-width="1.5"
+                    stroke-linecap="round" />
+                <path d="M12.375 9.61426L9 12.9893L5.625 9.61426" stroke="#323232" stroke-width="1.5"
+                    stroke-linecap="round" />
+                <path d="M8.99707 3.23926V12.9893" stroke="#323232" stroke-width="1.5" stroke-linecap="round" />
+            </svg>
+
+        </div>
+        <div class="left-menu_user-info_popup-item-label">
+            Приложение
+        </div>
+    </div>
+    <div class="left-menu_user-info_popup-item" onclick="<%= Scripts %>.logout()">
+        <div class="left-menu_user-info_popup-item-img">
+            <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8.99689 2.3252H2.25V15.8252H9" stroke="#333333" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+                <path d="M12.375 12.4502L15.75 9.0752L12.375 5.7002" stroke="#333333" stroke-width="1.5"
+                    stroke-linecap="round" stroke-linejoin="round" />
+                <path d="M6 9.07129H15.75" stroke="#333333" stroke-width="1.5" stroke-linecap="round"
+                    stroke-linejoin="round" />
+            </svg>
+
+        </div>
+        <div class="left-menu_user-info_popup-item-label">
+            Выйти
+        </div>
+    </div>
+    <% $endtemplate %>
+
+        <% $template popoverOpenerUserInfo %>
+            <div class="left-menu_user-info_more">
+                <svg width="12" height="4" viewBox="0 0 12 4" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M6.00078 3.19883C5.32878 3.19883 4.80078 2.65883 4.80078 1.99883C4.80078 1.33883 5.34078 0.798828 6.00078 0.798828C6.66078 0.798828 7.20078 1.33883 7.20078 1.99883C7.20078 2.65883 6.67278 3.19883 6.00078 3.19883Z"
+                        fill="#292D32" />
+                    <path
+                        d="M10.8016 3.1998C10.1296 3.1998 9.60156 2.6598 9.60156 1.9998C9.60156 1.3398 10.1416 0.799805 10.8016 0.799805C11.4616 0.799805 12.0016 1.3398 12.0016 1.9998C12.0016 2.6598 11.4736 3.1998 10.8016 3.1998Z"
+                        fill="#292D32" />
+                    <path
+                        d="M1.20098 3.1998C0.528977 3.1998 0.000976562 2.6598 0.000976562 1.9998C0.000976562 1.3398 0.540977 0.799805 1.20098 0.799805C1.86098 0.799805 2.40098 1.3398 2.40098 1.9998C2.40098 2.6598 1.87298 3.1998 1.20098 3.1998Z"
+                        fill="#292D32" />
+                </svg>
+            </div>
+            <% $endtemplate %>

@@ -1,0 +1,762 @@
+{
+  "__id": "018d218f-9af8-786b-8e42-1fc208b117ed",
+  "namespace": "kedo.letter_of_resignation",
+  "code": "sign_dismissal_statement_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Подписание заявления на увольнение",
+  "type": "bpmn",
+  "draft": false,
+  "version": 5,
+  "context": [
+    {
+      "code": "staff_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудник (пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "letter_of_resignation_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Заявление подписано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "letter_of_resignation",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "letter_of_resignation",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявление на увольнение"
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-01-19T11:51:15.960145339Z",
+  "__createdBy": "b9287795-55a7-42be-989a-2677b5bb0a2c",
+  "__updatedAt": "2024-03-05T19:30:05.546441385Z",
+  "__updatedBy": "cc31283b-f390-46e0-85c1-612cce8051b2",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 80,
+        "y": 88,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "f27b9fc1-5b23-4895-8607-70f5936383dd",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["957e46ea-4dc6-4e68-8018-3bb6e78f2bc3"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Подписание заявления на увольнение ({$letter_of_resignation})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0cb8c526-dd42-4c80-8088-ace73ede4d8b": {
+        "x": 776,
+        "y": 88,
+        "id": "0cb8c526-dd42-4c80-8088-ace73ede4d8b",
+        "icon": "end",
+        "lane": "35565c89-cc7e-4445-a6b1-ee4d9351548b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "10da3da7-860d-4b15-9cc7-74deda3117a0": {
+        "x": 280,
+        "y": 72,
+        "id": "10da3da7-860d-4b15-9cc7-74deda3117a0",
+        "lane": "f27b9fc1-5b23-4895-8607-70f5936383dd",
+        "name": "Оповещение типовое",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["eb2bdb03-0bf0-46c1-a68c-c44dca9ee67c"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "notification",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Заявление на увольнение"
+              },
+              "target": {
+                "kind": "context",
+                "value": "topic_of_the_letter"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "КЭДО"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_head"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Вам поступила задача на подписание заявления на увольнение. Перейдите на портал КЭДО. (ссылка)"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_text_for_sms"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": "Вам поступила задача на подписание заявления на увольнение. Перейдите на портал КЭДО. (ссылка)"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_body"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation"
+              },
+              "target": {
+                "kind": "context",
+                "value": "doc_app"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "alert_delay_required"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "2e4967f4-f64a-439e-a429-98e2ba207f19": {
+        "x": 464,
+        "y": 176,
+        "id": "2e4967f4-f64a-439e-a429-98e2ba207f19",
+        "icon": "system",
+        "lane": "35565c89-cc7e-4445-a6b1-ee4d9351548b",
+        "name": "Заявление подписано = нет",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["aa1797e6-7c45-499e-a351-d7c4eeda76e1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "letter_of_resignation_signed"
+              }
+            }
+          ]
+        }
+      },
+      "4d4524a9-8703-408d-bb57-6c389cae705f": {
+        "x": 488,
+        "y": 296,
+        "id": "4d4524a9-8703-408d-bb57-6c389cae705f",
+        "icon": "end",
+        "lane": "35565c89-cc7e-4445-a6b1-ee4d9351548b",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "575dcfd6-28b6-4121-aa87-7b6ab533fcb1": {
+        "x": 608,
+        "y": 72,
+        "id": "575dcfd6-28b6-4121-aa87-7b6ab533fcb1",
+        "icon": "system",
+        "lane": "35565c89-cc7e-4445-a6b1-ee4d9351548b",
+        "name": "Заявление подписано = да",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["bc4755ea-0b32-444a-a249-0820754cff63"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "letter_of_resignation_signed"
+              }
+            }
+          ]
+        }
+      },
+      "ba9f9b68-1304-46e2-a113-3abe4ca09844": {
+        "x": 464,
+        "y": 72,
+        "id": "ba9f9b68-1304-46e2-a113-3abe4ca09844",
+        "icon": "send_doc",
+        "lane": "35565c89-cc7e-4445-a6b1-ee4d9351548b",
+        "name": "Подписать заявление на увольнение",
+        "type": "sign_item",
+        "color": "#fde9a0",
+        "exits": [
+          "4d3037b2-cbd8-4789-b801-53c23cd49c1d",
+          "90eb7671-c88f-48e1-ab6c-fe8fa0ff7acf"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "letter_of_resignation",
+          "name": "",
+          "input": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "letter_of_resignation"
+              }
+            }
+          ],
+          "target": "letter_of_resignation",
+          "signExit": "90eb7671-c88f-48e1-ab6c-fe8fa0ff7acf",
+          "namespace": "kedo",
+          "cancelExit": "4d3037b2-cbd8-4789-b801-53c23cd49c1d",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 2,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "settingsSign": {
+            "isSign": "required",
+            "signFile": "required",
+            "showComment": "optional",
+            "signAttributes": "disabled",
+            "signDocflowSolution": "disabled"
+          },
+          "isIgnoreSubstitutionTarget": ""
+        }
+      },
+      "be67ee52-cdd9-4346-986d-57ad881b15e7": {
+        "x": 160,
+        "y": 72,
+        "id": "be67ee52-cdd9-4346-986d-57ad881b15e7",
+        "icon": "system",
+        "lane": "f27b9fc1-5b23-4895-8607-70f5936383dd",
+        "name": "Получить сотрудника",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["533efc0e-6b05-4385-babc-cc93899476c0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation.staff.ext_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff_user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation.staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ]
+        }
+      }
+    },
+    "lanes": {
+      "35565c89-cc7e-4445-a6b1-ee4d9351548b": {
+        "x": 408,
+        "y": 8,
+        "id": "35565c89-cc7e-4445-a6b1-ee4d9351548b",
+        "name": "Сотрудник (пользователь)",
+        "color": "#d6f0cc",
+        "width": 488,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "staff_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "f27b9fc1-5b23-4895-8607-70f5936383dd": {
+        "x": 8,
+        "y": 8,
+        "id": "f27b9fc1-5b23-4895-8607-70f5936383dd",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 400,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "4d3037b2-cbd8-4789-b801-53c23cd49c1d": {
+        "id": "4d3037b2-cbd8-4789-b801-53c23cd49c1d",
+        "name": "",
+        "path": [
+          {
+            "x": 504,
+            "y": 136
+          },
+          {
+            "x": 504,
+            "y": 176
+          }
+        ],
+        "type": "default",
+        "source": "ba9f9b68-1304-46e2-a113-3abe4ca09844",
+        "target": "2e4967f4-f64a-439e-a429-98e2ba207f19",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "533efc0e-6b05-4385-babc-cc93899476c0": {
+        "id": "533efc0e-6b05-4385-babc-cc93899476c0",
+        "name": "",
+        "path": [
+          {
+            "x": 240,
+            "y": 104
+          },
+          {
+            "x": 280,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "be67ee52-cdd9-4346-986d-57ad881b15e7",
+        "target": "10da3da7-860d-4b15-9cc7-74deda3117a0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "90eb7671-c88f-48e1-ab6c-fe8fa0ff7acf": {
+        "id": "90eb7671-c88f-48e1-ab6c-fe8fa0ff7acf",
+        "name": "",
+        "path": [
+          {
+            "x": 544,
+            "y": 104
+          },
+          {
+            "x": 608,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "ba9f9b68-1304-46e2-a113-3abe4ca09844",
+        "target": "575dcfd6-28b6-4121-aa87-7b6ab533fcb1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "__service"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 99.99
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "957e46ea-4dc6-4e68-8018-3bb6e78f2bc3": {
+        "id": "957e46ea-4dc6-4e68-8018-3bb6e78f2bc3",
+        "name": "",
+        "path": [
+          {
+            "x": 112,
+            "y": 104
+          },
+          {
+            "x": 160,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "be67ee52-cdd9-4346-986d-57ad881b15e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aa1797e6-7c45-499e-a351-d7c4eeda76e1": {
+        "id": "aa1797e6-7c45-499e-a351-d7c4eeda76e1",
+        "name": "",
+        "path": [
+          {
+            "x": 504,
+            "y": 240
+          },
+          {
+            "x": 504,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "2e4967f4-f64a-439e-a429-98e2ba207f19",
+        "target": "4d4524a9-8703-408d-bb57-6c389cae705f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bc4755ea-0b32-444a-a249-0820754cff63": {
+        "id": "bc4755ea-0b32-444a-a249-0820754cff63",
+        "name": "",
+        "path": [
+          {
+            "x": 688,
+            "y": 104
+          },
+          {
+            "x": 776,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "575dcfd6-28b6-4121-aa87-7b6ab533fcb1",
+        "target": "0cb8c526-dd42-4c80-8088-ace73ede4d8b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "eb2bdb03-0bf0-46c1-a68c-c44dca9ee67c": {
+        "id": "eb2bdb03-0bf0-46c1-a68c-c44dca9ee67c",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 104
+          },
+          {
+            "x": 464,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "10da3da7-860d-4b15-9cc7-74deda3117a0",
+        "target": "ba9f9b68-1304-46e2-a113-3abe4ca09844",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "letter_of_resignation"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "letter_of_resignation_signed": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

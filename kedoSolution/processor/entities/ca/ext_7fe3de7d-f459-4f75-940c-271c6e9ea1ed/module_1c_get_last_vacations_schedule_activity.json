@@ -1,0 +1,103 @@
+{
+  "__id": "7650d78e-0d69-4fc1-ba90-93deea251a69",
+  "__name": "(1С) Получить последний график отпусков",
+  "code": "module_1c_get_last_vacations_schedule",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 10,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "response",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    },
+    {
+      "code": "last_vacation_schedule",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Последний график отпусков (JSON)",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\nlet baseUrl: string;\nlet login: string\nlet password: string\nlet myHeaders: any\n\nfunction getConnectionInfo(): Error | null {\n\tconst connectionsArray = Namespace.params.data.list_of_connected_platforms ? JSON.parse(Namespace.params.data.list_of_connected_platforms) : undefined;\n\tif (!connectionsArray) {\n\t\treturn new Error(`Не найдено записей подключения`)\n\t}\n\t\n\n\tconst currentConnection = connectionsArray.length \u003e 1 ? connectionsArray.find((item: any) =\u003e {\n\t\treturn item.name === Context.data.connection_name\n\t}) : connectionsArray[0]\n\tif(!currentConnection) {\n\t\treturn new Error(`Не найдено подключение c именем ${Context.data.connection_name}`)\n\t}\n\n\tbaseUrl = currentConnection.url;\n\tlogin = currentConnection.login\n\tpassword = currentConnection.password\n\tmyHeaders = {\n\t\tAuthorization: `Basic ${btoa(login + ':' + password)}`,\n\t};\n\treturn null\n}\n\nasync function action(): Promise\u003cvoid\u003e{\n\tconst error = getConnectionInfo()\n\tif (error != null) {\n\t\tContext.data.error = error.message\n\t\treturn\n\t}\n\tconst requestOptions: FetchRequest = {\n\t\tmethod: 'GET',\n\t\theaders: myHeaders,\n\t};\n\n\tconst resUrl = `${baseUrl}/Document_ГрафикОтпусков?$format=json`;\n\n\ttry {\n\t\tconst response = await fetch(`${encodeURI(resUrl)}`, requestOptions)\n\t\tif (!response.ok) {\n\t\t\tconst responseText = await response.text()\n\t\t\tContext.data.error += ` staff data res.status error; resUrl - ${resUrl} `\n\t\t\tthrow new Error(`status ${response.status} res error ${resUrl}, err text ${responseText}`)\n\t\t}\n\t\tconst parsedResponse = await response.json()\n\t\tconst vacationsArray = parsedResponse.value\n\t\tconst lastElement = vacationsArray[vacationsArray.length - 1]\n\t\tContext.data.response = JSON.stringify(vacationsArray);\n\t\tContext.data.last_vacation_schedule = lastElement\n\n\t} catch (err){\n\t\tContext.data.error += ` try/catch error ${err}; resUrl - ${resUrl} `\n\t\tthrow new Error(err.message)\n\t}\n\n\t\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:01.673735922Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:53.939545548Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

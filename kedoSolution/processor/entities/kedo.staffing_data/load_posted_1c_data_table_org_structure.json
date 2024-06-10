@@ -1,0 +1,514 @@
+{
+  "__id": "018c8757-193c-7ed1-9288-4cbfe806eda7",
+  "namespace": "kedo.staffing_data",
+  "code": "load_posted_1c_data_table_org_structure",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1С) Загрузка/обновление ШР из таблицы обмена данными",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "app_legal_entity",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "_my_companies",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "_system_catalogs",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Юридическое Лицо",
+        "data": {}
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staffing_data",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staffing_data",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Данные Штатного расписания"
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-04-04T07:45:29.497600211Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2023-04-26T05:47:28.865905Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["ecd2747a-48a7-4d19-b3cc-879634924ce9"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "(1С) Загрузка/обновление ШР из таблицы обмена данными ({$staffing_data})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "400c0836-655b-4715-8b66-58c318fcfc96": {
+        "x": 680,
+        "y": 56,
+        "id": "400c0836-655b-4715-8b66-58c318fcfc96",
+        "icon": "script",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "Заполнение руководителей",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["5c18b7b7-550d-460e-9112-27544ce2a9fc"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillOrgHeadPositions",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "437234ae-d36e-455f-9a24-713b10503caa": {
+        "x": 360,
+        "y": 56,
+        "id": "437234ae-d36e-455f-9a24-713b10503caa",
+        "icon": "script",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "Загрузки организаций",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3c60dac4-c6ec-450f-b5d1-ad5c932d426f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "loadOrgs",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "8497853a-589b-46db-9c32-b7daf7748735": {
+        "x": 704,
+        "y": 320,
+        "id": "8497853a-589b-46db-9c32-b7daf7748735",
+        "icon": "end",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "994c4a6b-58df-4940-92e5-bae4f33fc34a": {
+        "x": 200,
+        "y": 56,
+        "id": "994c4a6b-58df-4940-92e5-bae4f33fc34a",
+        "icon": "script",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "Загрузка позиций и подразделений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["976e0b92-893c-4857-bde8-69d8473b3b77"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "loadPositionsAndSubdividions",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "a0e7dce1-d1e5-4a77-9da6-f4f591a57661": {
+        "x": 528,
+        "y": 56,
+        "id": "a0e7dce1-d1e5-4a77-9da6-f4f591a57661",
+        "icon": "script",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "Заполнение ссылок",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["9a12bbda-02fb-456c-b68b-c08e17ee0464"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillAppsLinks",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "c2981b4f-1188-433a-a191-7281c2efdde2": {
+        "x": 680,
+        "y": 192,
+        "id": "c2981b4f-1188-433a-a191-7281c2efdde2",
+        "lane": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "Обновить объект JSON для виджета ШР",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["6540c7ec-3994-47ee-b7e8-3519c1551868"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "update_json_object",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.staffing_data",
+          "subProcessTargetFieldCode": ""
+        }
+      }
+    },
+    "lanes": {
+      "96e4a966-58ea-4d13-a0b7-713e3029dcfc": {
+        "x": 8,
+        "y": 8,
+        "id": "96e4a966-58ea-4d13-a0b7-713e3029dcfc",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 904,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "3c60dac4-c6ec-450f-b5d1-ad5c932d426f": {
+        "id": "3c60dac4-c6ec-450f-b5d1-ad5c932d426f",
+        "name": "",
+        "path": [
+          {
+            "x": 440,
+            "y": 88
+          },
+          {
+            "x": 528,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "437234ae-d36e-455f-9a24-713b10503caa",
+        "target": "a0e7dce1-d1e5-4a77-9da6-f4f591a57661",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5c18b7b7-550d-460e-9112-27544ce2a9fc": {
+        "id": "5c18b7b7-550d-460e-9112-27544ce2a9fc",
+        "name": "",
+        "path": [
+          {
+            "x": 720,
+            "y": 120
+          },
+          {
+            "x": 720,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "400c0836-655b-4715-8b66-58c318fcfc96",
+        "target": "c2981b4f-1188-433a-a191-7281c2efdde2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6540c7ec-3994-47ee-b7e8-3519c1551868": {
+        "id": "6540c7ec-3994-47ee-b7e8-3519c1551868",
+        "name": "",
+        "path": [
+          {
+            "x": 720,
+            "y": 256
+          },
+          {
+            "x": 720,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "c2981b4f-1188-433a-a191-7281c2efdde2",
+        "target": "8497853a-589b-46db-9c32-b7daf7748735",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "976e0b92-893c-4857-bde8-69d8473b3b77": {
+        "id": "976e0b92-893c-4857-bde8-69d8473b3b77",
+        "name": "",
+        "path": [
+          {
+            "x": 280,
+            "y": 88
+          },
+          {
+            "x": 360,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "994c4a6b-58df-4940-92e5-bae4f33fc34a",
+        "target": "437234ae-d36e-455f-9a24-713b10503caa",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9a12bbda-02fb-456c-b68b-c08e17ee0464": {
+        "id": "9a12bbda-02fb-456c-b68b-c08e17ee0464",
+        "name": "",
+        "path": [
+          {
+            "x": 608,
+            "y": 88
+          },
+          {
+            "x": 680,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "a0e7dce1-d1e5-4a77-9da6-f4f591a57661",
+        "target": "400c0836-655b-4715-8b66-58c318fcfc96",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ecd2747a-48a7-4d19-b3cc-879634924ce9": {
+        "id": "ecd2747a-48a7-4d19-b3cc-879634924ce9",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 88
+          },
+          {
+            "x": 200,
+            "y": 88
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "994c4a6b-58df-4940-92e5-bae4f33fc34a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function loadPositionsAndSubdividions(): Promise\u003cvoid\u003e {\n    const allDivisions = await Namespace.app.structural_subdivision.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allPositions = await Namespace.app.position.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const searchData = await Namespace.app.posted_1c_data.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.table_name.eq(\"Catalog_ШтатноеРасписание\")\n        ))\n        .first()\n    let data1C: any[] = []\n    if (!!searchData) {\n        data1C = JSON.parse(searchData.data.table_data!).map((item:any) =\u003e item.data)\n    }\n    try {\n        let promises: Promise\u003cvoid\u003e[] = [];\n        for (let i = 0; i \u003c data1C.length; i++) {\n            const data = data1C[i]         \n            if (data['Должность'] !== \"00000000-0000-0000-0000-000000000000\") {\n                let app: ApplicationItem\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e | undefined;\n                app = allPositions.find(f =\u003e f.data.ref_key === data[\"Ref\"]);\n                if (!app)\n                    app = Namespace.app.position.create();\n                app.data.__name = data[\"Description\"];\n                app.data.ref_key = data[\"Ref\"];\n                app.data.owner_key = data[\"Owner\"][\"data\"];\n                app.data.parent_key = data[\"Parent\"];\n                app.data.position_key = data[\"Должность\"];\n                const salaryValue = data[\"ОкладТариф\"];\n                app.data.salary = new Money(salaryValue, 'RUB');\n                const date = data[\"ДатаУтверждения\"].split('T')[0].split('-');\n                const year = date[0];\n                const month = date[1];\n                const day = date[2];\n                app.data.approval_date = new TDate(year, month, day);\n                app.data.quantity = Number(data[\"КоличествоСтавок\"]);\n                promises.push(app.save())\n            } else {\n                Context.data.debug += `${data[\"Description\"]} ${data[\"Ref\"]} ${data[\"Подразделение\"]} ${data[\"Owner\"][\"data\"]} ${data[\"Parent\"]} ${data[\"Должность\"]}`\n                let app: ApplicationItem\u003cApplication$kedo$structural_subdivision$Data, Application$kedo$structural_subdivision$Params\u003e | undefined;\n                app = allDivisions.find(f =\u003e f.data.ref_key === data[\"Ref\"]);\n                if (!app)\n                    app = Namespace.app.structural_subdivision.create();\n                app.data.__name = data[\"Description\"];\n                app.data.ref_key = data[\"Ref\"];\n                app.data.subdiv_key = data[\"Подразделение\"];\n                app.data.owner_key = data[\"Owner\"][\"data\"];\n                app.data.parent_key = data[\"Parent\"];\n                app.data.position_key = data[\"Должность\"];\n                await app.save()\n            }\n        }\n        Context.data.debug += `done length ${data1C.length}`\n        await Promise.all(promises);\n    } catch (e: any) {\n        Context.data.debug += `An error occured: name ${e.name}, message ${e.message}`\n    }\n}\n\nasync function loadOrgs(): Promise\u003cvoid\u003e {\n    const searchData = await Namespace.app.posted_1c_data.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.table_name.eq(\"Catalog_Организации\")\n        ))\n        .first()\n\n    let data1C: any[] = []\n    if (!!searchData) {\n        data1C = JSON.parse(searchData.data.table_data!).map((item: any) =\u003e item.data)\n    }\n    for(let i = 0; i \u003c data1C.length; i++) {\n        let appEntity: ApplicationItem\u003cApplication$_system_catalogs$_my_companies$Data, Application$_system_catalogs$_my_companies$Params\u003e | undefined;\n        let appOrganization: ApplicationItem\u003cApplication$kedo$organization$Data, Application$kedo$organization$Params\u003e | undefined;\n        const ownerData = data1C[i]\n        appOrganization = await Namespace.app.organization.search()\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n                f.ref_key.eq(ownerData.Ref)\n            ))\n            .first()\n        if (appOrganization \u0026\u0026 appOrganization.data.entity) {\n            appEntity = await appOrganization.data.entity.fetch();\n        } else {\n            appOrganization = Namespace.app.organization.create();\n        }\n        if (!appEntity) {\n            appEntity = await Context.fields.app_legal_entity.app.search()\n                .where((f, g) =\u003e g.and(\n                    f.__deletedAt.eq(null),\n                    f.__name.eq(ownerData[\"Description\"])\n                ))\n                .first()\n        }\n        if (!appEntity) {\n            appEntity = Context.fields.app_legal_entity.app.create();\n        }\n        if (appEntity) {\n            appEntity.data.__name = ownerData[\"Description\"];\n            appEntity.data._full_legal_name = ownerData[\"НаименованиеПолное\"];\n            appEntity.data._inn = ownerData[\"ИНН\"];\n            appEntity.data._ogrn = ownerData[\"ОГРН\"];\n            await appEntity.save();\n        }\n        appOrganization.data.entity = appEntity;\n        appOrganization.data.ref_key = ownerData.Ref;\n        appOrganization.data.owner_key = '';\n        appOrganization.data.parent_key = '';\n        appOrganization.data.position_key = '';\n        await appOrganization.save();\n    }\n}\n\nasync function fillAppsLinks(): Promise\u003cvoid\u003e {\n    // получаем данные по данной базе 1С\n    const allOrganizations = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null)\n        ))\n        .size(10000)\n        .all();\n    const allSubdivisions = await Namespace.app.structural_subdivision.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null)\n        ))\n        .size(10000)\n        .all();\n    const allPositions = await Namespace.app.position.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null)\n        ))\n        .size(10000)\n        .all();\n    // проходимся по каждой организации и записываем её в элементы\n    let promises: Promise\u003cvoid\u003e[] = [];\n    for (const organiaztion of allOrganizations) {\n        const subdivisions = allSubdivisions.filter(f =\u003e f.data.owner_key === organiaztion.data.ref_key);\n        const positions = allPositions.filter(f =\u003e f.data.owner_key === organiaztion.data.ref_key);\n        for (const subdivision of subdivisions) {\n            subdivision.data.organization = organiaztion;\n            promises.push(subdivision.save())\n        }\n        for (const position of positions) {\n            position.data.organization = organiaztion;\n            promises.push(position.save())\n        }\n    }\n    await Promise.all(promises);\n    promises = [];\n    // проходимся по каждому подразделению и записываем его в элементы\n    for (const subdivisionParent of allSubdivisions) {\n        const subdivisionsChild = allSubdivisions.filter(f =\u003e f.data.parent_key === subdivisionParent.data.ref_key);\n        const positionsChild = allPositions.filter(f =\u003e f.data.parent_key === subdivisionParent.data.ref_key);\n        for (const subdivisionChild of subdivisionsChild) {\n            subdivisionChild.data.subdivision = subdivisionParent;\n            promises.push(subdivisionChild.save())\n        }\n        for (const positionChild of positionsChild) {\n            positionChild.data.subdivision = subdivisionParent;\n            promises.push(positionChild.save())\n        }\n    }\n    await Promise.all(promises)\n}\n\nasync function fillOrgHeadPositions(): Promise\u003cvoid\u003e {\n    // const tables = await Namespace.app.posted_1c_data.search()\n    //     .where(f =\u003e f.__deletedAt.eq(null))\n    //     .where((f, g) =\u003e g.or(\n    //         f.table_data.eq(\"InformationRegister_ЗанятостьПозицийШтатногоРасписания\"),\n    //         f.table_data.eq(\"InformationRegister_СведенияОбОтветственныхЛицах\"),\n    //         f.table_data.eq(\"Catalog_Сотрудники\")\n    //     )).size(10000)\n    //     .all()\n    // const \n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staffing_data"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_legal_entity": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

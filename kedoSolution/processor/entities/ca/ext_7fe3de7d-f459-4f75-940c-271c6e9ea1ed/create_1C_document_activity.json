@@ -1,0 +1,183 @@
+{
+  "__id": "2528c4ed-7dcf-4d8e-9e9b-c56e09cebb07",
+  "__name": "(1С) Провести документ",
+  "code": "create_1C_document",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 1,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "id_dokumenta",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID Документа",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    },
+    {
+      "code": "document_type",
+      "type": "ENUM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "enumItems": [
+          {
+            "code": "wo_payment",
+            "name": "Без сохранения оплаты",
+            "checked": false
+          },
+          {
+            "code": "sick_leave",
+            "name": "Больничный",
+            "checked": false
+          },
+          {
+            "code": "vacation",
+            "name": "Основной отпуск",
+            "checked": false
+          }
+        ]
+      },
+      "view": {
+        "name": "Тип документа",
+        "data": {},
+        "input": false
+      }
+    },
+    {
+      "code": "doc_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название документа в 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "response",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": false
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название подключения 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\nconst documentNames = {\n\two_payment: '',\n\tsick_leave: 'БольничныйЛист',\n\tvacation: 'Отпуск'\n}\n\nlet baseUrl: string;\nlet login: string\nlet password: string\nlet myHeaders: any\n\nfunction getConnectionInfo(): Error | null {\n\tconst connectionsArray = Namespace.params.data.list_of_connected_platforms ? JSON.parse(Namespace.params.data.list_of_connected_platforms) : undefined;\n\tif (!connectionsArray) {\n\t\treturn new Error(`Не найдено записей подключения`)\n\t}\n\n\tconst currentConnection = connectionsArray.length \u003e 1 ? connectionsArray.find((item: any) =\u003e {\n\t\treturn item.name === Context.data.connection_name\n\t}) : connectionsArray[0]\n\tif(!currentConnection) {\n\t\treturn new Error(`Не найдено подключение c именем ${Context.data.connection_name}`)\n\t}\n\n\tbaseUrl = currentConnection.url;\n\tlogin = currentConnection.login\n\tpassword = currentConnection.password\n\tmyHeaders = {\n\t\tAuthorization: `Basic ${btoa(login + ':' + password)}`,\n\t};\n\treturn null\n}\n\nasync function action(): Promise\u003cvoid\u003e{\n\tconst error = getConnectionInfo()\n\tif (error !== null) {\n\t\tContext.data.error = error.message\n\t}\n\n\tconst requestOptions: FetchRequest = {\n\t\tmethod: 'POST',\n\t\theaders: myHeaders,\n\t};\n\tconst documentName = Context.data.doc_name;\n\n\tconst resUrl = `${baseUrl}/Document_${documentName}(guid'${Context.data.id_dokumenta}')/Post?PostingModeOperational=false\u0026$format=json`;\n\n\ttry {\n\t\tconst response = await fetch(`${encodeURI(resUrl)}`, requestOptions)\n\t\tif(response.status === 500) {\n\t\t\tContext.data.error = JSON.stringify(await response.json())\n\t\t}\n\t} catch (err){\n\t\tContext.data.error += ` try/catch error ${err}; resUrl - ${resUrl} `\n\t\tthrow new Error(err)\n\t}\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:01.684906444Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:53.961364425Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

@@ -1,0 +1,4053 @@
+{
+  "__id": "018c8757-193c-7ed2-b09d-ef17125f419c",
+  "namespace": "kedo.staffing_data",
+  "code": "staffing_integration_with_1s",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1С) Загрузка/обновление ШР",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "response_1c_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ 1С (JSON)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "is_alternative",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Альтернативная интеграция",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "testdivapp",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "structural_subdivision",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "testdivapp",
+        "data": {}
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название базы 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "request_parameters_1c",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Параметры запроса 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "subdivisios_response_single",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Подразделение ответ 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "remote_applications",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Удаленные приложения",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "testposapp",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "position",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "testposapp",
+        "data": {}
+      }
+    },
+    {
+      "code": "number_of_iter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "head_subdivision_response",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Руководители подразделений 1C",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "app_legal_entity",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "_my_companies",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "_system_catalogs",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Юридическое лицо",
+        "data": {}
+      }
+    },
+    {
+      "code": "organization_array_length",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Длина массива организаций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "current_iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текущая итерация",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "staffing_data_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные штатного расписания (JSON)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staffing_data",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staffing_data",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Данные Штатного расписания"
+      }
+    },
+    {
+      "code": "organization_ref_key_array_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Массив ref_key организаций (JSON)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "connection_object",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Объект подключений (базы 1С)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "is_there_connections",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Есть подключения (базы 1С)",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2022-04-13T13:14:56.825160006Z",
+  "__createdBy": "6df9caf6-9e2b-4c10-b9cc-e897caad35ae",
+  "__updatedAt": "2023-04-28T05:20:17.97326254Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": -264,
+        "y": 152,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["a62f622a-7658-4e80-9bff-50aad323d1eb"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Интеграция Штатного расписания с 1С ({$staffing_data})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "11d47b57-b03d-4302-9044-1972ab73a4df": {
+        "x": 1864,
+        "y": 232,
+        "id": "11d47b57-b03d-4302-9044-1972ab73a4df",
+        "icon": "system",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Запрос в 1С истории",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "2b5e15b3-6ee7-4d65-ac49-cd4c2bd111fb",
+          "cc9d64f8-8293-4a7a-bc71-8584d9d18e46"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "cc9d64f8-8293-4a7a-bc71-8584d9d18e46",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "138b8d84-758b-4aca-b2d8-1675c555f586": {
+        "x": 2312,
+        "y": 136,
+        "id": "138b8d84-758b-4aca-b2d8-1675c555f586",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Загрузка руководителей",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["9149e08d-0150-41bd-aed9-ae310f31d912"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "load_1c_subdivisions_head",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "base_name"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "kedo.staffing_data",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "157cf0d3-c0db-4796-95e6-4146e327a1e7": {
+        "x": 864,
+        "y": 248,
+        "id": "157cf0d3-c0db-4796-95e6-4146e327a1e7",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "918e06b9-c4f7-4dc2-82d6-01a9b9ed2eac",
+          "fd2d7b68-5757-49c9-8228-1e7848471e6f"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "37c66d99-e1af-444b-8c86-59822bdb9ef8": {
+        "x": 16,
+        "y": 48,
+        "id": "37c66d99-e1af-444b-8c86-59822bdb9ef8",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Загрузка из таблицы",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["ba3b75e7-2d3a-42c1-ab8e-e86bb552bfbc"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "load_posted_1c_data_table_org_structure",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.staffing_data",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "406a8ec7-720c-4b9e-8700-c7163c7a04b0": {
+        "x": 2640,
+        "y": 432,
+        "id": "406a8ec7-720c-4b9e-8700-c7163c7a04b0",
+        "icon": "end",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "488d2934-d6d1-4adb-a0f5-6e9e8476c4d7": {
+        "x": 1864,
+        "y": 136,
+        "id": "488d2934-d6d1-4adb-a0f5-6e9e8476c4d7",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Подготовить запрос истории",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["223ffa89-a46f-46ec-a35d-7ba39e12dd81"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getPhysicHistoryArr",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "4ce46591-cc33-4e03-8c5b-8f3fa73b44ef": {
+        "x": 2536,
+        "y": 152,
+        "id": "4ce46591-cc33-4e03-8c5b-8f3fa73b44ef",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "5d660d22-c3f6-483e-adb1-5944c4a83546",
+          "051d1060-9ac5-45c4-ac8c-5c63fc7b2905"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "526e81e7-80b6-4074-93e9-b5f40a10262f": {
+        "x": 840,
+        "y": 136,
+        "id": "526e81e7-80b6-4074-93e9-b5f40a10262f",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Создаём/обновляем должности и подразделения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["c6b5810b-aa4c-4844-b629-5838ea4cf3eb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseDataUpdateApps",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "58d31846-9033-4370-9ddf-caa8b1c57d6b": {
+        "x": 2616,
+        "y": 136,
+        "id": "58d31846-9033-4370-9ddf-caa8b1c57d6b",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Обновить объект JSON для виджета ШР",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["5440faed-7f92-4d45-89b8-31af6147355e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "update_json_object",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.staffing_data",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "5ca8fa20-afe8-43b0-a313-6be15e5efedf": {
+        "x": 40,
+        "y": 152,
+        "id": "5ca8fa20-afe8-43b0-a313-6be15e5efedf",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "2742bfbe-d548-4ede-a53e-020172b6d476",
+          "fa8925cf-81a7-4893-9bdb-5ffc281fc947"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "613a1009-e559-4bbf-9421-72ff6d94e64b": {
+        "x": 2016,
+        "y": 248,
+        "id": "613a1009-e559-4bbf-9421-72ff6d94e64b",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8dc764c8-bf1b-47f9-a267-3754a45ef566",
+          "b4f1563e-ba0e-4de0-a70e-5f4cccd94af8"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "625bda09-08fe-4639-85b3-24abfb998216": {
+        "x": 2424,
+        "y": 416,
+        "id": "625bda09-08fe-4639-85b3-24abfb998216",
+        "icon": "notification",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Оповещение об ошибке",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["e995f7e0-874d-4a9b-a163-314e7bea9bb4"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$error}\u003cbr/\u003eПовторите позже",
+          "messageHeader": "При создании/обновлении ШР возникла ошибка"
+        }
+      },
+      "6918a540-78fe-4f4f-81bc-cad5a2bc89d0": {
+        "x": 752,
+        "y": 248,
+        "id": "6918a540-78fe-4f4f-81bc-cad5a2bc89d0",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "98bbd253-9fc4-43e7-9900-51313a2c44d8",
+          "5d0c3996-923f-4c32-b595-5ad18e5084fd"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "6e509c76-bdbe-487a-96dd-4c6491823f87": {
+        "x": 296,
+        "y": 152,
+        "id": "6e509c76-bdbe-487a-96dd-4c6491823f87",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "e69e06b2-6942-46a8-acb4-2239fa0cdd3b",
+          "45fa8c36-c8de-4f4d-b63f-e84c614a79a9"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "712a0f98-9d25-4e64-87b6-29ad329ef569": {
+        "x": 1632,
+        "y": 232,
+        "id": "712a0f98-9d25-4e64-87b6-29ad329ef569",
+        "icon": "system",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Запрос в 1С на физическое лицо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "625d82e2-6fbc-44bf-acab-0209da83daa1",
+          "a08e2b82-8290-4e86-ae21-3398fbca4197"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "a08e2b82-8290-4e86-ae21-3398fbca4197",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "82dd8ec8-cb5b-4a77-94e5-70446f32ce99": {
+        "x": 608,
+        "y": 232,
+        "id": "82dd8ec8-cb5b-4a77-94e5-70446f32ce99",
+        "icon": "system",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Запрос в 1С данных должностей и подразделений",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "48874c76-96f8-4e26-aa58-db5165ba1de9",
+          "bf4ff8a9-e4bf-40cf-af15-aa6e5656b6a2"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "48874c76-96f8-4e26-aa58-db5165ba1de9",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "82f75cd7-9e9c-411e-8066-62d449bb67a2": {
+        "x": 1072,
+        "y": 320,
+        "id": "82f75cd7-9e9c-411e-8066-62d449bb67a2",
+        "icon": "system",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Запрос в 1С данных организации",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "78a6f162-a723-4ccc-9259-3549fe7ffda4",
+          "3d59c226-0535-47f1-80dd-c86d7ffb42f4"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "3d59c226-0535-47f1-80dd-c86d7ffb42f4",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "937d24b6-5378-45a8-a80c-a09f4136b215": {
+        "x": 1192,
+        "y": 136,
+        "id": "937d24b6-5378-45a8-a80c-a09f4136b215",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Заполняем/обновляем ссылки на родителей",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["54ae072e-934f-4bb0-a5a3-3d6449493445"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillAppsLinks",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "a0499f0b-f7af-4c12-bfbf-1a2817019d91": {
+        "x": 128,
+        "y": 64,
+        "id": "a0499f0b-f7af-4c12-bfbf-1a2817019d91",
+        "icon": "end",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "a2085ab9-d2c3-409b-9386-ea2c2602d1f9": {
+        "x": 272,
+        "y": 232,
+        "id": "a2085ab9-d2c3-409b-9386-ea2c2602d1f9",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Ошибка: нет подключений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["5898d9dc-1865-4327-af52-965c64efc5a2"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createNoConnectionsError",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "b1d0d049-d789-4e14-9e7a-1e7a92da31e2": {
+        "x": 1408,
+        "y": 232,
+        "id": "b1d0d049-d789-4e14-9e7a-1e7a92da31e2",
+        "icon": "system",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Запрос в 1С ссылки на руководителя",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "9262af77-f205-4000-8305-376f39eaa897",
+          "fbdd4add-edd8-467b-8c5d-ea4305388a35"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "9262af77-f205-4000-8305-376f39eaa897",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "b6a435af-9a7b-4b97-bc14-178e4de342c2": {
+        "x": 1072,
+        "y": 232,
+        "id": "b6a435af-9a7b-4b97-bc14-178e4de342c2",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Подготовить данные запроса организации",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["dac41904-f1ed-4d4d-ab82-00482d5aff74"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepareReqOrganiztion",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "b8e4c66a-1135-42c7-9a72-3263237f7e8d": {
+        "x": 2312,
+        "y": 416,
+        "id": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Обработка ошибки",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["8850a404-39ca-4b05-bd29-851ed3b1d780"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "errorHandler",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "bdbf30c9-378f-4ddf-9627-aef513e8fdeb": {
+        "x": 2232,
+        "y": 152,
+        "id": "bdbf30c9-378f-4ddf-9627-aef513e8fdeb",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "2442794b-5829-4f3b-91ae-43ac1625b964",
+          "1040d9ea-36d4-4394-af6e-1b8e49d497c9"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "bee6807f-9da9-449e-baec-d0f728b9a3c1": {
+        "x": 1632,
+        "y": 136,
+        "id": "bee6807f-9da9-449e-baec-d0f728b9a3c1",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Подготовить запрос получения физического лица",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6fb84dfa-0454-4d5f-8fbf-b5a9c9e03a1c"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepaereReqHeadPhysRef",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "c09dae31-8f80-4afe-af4a-b2fe45636ab3": {
+        "x": -128,
+        "y": 136,
+        "id": "c09dae31-8f80-4afe-af4a-b2fe45636ab3",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Получить доп параметры",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["5fd30132-a3cf-4193-8d90-c92d65aae42a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getParams",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "d1dfd67d-13c1-47be-8d8e-612015f655b7": {
+        "x": 1544,
+        "y": 248,
+        "id": "d1dfd67d-13c1-47be-8d8e-612015f655b7",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "71bc5708-8dd4-497b-9993-ad1c5b6915fd",
+          "0bede2e3-a672-4d44-a80a-767a203c1a2f"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d414bc48-fb39-41c1-af6d-ae6e5f6096da": {
+        "x": 160,
+        "y": 136,
+        "id": "d414bc48-fb39-41c1-af6d-ae6e5f6096da",
+        "icon": "system",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Получить объект всех подключений (баз 1С)",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "3a42685d-fa1b-4efb-85b6-9c1d66f2c9d5",
+          "5983dd35-7ed3-46b2-a865-55a2a2e0732b"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "kedo_module_get_connections_object",
+          "name": "",
+          "input": [],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_object"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connections_object"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "is_there_connections"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connections_exist"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "5983dd35-7ed3-46b2-a865-55a2a2e0732b",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "dbe3ae7a-e5ba-4130-982b-7310a10703cc": {
+        "x": 1408,
+        "y": 136,
+        "id": "dbe3ae7a-e5ba-4130-982b-7310a10703cc",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Подготовить запрос для получения ссылки на руководителя",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["acc15c16-896e-4ade-bbc3-4e25ec713461"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepareReqHeadOrgLink",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "dbefaa6a-bfe9-4f04-ae30-30b27a539bcb": {
+        "x": 1328,
+        "y": 152,
+        "id": "dbefaa6a-bfe9-4f04-ae30-30b27a539bcb",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8d5d931f-139e-462e-ac72-1174f252f1f3",
+          "9ecda0de-6920-4bcd-8708-b89833541945"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "e27c0d2d-05df-4f8d-861d-096111a1eab2": {
+        "x": 384,
+        "y": 136,
+        "id": "e27c0d2d-05df-4f8d-861d-096111a1eab2",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Парсинг объекта подключений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["9b3c6d58-d147-42b3-9499-067fbc2bd736"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseConnectionsObject",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e4eb61cc-e079-4a59-86aa-80f8fdf72058": {
+        "x": 608,
+        "y": 136,
+        "id": "e4eb61cc-e079-4a59-86aa-80f8fdf72058",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Подготовить запрос данных в 1С",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f22a824f-335f-41dd-863d-10afe5bd0a96"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepareReqForGetData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e819c9ec-f1b2-4a63-9b45-5829db798932": {
+        "x": 984,
+        "y": 248,
+        "id": "e819c9ec-f1b2-4a63-9b45-5829db798932",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "a3290c8b-01bc-4cf8-b3bb-ab8c5e6c6c2f",
+          "1a8d2a0b-3d48-44f6-9cfd-8c94579fc8fa"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "f6e6af9c-422e-4eda-9808-d33f6abfc9e5": {
+        "x": 2424,
+        "y": 136,
+        "id": "f6e6af9c-422e-4eda-9808-d33f6abfc9e5",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Конец цикла по базе 1С",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["7e8ce17f-7c0e-4133-99c7-b411b1ab3f26"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "endIteration",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "f8ba0ab0-7862-4b93-8cfd-b50ffc9fb8c4": {
+        "x": 1776,
+        "y": 248,
+        "id": "f8ba0ab0-7862-4b93-8cfd-b50ffc9fb8c4",
+        "icon": "exclusive",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "efc29835-3dc2-4904-b045-802770908f0d",
+          "f79ac4ce-1fba-4299-a9ba-863e9f470056"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "f945d803-91ad-4f61-bdd4-c783f2da6fc5": {
+        "x": 2104,
+        "y": 136,
+        "id": "f945d803-91ad-4f61-bdd4-c783f2da6fc5",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Установить руководителя",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["f47d9116-0323-42bd-9d47-3028cb6c1e6a"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setOwnersHeader",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fa1823b7-06e8-470d-81eb-cd2f4c5030c9": {
+        "x": 496,
+        "y": 136,
+        "id": "fa1823b7-06e8-470d-81eb-cd2f4c5030c9",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Подготовка к циклу по базе 1С",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["824c31cc-1f58-4902-8eab-c48eac1dd75b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "startIteration",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fafdc290-7dda-4988-8a23-22897d80f761": {
+        "x": 960,
+        "y": 320,
+        "id": "fafdc290-7dda-4988-8a23-22897d80f761",
+        "icon": "script",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Создаём/обновляем организацию",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["532f8011-1614-4b5a-9da4-5b7f20a98c97"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createOwnerApp",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fb0e9577-c55f-4741-95b4-78da536171fd": {
+        "x": 2616,
+        "y": 232,
+        "id": "fb0e9577-c55f-4741-95b4-78da536171fd",
+        "icon": "notification",
+        "lane": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Оповещение о завершении процесса",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["6099ac9b-ba97-45d8-b94a-d944bd8cfcca"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Создание/обновление ШР завершилось успешно"
+        }
+      }
+    },
+    "lanes": {
+      "4e50e64b-7a45-4766-8628-ea66f0ce1e23": {
+        "x": -348,
+        "y": 8,
+        "id": "4e50e64b-7a45-4766-8628-ea66f0ce1e23",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 3116,
+        "height": 596,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "051d1060-9ac5-45c4-ac8c-5c63fc7b2905": {
+        "id": "051d1060-9ac5-45c4-ac8c-5c63fc7b2905",
+        "name": "",
+        "path": [
+          {
+            "x": 2568,
+            "y": 168
+          },
+          {
+            "x": 2616,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "4ce46591-cc33-4e03-8c5b-8f3fa73b44ef",
+        "target": "58d31846-9033-4370-9ddf-caa8b1c57d6b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0bede2e3-a672-4d44-a80a-767a203c1a2f": {
+        "id": "0bede2e3-a672-4d44-a80a-767a203c1a2f",
+        "name": "",
+        "path": [
+          {
+            "x": 1560,
+            "y": 280
+          },
+          {
+            "x": 1560,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "d1dfd67d-13c1-47be-8d8e-612015f655b7",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1040d9ea-36d4-4394-af6e-1b8e49d497c9": {
+        "id": "1040d9ea-36d4-4394-af6e-1b8e49d497c9",
+        "name": "",
+        "path": [
+          {
+            "x": 2264,
+            "y": 168
+          },
+          {
+            "x": 2312,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "bdbf30c9-378f-4ddf-9627-aef513e8fdeb",
+        "target": "138b8d84-758b-4aca-b2d8-1675c555f586",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1a8d2a0b-3d48-44f6-9cfd-8c94579fc8fa": {
+        "id": "1a8d2a0b-3d48-44f6-9cfd-8c94579fc8fa",
+        "name": "",
+        "path": [
+          {
+            "x": 1000,
+            "y": 248
+          },
+          {
+            "x": 1000,
+            "y": 168
+          },
+          {
+            "x": 1192,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "e819c9ec-f1b2-4a63-9b45-5829db798932",
+        "target": "937d24b6-5378-45a8-a80c-a09f4136b215",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "223ffa89-a46f-46ec-a35d-7ba39e12dd81": {
+        "id": "223ffa89-a46f-46ec-a35d-7ba39e12dd81",
+        "name": "",
+        "path": [
+          {
+            "x": 1904,
+            "y": 200
+          },
+          {
+            "x": 1904,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "488d2934-d6d1-4adb-a0f5-6e9e8476c4d7",
+        "target": "11d47b57-b03d-4302-9044-1972ab73a4df",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2442794b-5829-4f3b-91ae-43ac1625b964": {
+        "id": "2442794b-5829-4f3b-91ae-43ac1625b964",
+        "name": "",
+        "path": [
+          {
+            "x": 2248,
+            "y": 184
+          },
+          {
+            "x": 2248,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "bdbf30c9-378f-4ddf-9627-aef513e8fdeb",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2742bfbe-d548-4ede-a53e-020172b6d476": {
+        "id": "2742bfbe-d548-4ede-a53e-020172b6d476",
+        "name": "",
+        "path": [
+          {
+            "x": 72,
+            "y": 168
+          },
+          {
+            "x": 160,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "5ca8fa20-afe8-43b0-a313-6be15e5efedf",
+        "target": "d414bc48-fb39-41c1-af6d-ae6e5f6096da",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2b5e15b3-6ee7-4d65-ac49-cd4c2bd111fb": {
+        "id": "2b5e15b3-6ee7-4d65-ac49-cd4c2bd111fb",
+        "name": "",
+        "path": [
+          {
+            "x": 1944,
+            "y": 264
+          },
+          {
+            "x": 2016,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "11d47b57-b03d-4302-9044-1972ab73a4df",
+        "target": "613a1009-e559-4bbf-9421-72ff6d94e64b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3a42685d-fa1b-4efb-85b6-9c1d66f2c9d5": {
+        "id": "3a42685d-fa1b-4efb-85b6-9c1d66f2c9d5",
+        "name": "",
+        "path": [
+          {
+            "x": 240,
+            "y": 168
+          },
+          {
+            "x": 296,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "d414bc48-fb39-41c1-af6d-ae6e5f6096da",
+        "target": "6e509c76-bdbe-487a-96dd-4c6491823f87",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3d59c226-0535-47f1-80dd-c86d7ffb42f4": {
+        "id": "3d59c226-0535-47f1-80dd-c86d7ffb42f4",
+        "name": "",
+        "path": [
+          {
+            "x": 1072,
+            "y": 368
+          },
+          {
+            "x": 1040,
+            "y": 368
+          }
+        ],
+        "type": "error",
+        "source": "82f75cd7-9e9c-411e-8066-62d449bb67a2",
+        "target": "fafdc290-7dda-4988-8a23-22897d80f761",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "45fa8c36-c8de-4f4d-b63f-e84c614a79a9": {
+        "id": "45fa8c36-c8de-4f4d-b63f-e84c614a79a9",
+        "name": "",
+        "path": [
+          {
+            "x": 312,
+            "y": 184
+          },
+          {
+            "x": 312,
+            "y": 232
+          }
+        ],
+        "type": "default",
+        "source": "6e509c76-bdbe-487a-96dd-4c6491823f87",
+        "target": "a2085ab9-d2c3-409b-9386-ea2c2602d1f9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_there_connections"
+              },
+              "b": {
+                "kind": "manual",
+                "value": false
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "48874c76-96f8-4e26-aa58-db5165ba1de9": {
+        "id": "48874c76-96f8-4e26-aa58-db5165ba1de9",
+        "name": "",
+        "path": [
+          {
+            "x": 648,
+            "y": 296
+          },
+          {
+            "x": 648,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "error",
+        "source": "82dd8ec8-cb5b-4a77-94e5-70446f32ce99",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "532f8011-1614-4b5a-9da4-5b7f20a98c97": {
+        "id": "532f8011-1614-4b5a-9da4-5b7f20a98c97",
+        "name": "",
+        "path": [
+          {
+            "x": 1000,
+            "y": 320
+          },
+          {
+            "x": 1000,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "fafdc290-7dda-4988-8a23-22897d80f761",
+        "target": "e819c9ec-f1b2-4a63-9b45-5829db798932",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5440faed-7f92-4d45-89b8-31af6147355e": {
+        "id": "5440faed-7f92-4d45-89b8-31af6147355e",
+        "name": "",
+        "path": [
+          {
+            "x": 2656,
+            "y": 200
+          },
+          {
+            "x": 2656,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "58d31846-9033-4370-9ddf-caa8b1c57d6b",
+        "target": "fb0e9577-c55f-4741-95b4-78da536171fd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "54ae072e-934f-4bb0-a5a3-3d6449493445": {
+        "id": "54ae072e-934f-4bb0-a5a3-3d6449493445",
+        "name": "",
+        "path": [
+          {
+            "x": 1272,
+            "y": 168
+          },
+          {
+            "x": 1328,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "937d24b6-5378-45a8-a80c-a09f4136b215",
+        "target": "dbefaa6a-bfe9-4f04-ae30-30b27a539bcb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5898d9dc-1865-4327-af52-965c64efc5a2": {
+        "id": "5898d9dc-1865-4327-af52-965c64efc5a2",
+        "name": "",
+        "path": [
+          {
+            "x": 312,
+            "y": 296
+          },
+          {
+            "x": 312,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "a2085ab9-d2c3-409b-9386-ea2c2602d1f9",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5983dd35-7ed3-46b2-a865-55a2a2e0732b": {
+        "id": "5983dd35-7ed3-46b2-a865-55a2a2e0732b",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 200
+          },
+          {
+            "x": 200,
+            "y": 264
+          },
+          {
+            "x": 272,
+            "y": 264
+          }
+        ],
+        "type": "error",
+        "source": "d414bc48-fb39-41c1-af6d-ae6e5f6096da",
+        "target": "a2085ab9-d2c3-409b-9386-ea2c2602d1f9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5d0c3996-923f-4c32-b595-5ad18e5084fd": {
+        "id": "5d0c3996-923f-4c32-b595-5ad18e5084fd",
+        "name": "",
+        "path": [
+          {
+            "x": 768,
+            "y": 248
+          },
+          {
+            "x": 768,
+            "y": 168
+          },
+          {
+            "x": 840,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "6918a540-78fe-4f4f-81bc-cad5a2bc89d0",
+        "target": "526e81e7-80b6-4074-93e9-b5f40a10262f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5d660d22-c3f6-483e-adb1-5944c4a83546": {
+        "id": "5d660d22-c3f6-483e-adb1-5944c4a83546",
+        "name": "Итерация по базам",
+        "path": [
+          {
+            "x": 2552,
+            "y": 152
+          },
+          {
+            "x": 2552,
+            "y": 68
+          },
+          {
+            "x": 536,
+            "y": 68
+          },
+          {
+            "x": 536,
+            "y": 136
+          }
+        ],
+        "type": "plain",
+        "source": "4ce46591-cc33-4e03-8c5b-8f3fa73b44ef",
+        "target": "fa1823b7-06e8-470d-81eb-cd2f4c5030c9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "current_iteration"
+              },
+              "b": {
+                "kind": "context",
+                "value": "number_of_iter"
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "less",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5fd30132-a3cf-4193-8d90-c92d65aae42a": {
+        "id": "5fd30132-a3cf-4193-8d90-c92d65aae42a",
+        "name": "",
+        "path": [
+          {
+            "x": -48,
+            "y": 168
+          },
+          {
+            "x": 40,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "c09dae31-8f80-4afe-af4a-b2fe45636ab3",
+        "target": "5ca8fa20-afe8-43b0-a313-6be15e5efedf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6099ac9b-ba97-45d8-b94a-d944bd8cfcca": {
+        "id": "6099ac9b-ba97-45d8-b94a-d944bd8cfcca",
+        "name": "",
+        "path": [
+          {
+            "x": 2656,
+            "y": 296
+          },
+          {
+            "x": 2656,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "fb0e9577-c55f-4741-95b4-78da536171fd",
+        "target": "406a8ec7-720c-4b9e-8700-c7163c7a04b0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "625d82e2-6fbc-44bf-acab-0209da83daa1": {
+        "id": "625d82e2-6fbc-44bf-acab-0209da83daa1",
+        "name": "",
+        "path": [
+          {
+            "x": 1712,
+            "y": 264
+          },
+          {
+            "x": 1776,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "712a0f98-9d25-4e64-87b6-29ad329ef569",
+        "target": "f8ba0ab0-7862-4b93-8cfd-b50ffc9fb8c4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6fb84dfa-0454-4d5f-8fbf-b5a9c9e03a1c": {
+        "id": "6fb84dfa-0454-4d5f-8fbf-b5a9c9e03a1c",
+        "name": "",
+        "path": [
+          {
+            "x": 1672,
+            "y": 200
+          },
+          {
+            "x": 1672,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "bee6807f-9da9-449e-baec-d0f728b9a3c1",
+        "target": "712a0f98-9d25-4e64-87b6-29ad329ef569",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "71bc5708-8dd4-497b-9993-ad1c5b6915fd": {
+        "id": "71bc5708-8dd4-497b-9993-ad1c5b6915fd",
+        "name": "",
+        "path": [
+          {
+            "x": 1560,
+            "y": 248
+          },
+          {
+            "x": 1560,
+            "y": 168
+          },
+          {
+            "x": 1632,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "d1dfd67d-13c1-47be-8d8e-612015f655b7",
+        "target": "bee6807f-9da9-449e-baec-d0f728b9a3c1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "78a6f162-a723-4ccc-9259-3549fe7ffda4": {
+        "id": "78a6f162-a723-4ccc-9259-3549fe7ffda4",
+        "name": "",
+        "path": [
+          {
+            "x": 1072,
+            "y": 352
+          },
+          {
+            "x": 1040,
+            "y": 352
+          }
+        ],
+        "type": "plain",
+        "source": "82f75cd7-9e9c-411e-8066-62d449bb67a2",
+        "target": "fafdc290-7dda-4988-8a23-22897d80f761",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7e8ce17f-7c0e-4133-99c7-b411b1ab3f26": {
+        "id": "7e8ce17f-7c0e-4133-99c7-b411b1ab3f26",
+        "name": "",
+        "path": [
+          {
+            "x": 2504,
+            "y": 168
+          },
+          {
+            "x": 2536,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "f6e6af9c-422e-4eda-9808-d33f6abfc9e5",
+        "target": "4ce46591-cc33-4e03-8c5b-8f3fa73b44ef",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "824c31cc-1f58-4902-8eab-c48eac1dd75b": {
+        "id": "824c31cc-1f58-4902-8eab-c48eac1dd75b",
+        "name": "",
+        "path": [
+          {
+            "x": 576,
+            "y": 168
+          },
+          {
+            "x": 608,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "fa1823b7-06e8-470d-81eb-cd2f4c5030c9",
+        "target": "e4eb61cc-e079-4a59-86aa-80f8fdf72058",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8850a404-39ca-4b05-bd29-851ed3b1d780": {
+        "id": "8850a404-39ca-4b05-bd29-851ed3b1d780",
+        "name": "",
+        "path": [
+          {
+            "x": 2392,
+            "y": 448
+          },
+          {
+            "x": 2424,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "target": "625bda09-08fe-4639-85b3-24abfb998216",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8d5d931f-139e-462e-ac72-1174f252f1f3": {
+        "id": "8d5d931f-139e-462e-ac72-1174f252f1f3",
+        "name": "",
+        "path": [
+          {
+            "x": 1344,
+            "y": 184
+          },
+          {
+            "x": 1344,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "dbefaa6a-bfe9-4f04-ae30-30b27a539bcb",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8dc764c8-bf1b-47f9-a267-3754a45ef566": {
+        "id": "8dc764c8-bf1b-47f9-a267-3754a45ef566",
+        "name": "",
+        "path": [
+          {
+            "x": 2032,
+            "y": 280
+          },
+          {
+            "x": 2032,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "613a1009-e559-4bbf-9421-72ff6d94e64b",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9149e08d-0150-41bd-aed9-ae310f31d912": {
+        "id": "9149e08d-0150-41bd-aed9-ae310f31d912",
+        "name": "",
+        "path": [
+          {
+            "x": 2392,
+            "y": 168
+          },
+          {
+            "x": 2424,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "138b8d84-758b-4aca-b2d8-1675c555f586",
+        "target": "f6e6af9c-422e-4eda-9808-d33f6abfc9e5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "918e06b9-c4f7-4dc2-82d6-01a9b9ed2eac": {
+        "id": "918e06b9-c4f7-4dc2-82d6-01a9b9ed2eac",
+        "name": "Есть ошибка",
+        "path": [
+          {
+            "x": 880,
+            "y": 280
+          },
+          {
+            "x": 880,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "157cf0d3-c0db-4796-95e6-4146e327a1e7",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9262af77-f205-4000-8305-376f39eaa897": {
+        "id": "9262af77-f205-4000-8305-376f39eaa897",
+        "name": "",
+        "path": [
+          {
+            "x": 1448,
+            "y": 296
+          },
+          {
+            "x": 1448,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "error",
+        "source": "b1d0d049-d789-4e14-9e7a-1e7a92da31e2",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "98bbd253-9fc4-43e7-9900-51313a2c44d8": {
+        "id": "98bbd253-9fc4-43e7-9900-51313a2c44d8",
+        "name": "Есть ошибка",
+        "path": [
+          {
+            "x": 768,
+            "y": 280
+          },
+          {
+            "x": 768,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "6918a540-78fe-4f4f-81bc-cad5a2bc89d0",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9b3c6d58-d147-42b3-9499-067fbc2bd736": {
+        "id": "9b3c6d58-d147-42b3-9499-067fbc2bd736",
+        "name": "",
+        "path": [
+          {
+            "x": 464,
+            "y": 168
+          },
+          {
+            "x": 496,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "e27c0d2d-05df-4f8d-861d-096111a1eab2",
+        "target": "fa1823b7-06e8-470d-81eb-cd2f4c5030c9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9ecda0de-6920-4bcd-8708-b89833541945": {
+        "id": "9ecda0de-6920-4bcd-8708-b89833541945",
+        "name": "",
+        "path": [
+          {
+            "x": 1360,
+            "y": 168
+          },
+          {
+            "x": 1408,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "dbefaa6a-bfe9-4f04-ae30-30b27a539bcb",
+        "target": "dbe3ae7a-e5ba-4130-982b-7310a10703cc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a08e2b82-8290-4e86-ae21-3398fbca4197": {
+        "id": "a08e2b82-8290-4e86-ae21-3398fbca4197",
+        "name": "",
+        "path": [
+          {
+            "x": 1672,
+            "y": 296
+          },
+          {
+            "x": 1672,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "error",
+        "source": "712a0f98-9d25-4e64-87b6-29ad329ef569",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a3290c8b-01bc-4cf8-b3bb-ab8c5e6c6c2f": {
+        "id": "a3290c8b-01bc-4cf8-b3bb-ab8c5e6c6c2f",
+        "name": "",
+        "path": [
+          {
+            "x": 1016,
+            "y": 264
+          },
+          {
+            "x": 1072,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "e819c9ec-f1b2-4a63-9b45-5829db798932",
+        "target": "b6a435af-9a7b-4b97-bc14-178e4de342c2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "organization_array_length"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a62f622a-7658-4e80-9bff-50aad323d1eb": {
+        "id": "a62f622a-7658-4e80-9bff-50aad323d1eb",
+        "name": "Загрузить ШР",
+        "path": [
+          {
+            "x": -232,
+            "y": 168
+          },
+          {
+            "x": -128,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "c09dae31-8f80-4afe-af4a-b2fe45636ab3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "acc15c16-896e-4ade-bbc3-4e25ec713461": {
+        "id": "acc15c16-896e-4ade-bbc3-4e25ec713461",
+        "name": "",
+        "path": [
+          {
+            "x": 1448,
+            "y": 200
+          },
+          {
+            "x": 1448,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "dbe3ae7a-e5ba-4130-982b-7310a10703cc",
+        "target": "b1d0d049-d789-4e14-9e7a-1e7a92da31e2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b4f1563e-ba0e-4de0-a70e-5f4cccd94af8": {
+        "id": "b4f1563e-ba0e-4de0-a70e-5f4cccd94af8",
+        "name": "",
+        "path": [
+          {
+            "x": 2032,
+            "y": 248
+          },
+          {
+            "x": 2032,
+            "y": 168
+          },
+          {
+            "x": 2104,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "613a1009-e559-4bbf-9421-72ff6d94e64b",
+        "target": "f945d803-91ad-4f61-bdd4-c783f2da6fc5",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ba3b75e7-2d3a-42c1-ab8e-e86bb552bfbc": {
+        "id": "ba3b75e7-2d3a-42c1-ab8e-e86bb552bfbc",
+        "name": "",
+        "path": [
+          {
+            "x": 96,
+            "y": 80
+          },
+          {
+            "x": 128,
+            "y": 80
+          }
+        ],
+        "type": "plain",
+        "source": "37c66d99-e1af-444b-8c86-59822bdb9ef8",
+        "target": "a0499f0b-f7af-4c12-bfbf-1a2817019d91",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bf4ff8a9-e4bf-40cf-af15-aa6e5656b6a2": {
+        "id": "bf4ff8a9-e4bf-40cf-af15-aa6e5656b6a2",
+        "name": "",
+        "path": [
+          {
+            "x": 688,
+            "y": 264
+          },
+          {
+            "x": 752,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "82dd8ec8-cb5b-4a77-94e5-70446f32ce99",
+        "target": "6918a540-78fe-4f4f-81bc-cad5a2bc89d0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c6b5810b-aa4c-4844-b629-5838ea4cf3eb": {
+        "id": "c6b5810b-aa4c-4844-b629-5838ea4cf3eb",
+        "name": "",
+        "path": [
+          {
+            "x": 880,
+            "y": 200
+          },
+          {
+            "x": 880,
+            "y": 248
+          }
+        ],
+        "type": "plain",
+        "source": "526e81e7-80b6-4074-93e9-b5f40a10262f",
+        "target": "157cf0d3-c0db-4796-95e6-4146e327a1e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cc9d64f8-8293-4a7a-bc71-8584d9d18e46": {
+        "id": "cc9d64f8-8293-4a7a-bc71-8584d9d18e46",
+        "name": "",
+        "path": [
+          {
+            "x": 1904,
+            "y": 296
+          },
+          {
+            "x": 1904,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "error",
+        "source": "11d47b57-b03d-4302-9044-1972ab73a4df",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "dac41904-f1ed-4d4d-ab82-00482d5aff74": {
+        "id": "dac41904-f1ed-4d4d-ab82-00482d5aff74",
+        "name": "",
+        "path": [
+          {
+            "x": 1112,
+            "y": 296
+          },
+          {
+            "x": 1112,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "b6a435af-9a7b-4b97-bc14-178e4de342c2",
+        "target": "82f75cd7-9e9c-411e-8066-62d449bb67a2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e69e06b2-6942-46a8-acb4-2239fa0cdd3b": {
+        "id": "e69e06b2-6942-46a8-acb4-2239fa0cdd3b",
+        "name": "",
+        "path": [
+          {
+            "x": 328,
+            "y": 168
+          },
+          {
+            "x": 384,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "6e509c76-bdbe-487a-96dd-4c6491823f87",
+        "target": "e27c0d2d-05df-4f8d-861d-096111a1eab2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_there_connections"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e995f7e0-874d-4a9b-a163-314e7bea9bb4": {
+        "id": "e995f7e0-874d-4a9b-a163-314e7bea9bb4",
+        "name": "",
+        "path": [
+          {
+            "x": 2504,
+            "y": 448
+          },
+          {
+            "x": 2640,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "625bda09-08fe-4639-85b3-24abfb998216",
+        "target": "406a8ec7-720c-4b9e-8700-c7163c7a04b0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "efc29835-3dc2-4904-b045-802770908f0d": {
+        "id": "efc29835-3dc2-4904-b045-802770908f0d",
+        "name": "",
+        "path": [
+          {
+            "x": 1792,
+            "y": 280
+          },
+          {
+            "x": 1792,
+            "y": 448
+          },
+          {
+            "x": 2312,
+            "y": 448
+          }
+        ],
+        "type": "plain",
+        "source": "f8ba0ab0-7862-4b93-8cfd-b50ffc9fb8c4",
+        "target": "b8e4c66a-1135-42c7-9a72-3263237f7e8d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f22a824f-335f-41dd-863d-10afe5bd0a96": {
+        "id": "f22a824f-335f-41dd-863d-10afe5bd0a96",
+        "name": "",
+        "path": [
+          {
+            "x": 648,
+            "y": 200
+          },
+          {
+            "x": 648,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "e4eb61cc-e079-4a59-86aa-80f8fdf72058",
+        "target": "82dd8ec8-cb5b-4a77-94e5-70446f32ce99",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f47d9116-0323-42bd-9d47-3028cb6c1e6a": {
+        "id": "f47d9116-0323-42bd-9d47-3028cb6c1e6a",
+        "name": "",
+        "path": [
+          {
+            "x": 2184,
+            "y": 168
+          },
+          {
+            "x": 2232,
+            "y": 168
+          }
+        ],
+        "type": "plain",
+        "source": "f945d803-91ad-4f61-bdd4-c783f2da6fc5",
+        "target": "bdbf30c9-378f-4ddf-9627-aef513e8fdeb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f79ac4ce-1fba-4299-a9ba-863e9f470056": {
+        "id": "f79ac4ce-1fba-4299-a9ba-863e9f470056",
+        "name": "",
+        "path": [
+          {
+            "x": 1792,
+            "y": 248
+          },
+          {
+            "x": 1792,
+            "y": 168
+          },
+          {
+            "x": 1864,
+            "y": 168
+          }
+        ],
+        "type": "default",
+        "source": "f8ba0ab0-7862-4b93-8cfd-b50ffc9fb8c4",
+        "target": "488d2934-d6d1-4adb-a0f5-6e9e8476c4d7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fa8925cf-81a7-4893-9bdb-5ffc281fc947": {
+        "id": "fa8925cf-81a7-4893-9bdb-5ffc281fc947",
+        "name": "",
+        "path": [
+          {
+            "x": 56,
+            "y": 152
+          },
+          {
+            "x": 56,
+            "y": 112
+          }
+        ],
+        "type": "plain",
+        "source": "5ca8fa20-afe8-43b0-a313-6be15e5efedf",
+        "target": "37c66d99-e1af-444b-8c86-59822bdb9ef8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_alternative"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fbdd4add-edd8-467b-8c5d-ea4305388a35": {
+        "id": "fbdd4add-edd8-467b-8c5d-ea4305388a35",
+        "name": "",
+        "path": [
+          {
+            "x": 1488,
+            "y": 264
+          },
+          {
+            "x": 1544,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "b1d0d049-d789-4e14-9e7a-1e7a92da31e2",
+        "target": "d1dfd67d-13c1-47be-8d8e-612015f655b7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fd2d7b68-5757-49c9-8228-1e7848471e6f": {
+        "id": "fd2d7b68-5757-49c9-8228-1e7848471e6f",
+        "name": "",
+        "path": [
+          {
+            "x": 896,
+            "y": 264
+          },
+          {
+            "x": 984,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "157cf0d3-c0db-4796-95e6-4146e327a1e7",
+        "target": "e819c9ec-f1b2-4a63-9b45-5829db798932",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\n// let organizationsRefsArray: { ref_key: any; owner_key: any; }[] = [];\nconst numberOfUnloadedElements: number = 1000;\n\nasync function createNoConnectionsError(): Promise\u003cvoid\u003e {\n    Context.data.error = \"Нет доступных подключений 1С\"\n}\n\nasync function errorHandler(): Promise\u003cvoid\u003e {\n    if (!Context.data.error) {\n        Context.data.error = \"Обнаружена неизвестная ошибка в сценарии\"\n    }\n}\n\nasync function parseConnectionsObject(): Promise\u003cvoid\u003e {\n    const connectionsArray = Context.data.connection_object ? JSON.parse(Context.data.connection_object) : [];\n    if (connectionsArray.length === 0) return;\n    Context.data.number_of_iter = connectionsArray.length;\n    Context.data.current_iteration = 0\n}\n\nasync function startIteration(): Promise\u003cvoid\u003e {\n    const connectionsArray = Context.data.connection_object ? JSON.parse(Context.data.connection_object) : [];\n    Context.data.connection_name = connectionsArray[Context.data.current_iteration!].name\n}\n\nasync function prepareReqForGetData(): Promise\u003cvoid\u003e {\n    Context.data.request_parameters_1c = 'Catalog_ШтатноеРасписание?$format=json';\n    Context.data.error = ''\n}\n\nasync function parseDataUpdateApps(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    const data1S = JSON.parse(Context.data.response_1c_json)[\"value\"];\n    let organizationsRefsArray: { ref_key: any; owner_key: any; }[] = [];\n    const promises: Promise\u003cvoid\u003e[] = [];\n    const allDivisions = await Namespace.app.structural_subdivision.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allPositions = await Namespace.app.position.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    for (let i = 0; i \u003c data1S.length; i++) {\n        const data = data1S[i];\n        if (data['Должность_Key'] !== \"00000000-0000-0000-0000-000000000000\") {\n            let app: ApplicationItem\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e | undefined;\n            app = allPositions.find(f =\u003e f.data.ref_key === data[\"Ref_Key\"]);\n            if (!app)\n                app = Namespace.app.position.create();\n            app.data.__name = data[\"Description\"];\n            app.data.ref_key = data[\"Ref_Key\"];\n            app.data.owner_key = data[\"Owner_Key\"];\n            app.data.parent_key = data[\"Parent_Key\"];\n            app.data.position_key = data[\"Должность_Key\"];\n            app.data.base_1c = Context.data.connection_name;\n            const salaryValue = data[\"ОкладТариф\"];\n            app.data.salary = new Money(salaryValue, 'RUB');\n            const date = data[\"ДатаУтверждения\"].split('T')[0].split('-');\n            const year = date[0];\n            const month = date[1];\n            const day = date[2];\n            app.data.approval_date = new TDate(year, month, day);\n            app.data.quantity = Number(data[\"КоличествоСтавок\"]);\n            promises.push(app.save())\n        } else {\n            organizationsRefsArray.push({ ref_key: data['Ref_Key'], owner_key: data['Owner_Key'] })\n            let app: ApplicationItem\u003cApplication$kedo$structural_subdivision$Data, Application$kedo$structural_subdivision$Params\u003e | undefined;\n            app = allDivisions.find(f =\u003e f.data.ref_key === data[\"Ref_Key\"]);\n            if (!app)\n                app = Namespace.app.structural_subdivision.create();\n            app.data.__name = data[\"Description\"];\n            app.data.ref_key = data[\"Ref_Key\"];\n            app.data.subdiv_key = data[\"Подразделение_Key\"];\n            app.data.owner_key = data[\"Owner_Key\"];\n            app.data.parent_key = data[\"Parent_Key\"];\n            app.data.position_key = data[\"Должность_Key\"];\n            app.data.base_1c = Context.data.connection_name;\n            promises.push(app.save())\n        }\n    }\n    await Promise.all(promises);\n    organizationsRefsArray = organizationsRefsArray.filter((f, i, s) =\u003e\n        i === s.findIndex(t =\u003e t.owner_key === f.owner_key)\n    )\n    Context.data.organization_ref_key_array_json = JSON.stringify(organizationsRefsArray);\n    Context.data.organization_array_length = organizationsRefsArray.length;\n}\n\nasync function prepareReqOrganiztion(): Promise\u003cvoid\u003e {\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    const orgsArray = JSON.parse(Context.data.organization_ref_key_array_json!);\n    Context.data.request_parameters_1c = `Catalog_ШтатноеРасписание(guid'${orgsArray[Context.data.organization_array_length! - 1].ref_key}')/Owner?$format=json`\n}\n\nasync function createOwnerApp(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) {\n        Context.data.organization_array_length!--;\n        Context.data.error += ` Ошибка при запросе данных из 1С по организации `;\n        return;\n    }\n    let appEntity: ApplicationItem\u003cApplication$_system_catalogs$_my_companies$Data, Application$_system_catalogs$_my_companies$Params\u003e | undefined;\n    let appOrganization: ApplicationItem\u003cApplication$kedo$organization$Data, Application$kedo$organization$Params\u003e | undefined;\n    const orgsArray = JSON.parse(Context.data.organization_ref_key_array_json!);\n    const dataObj = orgsArray[Context.data.organization_array_length! - 1];\n    const ownerData = JSON.parse(Context.data.response_1c_json);\n    appOrganization = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.ref_key.eq(dataObj.owner_key)\n        ))\n        .first()\n    if (appOrganization \u0026\u0026 appOrganization.data.entity) {\n        appEntity = await appOrganization.data.entity.fetch();\n    } else {\n        appOrganization = Namespace.app.organization.create();\n    }\n    if (!appEntity) {\n        appEntity = await Context.fields.app_legal_entity.app.search()\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n                f.__name.eq(ownerData[\"Description\"])\n            ))\n            .first()\n    }\n    if (!appEntity) {\n        appEntity = Context.fields.app_legal_entity.app.create();\n    }\n    if (appEntity) {\n        appEntity.data.__name = ownerData[\"Description\"];\n        appEntity.data._full_legal_name = ownerData[\"НаименованиеПолное\"];\n        appEntity.data._inn = ownerData[\"ИНН\"];\n        appEntity.data._ogrn = ownerData[\"ОГРН\"];\n        await appEntity.save();\n    }\n    appOrganization.data.entity = appEntity;\n    appOrganization.data.ref_key = dataObj.owner_key;\n    appOrganization.data.base_1c = Context.data.connection_name;\n    appOrganization.data.owner_key = '';\n    appOrganization.data.parent_key = '';\n    appOrganization.data.position_key = '';\n    await appOrganization.save();\n    Context.data.organization_array_length!--;\n}\n\nasync function fillAppsLinks(): Promise\u003cvoid\u003e {\n    // получаем данные по данной базе 1С\n    const allOrganizations = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    const allSubdivisions = await Namespace.app.structural_subdivision.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    const allPositions = await Namespace.app.position.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    // проходимся по каждой организации и записываем её в элементы\n    let promises: Promise\u003cvoid\u003e[] = [];\n    for (const organiaztion of allOrganizations) {\n        const subdivisions = allSubdivisions.filter(f =\u003e f.data.owner_key === organiaztion.data.ref_key);\n        const positions = allPositions.filter(f =\u003e f.data.owner_key === organiaztion.data.ref_key);\n        for (const subdivision of subdivisions) {\n            subdivision.data.organization = organiaztion;\n            promises.push(subdivision.save())\n        }\n        for (const position of positions) {\n            position.data.organization = organiaztion;\n            promises.push(position.save())\n        }\n    }\n    await Promise.all(promises);\n    promises = [];\n    // проходимся по каждому подразделению и записываем его в элементы\n    for (const subdivisionParent of allSubdivisions) {\n        const subdivisionsChild = allSubdivisions.filter(f =\u003e f.data.parent_key === subdivisionParent.data.ref_key);\n        const positionsChild = allPositions.filter(f =\u003e f.data.parent_key === subdivisionParent.data.ref_key);\n        for (const subdivisionChild of subdivisionsChild) {\n            subdivisionChild.data.subdivision = subdivisionParent;\n            promises.push(subdivisionChild.save())\n        }\n        for (const positionChild of positionsChild) {\n            positionChild.data.subdivision = subdivisionParent;\n            promises.push(positionChild.save())\n        }\n    }\n    await Promise.all(promises)\n}\n\nasync function prepareReqHeadOrgLink(): Promise\u003cvoid\u003e {\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    Context.data.request_parameters_1c = `InformationRegister_СведенияОбОтветственныхЛицах?$format=json`;\n}\n\nasync function prepaereReqHeadPhysRef(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    let headOrgLink: string = '';\n    const res = JSON.parse(Context.data.response_1c_json);\n    headOrgLink = res.value[0][\"Руководитель@navigationLinkUrl\"]\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    Context.data.request_parameters_1c = `${headOrgLink}?$format=json`;\n}\n\nasync function getPhysicHistoryArr(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    let headPhysicRefKey: string = '';\n    const res = JSON.parse(Context.data.response_1c_json);\n    if (!res[\"Ref_Key\"]) return;\n    headPhysicRefKey = res[\"Ref_Key\"];\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    Context.data.request_parameters_1c = `InformationRegister_КадроваяИсторияСотрудников?$format=json\u0026$filter=RecordSet/any(d: d/ФизическоеЛицо_Key eq guid'${headPhysicRefKey}')`;\n}\n\nasync function setOwnersHeader(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    const res = JSON.parse(Context.data.response_1c_json);\n    if (!res.value) return;\n    const physicHistoryArr: any[] = res.value;\n    const headerPositionRef: string = physicHistoryArr[0][\"RecordSet\"][0][\"Должность_Key\"];\n    const owners = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    const headerPositionApp = await Namespace.app.position.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.position_key.eq(headerPositionRef)\n        ))\n        .first();\n    const promises: Promise\u003cvoid\u003e[] = [];\n    for (const owner of owners) {\n        owner.data.position_head = headerPositionApp;\n        promises.push(owner.save())\n    }\n    await Promise.all(promises)\n}\n\nasync function endIteration(): Promise\u003cvoid\u003e {\n    Context.data.current_iteration!++\n}\n\n// async function prepareSubdivisionHeadsRequest(): Promise\u003cvoid\u003e {\n//     Context.data.request_parameters_1c = \"InformationRegister_ПозицииРуководителейПодразделений?$format=json\"\n// }\n\n// async function setSubdivisionsHead(): Promise\u003cvoid\u003e {\n//     if (!Context.data.head_subdivision_response) return;\n//     const data1C = JSON.parse(Context.data.head_subdivision_response)[\"value\"]\n\n//     const subdivisionApps = await Namespace.app.structural_subdivision.search().where((f: any) =\u003e\n//         f.__deletedAt.eq(null)\n//     )\n//         .size(10000)\n//         .all();\n\n\n//     for (let i = 0; i \u003c data1C.length; i++) {\n//         const subdivisionRefKey = data1C[i][\"Подразделение_Key\"];\n\n//         const headPositionRefKey = data1C[i][\"ПозицияШтатногоРасписания_Key\"];\n\n//         const subdivisionApp = subdivisionApps.find((item: any) =\u003e {\n//             return item.data.subdiv_key === subdivisionRefKey\n//         })\n\n//         const headerPositionApp = await Namespace.app.position.search()\n//             .where((f, g) =\u003e g.and(\n//                 f.__deletedAt.eq(null),\n//                 f.ref_key.eq(headPositionRefKey)\n//             ))\n//             .first();\n\n\n//         if (!subdivisionApp) continue;\n\n//         subdivisionApp.data.position = headerPositionApp;\n//         await subdivisionApp.save()\n//     }\n// }\n\n\n\nasync function getParams(): Promise\u003cvoid\u003e {\n    const param = Namespace.params.data.use_alternative_integration\n    Context.data.is_alternative = !!param\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staffing_data"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "testdivapp": {
+        "enabled": false,
+        "conditions": []
+      },
+      "testposapp": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_alternative": {
+        "enabled": false,
+        "conditions": []
+      },
+      "number_of_iter": {
+        "enabled": false,
+        "conditions": []
+      },
+      "connection_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_legal_entity": {
+        "enabled": false,
+        "conditions": []
+      },
+      "response_1c_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "connection_object": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staffing_data_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "remote_applications": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_there_connections": {
+        "enabled": false,
+        "conditions": []
+      },
+      "request_parameters_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "head_subdivision_response": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_array_length": {
+        "enabled": false,
+        "conditions": []
+      },
+      "subdivisios_response_single": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_ref_key_array_json": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

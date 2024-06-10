@@ -1,0 +1,4305 @@
+{
+  "__id": "018c8757-193c-7ee2-a81a-15988e4cc900",
+  "namespace": "kedo.staff_data",
+  "code": "load_and_update_staffing_data_1c",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1С) Загрузка/обновление ШР",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "current_iteration",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Текущая итерация",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "response_1c_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ 1С (JSON)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "staff_data",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff_data",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Данные ШР из 1С"
+      }
+    },
+    {
+      "code": "staffing_data_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные штатного расписания (JSON)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "is_there_connections",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Есть подключения (базы 1С)",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "is_alternative",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Альтернативная интеграция",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "organization_array_length",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Длина массива организаций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "head_subdivision_response",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Руководители подразделений 1C",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "request_parameters_1c",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Параметры запроса 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "remote_applications",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Удаленные приложения",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "testdivapp",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "structural_subdivision",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "testdivapp",
+        "data": {}
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название базы 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "app_legal_entity",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "_my_companies",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "_system_catalogs",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Приложение Юридическое лицо",
+        "data": {}
+      }
+    },
+    {
+      "code": "testposapp",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "position",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "testposapp",
+        "data": {}
+      }
+    },
+    {
+      "code": "subdivisios_response_single",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Подразделение ответ 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "connection_object",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Объект подключений (базы 1С)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "number_of_iter",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Количество итераций",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "organization_ref_key_array_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Массив ref_key организаций (JSON)",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-05-02T09:24:23.152654045Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2023-11-23T08:45:45.009830038Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 64,
+        "y": 192,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["0f0f5fdf-5f9f-4285-a842-6285a168220b"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formCode": "form_a8f52e49-cb54-4b85-8a00-c897a1cce5eb",
+          "formFields": [
+            {
+              "code": "__name",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "(1С) Загрузка/обновление ШР ({$staff_data})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "024783b9-9c09-4663-adb0-3879616a247c": {
+        "x": 1232,
+        "y": 312,
+        "id": "024783b9-9c09-4663-adb0-3879616a247c",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "cf9c6141-2536-495c-92fc-798e501404f5",
+          "452fea6c-7a2c-48ac-b720-b39c486e2e7c"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "035a5369-cbef-4596-a03a-f026d0997edb": {
+        "x": 2808,
+        "y": 456,
+        "id": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Обработка ошибки",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["807c2a8a-5251-4345-a670-158c578c5463"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "errorHandler",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "0491f16d-8f2b-41c1-8509-157b0af7ce51": {
+        "x": 1104,
+        "y": 312,
+        "id": "0491f16d-8f2b-41c1-8509-157b0af7ce51",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "1a4883d6-6e39-4e85-b57f-64b55a3ed46d",
+          "47cbab19-c97d-4d97-a060-b8c1c95bb607"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "0696b44f-641b-488d-9712-a18fe0aaa0bd": {
+        "x": 288,
+        "y": 72,
+        "id": "0696b44f-641b-488d-9712-a18fe0aaa0bd",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Запуск процесса по альтернативной загрузке/обновлению ШР",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["8e69bffd-32ec-4c27-b2c8-b1002d8ef846"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "load_staffing_data_from_transaction_table_1C",
+          "async": true,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.staff_data",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "07c4d220-43b4-4647-a8ed-412386fd4bcc": {
+        "x": 2304,
+        "y": 296,
+        "id": "07c4d220-43b4-4647-a8ed-412386fd4bcc",
+        "icon": "system",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Запрос в 1С истории",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "04b20b1a-2881-4b3f-861a-02b0e63b44a0",
+          "848d9466-65e5-4f4b-bb6f-94c026622790"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "848d9466-65e5-4f4b-bb6f-94c026622790",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "1126b4f4-c7b9-49a8-a76b-6e67873cbd78": {
+        "x": 824,
+        "y": 176,
+        "id": "1126b4f4-c7b9-49a8-a76b-6e67873cbd78",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Подготовка к циклу по базе 1С",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["22e6bc1d-073a-4dbb-ae9f-5a01258df6b0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "startIteration",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "17ae891a-b3ba-4d4e-aaaa-b7a0860a4f9c": {
+        "x": 2456,
+        "y": 312,
+        "id": "17ae891a-b3ba-4d4e-aaaa-b7a0860a4f9c",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "56ff9fb3-827a-476f-8022-4272d3d9bb8e",
+          "40bc6207-2337-45a4-842d-c6c89a7b4265"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "195cd42c-bcbd-475e-931f-2431c8445081": {
+        "x": 3080,
+        "y": 192,
+        "id": "195cd42c-bcbd-475e-931f-2431c8445081",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "565b9835-8d63-4a36-a1c0-ea505caaf577",
+          "17e7024a-acaa-4cb4-93c3-bea472913e41"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "1ac77fb7-e6bd-45f5-b78a-327b85aa95c1": {
+        "x": 1336,
+        "y": 312,
+        "id": "1ac77fb7-e6bd-45f5-b78a-327b85aa95c1",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "041fe50e-7163-4a3a-8f91-d3c80ab15b87",
+          "3593561e-07d0-4dee-96ef-8f13419f7126"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "27add083-ca7f-44f7-849d-06c0caafcc9a": {
+        "x": 2808,
+        "y": 176,
+        "id": "27add083-ca7f-44f7-849d-06c0caafcc9a",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Загрузка руководителей",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["95af4892-272d-4369-8ebb-83493a1f94e0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "load_and_update_heads_of_subdivisions_1C",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "base_name"
+              }
+            }
+          ],
+          "output": [],
+          "namespace": "kedo.staff_data",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "28c61572-b50a-42cb-89aa-81344a0914ee": {
+        "x": 3456,
+        "y": 192,
+        "id": "28c61572-b50a-42cb-89aa-81344a0914ee",
+        "icon": "end",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "2976e084-f911-4d05-b6c8-7c4b472b808d": {
+        "x": 1208,
+        "y": 176,
+        "id": "2976e084-f911-4d05-b6c8-7c4b472b808d",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Создаём/обновляем должности и подразделения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["d7482f24-5223-457b-97b1-9e1b22301e7c"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseDataUpdateApps",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "30d4326e-93e3-4093-abe2-b1d8958c28f3": {
+        "x": 1472,
+        "y": 392,
+        "id": "30d4326e-93e3-4093-abe2-b1d8958c28f3",
+        "icon": "system",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Запрос в 1С данных организации",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "9b77f931-1ede-4bb3-a164-fbf23ee27366",
+          "b49f582d-7d1b-4eaa-b7c0-a47e22c4cf40"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "b49f582d-7d1b-4eaa-b7c0-a47e22c4cf40",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "30d4630c-c7fd-4bb7-b666-130317294ac8": {
+        "x": 1848,
+        "y": 176,
+        "id": "30d4630c-c7fd-4bb7-b666-130317294ac8",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Подготовить запрос для получения ссылки на руководителя",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["fe9ee56b-8be2-4e43-82b8-f43884288351"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepareReqHeadOrgLink",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3c49888f-ddfc-4108-93c6-f5c7868245f9": {
+        "x": 2000,
+        "y": 312,
+        "id": "3c49888f-ddfc-4108-93c6-f5c7868245f9",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "12806b40-aab1-45ca-be76-3e1f2b4474ea",
+          "615d5be5-8607-4957-a4a1-1d0c122c7b96"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "3ccd17f2-c2c5-4d5c-bb4e-5fc7c61f68a2": {
+        "x": 952,
+        "y": 176,
+        "id": "3ccd17f2-c2c5-4d5c-bb4e-5fc7c61f68a2",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Подготовить запрос данных в 1С",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["ab484105-55f2-4d9f-9769-688b4dc8f8cf"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepareReqForGetData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "3ec6e23d-8409-4419-a210-dca8ed9c015d": {
+        "x": 2936,
+        "y": 456,
+        "id": "3ec6e23d-8409-4419-a210-dca8ed9c015d",
+        "icon": "notification",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Оповещение об ошибке",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["9914c964-602b-4d7b-b884-09212b4341b0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "{$error}\u003cbr/\u003eПовторите позже",
+          "messageHeader": "При создании/обновлении ШР возникла ошибка"
+        }
+      },
+      "455d18e1-d911-48bb-b762-8804fbab93b6": {
+        "x": 2712,
+        "y": 192,
+        "id": "455d18e1-d911-48bb-b762-8804fbab93b6",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "e36193a4-fef7-4330-984a-3550d7d016d3",
+          "99a1b156-0cfd-41bf-94cc-fed502b43cba"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "45817a03-7f99-43c1-80a4-6758a952d6e7": {
+        "x": 1312,
+        "y": 392,
+        "id": "45817a03-7f99-43c1-80a4-6758a952d6e7",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Создаём/обновляем организацию",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["8976cb06-cb25-480b-9fcc-57450ae5d437"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createOwnerApp",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "461aee29-85ae-4ec7-81c7-ac7dc2a9e522": {
+        "x": 1848,
+        "y": 296,
+        "id": "461aee29-85ae-4ec7-81c7-ac7dc2a9e522",
+        "icon": "system",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Запрос в 1С ссылки на руководителя",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "88f53e8c-c930-467e-940e-46d874383949",
+          "3e5f227d-ae65-48e1-b4df-0ccea4bdeae7"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "3e5f227d-ae65-48e1-b4df-0ccea4bdeae7",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "52750ffb-88bc-40fd-b5e2-7e2f446dec37": {
+        "x": 1600,
+        "y": 176,
+        "id": "52750ffb-88bc-40fd-b5e2-7e2f446dec37",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Заполняем/обновляем ссылки на родителей",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["21502371-e349-4014-90c3-4d9f6261a87d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillAppsLinks",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "532c513e-48ff-4cfa-837b-1c922511b738": {
+        "x": 424,
+        "y": 176,
+        "id": "532c513e-48ff-4cfa-837b-1c922511b738",
+        "icon": "system",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Получить объект всех подключений (баз 1С)",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "b7c4f01e-8ecf-4822-9f21-72dfe1550190",
+          "5a2d0410-a0dc-4c82-b10d-606e415b767a"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "kedo_module_get_connections_object",
+          "name": "",
+          "input": [],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_object"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connections_object"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "is_there_connections"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connections_exist"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "5a2d0410-a0dc-4c82-b10d-606e415b767a",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "5a56e5d5-d82a-48c6-a539-55632a9edbce": {
+        "x": 312,
+        "y": 192,
+        "id": "5a56e5d5-d82a-48c6-a539-55632a9edbce",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "39f21395-7bd5-4ab0-bcf4-0221d5307b9f",
+          "4d185c18-609d-4110-8db5-acda02216192"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "77ad62ee-d784-4ca0-b67a-ddc3ad4179cb": {
+        "x": 560,
+        "y": 296,
+        "id": "77ad62ee-d784-4ca0-b67a-ddc3ad4179cb",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Ошибка: нет подключений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["84f78181-550e-4a55-b081-1ff559b09c7e"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "createNoConnectionsError",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "78ad1097-baeb-4adb-89bd-d4593de87276": {
+        "x": 2072,
+        "y": 296,
+        "id": "78ad1097-baeb-4adb-89bd-d4593de87276",
+        "icon": "system",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Запрос в 1С на физическое лицо",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "043e087d-21e2-4352-ad62-5c32721667b8",
+          "5b724f1d-9e9b-4d41-aeae-859b6ff6f761"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "5b724f1d-9e9b-4d41-aeae-859b6ff6f761",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "8fd35035-e525-4643-bcb7-05709d2a7e49": {
+        "x": 688,
+        "y": 176,
+        "id": "8fd35035-e525-4643-bcb7-05709d2a7e49",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Парсинг объекта подключений",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3155f3d7-03f4-4f66-846b-72e33332fd46"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "parseConnectionsObject",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "a61fb425-b4e6-4e8c-a2dd-8dff16f6b609": {
+        "x": 2936,
+        "y": 176,
+        "id": "a61fb425-b4e6-4e8c-a2dd-8dff16f6b609",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Конец цикла по базе 1С",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["3451c973-8d79-4a62-bdfe-1d7595a15685"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "endIteration",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "a97bce89-347c-4960-8c17-b19f579d46ad": {
+        "x": 3208,
+        "y": 176,
+        "id": "a97bce89-347c-4960-8c17-b19f579d46ad",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Обновить объект JSON для виджета ШР",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["4242ce6d-292f-4834-ab35-d796526cef04"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_and_update_json_render_object",
+          "async": false,
+          "input": [],
+          "output": [],
+          "namespace": "kedo.staff_data",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "cab11927-c9b6-4956-a2ca-2bbb3d7e6427": {
+        "x": 2232,
+        "y": 312,
+        "id": "cab11927-c9b6-4956-a2ca-2bbb3d7e6427",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "12f4f23c-9a3d-4c5a-8f5c-2a198c4722b9",
+          "b573f80f-3be9-4d14-bfbe-d39291b070e0"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "cd141e67-8b1d-4feb-97d9-bcac66a7bb3e": {
+        "x": 584,
+        "y": 192,
+        "id": "cd141e67-8b1d-4feb-97d9-bcac66a7bb3e",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "2edf7f77-bafe-4220-aa35-b5a541d6e8e7",
+          "d51ee4c9-05fc-4d9a-a163-e06210079c01"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d231f577-eeb9-46f3-aeab-07ec8a1fe3d9": {
+        "x": 440,
+        "y": 88,
+        "id": "d231f577-eeb9-46f3-aeab-07ec8a1fe3d9",
+        "icon": "end",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "d2b81dd9-123b-4be9-9b02-1686504519ef": {
+        "x": 160,
+        "y": 176,
+        "id": "d2b81dd9-123b-4be9-9b02-1686504519ef",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Получить настройки КЭДО",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["d574ebc2-c2d5-43f1-a718-b3ff142d8d4f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getParams",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "d3bb6d38-0cf4-4a63-b9ca-3cc2480a01cd": {
+        "x": 1752,
+        "y": 192,
+        "id": "d3bb6d38-0cf4-4a63-b9ca-3cc2480a01cd",
+        "icon": "exclusive",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "0c92ab82-642b-4593-b04b-7418d55b295e",
+          "dff58f7f-cde0-43de-a99c-cb744eb58643"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d443bd6d-8bda-4862-84fe-c752e888e2b4": {
+        "x": 2304,
+        "y": 176,
+        "id": "d443bd6d-8bda-4862-84fe-c752e888e2b4",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Подготовить запрос истории",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["bf1f965e-509e-4fb2-98f3-a2efd21a7533"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getPhysicHistoryArr",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "e5c8bbc8-efde-4916-8e00-7abed13e0d0e": {
+        "x": 1472,
+        "y": 296,
+        "id": "e5c8bbc8-efde-4916-8e00-7abed13e0d0e",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Подготовить данные запроса организации",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["2dea0a77-bf3a-4f72-a9b2-624bc56e2fbc"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepareReqOrganiztion",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "eba04760-e7e2-4849-bc84-44472481cc22": {
+        "x": 3320,
+        "y": 176,
+        "id": "eba04760-e7e2-4849-bc84-44472481cc22",
+        "icon": "notification",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Оповещение о завершении процесса",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["4b50035c-7e06-4396-97b8-8b51bfb693cb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "",
+          "messageHeader": "Создание/обновление ШР завершилось успешно"
+        }
+      },
+      "f3963121-0cd6-42f7-a6ea-3d4fd7152940": {
+        "x": 2552,
+        "y": 176,
+        "id": "f3963121-0cd6-42f7-a6ea-3d4fd7152940",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Установить руководителя",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["546e6b14-954c-4ee0-9f3a-fc537059b775"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setOwnersHeader",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fcec9267-ba41-4e34-993b-ab5370b43a2f": {
+        "x": 2072,
+        "y": 176,
+        "id": "fcec9267-ba41-4e34-993b-ab5370b43a2f",
+        "icon": "script",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Подготовить запрос получения физического лица",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["1b43f4fe-183f-4c6f-8786-cde125381708"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "prepaereReqHeadPhysRef",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "ff8b5c4a-7511-4874-9a8c-559cdc5882bf": {
+        "x": 952,
+        "y": 296,
+        "id": "ff8b5c4a-7511-4874-9a8c-559cdc5882bf",
+        "icon": "system",
+        "lane": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Запрос в 1С данных должностей и подразделений",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "23551bf0-d37b-46fe-afc5-fb808b004042",
+          "ce03016c-2329-47f6-b966-57e5eb9019a0"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "request_in_1c",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "request_parameters_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_parameters"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_body"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "request_type_string"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "connection_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "connection_name"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "response_1c_json"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response_1c_json"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "ce03016c-2329-47f6-b966-57e5eb9019a0",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      }
+    },
+    "lanes": {
+      "52127386-d1ab-4184-bbec-6f88df6bf4a7": {
+        "x": 8,
+        "y": 8,
+        "id": "52127386-d1ab-4184-bbec-6f88df6bf4a7",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 3660,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "041fe50e-7163-4a3a-8f91-d3c80ab15b87": {
+        "id": "041fe50e-7163-4a3a-8f91-d3c80ab15b87",
+        "name": "",
+        "path": [
+          {
+            "x": 1368,
+            "y": 328
+          },
+          {
+            "x": 1472,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "1ac77fb7-e6bd-45f5-b78a-327b85aa95c1",
+        "target": "e5c8bbc8-efde-4916-8e00-7abed13e0d0e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "organization_array_length"
+              },
+              "b": {
+                "kind": "manual",
+                "value": 0
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "greater",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "043e087d-21e2-4352-ad62-5c32721667b8": {
+        "id": "043e087d-21e2-4352-ad62-5c32721667b8",
+        "name": "",
+        "path": [
+          {
+            "x": 2152,
+            "y": 328
+          },
+          {
+            "x": 2232,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "78ad1097-baeb-4adb-89bd-d4593de87276",
+        "target": "cab11927-c9b6-4956-a2ca-2bbb3d7e6427",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "04b20b1a-2881-4b3f-861a-02b0e63b44a0": {
+        "id": "04b20b1a-2881-4b3f-861a-02b0e63b44a0",
+        "name": "",
+        "path": [
+          {
+            "x": 2384,
+            "y": 328
+          },
+          {
+            "x": 2456,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "07c4d220-43b4-4647-a8ed-412386fd4bcc",
+        "target": "17ae891a-b3ba-4d4e-aaaa-b7a0860a4f9c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0c92ab82-642b-4593-b04b-7418d55b295e": {
+        "id": "0c92ab82-642b-4593-b04b-7418d55b295e",
+        "name": "",
+        "path": [
+          {
+            "x": 1784,
+            "y": 208
+          },
+          {
+            "x": 1848,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "d3bb6d38-0cf4-4a63-b9ca-3cc2480a01cd",
+        "target": "30d4630c-c7fd-4bb7-b666-130317294ac8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0f0f5fdf-5f9f-4285-a842-6285a168220b": {
+        "id": "0f0f5fdf-5f9f-4285-a842-6285a168220b",
+        "name": "Выполнить",
+        "path": [
+          {
+            "x": 96,
+            "y": 208
+          },
+          {
+            "x": 160,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "d2b81dd9-123b-4be9-9b02-1686504519ef",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "12806b40-aab1-45ca-be76-3e1f2b4474ea": {
+        "id": "12806b40-aab1-45ca-be76-3e1f2b4474ea",
+        "name": "",
+        "path": [
+          {
+            "x": 2016,
+            "y": 312
+          },
+          {
+            "x": 2016,
+            "y": 208
+          },
+          {
+            "x": 2072,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "3c49888f-ddfc-4108-93c6-f5c7868245f9",
+        "target": "fcec9267-ba41-4e34-993b-ab5370b43a2f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "12f4f23c-9a3d-4c5a-8f5c-2a198c4722b9": {
+        "id": "12f4f23c-9a3d-4c5a-8f5c-2a198c4722b9",
+        "name": "",
+        "path": [
+          {
+            "x": 2248,
+            "y": 312
+          },
+          {
+            "x": 2248,
+            "y": 208
+          },
+          {
+            "x": 2304,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "cab11927-c9b6-4956-a2ca-2bbb3d7e6427",
+        "target": "d443bd6d-8bda-4862-84fe-c752e888e2b4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "17e7024a-acaa-4cb4-93c3-bea472913e41": {
+        "id": "17e7024a-acaa-4cb4-93c3-bea472913e41",
+        "name": "",
+        "path": [
+          {
+            "x": 3112,
+            "y": 208
+          },
+          {
+            "x": 3208,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "195cd42c-bcbd-475e-931f-2431c8445081",
+        "target": "a97bce89-347c-4960-8c17-b19f579d46ad",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1a4883d6-6e39-4e85-b57f-64b55a3ed46d": {
+        "id": "1a4883d6-6e39-4e85-b57f-64b55a3ed46d",
+        "name": "",
+        "path": [
+          {
+            "x": 1120,
+            "y": 312
+          },
+          {
+            "x": 1120,
+            "y": 208
+          },
+          {
+            "x": 1208,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "0491f16d-8f2b-41c1-8509-157b0af7ce51",
+        "target": "2976e084-f911-4d05-b6c8-7c4b472b808d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1b43f4fe-183f-4c6f-8786-cde125381708": {
+        "id": "1b43f4fe-183f-4c6f-8786-cde125381708",
+        "name": "",
+        "path": [
+          {
+            "x": 2112,
+            "y": 240
+          },
+          {
+            "x": 2112,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "fcec9267-ba41-4e34-993b-ab5370b43a2f",
+        "target": "78ad1097-baeb-4adb-89bd-d4593de87276",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "21502371-e349-4014-90c3-4d9f6261a87d": {
+        "id": "21502371-e349-4014-90c3-4d9f6261a87d",
+        "name": "",
+        "path": [
+          {
+            "x": 1680,
+            "y": 208
+          },
+          {
+            "x": 1752,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "52750ffb-88bc-40fd-b5e2-7e2f446dec37",
+        "target": "d3bb6d38-0cf4-4a63-b9ca-3cc2480a01cd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "22e6bc1d-073a-4dbb-ae9f-5a01258df6b0": {
+        "id": "22e6bc1d-073a-4dbb-ae9f-5a01258df6b0",
+        "name": "",
+        "path": [
+          {
+            "x": 904,
+            "y": 208
+          },
+          {
+            "x": 952,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "1126b4f4-c7b9-49a8-a76b-6e67873cbd78",
+        "target": "3ccd17f2-c2c5-4d5c-bb4e-5fc7c61f68a2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "23551bf0-d37b-46fe-afc5-fb808b004042": {
+        "id": "23551bf0-d37b-46fe-afc5-fb808b004042",
+        "name": "",
+        "path": [
+          {
+            "x": 1032,
+            "y": 328
+          },
+          {
+            "x": 1104,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "ff8b5c4a-7511-4874-9a8c-559cdc5882bf",
+        "target": "0491f16d-8f2b-41c1-8509-157b0af7ce51",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2dea0a77-bf3a-4f72-a9b2-624bc56e2fbc": {
+        "id": "2dea0a77-bf3a-4f72-a9b2-624bc56e2fbc",
+        "name": "",
+        "path": [
+          {
+            "x": 1512,
+            "y": 360
+          },
+          {
+            "x": 1512,
+            "y": 392
+          }
+        ],
+        "type": "plain",
+        "source": "e5c8bbc8-efde-4916-8e00-7abed13e0d0e",
+        "target": "30d4326e-93e3-4093-abe2-b1d8958c28f3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2edf7f77-bafe-4220-aa35-b5a541d6e8e7": {
+        "id": "2edf7f77-bafe-4220-aa35-b5a541d6e8e7",
+        "name": "",
+        "path": [
+          {
+            "x": 600,
+            "y": 224
+          },
+          {
+            "x": 600,
+            "y": 296
+          }
+        ],
+        "type": "default",
+        "source": "cd141e67-8b1d-4feb-97d9-bcac66a7bb3e",
+        "target": "77ad62ee-d784-4ca0-b67a-ddc3ad4179cb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3155f3d7-03f4-4f66-846b-72e33332fd46": {
+        "id": "3155f3d7-03f4-4f66-846b-72e33332fd46",
+        "name": "",
+        "path": [
+          {
+            "x": 768,
+            "y": 208
+          },
+          {
+            "x": 824,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "8fd35035-e525-4643-bcb7-05709d2a7e49",
+        "target": "1126b4f4-c7b9-49a8-a76b-6e67873cbd78",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3451c973-8d79-4a62-bdfe-1d7595a15685": {
+        "id": "3451c973-8d79-4a62-bdfe-1d7595a15685",
+        "name": "",
+        "path": [
+          {
+            "x": 3016,
+            "y": 208
+          },
+          {
+            "x": 3080,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "a61fb425-b4e6-4e8c-a2dd-8dff16f6b609",
+        "target": "195cd42c-bcbd-475e-931f-2431c8445081",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3593561e-07d0-4dee-96ef-8f13419f7126": {
+        "id": "3593561e-07d0-4dee-96ef-8f13419f7126",
+        "name": "",
+        "path": [
+          {
+            "x": 1352,
+            "y": 312
+          },
+          {
+            "x": 1352,
+            "y": 208
+          },
+          {
+            "x": 1600,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "1ac77fb7-e6bd-45f5-b78a-327b85aa95c1",
+        "target": "52750ffb-88bc-40fd-b5e2-7e2f446dec37",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "39f21395-7bd5-4ab0-bcf4-0221d5307b9f": {
+        "id": "39f21395-7bd5-4ab0-bcf4-0221d5307b9f",
+        "name": "",
+        "path": [
+          {
+            "x": 328,
+            "y": 192
+          },
+          {
+            "x": 328,
+            "y": 136
+          }
+        ],
+        "type": "plain",
+        "source": "5a56e5d5-d82a-48c6-a539-55632a9edbce",
+        "target": "0696b44f-641b-488d-9712-a18fe0aaa0bd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_alternative"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3e5f227d-ae65-48e1-b4df-0ccea4bdeae7": {
+        "id": "3e5f227d-ae65-48e1-b4df-0ccea4bdeae7",
+        "name": "",
+        "path": [
+          {
+            "x": 1888,
+            "y": 360
+          },
+          {
+            "x": 1888,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "error",
+        "source": "461aee29-85ae-4ec7-81c7-ac7dc2a9e522",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "40bc6207-2337-45a4-842d-c6c89a7b4265": {
+        "id": "40bc6207-2337-45a4-842d-c6c89a7b4265",
+        "name": "",
+        "path": [
+          {
+            "x": 2472,
+            "y": 344
+          },
+          {
+            "x": 2472,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "17ae891a-b3ba-4d4e-aaaa-b7a0860a4f9c",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4242ce6d-292f-4834-ab35-d796526cef04": {
+        "id": "4242ce6d-292f-4834-ab35-d796526cef04",
+        "name": "",
+        "path": [
+          {
+            "x": 3288,
+            "y": 208
+          },
+          {
+            "x": 3320,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "a97bce89-347c-4960-8c17-b19f579d46ad",
+        "target": "eba04760-e7e2-4849-bc84-44472481cc22",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "452fea6c-7a2c-48ac-b720-b39c486e2e7c": {
+        "id": "452fea6c-7a2c-48ac-b720-b39c486e2e7c",
+        "name": "",
+        "path": [
+          {
+            "x": 1248,
+            "y": 344
+          },
+          {
+            "x": 1248,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "024783b9-9c09-4663-adb0-3879616a247c",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "47cbab19-c97d-4d97-a060-b8c1c95bb607": {
+        "id": "47cbab19-c97d-4d97-a060-b8c1c95bb607",
+        "name": "",
+        "path": [
+          {
+            "x": 1120,
+            "y": 344
+          },
+          {
+            "x": 1120,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "0491f16d-8f2b-41c1-8509-157b0af7ce51",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4b50035c-7e06-4396-97b8-8b51bfb693cb": {
+        "id": "4b50035c-7e06-4396-97b8-8b51bfb693cb",
+        "name": "",
+        "path": [
+          {
+            "x": 3400,
+            "y": 208
+          },
+          {
+            "x": 3456,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "eba04760-e7e2-4849-bc84-44472481cc22",
+        "target": "28c61572-b50a-42cb-89aa-81344a0914ee",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4d185c18-609d-4110-8db5-acda02216192": {
+        "id": "4d185c18-609d-4110-8db5-acda02216192",
+        "name": "",
+        "path": [
+          {
+            "x": 344,
+            "y": 208
+          },
+          {
+            "x": 424,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "5a56e5d5-d82a-48c6-a539-55632a9edbce",
+        "target": "532c513e-48ff-4cfa-837b-1c922511b738",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "546e6b14-954c-4ee0-9f3a-fc537059b775": {
+        "id": "546e6b14-954c-4ee0-9f3a-fc537059b775",
+        "name": "",
+        "path": [
+          {
+            "x": 2632,
+            "y": 208
+          },
+          {
+            "x": 2712,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "f3963121-0cd6-42f7-a6ea-3d4fd7152940",
+        "target": "455d18e1-d911-48bb-b762-8804fbab93b6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "565b9835-8d63-4a36-a1c0-ea505caaf577": {
+        "id": "565b9835-8d63-4a36-a1c0-ea505caaf577",
+        "name": "",
+        "path": [
+          {
+            "x": 3096,
+            "y": 192
+          },
+          {
+            "x": 3096,
+            "y": 112
+          },
+          {
+            "x": 864,
+            "y": 112
+          },
+          {
+            "x": 864,
+            "y": 176
+          }
+        ],
+        "type": "plain",
+        "source": "195cd42c-bcbd-475e-931f-2431c8445081",
+        "target": "1126b4f4-c7b9-49a8-a76b-6e67873cbd78",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "current_iteration"
+              },
+              "b": {
+                "kind": "context",
+                "value": "number_of_iter"
+              },
+              "type": "FLOAT",
+              "inversion": false,
+              "operation": {
+                "relation": "less",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "56ff9fb3-827a-476f-8022-4272d3d9bb8e": {
+        "id": "56ff9fb3-827a-476f-8022-4272d3d9bb8e",
+        "name": "",
+        "path": [
+          {
+            "x": 2472,
+            "y": 312
+          },
+          {
+            "x": 2472,
+            "y": 208
+          },
+          {
+            "x": 2552,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "17ae891a-b3ba-4d4e-aaaa-b7a0860a4f9c",
+        "target": "f3963121-0cd6-42f7-a6ea-3d4fd7152940",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5a2d0410-a0dc-4c82-b10d-606e415b767a": {
+        "id": "5a2d0410-a0dc-4c82-b10d-606e415b767a",
+        "name": "",
+        "path": [
+          {
+            "x": 464,
+            "y": 240
+          },
+          {
+            "x": 464,
+            "y": 328
+          },
+          {
+            "x": 560,
+            "y": 328
+          }
+        ],
+        "type": "error",
+        "source": "532c513e-48ff-4cfa-837b-1c922511b738",
+        "target": "77ad62ee-d784-4ca0-b67a-ddc3ad4179cb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5b724f1d-9e9b-4d41-aeae-859b6ff6f761": {
+        "id": "5b724f1d-9e9b-4d41-aeae-859b6ff6f761",
+        "name": "",
+        "path": [
+          {
+            "x": 2112,
+            "y": 360
+          },
+          {
+            "x": 2112,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "error",
+        "source": "78ad1097-baeb-4adb-89bd-d4593de87276",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "615d5be5-8607-4957-a4a1-1d0c122c7b96": {
+        "id": "615d5be5-8607-4957-a4a1-1d0c122c7b96",
+        "name": "",
+        "path": [
+          {
+            "x": 2016,
+            "y": 344
+          },
+          {
+            "x": 2016,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "3c49888f-ddfc-4108-93c6-f5c7868245f9",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "807c2a8a-5251-4345-a670-158c578c5463": {
+        "id": "807c2a8a-5251-4345-a670-158c578c5463",
+        "name": "",
+        "path": [
+          {
+            "x": 2888,
+            "y": 488
+          },
+          {
+            "x": 2936,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "target": "3ec6e23d-8409-4419-a210-dca8ed9c015d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "848d9466-65e5-4f4b-bb6f-94c026622790": {
+        "id": "848d9466-65e5-4f4b-bb6f-94c026622790",
+        "name": "",
+        "path": [
+          {
+            "x": 2344,
+            "y": 360
+          },
+          {
+            "x": 2344,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "error",
+        "source": "07c4d220-43b4-4647-a8ed-412386fd4bcc",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "84f78181-550e-4a55-b081-1ff559b09c7e": {
+        "id": "84f78181-550e-4a55-b081-1ff559b09c7e",
+        "name": "",
+        "path": [
+          {
+            "x": 600,
+            "y": 360
+          },
+          {
+            "x": 600,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "77ad62ee-d784-4ca0-b67a-ddc3ad4179cb",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "88f53e8c-c930-467e-940e-46d874383949": {
+        "id": "88f53e8c-c930-467e-940e-46d874383949",
+        "name": "",
+        "path": [
+          {
+            "x": 1928,
+            "y": 328
+          },
+          {
+            "x": 2000,
+            "y": 328
+          }
+        ],
+        "type": "plain",
+        "source": "461aee29-85ae-4ec7-81c7-ac7dc2a9e522",
+        "target": "3c49888f-ddfc-4108-93c6-f5c7868245f9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8976cb06-cb25-480b-9fcc-57450ae5d437": {
+        "id": "8976cb06-cb25-480b-9fcc-57450ae5d437",
+        "name": "",
+        "path": [
+          {
+            "x": 1352,
+            "y": 392
+          },
+          {
+            "x": 1352,
+            "y": 344
+          }
+        ],
+        "type": "plain",
+        "source": "45817a03-7f99-43c1-80a4-6758a952d6e7",
+        "target": "1ac77fb7-e6bd-45f5-b78a-327b85aa95c1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8e69bffd-32ec-4c27-b2c8-b1002d8ef846": {
+        "id": "8e69bffd-32ec-4c27-b2c8-b1002d8ef846",
+        "name": "",
+        "path": [
+          {
+            "x": 368,
+            "y": 104
+          },
+          {
+            "x": 440,
+            "y": 104
+          }
+        ],
+        "type": "plain",
+        "source": "0696b44f-641b-488d-9712-a18fe0aaa0bd",
+        "target": "d231f577-eeb9-46f3-aeab-07ec8a1fe3d9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "95af4892-272d-4369-8ebb-83493a1f94e0": {
+        "id": "95af4892-272d-4369-8ebb-83493a1f94e0",
+        "name": "",
+        "path": [
+          {
+            "x": 2888,
+            "y": 208
+          },
+          {
+            "x": 2936,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "27add083-ca7f-44f7-849d-06c0caafcc9a",
+        "target": "a61fb425-b4e6-4e8c-a2dd-8dff16f6b609",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9914c964-602b-4d7b-b884-09212b4341b0": {
+        "id": "9914c964-602b-4d7b-b884-09212b4341b0",
+        "name": "",
+        "path": [
+          {
+            "x": 3016,
+            "y": 488
+          },
+          {
+            "x": 3472,
+            "y": 488
+          },
+          {
+            "x": 3472,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "3ec6e23d-8409-4419-a210-dca8ed9c015d",
+        "target": "28c61572-b50a-42cb-89aa-81344a0914ee",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "99a1b156-0cfd-41bf-94cc-fed502b43cba": {
+        "id": "99a1b156-0cfd-41bf-94cc-fed502b43cba",
+        "name": "",
+        "path": [
+          {
+            "x": 2728,
+            "y": 224
+          },
+          {
+            "x": 2728,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "455d18e1-d911-48bb-b762-8804fbab93b6",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9b77f931-1ede-4bb3-a164-fbf23ee27366": {
+        "id": "9b77f931-1ede-4bb3-a164-fbf23ee27366",
+        "name": "",
+        "path": [
+          {
+            "x": 1472,
+            "y": 424
+          },
+          {
+            "x": 1392,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "30d4326e-93e3-4093-abe2-b1d8958c28f3",
+        "target": "45817a03-7f99-43c1-80a4-6758a952d6e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ab484105-55f2-4d9f-9769-688b4dc8f8cf": {
+        "id": "ab484105-55f2-4d9f-9769-688b4dc8f8cf",
+        "name": "",
+        "path": [
+          {
+            "x": 992,
+            "y": 240
+          },
+          {
+            "x": 992,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "3ccd17f2-c2c5-4d5c-bb4e-5fc7c61f68a2",
+        "target": "ff8b5c4a-7511-4874-9a8c-559cdc5882bf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b49f582d-7d1b-4eaa-b7c0-a47e22c4cf40": {
+        "id": "b49f582d-7d1b-4eaa-b7c0-a47e22c4cf40",
+        "name": "",
+        "path": [
+          {
+            "x": 1472,
+            "y": 440
+          },
+          {
+            "x": 1392,
+            "y": 440
+          }
+        ],
+        "type": "error",
+        "source": "30d4326e-93e3-4093-abe2-b1d8958c28f3",
+        "target": "45817a03-7f99-43c1-80a4-6758a952d6e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b573f80f-3be9-4d14-bfbe-d39291b070e0": {
+        "id": "b573f80f-3be9-4d14-bfbe-d39291b070e0",
+        "name": "",
+        "path": [
+          {
+            "x": 2248,
+            "y": 344
+          },
+          {
+            "x": 2248,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "cab11927-c9b6-4956-a2ca-2bbb3d7e6427",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b7c4f01e-8ecf-4822-9f21-72dfe1550190": {
+        "id": "b7c4f01e-8ecf-4822-9f21-72dfe1550190",
+        "name": "",
+        "path": [
+          {
+            "x": 504,
+            "y": 208
+          },
+          {
+            "x": 584,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "532c513e-48ff-4cfa-837b-1c922511b738",
+        "target": "cd141e67-8b1d-4feb-97d9-bcac66a7bb3e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "bf1f965e-509e-4fb2-98f3-a2efd21a7533": {
+        "id": "bf1f965e-509e-4fb2-98f3-a2efd21a7533",
+        "name": "",
+        "path": [
+          {
+            "x": 2344,
+            "y": 240
+          },
+          {
+            "x": 2344,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "d443bd6d-8bda-4862-84fe-c752e888e2b4",
+        "target": "07c4d220-43b4-4647-a8ed-412386fd4bcc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ce03016c-2329-47f6-b966-57e5eb9019a0": {
+        "id": "ce03016c-2329-47f6-b966-57e5eb9019a0",
+        "name": "",
+        "path": [
+          {
+            "x": 992,
+            "y": 360
+          },
+          {
+            "x": 992,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "error",
+        "source": "ff8b5c4a-7511-4874-9a8c-559cdc5882bf",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cf9c6141-2536-495c-92fc-798e501404f5": {
+        "id": "cf9c6141-2536-495c-92fc-798e501404f5",
+        "name": "",
+        "path": [
+          {
+            "x": 1264,
+            "y": 328
+          },
+          {
+            "x": 1336,
+            "y": 328
+          }
+        ],
+        "type": "default",
+        "source": "024783b9-9c09-4663-adb0-3879616a247c",
+        "target": "1ac77fb7-e6bd-45f5-b78a-327b85aa95c1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d51ee4c9-05fc-4d9a-a163-e06210079c01": {
+        "id": "d51ee4c9-05fc-4d9a-a163-e06210079c01",
+        "name": "",
+        "path": [
+          {
+            "x": 616,
+            "y": 208
+          },
+          {
+            "x": 688,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "cd141e67-8b1d-4feb-97d9-bcac66a7bb3e",
+        "target": "8fd35035-e525-4643-bcb7-05709d2a7e49",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "is_there_connections"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d574ebc2-c2d5-43f1-a718-b3ff142d8d4f": {
+        "id": "d574ebc2-c2d5-43f1-a718-b3ff142d8d4f",
+        "name": "",
+        "path": [
+          {
+            "x": 240,
+            "y": 208
+          },
+          {
+            "x": 312,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "d2b81dd9-123b-4be9-9b02-1686504519ef",
+        "target": "5a56e5d5-d82a-48c6-a539-55632a9edbce",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d7482f24-5223-457b-97b1-9e1b22301e7c": {
+        "id": "d7482f24-5223-457b-97b1-9e1b22301e7c",
+        "name": "",
+        "path": [
+          {
+            "x": 1248,
+            "y": 240
+          },
+          {
+            "x": 1248,
+            "y": 312
+          }
+        ],
+        "type": "plain",
+        "source": "2976e084-f911-4d05-b6c8-7c4b472b808d",
+        "target": "024783b9-9c09-4663-adb0-3879616a247c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "dff58f7f-cde0-43de-a99c-cb744eb58643": {
+        "id": "dff58f7f-cde0-43de-a99c-cb744eb58643",
+        "name": "",
+        "path": [
+          {
+            "x": 1768,
+            "y": 224
+          },
+          {
+            "x": 1768,
+            "y": 488
+          },
+          {
+            "x": 2808,
+            "y": 488
+          }
+        ],
+        "type": "plain",
+        "source": "d3bb6d38-0cf4-4a63-b9ca-3cc2480a01cd",
+        "target": "035a5369-cbef-4596-a03a-f026d0997edb",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "error"
+              },
+              "type": "STRING",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e36193a4-fef7-4330-984a-3550d7d016d3": {
+        "id": "e36193a4-fef7-4330-984a-3550d7d016d3",
+        "name": "",
+        "path": [
+          {
+            "x": 2744,
+            "y": 208
+          },
+          {
+            "x": 2808,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "455d18e1-d911-48bb-b762-8804fbab93b6",
+        "target": "27add083-ca7f-44f7-849d-06c0caafcc9a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fe9ee56b-8be2-4e43-82b8-f43884288351": {
+        "id": "fe9ee56b-8be2-4e43-82b8-f43884288351",
+        "name": "",
+        "path": [
+          {
+            "x": 1888,
+            "y": 240
+          },
+          {
+            "x": 1888,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "30d4630c-c7fd-4bb7-b666-130317294ac8",
+        "target": "461aee29-85ae-4ec7-81c7-ac7dc2a9e522",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\n// const numberOfUnloadedElements = 1000;\nconst promisesCount = 30;\n\nasync function getParams(): Promise\u003cvoid\u003e {\n    const settings = await Namespace.app.settings.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n\n    const alternative_integration = settings.find(f =\u003e f.data.code == 'use_alternative_integration');\n    Context.data.is_alternative = alternative_integration ? alternative_integration.data.status : false;\n}\n\nasync function createNoConnectionsError(): Promise\u003cvoid\u003e {\n    Context.data.error = \"Нет доступных подключений 1С\"\n}\n\nasync function errorHandler(): Promise\u003cvoid\u003e {\n    if (!Context.data.error) {\n        Context.data.error = \"Обнаружена неизвестная ошибка в сценарии\"\n    }\n}\n\nasync function parseConnectionsObject(): Promise\u003cvoid\u003e {\n    const connectionsArray = Context.data.connection_object ? JSON.parse(Context.data.connection_object) : [];\n    if (connectionsArray.length === 0) return;\n    Context.data.number_of_iter = connectionsArray.length;\n    Context.data.current_iteration = 0\n}\n\nasync function startIteration(): Promise\u003cvoid\u003e {\n    const connectionsArray = Context.data.connection_object ? JSON.parse(Context.data.connection_object) : [];\n    Context.data.connection_name = connectionsArray[Context.data.current_iteration!].name\n}\n\nasync function prepareReqForGetData(): Promise\u003cvoid\u003e {\n    Context.data.request_parameters_1c = 'Catalog_ШтатноеРасписание?$format=json';\n    Context.data.error = ''\n}\n\nasync function parseDataUpdateApps(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    const data1S = JSON.parse(Context.data.response_1c_json)[\"value\"];\n    let organizationsRefsArray: { ref_key: any; owner_key: any; }[] = [];\n    let promises: Promise\u003cvoid\u003e[] = [];\n    const allDivisions = await Namespace.app.structural_subdivision.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const allPositions = await Namespace.app.position.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all();\n    const employmentType = Namespace.app.position.fields.employment_type.variants.main_workplace\n    const workRelationsTypeApps = await Namespace.app.type_employment_relationship.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null)\n        )).size(10000).all()\n    const workRelationsType = workRelationsTypeApps.find(item =\u003e {\n        return item.data.__name === \"Сотрудник без ограничений\"\n    })\n\n    const processedPosKeys: string[] = []\n    const processedDivKeys: string[] = []\n    for (let i = 0; i \u003c data1S.length; i++) {\n        const data = data1S[i];\n        if (data['Должность_Key'] !== \"00000000-0000-0000-0000-000000000000\") {\n            // const isProcessed = processedPosKeys.find((ref: string) =\u003e ref === data[\"Ref_Key\"]) \n            // if (!!isProcessed) continue;\n\n            let app: ApplicationItem\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e | undefined;\n            app = allPositions.find(f =\u003e f.data.ref_key === data[\"Ref_Key\"]);\n            if (!app)\n                app = Namespace.app.position.create();\n            app.data.__name = data[\"Description\"];\n            app.data.ref_key = data[\"Ref_Key\"];\n            app.data.owner_key = data[\"Owner_Key\"];\n            app.data.parent_key = data[\"Parent_Key\"];\n            app.data.position_key = data[\"Должность_Key\"];\n            app.data.base_1c = Context.data.connection_name;\n            app.data.remote_work = false\n            app.data.employment_type = employmentType\n            app.data.type_employment_relationship = workRelationsType\n            const salaryValue = data[\"ОкладТариф\"];\n            app.data.salary = new Money(salaryValue, 'RUB');\n            const date = data[\"ДатаУтверждения\"].split('T')[0].split('-');\n            const year = date[0];\n            const month = date[1];\n            const day = date[2];\n            app.data.approval_date = new TDate(year, month, day);\n            app.data.quantity = Number(data[\"КоличествоСтавок\"]);\n            await app.save()\n            // promises.push(app.save());\n            // processedPosKeys.push(data[\"Ref_Key\"])\n            // if (promises.length \u003e= promisesCount) {\n            //     await Promise.all(promises);\n            //     promises = []\n            // }\n        } else {\n            organizationsRefsArray.push({ ref_key: data['Ref_Key'], owner_key: data['Owner_Key'] })\n\n            // const isProcessed = processedDivKeys.find((ref: string) =\u003e ref === data[\"Ref_Key\"]) \n            // if (!!isProcessed) continue;\n\n            let app: ApplicationItem\u003cApplication$kedo$structural_subdivision$Data, Application$kedo$structural_subdivision$Params\u003e | undefined;\n            app = allDivisions.find(f =\u003e f.data.ref_key === data[\"Ref_Key\"]);\n            if (!app)\n                app = Namespace.app.structural_subdivision.create();\n            app.data.__name = data[\"Description\"];\n            app.data.ref_key = data[\"Ref_Key\"];\n            app.data.subdiv_key = data[\"Подразделение_Key\"];\n            app.data.owner_key = data[\"Owner_Key\"];\n            app.data.parent_key = data[\"Parent_Key\"];\n            app.data.position_key = data[\"Должность_Key\"];\n            app.data.base_1c = Context.data.connection_name;\n            await app.save()\n            //promises.push(app.save());\n            // processedDivKeys.push(data[\"Ref_Key\"])\n            // if (promises.length \u003e= promisesCount) {\n            //     await Promise.all(promises);\n            //     promises = []\n            // }\n        }\n    }\n   // await Promise.all(promises);\n    organizationsRefsArray = organizationsRefsArray.filter((f, i, s) =\u003e\n        i === s.findIndex(t =\u003e t.owner_key === f.owner_key)\n    )\n    Context.data.organization_ref_key_array_json = JSON.stringify(organizationsRefsArray);\n    Context.data.organization_array_length = organizationsRefsArray.length;\n}\n\nasync function prepareReqOrganiztion(): Promise\u003cvoid\u003e {\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    const orgsArray = JSON.parse(Context.data.organization_ref_key_array_json!);\n    Context.data.request_parameters_1c = `Catalog_ШтатноеРасписание(guid'${orgsArray[Context.data.organization_array_length! - 1].ref_key}')/Owner?$format=json`\n}\n\nasync function createOwnerApp(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) {\n        Context.data.organization_array_length!--;\n        Context.data.error += ` Ошибка при запросе данных из 1С по организации `;\n        return;\n    }\n    let appEntity: ApplicationItem\u003cApplication$_system_catalogs$_my_companies$Data, Application$_system_catalogs$_my_companies$Params\u003e | undefined;\n    let appOrganization: ApplicationItem\u003cApplication$kedo$organization$Data, Application$kedo$organization$Params\u003e | undefined;\n    const orgsArray = JSON.parse(Context.data.organization_ref_key_array_json!);\n    const dataObj = orgsArray[Context.data.organization_array_length! - 1];\n    const ownerData = JSON.parse(Context.data.response_1c_json);\n    appOrganization = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.ref_key.eq(dataObj.owner_key)\n        ))\n        .first()\n    if (appOrganization \u0026\u0026 appOrganization.data.entity) {\n        appEntity = await appOrganization.data.entity.fetch();\n    } else {\n        appOrganization = Namespace.app.organization.create();\n    }\n    if (!appEntity) {\n        appEntity = await Context.fields.app_legal_entity.app.search()\n            .where((f, g) =\u003e g.and(\n                f.__deletedAt.eq(null),\n                f.__name.eq(ownerData[\"Description\"])\n            ))\n            .first()\n    }\n    if (!appEntity) {\n        appEntity = Context.fields.app_legal_entity.app.create();\n    }\n    if (appEntity) {\n        appEntity.data.__name = ownerData[\"Description\"];\n        appEntity.data._full_legal_name = ownerData[\"НаименованиеПолное\"];\n        appEntity.data._inn = ownerData[\"ИНН\"];\n        appEntity.data._ogrn = ownerData[\"ОГРН\"];\n        await appEntity.save();\n    }\n    appOrganization.data.entity = appEntity;\n    appOrganization.data.ref_key = dataObj.owner_key;\n    appOrganization.data.base_1c = Context.data.connection_name;\n    appOrganization.data.owner_key = '';\n    appOrganization.data.parent_key = '';\n    appOrganization.data.position_key = '';\n    await appOrganization.save();\n    Context.data.organization_array_length!--;\n}\n\nasync function fillAppsLinks(): Promise\u003cvoid\u003e {\n    // получаем данные по данной базе 1С\n    const allOrganizations = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    const allSubdivisions = await Namespace.app.structural_subdivision.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    const allPositions = await Namespace.app.position.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    // проходимся по каждой организации и записываем её в элементы\n    let promises: Promise\u003cvoid\u003e[] = [];\n    for (const organiaztion of allOrganizations) {\n        const subdivisions = allSubdivisions.filter(f =\u003e f.data.owner_key === organiaztion.data.ref_key);\n        const positions = allPositions.filter(f =\u003e f.data.owner_key === organiaztion.data.ref_key);\n        for (const subdivision of subdivisions) {\n            subdivision.data.organization = organiaztion;\n            await subdivision.save()\n            // promises.push(subdivision.save());\n            // if (promises.length \u003e= promisesCount) {\n            //     await Promise.all(promises);\n            //     promises = []\n            // }\n        }\n        for (const position of positions) {\n            position.data.organization = organiaztion;\n            await position.save()\n            // promises.push(position.save());\n            // if (promises.length \u003e= promisesCount) {\n            //     await Promise.all(promises);\n            //     promises = []\n            // }\n        }\n    }\n    //await Promise.all(promises);\n    promises = [];\n    // проходимся по каждому подразделению и записываем его в элементы\n    for (const subdivisionParent of allSubdivisions) {\n        const subdivisionsChild = allSubdivisions.filter(f =\u003e f.data.parent_key === subdivisionParent.data.ref_key);\n        const positionsChild = allPositions.filter(f =\u003e f.data.parent_key === subdivisionParent.data.ref_key);\n        for (const subdivisionChild of subdivisionsChild) {\n            subdivisionChild.data.subdivision = subdivisionParent;\n            await subdivisionChild.save()\n            // promises.push(subdivisionChild.save());\n            // if (promises.length \u003e= promisesCount) {\n            //     await Promise.all(promises);\n            //     promises = []\n            // }\n        }\n        for (const positionChild of positionsChild) {\n            positionChild.data.subdivision = subdivisionParent;\n            await positionChild.save()\n            //promises.push(positionChild.save());\n            // if (promises.length \u003e= promisesCount) {\n            //     await Promise.all(promises);\n            //     promises = []\n            // }\n        }\n    }\n    //await Promise.all(promises)\n}\n\nasync function prepareReqHeadOrgLink(): Promise\u003cvoid\u003e {\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    Context.data.request_parameters_1c = `InformationRegister_СведенияОбОтветственныхЛицах?$format=json`;\n}\n\nasync function prepaereReqHeadPhysRef(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    let headOrgLink: string = '';\n    const res = JSON.parse(Context.data.response_1c_json);\n    headOrgLink = res.value[0][\"Руководитель@navigationLinkUrl\"]\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    Context.data.request_parameters_1c = `${headOrgLink}?$format=json`;\n}\n\nasync function getPhysicHistoryArr(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    let headPhysicRefKey: string = '';\n    const res = JSON.parse(Context.data.response_1c_json);\n    if (!res[\"Ref_Key\"]) return;\n    headPhysicRefKey = res[\"Ref_Key\"];\n    Context.data.error = '';\n    Context.data.response_1c_json = '';\n    Context.data.request_parameters_1c = `InformationRegister_КадроваяИсторияСотрудников?$format=json\u0026$filter=RecordSet/any(d: d/ФизическоеЛицо_Key eq guid'${headPhysicRefKey}')`;\n}\n\nasync function setOwnersHeader(): Promise\u003cvoid\u003e {\n    if (!Context.data.response_1c_json) return;\n    const res = JSON.parse(Context.data.response_1c_json);\n    if (!res.value) return;\n    const physicHistoryArr: any[] = res.value;\n    const headerPositionRef: string = physicHistoryArr[0][\"RecordSet\"][0][\"Должность_Key\"];\n    const owners = await Namespace.app.organization.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.base_1c.eq(Context.data.connection_name!)\n        ))\n        .size(10000)\n        .all();\n    const headerPositionApp = await Namespace.app.position.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.position_key.eq(headerPositionRef)\n        ))\n        .first();\n    let promises: Promise\u003cvoid\u003e[] = [];\n    for (const owner of owners) {\n        owner.data.position_head = headerPositionApp;\n        await owner.save()\n        // promises.push(owner.save());\n        // if (promises.length \u003e= promisesCount) {\n        //     await Promise.all(promises);\n        //     promises = []\n        // }\n    }\n   // await Promise.all(promises)\n   await linkFix()\n}\n\nasync function linkFix(): Promise\u003cvoid\u003e {\n    const positions = await Namespace.app.position.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.subdivision.eq(null)\n        )).size(10000).all()\n    //@ts-ignore\n    const positionParentKeys: string[] = positions.filter(item =\u003e !!item.data.parent_key).map(item =\u003e item.data.parent_key)\n    const subdivs = await Namespace.app.structural_subdivision.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.ref_key.in(positionParentKeys)\n        )).size(10000).all()\n    Context.data.debug += \" length \" + positions.length\n    for (let i = 0; i \u003c positions.length; i++) {\n        const curPos = positions[i]\n        const parentKey = curPos.data.parent_key\n        if (!parentKey)  continue;\n        const subdiv = subdivs.find(div =\u003e div.data.ref_key === parentKey)\n        curPos.data.subdivision = subdiv\n        await curPos.save()\n        \n    }\n}\n\nasync function endIteration(): Promise\u003cvoid\u003e {\n    Context.data.current_iteration!++\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_80188ef1-6212-4793-89cf-95b7e3bfd642",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_a8f52e49-cb54-4b85-8a00-c897a1cce5eb",
+      "name": "Форма запуска",
+      "values": {
+        "formType": "start-process-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "cc734fcd-17d6-4b8c-8529-91a25cc2a94e",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "11c9f46a-b3c4-4e77-8ee8-dd2b38dd892e",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "0ceaa8ec-5cdc-4385-9a6b-b0ae1e04039b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "2c1bfe32-44b9-46d5-bee7-2ed66205f4d6",
+                  "values": {
+                    "userGuide": {
+                      "path": ["instruction"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "user-guide",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "2112f287-a8ad-433c-862d-f9808c2d4f7b",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "8900384e-a047-46b0-8ba7-462c23711e72",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff_data"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "testdivapp": {
+        "enabled": false,
+        "conditions": []
+      },
+      "testposapp": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_alternative": {
+        "enabled": false,
+        "conditions": []
+      },
+      "number_of_iter": {
+        "enabled": false,
+        "conditions": []
+      },
+      "connection_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_legal_entity": {
+        "enabled": false,
+        "conditions": []
+      },
+      "response_1c_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "connection_object": {
+        "enabled": false,
+        "conditions": []
+      },
+      "current_iteration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staffing_data_json": {
+        "enabled": false,
+        "conditions": []
+      },
+      "remote_applications": {
+        "enabled": false,
+        "conditions": []
+      },
+      "is_there_connections": {
+        "enabled": false,
+        "conditions": []
+      },
+      "request_parameters_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "head_subdivision_response": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_array_length": {
+        "enabled": false,
+        "conditions": []
+      },
+      "subdivisios_response_single": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization_ref_key_array_json": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

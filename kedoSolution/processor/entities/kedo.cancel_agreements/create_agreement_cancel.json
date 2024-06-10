@@ -1,0 +1,2764 @@
+{
+  "__id": "018e89f8-23b6-78f4-8c56-129fb7d816d9",
+  "namespace": "kedo.cancel_agreements",
+  "code": "create_agreement_cancel",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Создание дополнительного соглашения об отмене документов",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "resigning_agremeent",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Повторное подписание доп. соглашения?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "director_full_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ФИО директора",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "director_position",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Должность руководителя",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "director_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Руководитель (пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование доп. соглашения",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_number",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер доп. соглашения",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_applications",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на отмену",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата доп. соглашения",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_signed",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Доп. соглашение подписано?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_full_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ФИО сотрудника",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_position",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Должность сотрудника",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемая заявка",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "app_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Наименование заявки",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудник (пользователь)",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "signed_documents",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Информация о подписанных документах",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_generation_again",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Перегенерация доп. соглашения?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "cancel_agreements",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "cancel_agreements",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Дополнительные соглашения об отмене подписанного документа"
+      }
+    },
+    {
+      "code": "director",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Руководитель",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл доп. соглашения",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "custom_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Приложенный шаблон доп. соглашения",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "event_start_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата начала кадрового события",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "agreement_name_cancel",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Отменяемое дополнительное соглашение (Наименование)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "contract_number",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер трудового договора",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "contract_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата трудового договора",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-22T07:33:32.597742428Z",
+  "__createdBy": "dbf3495b-ce41-49f5-ba21-cdd11a052281",
+  "__updatedAt": "2024-04-02T15:07:03.060099375Z",
+  "__updatedBy": "1a8a4a0b-7e7e-4e0e-895e-ab2a0a301d1e",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 88,
+        "y": 248,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["27d7d009-6afb-4940-87e3-201dfbc72a49"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Создание дополнительного соглашения об отмене документов ({$cancel_agreements})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "01187653-be18-4720-8d21-0357c85196b7": {
+        "x": 416,
+        "y": 536,
+        "id": "01187653-be18-4720-8d21-0357c85196b7",
+        "icon": "end",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "02879b39-b219-4fd4-bbd0-5d4f6fbc2f96": {
+        "x": 840,
+        "y": 232,
+        "id": "02879b39-b219-4fd4-bbd0-5d4f6fbc2f96",
+        "icon": "create",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Создание элемента",
+        "type": "app_create",
+        "color": "#a0e9fd",
+        "exits": ["5ab9f35c-714a-4152-a3cf-6a1cba23c549"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "notify": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "cancel_app"
+              },
+              "target": {
+                "kind": "context",
+                "value": "cancel_app"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "name"
+              }
+            }
+          ],
+          "variable": "cancel_agreements"
+        }
+      },
+      "1971d0bd-534d-49a1-b232-ea9f704a6ed9": {
+        "x": 976,
+        "y": 232,
+        "id": "1971d0bd-534d-49a1-b232-ea9f704a6ed9",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Подписание Доп. соглашения",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["4f1adc11-7694-43a2-9368-ed5711179bba"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "signing_agreement_cancel",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff_user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "director"
+              },
+              "target": {
+                "kind": "context",
+                "value": "director"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "director_user"
+              },
+              "target": {
+                "kind": "context",
+                "value": "director_user"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "agreement_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "cancel_app"
+              },
+              "target": {
+                "kind": "context",
+                "value": "cancel_app"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "cancel_agreements"
+              },
+              "target": {
+                "kind": "context",
+                "value": "cancel_agreements"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "app_name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "app_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "app"
+              },
+              "target": {
+                "kind": "context",
+                "value": "app"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "event_start_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "event_start_date"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_signed"
+              },
+              "target": {
+                "kind": "context",
+                "value": "agreement_signed"
+              }
+            }
+          ],
+          "namespace": "kedo.cancel_agreements",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "3170ddfd-8ec1-479e-a30e-a648540a7af2": {
+        "x": 1152,
+        "y": 248,
+        "id": "3170ddfd-8ec1-479e-a30e-a648540a7af2",
+        "icon": "end",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "35da502f-4c4b-4d27-ac41-d5148f6571e7": {
+        "x": 272,
+        "y": 344,
+        "id": "35da502f-4c4b-4d27-ac41-d5148f6571e7",
+        "icon": "script",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Заполнение контекста БП для генерации по файлу",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["2779d99a-0e4e-49a0-96eb-7ddd71bb5078"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "generateFile",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "4ba3a422-77d8-4f8f-b9f4-1ba942dae63a": {
+        "x": 840,
+        "y": 344,
+        "id": "4ba3a422-77d8-4f8f-b9f4-1ba942dae63a",
+        "icon": "system",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Изменение элемента",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["05e4f7c6-51d3-475d-81ad-e9c47119716d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "notify": true,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "__file"
+              }
+            }
+          ],
+          "variable": "cancel_agreements"
+        }
+      },
+      "673cc0ca-598c-43f8-ba81-38bcd971acdc": {
+        "x": 296,
+        "y": 248,
+        "id": "673cc0ca-598c-43f8-ba81-38bcd971acdc",
+        "icon": "exclusive",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Есть приложенное доп. соглашение?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "a1c656f7-f5da-421d-b326-a2d6b62c6d81",
+          "9b52872b-d0a5-43ad-b1dc-d017c502b575"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "6946d243-0076-4651-a763-b79e8e440ac8": {
+        "x": 624,
+        "y": 232,
+        "id": "6946d243-0076-4651-a763-b79e8e440ac8",
+        "icon": "system",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Конвертация файла в PDF",
+        "type": "ca",
+        "color": "#ffc107",
+        "exits": [
+          "ded5da8f-8790-4e70-b4a1-6e64e2a440af",
+          "fd78c7d6-3d64-405d-b629-fb04c0a7255c"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "pdf_converter",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "file_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "translate_need"
+              }
+            }
+          ],
+          "output": [
+            {
+              "target": {
+                "kind": "context",
+                "value": "orignial_file_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "new_file_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "new_file"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "fd78c7d6-3d64-405d-b629-fb04c0a7255c",
+              "notify": true,
+              "interrupt": true,
+              "receivers": []
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "file": {
+                "kind": "Mapped",
+                "path": ["agreement_file"]
+              },
+              "new_file": {
+                "kind": "Mapped",
+                "path": ["agreement_file"]
+              },
+              "file_name": null,
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "agreement_file"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "file"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "file_name"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "manual",
+                      "value": true
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "translate_need"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "orignial_file_name"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "new_file_name"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "agreement_file"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "new_file"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "cancel_agreements",
+                    "data": {
+                      "code": "cancel_agreements",
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "name": "Дополнительные соглашения об отмене подписанного документа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "cancel_app",
+                    "data": {
+                      "code": "cancel_applications",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявка на отмену",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "app_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Наименование заявки",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Сотрудник",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff_user",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Сотрудник (пользователь)",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "director",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "director_user",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель (пользователь)",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "agreement_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Наименование доп. соглашения",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "agreement_number",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Номер доп. соглашения",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "agreement_date",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": false,
+                        "additionalType": "date",
+                        "defaultTimeType": "startOfDay"
+                      },
+                      "name": "Дата доп. соглашения",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signed_documents",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Информация о подписанных документах",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "agreement_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл доп. соглашения",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "custom_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Приложенный шаблон доп. соглашения",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "resigning_agremeent",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Повторное подписание доп. соглашения?",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "agreement_generation_again",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Перегенерация доп. соглашения?",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "agreement_signed",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Доп. соглашение подписано?",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "orignial_file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Исходное название файла",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "new_file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Новое название файла",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл",
+                      "input": true,
+                      "tooltip": "Приложите файл в формате docx, xlsx или pdf"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название файла",
+                      "input": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "translate_need",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Требуется перевод названия файла?",
+                      "input": true,
+                      "tooltip": "Требуется перевод названия файла в латиницу"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "new_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Новый файл",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "new_file_name": null,
+              "translate_need": true,
+              "__dynamic_binding": {},
+              "orignial_file_name": null
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "b5fcb0e6-6c8d-4be2-afd7-ee2010f75b85": {
+        "x": 192,
+        "y": 248,
+        "id": "b5fcb0e6-6c8d-4be2-afd7-ee2010f75b85",
+        "icon": "exclusive",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Повторное подписание?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "0cd71750-558f-4a1c-a027-62ca61ae013d",
+          "4274686e-8d06-4efa-a492-d321ad98744f"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "b74a9c2e-2ba5-4633-a841-0b5b90169063": {
+        "x": 392,
+        "y": 344,
+        "id": "b74a9c2e-2ba5-4633-a841-0b5b90169063",
+        "icon": "doctemplate",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Генерация доп. соглашения по файлу",
+        "type": "file_template",
+        "color": "#f0f4c3",
+        "exits": [
+          "a241d092-87d4-4fbd-be15-c1e342f48d03",
+          "471d9a02-96fd-4bfd-a6a7-bec6a79513b6"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "toPDF": false,
+          "escalation": {
+            "byError": {
+              "exit": "471d9a02-96fd-4bfd-a6a7-bec6a79513b6",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "inputFileCode": "custom_file",
+          "outputFileCode": "agreement_file",
+          "outputFileName": "Дополнительное соглашение об отмене документа(-ов) по заявке: {$app_name}.docx"
+        }
+      },
+      "b88cc3cc-fccb-4edd-a1b8-8dce97decdbf": {
+        "x": 392,
+        "y": 424,
+        "id": "b88cc3cc-fccb-4edd-a1b8-8dce97decdbf",
+        "icon": "notification",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Ошибка при генерации приказа по приложенному шаблону",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["f9097283-e1b2-4416-af03-3a25301f8d67"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageHeader": "Ошибка при генерации приказа по приложенному шаблону"
+        }
+      },
+      "d6b669bd-a9a0-4096-8a21-1849109d9e5f": {
+        "x": 760,
+        "y": 248,
+        "id": "d6b669bd-a9a0-4096-8a21-1849109d9e5f",
+        "icon": "exclusive",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Перегенерация доп. соглашения?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "597ba053-b4bf-49f2-9122-4f5b2694c03b",
+          "338d99a1-3d8e-4efa-906a-6a9137266a90"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "e0047ebe-0c38-403c-85e5-314e3248499d": {
+        "x": 528,
+        "y": 232,
+        "id": "e0047ebe-0c38-403c-85e5-314e3248499d",
+        "icon": "script",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Присвоить в контекст наименование доп. соглашения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["b2df8925-1365-480d-ba73-20a6b470f34d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "setCancelDocName",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "fec5ce13-6260-41fc-baa9-b1f3df21d92f": {
+        "x": 392,
+        "y": 232,
+        "id": "fec5ce13-6260-41fc-baa9-b1f3df21d92f",
+        "icon": "doctemplate",
+        "lane": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Генерация доп. соглашения по шаблону",
+        "type": "doc_template",
+        "color": "#f0f4c3",
+        "exits": ["c63967d4-00e1-4066-9397-e79b45c769c4"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "22e97bc0-765a-4810-92e0-510d5edd94ce",
+          "toPDF": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_number"
+              },
+              "target": {
+                "kind": "context",
+                "value": "agreement_number"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "agreement_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "agreement_name_cancel"
+              },
+              "target": {
+                "kind": "context",
+                "value": "agreement_name_cancel"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "contract_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "contract_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "contract_number"
+              },
+              "target": {
+                "kind": "context",
+                "value": "contract_number"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "director"
+              },
+              "target": {
+                "kind": "context",
+                "value": "director"
+              },
+              "convert": "to_scalar"
+            }
+          ],
+          "namespace": "kedo.cancel_agreements",
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          },
+          "outputFileCode": "agreement_file",
+          "outputFileName": "Дополнительное соглашение об отмене документа(-ов) по заявке: {$app_name}.docx"
+        }
+      }
+    },
+    "lanes": {
+      "a7edd56e-3987-47cf-ade1-fe4884d0cdc0": {
+        "x": 8,
+        "y": 8,
+        "id": "a7edd56e-3987-47cf-ade1-fe4884d0cdc0",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 1264,
+        "height": 640,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "05e4f7c6-51d3-475d-81ad-e9c47119716d": {
+        "id": "05e4f7c6-51d3-475d-81ad-e9c47119716d",
+        "name": "",
+        "path": [
+          {
+            "x": 920,
+            "y": 376
+          },
+          {
+            "x": 968,
+            "y": 376
+          },
+          {
+            "x": 968,
+            "y": 264
+          },
+          {
+            "x": 976,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "4ba3a422-77d8-4f8f-b9f4-1ba942dae63a",
+        "target": "1971d0bd-534d-49a1-b232-ea9f704a6ed9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0cd71750-558f-4a1c-a027-62ca61ae013d": {
+        "id": "0cd71750-558f-4a1c-a027-62ca61ae013d",
+        "name": "Да",
+        "path": [
+          {
+            "x": 208,
+            "y": 248
+          },
+          {
+            "x": 208,
+            "y": 140
+          },
+          {
+            "x": 968,
+            "y": 140
+          },
+          {
+            "x": 968,
+            "y": 264
+          },
+          {
+            "x": 976,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "b5fcb0e6-6c8d-4be2-afd7-ee2010f75b85",
+        "target": "1971d0bd-534d-49a1-b232-ea9f704a6ed9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "resigning_agremeent"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2779d99a-0e4e-49a0-96eb-7ddd71bb5078": {
+        "id": "2779d99a-0e4e-49a0-96eb-7ddd71bb5078",
+        "name": "",
+        "path": [
+          {
+            "x": 352,
+            "y": 376
+          },
+          {
+            "x": 392,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "35da502f-4c4b-4d27-ac41-d5148f6571e7",
+        "target": "b74a9c2e-2ba5-4633-a841-0b5b90169063",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "27d7d009-6afb-4940-87e3-201dfbc72a49": {
+        "id": "27d7d009-6afb-4940-87e3-201dfbc72a49",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 264
+          },
+          {
+            "x": 192,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "b5fcb0e6-6c8d-4be2-afd7-ee2010f75b85",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "338d99a1-3d8e-4efa-906a-6a9137266a90": {
+        "id": "338d99a1-3d8e-4efa-906a-6a9137266a90",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 792,
+            "y": 264
+          },
+          {
+            "x": 840,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "d6b669bd-a9a0-4096-8a21-1849109d9e5f",
+        "target": "02879b39-b219-4fd4-bbd0-5d4f6fbc2f96",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4274686e-8d06-4efa-a492-d321ad98744f": {
+        "id": "4274686e-8d06-4efa-a492-d321ad98744f",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 224,
+            "y": 264
+          },
+          {
+            "x": 296,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "b5fcb0e6-6c8d-4be2-afd7-ee2010f75b85",
+        "target": "673cc0ca-598c-43f8-ba81-38bcd971acdc",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "471d9a02-96fd-4bfd-a6a7-bec6a79513b6": {
+        "id": "471d9a02-96fd-4bfd-a6a7-bec6a79513b6",
+        "name": "",
+        "path": [
+          {
+            "x": 432,
+            "y": 408
+          },
+          {
+            "x": 432,
+            "y": 424
+          }
+        ],
+        "type": "error",
+        "source": "b74a9c2e-2ba5-4633-a841-0b5b90169063",
+        "target": "b88cc3cc-fccb-4edd-a1b8-8dce97decdbf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "4f1adc11-7694-43a2-9368-ed5711179bba": {
+        "id": "4f1adc11-7694-43a2-9368-ed5711179bba",
+        "name": "",
+        "path": [
+          {
+            "x": 1056,
+            "y": 264
+          },
+          {
+            "x": 1152,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "1971d0bd-534d-49a1-b232-ea9f704a6ed9",
+        "target": "3170ddfd-8ec1-479e-a30e-a648540a7af2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "597ba053-b4bf-49f2-9122-4f5b2694c03b": {
+        "id": "597ba053-b4bf-49f2-9122-4f5b2694c03b",
+        "name": "Да",
+        "path": [
+          {
+            "x": 776,
+            "y": 280
+          },
+          {
+            "x": 776,
+            "y": 376
+          },
+          {
+            "x": 840,
+            "y": 376
+          }
+        ],
+        "type": "plain",
+        "source": "d6b669bd-a9a0-4096-8a21-1849109d9e5f",
+        "target": "4ba3a422-77d8-4f8f-b9f4-1ba942dae63a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "agreement_generation_again"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5ab9f35c-714a-4152-a3cf-6a1cba23c549": {
+        "id": "5ab9f35c-714a-4152-a3cf-6a1cba23c549",
+        "name": "",
+        "path": [
+          {
+            "x": 920,
+            "y": 264
+          },
+          {
+            "x": 976,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "02879b39-b219-4fd4-bbd0-5d4f6fbc2f96",
+        "target": "1971d0bd-534d-49a1-b232-ea9f704a6ed9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9b52872b-d0a5-43ad-b1dc-d017c502b575": {
+        "id": "9b52872b-d0a5-43ad-b1dc-d017c502b575",
+        "name": "Нет",
+        "path": [
+          {
+            "x": 328,
+            "y": 264
+          },
+          {
+            "x": 392,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "673cc0ca-598c-43f8-ba81-38bcd971acdc",
+        "target": "fec5ce13-6260-41fc-baa9-b1f3df21d92f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a1c656f7-f5da-421d-b326-a2d6b62c6d81": {
+        "id": "a1c656f7-f5da-421d-b326-a2d6b62c6d81",
+        "name": "Да",
+        "path": [
+          {
+            "x": 312,
+            "y": 280
+          },
+          {
+            "x": 312,
+            "y": 344
+          }
+        ],
+        "type": "plain",
+        "source": "673cc0ca-598c-43f8-ba81-38bcd971acdc",
+        "target": "35da502f-4c4b-4d27-ac41-d5148f6571e7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "custom_file"
+              },
+              "type": "FILE",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a241d092-87d4-4fbd-be15-c1e342f48d03": {
+        "id": "a241d092-87d4-4fbd-be15-c1e342f48d03",
+        "name": "",
+        "path": [
+          {
+            "x": 472,
+            "y": 376
+          },
+          {
+            "x": 520,
+            "y": 376
+          },
+          {
+            "x": 520,
+            "y": 264
+          },
+          {
+            "x": 528,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "b74a9c2e-2ba5-4633-a841-0b5b90169063",
+        "target": "e0047ebe-0c38-403c-85e5-314e3248499d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b2df8925-1365-480d-ba73-20a6b470f34d": {
+        "id": "b2df8925-1365-480d-ba73-20a6b470f34d",
+        "name": "",
+        "path": [
+          {
+            "x": 608,
+            "y": 264
+          },
+          {
+            "x": 624,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "e0047ebe-0c38-403c-85e5-314e3248499d",
+        "target": "6946d243-0076-4651-a763-b79e8e440ac8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c63967d4-00e1-4066-9397-e79b45c769c4": {
+        "id": "c63967d4-00e1-4066-9397-e79b45c769c4",
+        "name": "",
+        "path": [
+          {
+            "x": 472,
+            "y": 264
+          },
+          {
+            "x": 528,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "fec5ce13-6260-41fc-baa9-b1f3df21d92f",
+        "target": "e0047ebe-0c38-403c-85e5-314e3248499d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ded5da8f-8790-4e70-b4a1-6e64e2a440af": {
+        "id": "ded5da8f-8790-4e70-b4a1-6e64e2a440af",
+        "name": "",
+        "path": [
+          {
+            "x": 704,
+            "y": 264
+          },
+          {
+            "x": 760,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "6946d243-0076-4651-a763-b79e8e440ac8",
+        "target": "d6b669bd-a9a0-4096-8a21-1849109d9e5f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f9097283-e1b2-4416-af03-3a25301f8d67": {
+        "id": "f9097283-e1b2-4416-af03-3a25301f8d67",
+        "name": "",
+        "path": [
+          {
+            "x": 432,
+            "y": 488
+          },
+          {
+            "x": 432,
+            "y": 536
+          }
+        ],
+        "type": "plain",
+        "source": "b88cc3cc-fccb-4edd-a1b8-8dce97decdbf",
+        "target": "01187653-be18-4720-8d21-0357c85196b7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fd78c7d6-3d64-405d-b629-fb04c0a7255c": {
+        "id": "fd78c7d6-3d64-405d-b629-fb04c0a7255c",
+        "name": "",
+        "path": [
+          {
+            "x": 704,
+            "y": 280
+          },
+          {
+            "x": 752,
+            "y": 280
+          },
+          {
+            "x": 752,
+            "y": 264
+          },
+          {
+            "x": 760,
+            "y": 264
+          }
+        ],
+        "type": "error",
+        "source": "6946d243-0076-4651-a763-b79e8e440ac8",
+        "target": "d6b669bd-a9a0-4096-8a21-1849109d9e5f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "\n\nasync function setCancelDocName(): Promise\u003cvoid\u003e {\n    if (Context.data.agreement_file) {\n        const doc_name = await Context.data.agreement_file.fetch();\n        Context.data.agreement_name = doc_name.data.__name;\n    }\n}\nasync function generateFile(): Promise\u003cvoid\u003e {\n    if (Context.data.staff) {\n        const staff = await Context.data.staff.fetch();\n\n        Context.data.staff_full_name = `${staff.data.surname} ${staff.data.name} ${staff.data.middlename}`;\n\n        if (staff.data.position) {\n            const position = await staff.data.position.fetch();\n\n            Context.data.staff_position = position.data.__name;\n        }\n    }\n\n    if (Context.data.director) {\n        const director = await Context.data.director.fetch();\n\n        Context.data.director_full_name = `${director.data.surname} ${director.data.name} ${director.data.middlename}`;\n\n        if (director.data.position) {\n            const position = await director.data.position.fetch();\n\n            Context.data.director_position = position.data.__name;\n        }\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "cancel_agreements",
+          "data": {
+            "code": "cancel_agreements",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Дополнительные соглашения об отмене подписанного документа"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "cancel_agreements"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "app_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "director": {
+        "enabled": false,
+        "conditions": []
+      },
+      "cancel_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "custom_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "contract_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "director_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_position": {
+        "enabled": false,
+        "conditions": []
+      },
+      "contract_number": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff_full_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_number": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_signed": {
+        "enabled": false,
+        "conditions": []
+      },
+      "event_start_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signed_documents": {
+        "enabled": false,
+        "conditions": []
+      },
+      "director_position": {
+        "enabled": false,
+        "conditions": []
+      },
+      "director_full_name": {
+        "enabled": false,
+        "conditions": []
+      },
+      "resigning_agremeent": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_name_cancel": {
+        "enabled": false,
+        "conditions": []
+      },
+      "agreement_generation_again": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

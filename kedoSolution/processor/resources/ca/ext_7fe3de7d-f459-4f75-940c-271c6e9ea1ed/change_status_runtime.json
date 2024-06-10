@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    if (!Context.data.app) {\n        return;\n    }\n    if (!Context.data.status) {\n        throw new Error(\"Context.data.status is undefined\");\n    }\n    const app = await Context.data.app.fetch();\n    const status_code = Context.data.status.code;\n    const status = await Context.fields.kedo_status.app.search()\n        .where((f, g) => g.and(f.__deletedAt.eq(null), f.code.eq(status_code)))\n        .first();\n    app.data.kedo_status = status;\n    await app.save();\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

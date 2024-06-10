@@ -1,0 +1,148 @@
+{
+  "__id": "0a58739c-3195-4e61-b072-33303ed58287",
+  "__name": "Совмещение должностей",
+  "code": "execution_duties_activity",
+  "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "additional_info",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дополнительная информация",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Имя подключения 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "integration_app_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID приложения интеграции",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "execution_duties_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные ИО",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "app",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Приложение-источник",
+        "data": {},
+        "input": true,
+        "output": false
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\ninterface IStaffData {\n\tname: string,\n\tid_1c: string,\n\tindividual_id_1c: string,\n\torganization_id: string,\n\tposition_id: string,\n}\n\nenum CombinationType {\n\t/** Расширение зон обслуживания */\n\tEXPANSION_SERVICE_AREAS,\n\t/** Исполнение обязанностей сотрудника */\n\tPERFOMANCE_DUTIES,\n\t/** Совмщение должностей */\n\tPROFESSIONAL_DUTIES,\n}\n\nenum SurchargeType {\n\tFIXED_AMOUNT,\n\tCOMBINATION_PERCENT,\n\tMAIN_POSITION_PERCENT,\n}\n\ninterface IExecutionDutiesData {\n\tname: string,\n\t/** Отсутствующий сотрудник */\n\tabsent_staff: IStaffData,\n\t/** Замещающий сотрудник */\n\treplacement_staff: IStaffData,\n\tstart_date: string,\n\tend_date: string,\n\t/** Вид совмещения */\n\tcombination_type: CombinationType,\n\tsurcharge_type: SurchargeType,\n\tpercent?: number,\n\t/** Комментарий */\n\tcomment?: string,\n}\n\n/** Коэффициент для расчета ставки\n * Рассчитывается исходя из соотношения:\n * 30% - 1/4\n * 15% - 1/8\n*/\nconst coefficient = 0.25 / 30;\n\n/** Округление числа до нужного количества знаков после запятой. */\nfunction round(value: number, precision: number) {\n\tvar multiplier = Math.pow(10, precision || 0);\n\treturn Math.round(value * multiplier) / multiplier;\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tif (!Context.data.execution_duties_data) {\n\t\tthrow new Error(\"Context.data.execution_duties_data is undefined\");\n\t}\n\n\tconst exectuion_duties_data: IExecutionDutiesData = JSON.parse(Context.data.execution_duties_data);\n\n\tconst current_date = new Datetime();\n\n\tconst body: any = {\n\t\t\"Date\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n\t\t\"ПериодРегистрации\": current_date.format(\"YYYY-MM-01T00:00:00\"),\n\t\t\"ДатаНачала\": exectuion_duties_data.start_date,\n\t\t\"ДатаОкончания\": exectuion_duties_data.end_date,\n\t\t\"СовмещающийСотрудник_Key\": exectuion_duties_data.replacement_staff.id_1c,\n\t\t\"Организация_Key\": exectuion_duties_data.absent_staff.organization_id,\n\t\t\"Комментарий\": exectuion_duties_data.comment ?? \"\",\n\n\t\t\"РазмерДоплатыУтвержден\": true,\n\t}\n\n\t// Тип совмещения\n\tswitch (exectuion_duties_data.combination_type) {\n\t\t// Расширение зон обслуживания\n\t\tcase CombinationType.EXPANSION_SERVICE_AREAS: {\n\t\t\tbody[\"ПричинаСовмещения\"] = \"УвеличениеОбъемаРабот\";\n\t\t\tbody[\"КоличествоСтавок\"] = 0.125;\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.MAIN_POSITION_PERCENT || exectuion_duties_data.surcharge_type == SurchargeType.COMBINATION_PERCENT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = true;\n\t\t\t\tbody[\"СпособРасчетаДоплаты\"] = \"ПроцентФОТСовмещающего\";\n\t\t\t\tbody[\"ПроцентДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t}\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.FIXED_AMOUNT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = false;\n\t\t\t\tbody[\"РазмерДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t}\n\n\t\t\tbreak;\n\t\t}\n\n\t\t// Исполнение обязанностей\n\t\tcase CombinationType.PERFOMANCE_DUTIES: {\n\t\t\tbody[\"ПричинаСовмещения\"] = \"ИсполнениеОбязанностей\";\n\t\t\tbody[\"ОтсутствующийСотрудник_Key\"] = exectuion_duties_data.absent_staff.id_1c;\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.MAIN_POSITION_PERCENT || exectuion_duties_data.surcharge_type == SurchargeType.COMBINATION_PERCENT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = true;\n\t\t\t\tbody[\"СпособРасчетаДоплаты\"] = \"ПроцентФОТСовмещающего\";\n\t\t\t\tbody[\"ПроцентДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t}\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.FIXED_AMOUNT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = false;\n\t\t\t\tbody[\"РазмерДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t}\n\n\t\t\tbreak;\n\t\t}\n\n\t\t// Совмещение должностей\n\t\tcase CombinationType.PROFESSIONAL_DUTIES: {\n\t\t\tbody[\"ПричинаСовмещения\"] = \"СовмещениеПрофессийДолжностей\";\n\t\t\tbody[\"СовмещаемаяДолжность_Key\"] = exectuion_duties_data.absent_staff.position_id;\n\t\t\tbody[\"КоличествоСтавок\"] = 0.125;\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.COMBINATION_PERCENT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = true;\n\t\t\t\tbody[\"СпособРасчетаДоплаты\"] = \"ПроцентФОТ\";\n\t\t\t\tbody[\"ПроцентДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t\tbody[\"КоличествоСтавок\"] = round(coefficient * (exectuion_duties_data.percent ?? 0), 2);\n\t\t\t}\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.MAIN_POSITION_PERCENT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = true;\n\t\t\t\tbody[\"СпособРасчетаДоплаты\"] = \"ПроцентФОТСовмещающего\";\n\t\t\t\tbody[\"ПроцентДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t\tbody[\"КоличествоСтавок\"] = round(coefficient * (exectuion_duties_data.percent ?? 0), 2);\n\t\t\t}\n\n\t\t\tif (exectuion_duties_data.surcharge_type == SurchargeType.FIXED_AMOUNT) {\n\t\t\t\tbody[\"РассчитыватьДоплату\"] = false;\n\t\t\t\tbody[\"РазмерДоплаты\"] = exectuion_duties_data.percent;\n\t\t\t}\n\n\t\t\tbreak;\n\t\t}\n\n\t\tdefault: {\n\t\t\tthrow new Error(`Неизвестный тип замещения: ${exectuion_duties_data.combination_type}`);\n\t\t}\n\t}\n\n\tconst accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n\tconst integration_app = Namespace.params.fields.integration_app.app.create();\n\n\tintegration_app.data.__name = `Исполнение обязанностей (${exectuion_duties_data.name})`;\n\tintegration_app.data.document_odata_name = \"Document_Совмещение\";\n\tintegration_app.data.accounting_systems = accounting1c;\n\tintegration_app.data.personal_guid_1c = JSON.stringify([]);\n\tintegration_app.data.document_creation_data = JSON.stringify(body);\n\tintegration_app.data.additional_info = Context.data.additional_info ?? \"\";\n\tintegration_app.data.base_1c_name = Context.data.connection_name ?? \"\";\n\tintegration_app.data.related_element = Context.data.app;\n\n\tawait integration_app.save();\n\n\tContext.data.integration_app_id = integration_app.data.__id;\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-03-29T11:28:45.103604341Z",
+  "__createdBy": "d78f4b2f-13a2-4903-aeeb-fdb72d5b9d0c",
+  "__updatedAt": "2024-04-11T08:38:25.6358293Z",
+  "__updatedBy": "8c6e1940-a6f3-4603-aff7-7cdf41cc9799",
+  "__deletedAt": null
+}

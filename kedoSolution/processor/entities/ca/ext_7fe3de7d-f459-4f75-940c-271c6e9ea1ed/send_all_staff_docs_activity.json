@@ -1,0 +1,143 @@
+{
+  "__id": "14e30108-a850-4719-8513-dd4de03ba812",
+  "__name": "(РвРФ) Отправить документы сотрудника в личный кабинет",
+  "code": "send_all_staff_docs",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "documents",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": true,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документы",
+        "data": {},
+        "input": true
+      }
+    },
+    {
+      "code": "snils",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "СНИЛС",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true
+      }
+    },
+    {
+      "code": "doc_links",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ссылки на документы",
+        "data": {
+          "additionalType": "text"
+        },
+        "output": true
+      }
+    },
+    {
+      "code": "doc_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Идентификаторы документа",
+        "data": {
+          "additionalType": "text"
+        },
+        "output": true
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        },
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "const userId = Namespace.params.data.user_id;\nconst token = Namespace.params.data.api_token;\nconst snils = Context.data.snils;\nconst docKindId = \"ETD.OtherDoc\";\nconst groupId = \"ETD.LoadingFiles\";\nconst notificationURL = \"null.ru\"\n\nasync function action() {\n\tlet docs = Context.data.documents!;\n\n\tfor (let doc of docs) {\n\t\tlet fetchedDoc = await doc.fetch();\n\t\tlet docLink = await doc.getDownloadUrl();\n\t\tlet docBuffer = await fetch(docLink).then(doc =\u003e doc.arrayBuffer());\n\t\tlet base64String = btoa(String.fromCharCode(...new Uint8Array(docBuffer)));\n\t\tlet fileName = fetchedDoc.data.__name;\n\t\tlet comment = \"\";\n\t\tlet response = await fetch(\"https://ekd-integration.trudvsem.ru/createLaborerDocs\", {\n\t\t\tmethod: \"POST\",\n\t\t\theaders: {\n\t\t\t\t\"Authorization\": `Basic ${token}`,\n\t\t\t\t\"Content-Type\": \"application/json\"\n\t\t\t},\n\t\t\tbody: JSON.stringify({\n\t\t\t\tuserId,\n\t\t\t\tsnils,\n\t\t\t\tname: fileName,\n\t\t\t\tcomment,\n\t\t\t\tfile: base64String,\n\t\t\t\tgroupId,\n\t\t\t\tdocKindId,\n\t\t\t\tnotificationURL,\n\t\t\t\tfileName\n\t\t\t})\n\t\t});\n\t\tif (!response.ok) {\n\t\t\tContext.data.error = await response.text();\n\t\t\treturn;\n\t\t};\n\t\tlet responseJson = await response.json();\n\t\tlet docId = responseJson.documentId;\n\t\tlet documentLink = responseJson.documentLink;\n\t\tif (Context.data.doc_links) {\n\t\t\tContext.data.doc_links += documentLink;\n\t\t\tContext.data.doc_links += \"\\n\";\n\t\t} else {\n\t\t\tContext.data.doc_links = documentLink;\n\t\t\tContext.data.doc_links += \"\\n\";\n\t\t};\n\t\tif (Context.data.doc_id) {\n\t\t\tContext.data.doc_id += docId;\n\t\t\tContext.data.doc_id += \"\\n\";\n\t\t} else {\n\t\t\tContext.data.doc_id = docId;\n\t\t\tContext.data.doc_id += \"\\n\";\n\t\t};\n\t};\n};",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-20T13:08:02.241399854Z",
+  "__createdBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-02-14T11:09:55.639612374Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

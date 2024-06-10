@@ -1,0 +1,11 @@
+{
+  "scripts": "let baseUrl;\nlet login;\nlet password;\nlet myHeaders;\nfunction getConnectionInfo() {\n    const connectionsArray = Namespace.params.data.list_of_connected_platforms ? JSON.parse(Namespace.params.data.list_of_connected_platforms) : undefined;\n    if (!connectionsArray) {\n        return new Error(`Не найдено записей подключения`);\n    }\n    const currentConnection = Context.data.connection_name ? connectionsArray.find((item) => {\n        return item.name === Context.data.connection_name;\n    }) : connectionsArray[0];\n    if (!currentConnection) {\n        return new Error(`Не найдено подключение c именем ${Context.data.connection_name}`);\n    }\n    baseUrl = currentConnection.url;\n    login = currentConnection.login;\n    password = currentConnection.password;\n    myHeaders = {\n        Authorization: `Basic ${btoa(login + ':' + password)}`,\n    };\n    return null;\n}\nasync function action() {\n    const error = getConnectionInfo();\n    if (error !== null) {\n        Context.data.error = error.message;\n        return;\n    }\n    const requestOptions = {\n        method: Context.data.request_type_string ? Context.data.request_type_string : 'GET',\n        headers: myHeaders,\n    };\n    if (!!Context.data.request_body) {\n        requestOptions.body = Context.data.request_body;\n    }\n    const resUrl = `${baseUrl}/${Context.data.request_parameters}`;\n    try {\n        const response = await fetch(`${encodeURI(resUrl)}`, requestOptions);\n        if (!response.ok) {\n            Context.data.error += ` staff data res.status error; resUrl - ${resUrl} `;\n            throw new Error(`response status ${response.status} staff data res.status error; resUrl - ${resUrl}`);\n        }\n        Context.data.response_1c_json = JSON.stringify(await response.json());\n    }\n    catch (err) {\n        Context.data.error += `try/catch error ${err}; resUrl - ${resUrl}`;\n        throw new Error(`try/catch error ${err.message}; resUrl - ${resUrl}`);\n    }\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}

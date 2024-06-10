@@ -1,0 +1,704 @@
+{
+  "__id": "018fe324-840a-7695-a56b-cbbfce335ac9",
+  "namespace": "kedo_ext",
+  "code": "application_widget_in_progress",
+  "__name": "Виджет Заявки в работе",
+  "description": "",
+  "extensionZoneCode": "",
+  "sort": 0,
+  "category": "00000000-0000-0000-0000-000000000000",
+  "version": 6,
+  "hidden": false,
+  "draft": false,
+  "readonly": false,
+  "descriptor": {
+    "icon": "business_box",
+    "template": {
+      "id": "46d61539-cf85-49eb-8238-8c2528e06f44",
+      "descriptor": "component",
+      "content": {
+        "": [
+          {
+            "id": "241ff975-cf04-46a2-8880-2459627adb37",
+            "descriptor": "code",
+            "values": {
+              "html": "\u003cstyle\u003e\n    .main-page_issues-widget.main-widget {\n        display: flex;\n        flex-direction: column;\n        gap: 1.25rem;\n        min-height: 11rem;\n    }\n\n    .widget-title {\n        display: flex;\n        justify-content: space-between;\n    }\n\n    .main-page_issues-widget_title-info {\n        font-size: 2rem;\n    }\n\n    .main-page_issues-widget_container {\n        position: relative;\n    }\n\n    .main-page_issues-widget .widget-container {\n        display: flex;\n        gap: 1.25rem;\n        flex-wrap: wrap;\n    }\n\n    .main-page_issues-widget_container_empty {\n        display: flex;\n        align-items: center;\n        justify-content: center;\n    }\n\n    .main-page_issues-widget_container_empty h4 {\n        font-size: 18px;\n    }\n\n    .main-page_issues-widget .widget-item {\n        padding: 1.5rem;\n        box-sizing: border-box;\n        border-radius: 8px;\n        background-color: #FFF;\n        display: flex;\n        flex-direction: column;\n        flex: 1;\n        transition: all 0.3s;\n        max-width: 24.4%;\n    }\n\n    .main-page_issues-widget a.widget-item {\n        text-decoration: none;\n    }\n\n    .main-page_issues-widget a.widget-item:hover {\n        box-shadow: 0px 0px 13px 0px rgba(0, 0, 0, 0.1);\n    }\n\n    .main-page_issues-widget .item-header_container {\n        display: flex;\n        margin-bottom: .5rem;\n        justify-content: space-between;\n    }\n\n    .issues-widget_item_header-icon.item-icon-container {\n        border-radius: 50%;\n    }\n\n    .main-page_issues-widget .active .item-icon-container {\n        background-color: #CBDCFF;\n    }\n\n    .main-page_issues-widget .item-icon-container path {\n        stroke: white;\n    }\n\n    .main-page_issues-widget .item-icon-container {\n        background-color: #CAD1D8;\n        width: 36px;\n        height: 36px;\n        box-sizing: border-box;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        border-radius: 8px;\n    }\n\n    .main-page_issues-widget .item-icon-container svg {\n        fill: none;\n    }\n\n    .main-page_issues-widget .item-shortand {\n        color: #0055FF;\n        font-size: 20px;\n        font-weight: 500;\n        margin-bottom: 1rem;\n    }\n\n    .main-page_issues-widget .item-status {\n        display: flex;\n        justify-content: start;\n        align-items: center;\n        gap: .5rem;\n        margin: auto 0 0 0;\n    }\n\n    .main-page_issues-widget .active .status-dot {\n        background-color: #B1CBFF;\n    }\n\n    .main-page_issues-widget .status-dot {\n        border-radius: 50%;\n        background-color: #BCBCBC;\n        width: 10px;\n        min-width: 10px;\n        height: 10px;\n    }\n\n    .main-page_issues-widget .active .status-name {\n        color: #B1CBFF\n    }\n\n    .main-page_issues-widget .status-name {\n        color: #BCBCBC;\n        font-size: 16px;\n        font-weight: 400;\n        margin: 0;\n    }\n\n    .main-page_issues-widget .item-header {\n        font-size: 16px;\n        font-style: normal;\n        font-weight: 400;\n        line-height: 140%;\n        color: #979797;\n    }\n\n    .main-page_issues-widget .active .item-header {\n        color: black\n    }\n\n    .main-page_issues-widget .kedo-loader-wrapper {\n        opacity: 1;\n        z-index: 999;\n        display: flex;\n        align-items: center;\n        justify-content: center;\n        position: absolute;\n        width: 100%;\n        height: 100%;\n        transition: all .5s;\n    }\n\n    .main-page_issues-widget .kedo-loader-wrapper.hidden {\n        z-index: -1;\n        opacity: 0;\n    }\n\n    .main-page_issues-widget .kedo-loader {\n        width: 50px;\n        --b: 8px;\n        aspect-ratio: 1;\n        border-radius: 50%;\n        background: #514b82;\n        -webkit-mask: repeating-conic-gradient(#0000 0deg, #000 1deg 70deg, #0000 71deg 90deg), radial-gradient(farthest-side, #0000 calc(100% - var(--b) - 1px), #000 calc(100% - var(--b)));\n        -webkit-mask-composite: destination-in;\n        mask-composite: intersect;\n        animation: kedo-loader-rotate 1s infinite;\n    }\n\n    .main-page_issues-widget .kedo-spinner {\n        animation: kedo-spinner-rotate 0.6s linear infinite;\n        height: 24px;\n        width: 24px;\n        fill: black;\n    }\n\n    @keyframes kedo-loader-rotate {\n        to {\n            transform: rotate(.5turn)\n        }\n    }\n\n    @keyframes kedo-spinner-rotate {\n        0% {\n            transform: rotate(0deg);\n        }\n\n        100% {\n            transform: rotate(360deg);\n        }\n    }\n\n    .main-page_issues-widget .st0 {\n        opacity: 0.6;\n    }\n\n    .main-page_issues-widget .st1 {\n        opacity: 0.5;\n    }\n\n    .main-page_issues-widget .st2 {\n        opacity: 0.4;\n    }\n\n    .main-page_issues-widget .st3 {\n        opacity: 0.3;\n    }\n\n    .main-page_issues-widget .st4 {\n        opacity: 0.8;\n    }\n\n    .main-page_issues-widget .st5 {\n        opacity: 0.9;\n    }\n\n    .main-page_issues-widget .st6 {\n        opacity: 0.1;\n    }\n\n    .main-page_issues-widget .st7 {\n        opacity: 0.2;\n    }\n\n    @media (max-width: 450px) {\n        .main-page_issues-widget .widget-item {\n            flex-basis: auto;\n            flex-grow: 1;\n            max-width: 100%;\n        }\n    }\n\u003c/style\u003e\n\n\u003ctemplate class=\"issues-widget_item-template\"\u003e\n    \u003ca class=\"issues-widget_item widget-item\"\u003e\n        \u003cdiv class=\"issues-widget_item_header item-header_container\"\u003e\n            \u003cp class=\"issues-widget_item_header-date item-header\"\u003e\n\n            \u003c/p\u003e\n            \u003cdiv class=\"issues-widget_item_header-icon item-icon-container\"\u003e\n\n            \u003c/div\u003e\n        \u003c/div\u003e\n        \u003ch3 class=\"issues-widget_item_shortand item-shortand\"\u003e\n\n        \u003c/h3\u003e\n        \u003cdiv class=\"issues-widget_item_status item-status\"\u003e\n            \u003cdiv class=\"status-dot\"\u003e\n\n            \u003c/div\u003e\n            \u003cp class=\"status-name\"\u003e\n\n            \u003c/p\u003e\n        \u003c/div\u003e\n    \u003c/a\u003e\n\u003c/template\u003e\n\n\u003cdiv class=\"main-page_issues-widget main-widget\"\u003e\n    \u003cdiv class=\"main-page_issues-widget_title widget-title\"\u003e\n        \u003ch4 class=\"main-page_issues-widget_title-info\"\u003e\n            Заявки в работе\n        \u003c/h4\u003e\n    \u003c/div\u003e\n    \u003cdiv class=\"kedo-loader-wrapper\" data-loader=\"issues_widget\" style=\"z-index: 99;\"\u003e\n        \u003csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 26 26\" data-test=\"spinner\" class=\"kedo-spinner\"\u003e\n            \u003cpath d=\"M13 3v-2c-2.7 0-5.4.9-7.7 2.8l-.8.7 1.4 1.4c2-1.9 4.5-2.9 7.1-2.9z\" class=\"st0\"\u003e\u003c/path\u003e\n            \u003cpath d=\"M5.9 5.9l-1.4-1.4c-2.3 2.3-3.5 5.4-3.5 8.5h2c0-2.6 1-5.1 2.9-7.1z\" class=\"st1\"\u003e\n            \u003c/path\u003e\n            \u003cpath d=\"M3 13h-2c0 2.7.9 5.4 2.8 7.7l.7.8 1.4-1.4c-1.9-2-2.9-4.5-2.9-7.1z\" class=\"st2\"\u003e\n            \u003c/path\u003e\n            \u003cpath d=\"M5.9 20.1l-1.4 1.4c2.3 2.3 5.4 3.5 8.5 3.5v-2c-2.6 0-5.1-1-7.1-2.9z\" class=\"st3\"\u003e\u003c/path\u003e\n            \u003cpath d=\"M20.1 5.9l1.4-1.4c-2.3-2.3-5.4-3.5-8.5-3.5v2c2.6 0 5.1 1 7.1 2.9z\" class=\"st4\"\u003e\n            \u003c/path\u003e\n            \u003cpath d=\"M23 13h2c0-2.7-.9-5.4-2.8-7.7l-.7-.8-1.4 1.4c1.9 2 2.9 4.5 2.9 7.1z\" class=\"st5\"\u003e\u003c/path\u003e\n            \u003cpath d=\"M20.1 20.1l1.4 1.4c2.3-2.3 3.5-5.4 3.5-8.5h-2c0 2.6-1 5.1-2.9 7.1z\" class=\"st6\"\u003e\u003c/path\u003e\n            \u003cpath d=\"M20.7 22.2l.8-.7-1.4-1.4c-2 2-4.5 2.9-7.1 2.9v2c2.7 0 5.4-.9 7.7-2.8z\" class=\"st7\"\u003e\u003c/path\u003e\n        \u003c/svg\u003e\n    \u003c/div\u003e\n    \u003cdiv class=\"main-page_issues-widget_container widget-container\"\u003e\n\n    \u003c/div\u003e\n    \u003cdiv class=\"main-page_issues-widget_container_empty hidden\"\u003e\n        \u003ch4 class=\"main-page_issues-widget_container_empty-label\"\u003e\n            Заявки в работе отсутствуют\n        \u003c/h4\u003e\n    \u003c/div\u003e\n\u003c/div\u003e",
+              "hideContent": false,
+              "contentPlaceholder": ""
+            }
+          }
+        ]
+      }
+    },
+    "fields": [
+      {
+        "code": "benefit_application_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "benefit_application",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "personnel_documents",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявления на выплату пособия",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "order_financial_assistance_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "application_for_financial_assistance",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "personnel_documents",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявление на материальную помощь",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "certificate_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "certificate",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "personnel_documents",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Справки",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "category_assignment_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "category_assignment",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявка на присвоение категори",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "employees_personal_data_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "employees_personal_data",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявки на изменение ПДн",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "free_from_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "free_from",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "personnel_documents",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявки в свободной форме",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "application_for_the_transfer_of_salary_to_the_current_account_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "application_for_the_transfer_of_salary_to_the_current_account",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "personnel_documents",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Перечисление ЗП на расчетный счет",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "setlement_sheet_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "setlement_sheet",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "personnel_documents",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Расчетный листок",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "staff_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "staff",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Сотрудники",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "statuses_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "statuses",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Статусы",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "business_trips_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "business_trips",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Командировки",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "vacations_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "holidays",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Отпуска",
+          "data": {},
+          "input": false,
+          "output": false
+        }
+      },
+      {
+        "code": "medical_request_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "medical_request",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявка на медосмотр",
+          "data": {},
+          "input": true,
+          "output": true
+        }
+      },
+      {
+        "code": "transfer_application_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "transfer_application",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявка на перевод",
+          "data": {},
+          "input": true,
+          "output": true
+        }
+      },
+      {
+        "code": "execution_duties_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "execution_duties",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявка на ИО",
+          "data": {},
+          "input": true,
+          "output": true
+        }
+      },
+      {
+        "code": "dismissal_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "dismissal_app",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявка на увольнение",
+          "data": {},
+          "input": true,
+          "output": true
+        }
+      },
+      {
+        "code": "employment_app",
+        "type": "SYS_COLLECTION",
+        "searchable": false,
+        "indexed": false,
+        "deleted": false,
+        "array": true,
+        "required": false,
+        "single": true,
+        "defaultValue": null,
+        "calcByFormula": false,
+        "formula": "",
+        "data": {
+          "code": "employment_app",
+          "filter": {
+            "value": {
+              "tf": {}
+            },
+            "enabled": false
+          },
+          "bindings": null,
+          "namespace": "kedo",
+          "isDependent": false,
+          "linkedFieldCode": ""
+        },
+        "view": {
+          "name": "Приложение Заявка на трудоустройство",
+          "data": {},
+          "input": true,
+          "output": true
+        }
+      }
+    ],
+    "fieldVisibilityConditions": {
+      "staff_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "statuses_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "dismissal_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "free_from_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "vacations_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employment_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "certificate_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "business_trips_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "medical_request_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "setlement_sheet_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "execution_duties_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "benefit_application_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "category_assignment_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_application_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "employees_personal_data_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "order_financial_assistance_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "application_for_the_transfer_of_salary_to_the_current_account_app": {
+        "enabled": false,
+        "conditions": []
+      }
+    },
+    "scriptOptions": {},
+    "clientScripts": "\ndeclare const window: any;\ndeclare const document: any;\ndeclare const console: any;\ndeclare const DOMParser: any;\n\ntype objData = {\n    id: string,\n    code: string,\n    ns: string,\n    name: string,\n    status: string,\n    status_code: string,\n    business_type: string,\n    render_zone: string,\n    created_at: TDatetime,\n    item_type: string,\n    link: string,\n    start_date?: string,\n    end_date?: string,\n    start_date_obj: TDate | TDatetime,\n    end_date_obj: TDate | TDatetime,\n    vacation_type?: string,\n    vacation_code?: string,\n    duration?: number,\n    staffId: string,\n    work_type?: string\n};\ntype blockConstructor = {\n    titleClass: string,\n    titleContent: string,\n    iconClass?: string,\n    iconContent?: string,\n    extraContentClass?: string,\n    extraContent?: string,\n    status?: string,\n    link?: string\n};\ntype status = ApplicationItem\u003cApplication$kedo$statuses$Data, any\u003e;\ntype staff = ApplicationItem\u003cApplication$kedo$staff$Data, any\u003e;\n\nenum LoaderType {\n    COMMON = \"common\",\n    MAIN = \"main\",\n    TASKS = \"tasks\",\n    DOCUMENTS = \"documents\",\n    SERVICES = \"services\",\n    SERVICE_DESK = \"service_desk\",\n    BUSINESS_TRIPS = \"business_trips\",\n    VACATIONS = \"vacations\",\n    PROFILE = \"profile\",\n    DOCUMENTS_WIDGET = \"personnel_documents_widget\",\n    ISSUES_WIDGET = \"issues_widget\",\n    VACATION_WIDGET = \"vacation_widget\",\n};\nenum DocType {\n    PERSONAL = \"personal_data\",\n    ISSUE = \"issue\",\n    VACATION = \"vacation\",\n    BUSINESS_TRIP = \"business_trip\"\n};\n\nconst monthReference = {\n    \"1\": \"Января\",\n    \"2\": \"Февраля\",\n    \"3\": \"Марта\",\n    \"4\": \"Апреля\",\n    \"5\": \"Мая\",\n    \"6\": \"Июня\",\n    \"7\": \"Июля\",\n    \"8\": \"Августа\",\n    \"9\": \"Сентября\",\n    \"10\": \"Октября\",\n    \"11\": \"Ноября\",\n    \"12\": \"Декабря\"\n};\nconst issueCodeToNameReference = {\n    application_for_financial_assistance: \"Заявка на материальную помощь\",\n    benefit_application: \"Заявка на выплату пособия\",\n    certificate: \"Справка\",\n    category_assignment: \"Заявка на присвоениее категории\",\n    employees_personal_data: \"Заявка на изменение ПДн\",\n    free_from: \"Заявка в свободной форме\",\n    business_trips: \"Командировка\",\n    businesstrip_requests: \"Командировка\",\n    holidays: \"Отпуск\",\n    vacations: \"Отпуск\",\n    dismissal_app: \"Увольнение\",\n    execution_duties: \"Заявка на ИО\",\n    transfer_application: \"Заявка на перевод\",\n    employment_app: \"Трудоустройство\",\n    medical_request: \"Медосмотр\",\n    cancel_applications: \"Отмена документа\"\n};\nconst issuesWidgetCodes = [\n    \"employees_personal_data\",\n    \"category_assignment\",\n    \"application_for_financial_assistance\",\n    \"benefit_application\",\n    \"free_from\",\n    \"certificate\",\n    \"medical_request\",\n    \"order_financial_assistance\",\n    \"employment_app\",\n    \"execution_duties\",\n    \"application_for_the_transfer_of_salary_to_the_current_account\"\n];\nconst today = new TDate();\nconst current_url = window.location.href;\n\nlet issues_manager: IssuesManager;\nlet userDataManager: UserDataManager;\nlet serializer: Serializer;\nlet systemDataManager: SystemDataManager;\n\nclass IssuesManager {\n    constructor() {\n        this.parser = new DOMParser();\n    };\n\n    parser: typeof DOMParser;\n\n    /** Отрисовка виджета */\n    async renderWidget(refresh = false) {\n\n        // Получение контейнера и шаблона заявок\n        const issuesContainer = document.querySelector('.main-page_issues-widget').querySelector(\".main-page_issues-widget_container\");\n        const issueItemTemplate = document.querySelector(\".issues-widget_item-template\");\n\n        refresh \u0026\u0026 refreshContainers([issuesContainer]);\n\n        // Получение контейнера с текстом про отсутствия заявок\n        const emptyIssuesTemplate = document.querySelector(\".main-page_issues-widget_container_empty\");\n\n        // Если заявок нет, то отображаем контейнер с текстом, если есть, то прячем\n        if (!userDataManager.issues || userDataManager.issues.length \u003c 1 || userDataManager.lastDocsForRender.length === 0) {\n            emptyIssuesTemplate.classList.remove(\"hidden\");\n        }\n        else if (!emptyIssuesTemplate.classList.contains(\"hidden\")) {\n            emptyIssuesTemplate.classList.add(\"hidden\");\n        };\n\n        // Создание карточек заявок\n        userDataManager.lastDocsForRender.forEach(item =\u003e {\n            const [startDay, startMonth] = item.start_date ? item.start_date.split(\".\") : [\"\", \"\", \"\"];\n            const [endDay, endMonth] = item.end_date ? item.end_date.split(\".\") : [\"\", \"\", \"\"];\n            const elementData: blockConstructor = {\n                titleClass: \"item-header\",\n                titleContent: item.code === \"businesstrip_requests\" || item.code === \"vacations\"\n                    ? `${startDay} ${(\u003cany\u003emonthReference)[startMonth.replace(\"0\", \"\")].toLowerCase()} - ${endDay} ${(\u003cany\u003emonthReference)[endMonth.replace(\"0\", \"\")].toLowerCase()}`\n                    : item.code === \"overtime_work\" || item.code === \"dismissal_app\" ? `${item.start_date_obj.day} ${(\u003cany\u003emonthReference)[item.start_date_obj.month.toString()].toLowerCase()}`\n                        : `${item.created_at.day} ${(\u003cany\u003emonthReference)[item.created_at.month.toString()].toLowerCase()}`,\n                iconClass: \"item-icon-container\",\n                iconContent: (\u003cany\u003esvgToTypeReference)[item.item_type],\n                extraContentClass: \"item-shortand\",\n                extraContent: item.code === \"overtime_work\" ? item.work_type : item.vacation_type || (\u003cany\u003eissueCodeToNameReference)[item.code],\n                status: item.status,\n                link: item.link\n            };\n            const newIssueContent = issueItemTemplate.content.cloneNode(true);\n            const newIssueElement = newIssueContent.querySelector(\".issues-widget_item\");\n            this.renderComponent(issuesContainer, newIssueElement, false, elementData);\n        });\n\n        // Скрываем лоадер, если это первая загрузка\n        !refresh \u0026\u0026 this.handleLoader(LoaderType.ISSUES_WIDGET);\n\n        // Показываем новые карточки\n        const all_new_bloks_hidden = issuesContainer.querySelectorAll('.issues-widget_item.hidden');\n        all_new_bloks_hidden.forEach((block: any) =\u003e block.classList.remove('hidden'));\n    };\n\n    /** Включает/выключает анимацию загрузки страницы\n   * @param loader тип загрузчика, выборка по атрибуту data-loader\n   */\n    handleLoader(loaderType: LoaderType) {\n        const loader = document.querySelector(`.kedo-loader-wrapper[data-loader=${loaderType}]`);\n        if (loader) {\n            loader.classList.toggle(\"hidden\");\n        }\n        else {\n            const waitForLoader = window.setInterval(() =\u003e {\n                const loader = document.querySelector(`.kedo-loader-wrapper[data-loader=${loaderType}]`);\n                if (!loader) {\n                    return;\n                };\n                window.clearInterval(waitForLoader)\n                loader.classList.toggle(\"hidden\");\n\n            }, 100);\n        }\n\n    };\n\n    /** Метод для рендера элемента в определенной области DOM\n     * @param domElement контейнер, в который нужно вставить элемент\n     * @param elementToAppend элемент для вставки (может быть массивом с DOM-элементами)\n     * @param prepend признак, что вставка элементов должна происходить перед всеми остальными в контейнере\n     * @param elementData объект, который используется для отрисовки данных в методе this.processComponent\n     * @param setActive признак, что элементу нужно присвоить класс .active\n     * @param onclick функция без параметров, которую можно навесить на событиее click для вставляемого элемента\n     */\n    renderComponent(domElement: any, elementToAppend: any, prepend = false, elementData?: blockConstructor, setActive = false, onclick?: Function) {\n\n        if (elementData) {\n            this.processComponent(elementToAppend, elementData, setActive);\n        };\n        if (onclick) {\n            elementToAppend.addEventListener(\"click\", onclick);\n        };\n        if (prepend) {\n            if (Array.isArray(elementToAppend)) {\n                domElement.prepend(...elementToAppend);\n                return;\n            };\n            domElement.prepend(elementToAppend);\n        } else {\n            if (Array.isArray(elementToAppend)) {\n                domElement.append(...elementToAppend);\n                return;\n            };\n            domElement.appendChild(elementToAppend);\n        };\n    };\n    /** Метод для изменения элемента (используется как конструктор для блоков класса .widget-item)\n     * @param element DOM-элемент\n     * @param elementData объект с данными для вставки в элемент\n     * @param setActive признак, что элементу нужно присвоить класс .active\n     */\n    processComponent(element: any, elementData: blockConstructor, setActive = false) {\n\n        const title = element.querySelector(`.${elementData.titleClass}`);\n\n        title.textContent = elementData.titleContent;\n        if (elementData.iconClass) {\n\n            const iconContainer = element.querySelector(`.${elementData.iconClass}`)\n            const svg = this.parser.parseFromString(elementData.iconContent, \"text/html\").body.firstChild;\n\n            iconContainer.append(svg);\n        };\n        if (elementData.extraContentClass) {\n\n            const extraContentContainer = element.querySelector(`.${elementData.extraContentClass}`);\n            extraContentContainer.textContent = elementData.extraContent;\n        };\n        if (elementData.status) {\n\n            const statusContainer = element.querySelector(\".status-name\");\n            statusContainer.textContent = elementData.status;\n        };\n        if (setActive) {\n            this.setActive(element);\n        };\n        if (elementData.link) {\n            element.href = elementData.link;\n        };\n    };\n\n    /** Добавляет класс active к элементу\n     * @param element DOM-элемент\n     */\n    setActive(element: any) {\n        element.classList.add(\"active\");\n    };\n}\n/** Класс, хранящий в себе все данные, относящиеся к текущему пользователю/сотруднику\n * @property user объект типа UserItem, текущий пользователь\n * @property staff объект типа staff (приложение Сотрудники), текущий сотрудник\n * @property issues заявки в формате objData\n * @property lastDocsForRender последние документы для отрисовки на портале, в формате objData\n * @property isInnerUser признак того, что пользователь является внутренним\n */\nclass UserDataManager {\n    constructor() {\n        this.issues = [];\n        this.lastDocsForRender = [];\n    };\n\n    user: CurrentUserItem;\n    staff: staff;\n    issues: objData[];\n    lastDocsForRender: objData[];\n    isInnerUser: boolean;\n};\n/** Класс, методы которого используются для сериализации данных\n * @property userDataManager экземпляр класса UserDataManager\n * @property systemDataManager экземпляр класса SystemDataManager\n */\nclass Serializer {\n\n    userDataManager: UserDataManager;\n    systemDataManager: SystemDataManager;\n\n    setManagers(dataManager: UserDataManager, systemDataManager: SystemDataManager) {\n        this.userDataManager = dataManager;\n        this.systemDataManager = systemDataManager;\n    };\n\n    /** Преобразует объект к типу objData\n     * @param item объект приложения, унаследованный от BaseItem\n     */\n    serializeObjData(item: any): objData {\n\n        const linkCode = item.code === \"holidays\" ? \"vacations\" : item.code === \"business_trips\" ? \"businesstrip_requests\" : item.code;\n        const linkNs = item.code === \"holidays\" ? \"absences\" : item.code === \"business_trips\" ? \"business_trips\" : item.namespace;\n        const itemStatus = item.data.kedo_status ? this.systemDataManager.statuses.find(s =\u003e s.id === item.data.kedo_status.id) : undefined;\n        const dateArray = item.code === \"overtime_work\" ? item.data.start_date ? new Datetime(item.data.start_date).format(\"DD.MM.YYYY\").split(\".\").map(Number) : item.data.date ? new Datetime(item.data.date).format(\"DD.MM.YYYY\").split(\".\").map(Number) : undefined : undefined;\n\n        return \u003cobjData\u003e{\n            id: item.id,\n            name: item.data.__name,\n            code: item.code === \"business_trips\" ? \"businesstrip_requests\" : item.code === \"holidays\" ? \"vacations\" : item.code,\n            ns: item.code === \"business_trips\" ? item.code : item.code === \"holidays\" ? \"absences\" : item.namespace,\n            status: itemStatus ? itemStatus.data.name : item.data.__status \u0026\u0026 item.data.__status.status ? item.data.__status.status.name : \"Не определён\",\n            status_code: itemStatus ? itemStatus.data.code : item.data.__status \u0026\u0026 item.data.__status.status ? item.data.__status.status.code : \"not implemented\",\n            business_type: issuesWidgetCodes.indexOf(item.code) === -1 ? \"personnel_document\" : \"issue\",\n            item_type: item.code === \"business_trips\" ? DocType.BUSINESS_TRIP : item.code === \"holidays\" ? DocType.VACATION : issuesWidgetCodes.indexOf(item.code) === -1 ? DocType.PERSONAL : DocType.ISSUE,\n            render_zone: issuesWidgetCodes.indexOf(item.code) === -1 ? \"main-page_personnel-events-widget_container\" : \"main-page_issues-widget_container\",\n            created_at: item.code === \"overtime_work\" ? new Datetime(item.data.__createdAt) : item.data.__createdAt,\n            link: `${window.location.href}(p:item/${linkNs}/${linkCode}/${item.id})`,\n            start_date: item.code === \"business_trips\" ? item.data.start_date_string : item.code === \"holidays\" ? item.data.start_string || item.data.rest_day_first \u0026\u0026 item.data.rest_day_first.format(\"DD.MM.YYYY\") : item.code === \"overtime_work\" \u0026\u0026 item.data.start_date_string ? item.data.start_date_string.split(\",\").length \u003e 1 ? item.data.start_date_string.split(\",\")[0] : item.data.start_date_string : item.data.date_start ? item.data.date_start.format(\"DD.MM.YYYY\") : item.data.__createdAt.format ? item.data.__createdAt.format(\"DD.MM.YYYY\") : undefined,\n            end_date: item.code === \"business_trips\" ? item.data.end_date_string : item.code === \"holidays\" ? item.data.end_string || item.data.rest_day_second \u0026\u0026 item.data.rest_day_second.format(\"DD.MM.YYYY\") || item.data.rest_day_first \u0026\u0026 item.data.rest_day_first.format(\"DD.MM.YYYY\") : item.data.date_end ? item.data.date_end.format(\"DD.MM.YYYY\") : item.data.date_start ? item.data.date_start.format(\"DD.MM.YYYY\") : item.data.__createdAt.format ? item.data.__createdAt.format(\"DD.MM.YYYY\") : undefined,\n            start_date_obj: item.code === \"business_trips\" ? item.data.start_date : item.code === \"holidays\" ? item.data.start ?? item.data.rest_day_first : item.code === \"overtime_work\" \u0026\u0026 dateArray ? new TDate(dateArray[2], dateArray[1], dateArray[0]) : item.code === \"dismissal_app\" ? item.data.date_of_dismissal : item.data.date_start ?? item.data.__createdAt,\n            end_date_obj: item.code === \"business_trips\" ? item.data.end_date : item.code === \"holidays\" ? item.data.end ?? item.data.rest_day_second ?? item.data.rest_day_first : item.data.date_end ?? item.data.date_end ?? item.data.__createdAt,\n            vacation_type: item.code === \"holidays\" \u0026\u0026 item.data.type_of ? item.data.type_of.name : undefined,\n            vacation_code: item.code === \"holidays\" \u0026\u0026 item.data.type_of ? item.data.type_of.code : undefined,\n            duration: item.code === \"holidays\" ? item.data.amount_of_days : item.code === \"business_trips\" ? item.data.duration : undefined,\n            staffId: item.data.kedo_staff ? item.data.kedo_staff.id : undefined,\n            work_type: item.data.work_type || \"\"\n        };\n    };\n};\n/** Класс, хранящий в себе глобальные объекты, прямо или косвенно связанные с пользователем/сотрудником, необходимые для отрисовки компонентов */\nclass SystemDataManager {\n    statuses: status[];\n};\n\n/** Функция для сброса компонентов внутри контейнеров при обновлении данных страницы\n * @param containers массив с DOM-элементами\n * @param classToDelete при указании класса - удаляет элементы с подходящим классом внутри контейнера\n */\nfunction refreshContainers(containers: any[], classToDelete?: string): void {\n    if (classToDelete) {\n        Array.from(containers).forEach((container: any) =\u003e {\n            const nodesToDelete = container.querySelectorAll(`.${classToDelete}`);\n            nodesToDelete.forEach((node: any) =\u003e {\n                node.remove();\n            });\n        });\n\n        return;\n    };\n\n    containers.forEach((container: any) =\u003e {\n        container.innerHTML = \"\";\n    });\n};\n\n/**\n * Функция используется для получения всех динамических данных, связанных с пользователем (документы, задачи)\n * @param refresh признак того, что идет обновление данных\n * @param refreshTasks признак того, что нужно только обновление задач\n */\nasync function getOrRefreshData(refresh = false): Promise\u003cvoid\u003e {\n\n    const defaultFilter: FilterClosure\u003cItemData\u003e = (f, g) =\u003e {\n        return g.and(\n            //@ts-ignore\n            f.__deletedAt.eq(null),\n            //@ts-ignore\n            f.staff.link(userDataManager.staff)\n        );\n    };\n\n    // Загрузка всех заявок сотрудника\n    const allIssues = await Promise.all([\n        Context.fields.benefit_application_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.order_financial_assistance_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.certificate_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.category_assignment_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.employees_personal_data_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.free_from_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.application_for_the_transfer_of_salary_to_the_current_account_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.setlement_sheet_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.vacations_app.app.search().where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.kedo_staff.link(userDataManager.staff)\n        )).size(1000).all(),\n        Context.fields.business_trips_app.app.search().where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.kedo_staff.link(userDataManager.staff)\n        )).size(1000).all(),\n        Context.fields.medical_request_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.transfer_application_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.execution_duties_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.dismissal_app.app.search().where(defaultFilter).size(1000).all(),\n        Context.fields.employment_app.app.search().where(defaultFilter).size(1000).all()\n    ]);\n\n    // Сортировка заявок\n    const allIssuesObj: objData[] = [].concat.apply([], allIssues).map((item: any) =\u003e serializer.serializeObjData(item)).sort((a: objData, b: objData) =\u003e {\n        if (!a.created_at || !b.created_at) {\n            return 0;\n        };\n        if (a.created_at.before(b.created_at)) {\n            return -1;\n        };\n        if (a.created_at.after(b.created_at)) {\n            return 1;\n        };\n        return 0;\n    });\n\n    // Запись всех заявок\n    userDataManager.issues = allIssuesObj;\n    // Получаем ближайшие заявки\n    userDataManager.lastDocsForRender = [\n        ...userDataManager.issues.filter(item =\u003e \n        item.status_code !== \"cancelled\" \u0026\u0026 item.status_code !== \"staff_cancelled\" \u0026\u0026 item.status_code !== \"completed\" \n        ).slice(0, 4)];\n\n    issues_manager.renderWidget(refresh);\n};\n\n/** Функция используется для получения константных данных, после чего вызывается getOrRefreshData для получения данных, которые динамически меняются */\nasync function getAllData(): Promise\u003cvoid\u003e {\n\n    const [allStatuses] = await Promise.all([\n        Context.fields.statuses_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(100).all()\n    ]);\n\n    systemDataManager.statuses = allStatuses;\n    serializer.setManagers(userDataManager, systemDataManager);\n};\n\nasync function onLoad(): Promise\u003cvoid\u003e {\n\n    // Инициализация экземляров классов\n    userDataManager = new UserDataManager();\n    issues_manager = new IssuesManager();\n    systemDataManager = new SystemDataManager();\n    serializer = new Serializer();\n\n    // Получение текущего пользорвателя и карточки сотрудников\n    const [currentUser, allStaff] = await Promise.all([\n        System.users.getCurrentUser(),\n        Context.fields.staff_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all(),\n        getAllData()\n    ]);\n\n    // Посик карточки сотрудника текущего пользователя\n    const currentStaff = allStaff.find(staff =\u003e staff.data.ext_user \u0026\u0026 staff.data.ext_user.id === currentUser.id);\n    // if (!currentStaff) {\n    //     const waitForContainer = window.setInterval(() =\u003e {\n\n    //         const unemployedContainer = document.querySelector(\"#empty-staff\");\n\n    //         if (!unemployedContainer) {\n    //             console.log(\"PersonnelEventWidget: no unemployed container\")\n    //             return;\n    //         };\n\n    //         window.clearInterval(waitForContainer);\n    //         unemployedContainer.classList.remove(\"hidden\");\n    //     }, 100);\n    //     return;\n    // };\n\n    // Запись данных\n    userDataManager.staff = currentStaff!;\n    Context.data.staff_app = currentStaff;\n    userDataManager.user = \u003cCurrentUserItem\u003ecurrentUser;\n    userDataManager.isInnerUser = currentStaff \u0026\u0026 !currentStaff.data.staff_access || false;\n\n    getOrRefreshData();\n\n    // Если был таймер, очищаем его\n    if (document.issuesWidgetInterval) {\n        console.log(\"IssuesWidget: interval clear\");\n        window.clearInterval(document.issuesWidgetInterval);\n    }\n    // Создаем таймер\n    document.issuesWidgetInterval = window.setInterval(() =\u003e {\n        // Если ссылка отличается, то очищаем таймер\n        if (window.location.href.indexOf(current_url) === -1) {\n            console.log(\"IssuesWidget: refresh, interval clear\");\n            window.clearInterval(document.issuesWidgetInterval);\n            return;\n        }\n        getOrRefreshData(true).then(_ =\u003e {\n            console.log(\"IssuesWidget: refresh\");\n        });\n    }, 60000);\n}\n\n//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\n/////////////////////////////////////////////////////// Самые большие значения ///////////////////////////////////////////////////////\n//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////\n\nconst svgToTypeReference = {\n    docs: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M3.33301 2.4999C3.33301 2.03966 3.7061 1.66656 4.16634 1.66656H12.4997L16.6663 5.83323V17.4999C16.6663 17.9601 16.2933 18.3332 15.833 18.3332H4.16634C3.7061 18.3332 3.33301 17.9601 3.33301 17.4999V2.4999Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 8.33356H13.3337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 11.6666H13.3337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e    \n    `,\n    profile: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M10.0003 8.33323C11.8413 8.33323 13.3337 6.84085 13.3337 4.9999C13.3337 3.15895 11.8413 1.66656 10.0003 1.66656C8.15938 1.66656 6.66699 3.15895 6.66699 4.9999C6.66699 6.84085 8.15938 8.33323 10.0003 8.33323Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M17.5 18.3334C17.5 14.1913 14.1421 10.8334 10 10.8334C5.85787 10.8334 2.5 14.1913 2.5 18.3334\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n    help: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cg clip-path=\"url(#clip0_2707_357)\"\u003e\n    \u003cpath d=\"M10 18.75C12.4162 18.75 14.6037 17.7706 16.1872 16.1872C17.7706 14.6037 18.75 12.4162 18.75 10C18.75 7.58378 17.7706 5.39627 16.1872 3.81281C14.6037 2.22938 12.4162 1.25 10 1.25C7.58378 1.25 5.39627 2.22938 3.81281 3.81281C2.22938 5.39627 1.25 7.58378 1.25 10C1.25 12.4162 2.22938 14.6037 3.81281 16.1872C5.39627 17.7706 7.58378 18.75 10 18.75Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M10 12.0235V10.2735C11.4497 10.2735 12.625 9.09824 12.625 7.6485C12.625 6.19875 11.4497 5.0235 10 5.0235C8.55026 5.0235 7.375 6.19875 7.375 7.6485\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M9.99902 15.961C10.6031 15.961 11.0928 15.4714 11.0928 14.8673C11.0928 14.2632 10.6031 13.7735 9.99902 13.7735C9.39497 13.7735 8.90527 14.2632 8.90527 14.8673C8.90527 15.4714 9.39497 15.961 9.99902 15.961Z\" fill=\"black\"/\u003e\n    \u003c/g\u003e\n    \u003cdefs\u003e\n    \u003cclipPath id=\"clip0_2707_357\"\u003e\n    \u003crect width=\"20\" height=\"20\" fill=\"white\"/\u003e\n    \u003c/clipPath\u003e\n    \u003c/defs\u003e\n    \u003c/svg\u003e\n    \n    `,\n    task: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M7.50033 3.33325H4.58366C4.35353 3.33325 4.16699 3.5198 4.16699 3.74992V17.9166C4.16699 18.1467 4.35353 18.3333 4.58366 18.3333H16.2503C16.4805 18.3333 16.667 18.1467 16.667 17.9166V3.74992C16.667 3.5198 16.4805 3.33325 16.2503 3.33325H13.3337\" stroke=\"black\" stroke-width=\"1.5\"/\u003e\n    \u003cpath d=\"M7.5 5.41667V3.33333H9.14604C9.15742 3.33333 9.16667 3.3241 9.16667 3.31271V2.5C9.16667 1.80965 9.72629 1.25 10.4167 1.25C11.107 1.25 11.6667 1.80965 11.6667 2.5V3.31271C11.6667 3.3241 11.6759 3.33333 11.6873 3.33333H13.3333V5.41667C13.3333 5.64679 13.1468 5.83333 12.9167 5.83333H7.91667C7.68654 5.83333 7.5 5.64679 7.5 5.41667Z\" stroke=\"black\" stroke-width=\"1.5\"/\u003e\n    \u003cpath d=\"M7.5 10H13.75\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.5 13.75H13.75\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n    main: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M3.75 7.5V17.5H16.25V7.5L10 2.5L3.75 7.5Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.91699 12.0833V17.4999H12.0837V12.0833H7.91699Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M3.75 17.5H16.25\" stroke=\"black\" stroke-linecap=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n    schedule: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M18.125 1.25H1.875C0.839453 1.25 0 2.08945 0 3.125V16.875C0 17.9105 0.839453 18.75 1.875 18.75H18.125C19.1605 18.75 20 17.9105 20 16.875V3.125C20 2.08945 19.1605 1.25 18.125 1.25ZM6.25 17.5H1.875C1.5298 17.5 1.25 17.2202 1.25 16.875V13.75H6.25V17.5ZM6.25 12.5H1.25V8.75H6.25V12.5ZM6.25 7.5H1.25V3.75H6.25V7.5ZM12.5 17.5H7.5V13.75H12.5V17.5ZM12.5 12.5H7.5V8.75H12.5V12.5ZM12.5 7.5H7.5V3.75H12.5V7.5ZM18.75 13.75V16.875C18.75 17.2202 18.4702 17.5 18.125 17.5H13.75V13.75H18.75ZM18.75 12.5H13.75V8.75H18.75V12.5ZM18.75 7.5H13.75V3.75H18.75V7.5Z\" fill=\"black\"/\u003e\n    \u003c/svg\u003e    \n    `,\n    business_trip: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cg clip-path=\"url(#clip0_2710_613)\"\u003e\n    \u003cmask id=\"mask0_2710_613\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"20\" height=\"20\"\u003e\n    \u003cpath d=\"M20 0H0V20H20V0Z\" fill=\"white\"/\u003e\n    \u003c/mask\u003e\n    \u003cg mask=\"url(#mask0_2710_613)\"\u003e\n    \u003cpath d=\"M2.08203 17.0783H17.9154\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M3.55003 13.0267L1.62793 9.69758C2.03222 9.46416 4.03276 10.1621 4.77749 10.5442L8.81999 9.0972L5.36362 3.11061L7.07803 3.00771L12.6616 8.19995L16.0993 7.11178C17.6217 6.67628 18.1018 7.50787 18.1977 7.67399C18.7738 8.67183 17.6097 9.34387 17.4434 9.43987C16.1131 10.208 3.55003 13.0267 3.55003 13.0267Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/g\u003e\n    \u003c/g\u003e\n    \u003cdefs\u003e\n    \u003cclipPath id=\"clip0_2710_613\"\u003e\n    \u003crect width=\"20\" height=\"20\" fill=\"white\"/\u003e\n    \u003c/clipPath\u003e\n    \u003c/defs\u003e\n    \u003c/svg\u003e\n    `,\n    vacation: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M14.9997 10.8334V5.83339C14.9997 5.37314 14.6266 5.00006 14.1663 5.00006H4.16634C3.7061 5.00006 3.33301 5.37314 3.33301 5.83339V15.8334C3.33301 16.2936 3.7061 16.6667 4.16634 16.6667H11.2497\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 5.00006V16.6667\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M11.667 5.00006V12.0834\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M11.667 4.9999V2.4999C11.667 2.03966 11.2939 1.66656 10.8337 1.66656H7.50033C7.04008 1.66656 6.66699 2.03966 6.66699 2.4999V4.9999\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M14.583 18.3336C16.6541 18.3336 18.333 16.6546 18.333 14.5836C18.333 12.5125 16.6541 10.8336 14.583 10.8336C12.5119 10.8336 10.833 12.5125 10.833 14.5836C10.833 16.6546 12.5119 18.3336 14.583 18.3336Z\" stroke=\"black\" stroke-width=\"1.5\"/\u003e\n    \u003cpath d=\"M14.167 13.3336V15.0002H15.8337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M5.41699 16.6666V18.3332\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\"/\u003e\n    \u003c/svg\u003e    \n    `,\n    finance: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M1.66699 5.4165H18.3337V15.4165H1.66699V5.4165Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M1.66699 8.74984C3.50794 8.74984 5.00033 7.25746 5.00033 5.4165H1.66699V8.74984Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M1.66699 12.0835C3.50794 12.0835 5.00033 13.5759 5.00033 15.4168H1.66699V12.0835Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M18.3333 12.0835V15.4168H15C15 13.5759 16.4924 12.0835 18.3333 12.0835Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M18.3333 8.74984C16.4924 8.74984 15 7.25746 15 5.4165H18.3333V8.74984Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M10.0003 12.9165C11.1509 12.9165 12.0837 11.7972 12.0837 10.4165C12.0837 9.0358 11.1509 7.9165 10.0003 7.9165C8.84974 7.9165 7.91699 9.0358 7.91699 10.4165C7.91699 11.7972 8.84974 12.9165 10.0003 12.9165Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n    other: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M15.8335 1.6665H4.16683C3.70659 1.6665 3.3335 2.0396 3.3335 2.49984V17.4998C3.3335 17.9601 3.70659 18.3332 4.16683 18.3332H15.8335C16.2937 18.3332 16.6668 17.9601 16.6668 17.4998V2.49984C16.6668 2.0396 16.2937 1.6665 15.8335 1.6665Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 11.25H12.9168\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 8.75H12.9168\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 5.83301H12.9168\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 14.1665H10.0002\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n    personal_data: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M17.5003 3.3335H2.50033C2.04009 3.3335 1.66699 3.70659 1.66699 4.16683V15.8335C1.66699 16.2937 2.04009 16.6668 2.50033 16.6668H17.5003C17.9606 16.6668 18.3337 16.2937 18.3337 15.8335V4.16683C18.3337 3.70659 17.9606 3.3335 17.5003 3.3335Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.08366 10.4168C8.00412 10.4168 8.75033 9.67062 8.75033 8.75016C8.75033 7.8297 8.00412 7.0835 7.08366 7.0835C6.1632 7.0835 5.41699 7.8297 5.41699 8.75016C5.41699 9.67062 6.1632 10.4168 7.08366 10.4168Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M9.5835 12.9165C9.5835 11.5358 8.4642 10.4165 7.0835 10.4165C5.70279 10.4165 4.5835 11.5358 4.5835 12.9165\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M11.667 8.3335H15.0003\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M12.5 11.6665H15\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n    overtime: `\u003csvg width=\"14\" height=\"18\" viewBox=\"0 0 14 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cg clip-path=\"url(#clip0_2358_14813)\"\u003e\n    \u003cpath d=\"M10.2083 8.4375H6.125C5.96458 8.4375 5.83333 8.56406 5.83333 8.71875V9.28125C5.83333 9.43594 5.96458 9.5625 6.125 9.5625H10.2083C10.3687 9.5625 10.5 9.43594 10.5 9.28125V8.71875C10.5 8.56406 10.3687 8.4375 10.2083 8.4375ZM10.2083 11.8125H6.125C5.96458 11.8125 5.83333 11.9391 5.83333 12.0938V12.6562C5.83333 12.8109 5.96458 12.9375 6.125 12.9375H10.2083C10.3687 12.9375 10.5 12.8109 10.5 12.6562V12.0938C10.5 11.9391 10.3687 11.8125 10.2083 11.8125ZM4.08333 8.15625C3.59844 8.15625 3.20833 8.53242 3.20833 9C3.20833 9.46758 3.59844 9.84375 4.08333 9.84375C4.56823 9.84375 4.95833 9.46758 4.95833 9C4.95833 8.53242 4.56823 8.15625 4.08333 8.15625ZM4.08333 11.5312C3.59844 11.5312 3.20833 11.9074 3.20833 12.375C3.20833 12.8426 3.59844 13.2188 4.08333 13.2188C4.56823 13.2188 4.95833 12.8426 4.95833 12.375C4.95833 11.9074 4.56823 11.5312 4.08333 11.5312ZM12.25 2.25H9.33333C9.33333 1.00898 8.28698 0 7 0C5.71302 0 4.66667 1.00898 4.66667 2.25H1.75C0.783854 2.25 0 3.00586 0 3.9375V16.3125C0 17.2441 0.783854 18 1.75 18H12.25C13.2161 18 14 17.2441 14 16.3125V3.9375C14 3.00586 13.2161 2.25 12.25 2.25ZM7 1.6875C7.32083 1.6875 7.58333 1.94062 7.58333 2.25C7.58333 2.55938 7.32083 2.8125 7 2.8125C6.67917 2.8125 6.41667 2.55938 6.41667 2.25C6.41667 1.94062 6.67917 1.6875 7 1.6875ZM12.25 16.0312C12.25 16.1859 12.1187 16.3125 11.9583 16.3125H2.04167C1.88125 16.3125 1.75 16.1859 1.75 16.0312V4.21875C1.75 4.06406 1.88125 3.9375 2.04167 3.9375H3.5V5.0625C3.5 5.37187 3.7625 5.625 4.08333 5.625H9.91667C10.2375 5.625 10.5 5.37187 10.5 5.0625V3.9375H11.9583C12.1187 3.9375 12.25 4.06406 12.25 4.21875V16.0312Z\" fill=\"white\"/\u003e\n    \u003c/g\u003e\n    \u003cdefs\u003e\n    \u003cclipPath id=\"clip0_2358_14813\"\u003e\n    \u003crect width=\"14\" height=\"18\" fill=\"white\"/\u003e\n    \u003c/clipPath\u003e\n    \u003c/defs\u003e\n    \u003c/svg\u003e\n    `,\n    service: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M15.4167 3.33356H4.58333C4.1231 3.33356 3.75 3.70665 3.75 4.16689V17.5002C3.75 17.9605 4.1231 18.3336 4.58333 18.3336H15.4167C15.8769 18.3336 16.25 17.9605 16.25 17.5002V4.16689C16.25 3.70665 15.8769 3.33356 15.4167 3.33356Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.5 1.66656V4.16656\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M12.5 1.66656V4.16656\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 7.91656H13.3337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 11.2501H11.667\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 14.5836H10.0003\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e    \n    `,\n    issue: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M16.25 1.6665H4.58333C4.1231 1.6665 3.75 2.0396 3.75 2.49984V17.4998C3.75 17.9601 4.1231 18.3332 4.58333 18.3332H16.25C16.7102 18.3332 17.0833 17.9601 17.0833 17.4998V2.49984C17.0833 2.0396 16.7102 1.6665 16.25 1.6665Z\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.08301 12.5H12.9163\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.08301 15H9.99967\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M12.9163 5H7.08301V9.16667H12.9163V5Z\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e`\n};",
+    "clientScriptOptions": {
+      "allowServer": true
+    },
+    "serverScripts": "/* Server scripts module */\n",
+    "serverScriptOptions": {}
+  },
+  "dataNamespace": "",
+  "dataCode": "",
+  "runtime": {
+    "version": 1,
+    "clientScripts": "System.register([], function (exports_1, context_1) {\n    \"use strict\";\n    var __moduleName = context_1 \u0026\u0026 context_1.id;\n    function default_1(Context, ViewContext, Server, System) {\n        let LoaderType;\n        (function (LoaderType) {\n            LoaderType[\"COMMON\"] = \"common\";\n            LoaderType[\"MAIN\"] = \"main\";\n            LoaderType[\"TASKS\"] = \"tasks\";\n            LoaderType[\"DOCUMENTS\"] = \"documents\";\n            LoaderType[\"SERVICES\"] = \"services\";\n            LoaderType[\"SERVICE_DESK\"] = \"service_desk\";\n            LoaderType[\"BUSINESS_TRIPS\"] = \"business_trips\";\n            LoaderType[\"VACATIONS\"] = \"vacations\";\n            LoaderType[\"PROFILE\"] = \"profile\";\n            LoaderType[\"DOCUMENTS_WIDGET\"] = \"personnel_documents_widget\";\n            LoaderType[\"ISSUES_WIDGET\"] = \"issues_widget\";\n            LoaderType[\"VACATION_WIDGET\"] = \"vacation_widget\";\n        })(LoaderType || (LoaderType = {}));\n        ;\n        let DocType;\n        (function (DocType) {\n            DocType[\"PERSONAL\"] = \"personal_data\";\n            DocType[\"ISSUE\"] = \"issue\";\n            DocType[\"VACATION\"] = \"vacation\";\n            DocType[\"BUSINESS_TRIP\"] = \"business_trip\";\n        })(DocType || (DocType = {}));\n        ;\n        const monthReference = {\n            \"1\": \"Января\",\n            \"2\": \"Февраля\",\n            \"3\": \"Марта\",\n            \"4\": \"Апреля\",\n            \"5\": \"Мая\",\n            \"6\": \"Июня\",\n            \"7\": \"Июля\",\n            \"8\": \"Августа\",\n            \"9\": \"Сентября\",\n            \"10\": \"Октября\",\n            \"11\": \"Ноября\",\n            \"12\": \"Декабря\"\n        };\n        const issueCodeToNameReference = {\n            application_for_financial_assistance: \"Заявка на материальную помощь\",\n            benefit_application: \"Заявка на выплату пособия\",\n            certificate: \"Справка\",\n            category_assignment: \"Заявка на присвоениее категории\",\n            employees_personal_data: \"Заявка на изменение ПДн\",\n            free_from: \"Заявка в свободной форме\",\n            business_trips: \"Командировка\",\n            businesstrip_requests: \"Командировка\",\n            holidays: \"Отпуск\",\n            vacations: \"Отпуск\",\n            dismissal_app: \"Увольнение\",\n            execution_duties: \"Заявка на ИО\",\n            transfer_application: \"Заявка на перевод\",\n            employment_app: \"Трудоустройство\",\n            medical_request: \"Медосмотр\",\n            cancel_applications: \"Отмена документа\"\n        };\n        const issuesWidgetCodes = [\n            \"employees_personal_data\",\n            \"category_assignment\",\n            \"application_for_financial_assistance\",\n            \"benefit_application\",\n            \"free_from\",\n            \"certificate\",\n            \"medical_request\",\n            \"order_financial_assistance\",\n            \"employment_app\",\n            \"execution_duties\",\n            \"application_for_the_transfer_of_salary_to_the_current_account\"\n        ];\n        const today = new TDate();\n        const current_url = window.location.href;\n        let issues_manager;\n        let userDataManager;\n        let serializer;\n        let systemDataManager;\n        class IssuesManager {\n            constructor() {\n                this.parser = new DOMParser();\n            }\n            ;\n            async renderWidget(refresh = false) {\n                const issuesContainer = document.querySelector('.main-page_issues-widget').querySelector(\".main-page_issues-widget_container\");\n                const issueItemTemplate = document.querySelector(\".issues-widget_item-template\");\n                refresh \u0026\u0026 refreshContainers([issuesContainer]);\n                const emptyIssuesTemplate = document.querySelector(\".main-page_issues-widget_container_empty\");\n                if (!userDataManager.issues || userDataManager.issues.length \u003c 1 || userDataManager.lastDocsForRender.length === 0) {\n                    emptyIssuesTemplate.classList.remove(\"hidden\");\n                }\n                else if (!emptyIssuesTemplate.classList.contains(\"hidden\")) {\n                    emptyIssuesTemplate.classList.add(\"hidden\");\n                }\n                ;\n                userDataManager.lastDocsForRender.forEach(item =\u003e {\n                    const [startDay, startMonth] = item.start_date ? item.start_date.split(\".\") : [\"\", \"\", \"\"];\n                    const [endDay, endMonth] = item.end_date ? item.end_date.split(\".\") : [\"\", \"\", \"\"];\n                    const elementData = {\n                        titleClass: \"item-header\",\n                        titleContent: item.code === \"businesstrip_requests\" || item.code === \"vacations\"\n                            ? `${startDay} ${monthReference[startMonth.replace(\"0\", \"\")].toLowerCase()} - ${endDay} ${monthReference[endMonth.replace(\"0\", \"\")].toLowerCase()}`\n                            : item.code === \"overtime_work\" || item.code === \"dismissal_app\" ? `${item.start_date_obj.day} ${monthReference[item.start_date_obj.month.toString()].toLowerCase()}`\n                                : `${item.created_at.day} ${monthReference[item.created_at.month.toString()].toLowerCase()}`,\n                        iconClass: \"item-icon-container\",\n                        iconContent: svgToTypeReference[item.item_type],\n                        extraContentClass: \"item-shortand\",\n                        extraContent: item.code === \"overtime_work\" ? item.work_type : item.vacation_type || issueCodeToNameReference[item.code],\n                        status: item.status,\n                        link: item.link\n                    };\n                    const newIssueContent = issueItemTemplate.content.cloneNode(true);\n                    const newIssueElement = newIssueContent.querySelector(\".issues-widget_item\");\n                    this.renderComponent(issuesContainer, newIssueElement, false, elementData);\n                });\n                !refresh \u0026\u0026 this.handleLoader(LoaderType.ISSUES_WIDGET);\n                const all_new_bloks_hidden = issuesContainer.querySelectorAll('.issues-widget_item.hidden');\n                all_new_bloks_hidden.forEach((block) =\u003e block.classList.remove('hidden'));\n            }\n            ;\n            handleLoader(loaderType) {\n                const loader = document.querySelector(`.kedo-loader-wrapper[data-loader=${loaderType}]`);\n                if (loader) {\n                    loader.classList.toggle(\"hidden\");\n                }\n                else {\n                    const waitForLoader = window.setInterval(() =\u003e {\n                        const loader = document.querySelector(`.kedo-loader-wrapper[data-loader=${loaderType}]`);\n                        if (!loader) {\n                            return;\n                        }\n                        ;\n                        window.clearInterval(waitForLoader);\n                        loader.classList.toggle(\"hidden\");\n                    }, 100);\n                }\n            }\n            ;\n            renderComponent(domElement, elementToAppend, prepend = false, elementData, setActive = false, onclick) {\n                if (elementData) {\n                    this.processComponent(elementToAppend, elementData, setActive);\n                }\n                ;\n                if (onclick) {\n                    elementToAppend.addEventListener(\"click\", onclick);\n                }\n                ;\n                if (prepend) {\n                    if (Array.isArray(elementToAppend)) {\n                        domElement.prepend(...elementToAppend);\n                        return;\n                    }\n                    ;\n                    domElement.prepend(elementToAppend);\n                }\n                else {\n                    if (Array.isArray(elementToAppend)) {\n                        domElement.append(...elementToAppend);\n                        return;\n                    }\n                    ;\n                    domElement.appendChild(elementToAppend);\n                }\n                ;\n            }\n            ;\n            processComponent(element, elementData, setActive = false) {\n                const title = element.querySelector(`.${elementData.titleClass}`);\n                title.textContent = elementData.titleContent;\n                if (elementData.iconClass) {\n                    const iconContainer = element.querySelector(`.${elementData.iconClass}`);\n                    const svg = this.parser.parseFromString(elementData.iconContent, \"text/html\").body.firstChild;\n                    iconContainer.append(svg);\n                }\n                ;\n                if (elementData.extraContentClass) {\n                    const extraContentContainer = element.querySelector(`.${elementData.extraContentClass}`);\n                    extraContentContainer.textContent = elementData.extraContent;\n                }\n                ;\n                if (elementData.status) {\n                    const statusContainer = element.querySelector(\".status-name\");\n                    statusContainer.textContent = elementData.status;\n                }\n                ;\n                if (setActive) {\n                    this.setActive(element);\n                }\n                ;\n                if (elementData.link) {\n                    element.href = elementData.link;\n                }\n                ;\n            }\n            ;\n            setActive(element) {\n                element.classList.add(\"active\");\n            }\n            ;\n        }\n        class UserDataManager {\n            constructor() {\n                this.issues = [];\n                this.lastDocsForRender = [];\n            }\n            ;\n        }\n        ;\n        class Serializer {\n            setManagers(dataManager, systemDataManager) {\n                this.userDataManager = dataManager;\n                this.systemDataManager = systemDataManager;\n            }\n            ;\n            serializeObjData(item) {\n                var _a, _b, _c, _d, _e, _f;\n                const linkCode = item.code === \"holidays\" ? \"vacations\" : item.code === \"business_trips\" ? \"businesstrip_requests\" : item.code;\n                const linkNs = item.code === \"holidays\" ? \"absences\" : item.code === \"business_trips\" ? \"business_trips\" : item.namespace;\n                const itemStatus = item.data.kedo_status ? this.systemDataManager.statuses.find(s =\u003e s.id === item.data.kedo_status.id) : undefined;\n                const dateArray = item.code === \"overtime_work\" ? item.data.start_date ? new Datetime(item.data.start_date).format(\"DD.MM.YYYY\").split(\".\").map(Number) : item.data.date ? new Datetime(item.data.date).format(\"DD.MM.YYYY\").split(\".\").map(Number) : undefined : undefined;\n                return {\n                    id: item.id,\n                    name: item.data.__name,\n                    code: item.code === \"business_trips\" ? \"businesstrip_requests\" : item.code === \"holidays\" ? \"vacations\" : item.code,\n                    ns: item.code === \"business_trips\" ? item.code : item.code === \"holidays\" ? \"absences\" : item.namespace,\n                    status: itemStatus ? itemStatus.data.name : item.data.__status \u0026\u0026 item.data.__status.status ? item.data.__status.status.name : \"Не определён\",\n                    status_code: itemStatus ? itemStatus.data.code : item.data.__status \u0026\u0026 item.data.__status.status ? item.data.__status.status.code : \"not implemented\",\n                    business_type: issuesWidgetCodes.indexOf(item.code) === -1 ? \"personnel_document\" : \"issue\",\n                    item_type: item.code === \"business_trips\" ? DocType.BUSINESS_TRIP : item.code === \"holidays\" ? DocType.VACATION : issuesWidgetCodes.indexOf(item.code) === -1 ? DocType.PERSONAL : DocType.ISSUE,\n                    render_zone: issuesWidgetCodes.indexOf(item.code) === -1 ? \"main-page_personnel-events-widget_container\" : \"main-page_issues-widget_container\",\n                    created_at: item.code === \"overtime_work\" ? new Datetime(item.data.__createdAt) : item.data.__createdAt,\n                    link: `${window.location.href}(p:item/${linkNs}/${linkCode}/${item.id})`,\n                    start_date: item.code === \"business_trips\" ? item.data.start_date_string : item.code === \"holidays\" ? item.data.start_string || item.data.rest_day_first \u0026\u0026 item.data.rest_day_first.format(\"DD.MM.YYYY\") : item.code === \"overtime_work\" \u0026\u0026 item.data.start_date_string ? item.data.start_date_string.split(\",\").length \u003e 1 ? item.data.start_date_string.split(\",\")[0] : item.data.start_date_string : item.data.date_start ? item.data.date_start.format(\"DD.MM.YYYY\") : item.data.__createdAt.format ? item.data.__createdAt.format(\"DD.MM.YYYY\") : undefined,\n                    end_date: item.code === \"business_trips\" ? item.data.end_date_string : item.code === \"holidays\" ? item.data.end_string || item.data.rest_day_second \u0026\u0026 item.data.rest_day_second.format(\"DD.MM.YYYY\") || item.data.rest_day_first \u0026\u0026 item.data.rest_day_first.format(\"DD.MM.YYYY\") : item.data.date_end ? item.data.date_end.format(\"DD.MM.YYYY\") : item.data.date_start ? item.data.date_start.format(\"DD.MM.YYYY\") : item.data.__createdAt.format ? item.data.__createdAt.format(\"DD.MM.YYYY\") : undefined,\n                    start_date_obj: item.code === \"business_trips\" ? item.data.start_date : item.code === \"holidays\" ? (_a = item.data.start) !== null \u0026\u0026 _a !== void 0 ? _a : item.data.rest_day_first : item.code === \"overtime_work\" \u0026\u0026 dateArray ? new TDate(dateArray[2], dateArray[1], dateArray[0]) : item.code === \"dismissal_app\" ? item.data.date_of_dismissal : (_b = item.data.date_start) !== null \u0026\u0026 _b !== void 0 ? _b : item.data.__createdAt,\n                    end_date_obj: item.code === \"business_trips\" ? item.data.end_date : item.code === \"holidays\" ? (_d = (_c = item.data.end) !== null \u0026\u0026 _c !== void 0 ? _c : item.data.rest_day_second) !== null \u0026\u0026 _d !== void 0 ? _d : item.data.rest_day_first : (_f = (_e = item.data.date_end) !== null \u0026\u0026 _e !== void 0 ? _e : item.data.date_end) !== null \u0026\u0026 _f !== void 0 ? _f : item.data.__createdAt,\n                    vacation_type: item.code === \"holidays\" \u0026\u0026 item.data.type_of ? item.data.type_of.name : undefined,\n                    vacation_code: item.code === \"holidays\" \u0026\u0026 item.data.type_of ? item.data.type_of.code : undefined,\n                    duration: item.code === \"holidays\" ? item.data.amount_of_days : item.code === \"business_trips\" ? item.data.duration : undefined,\n                    staffId: item.data.kedo_staff ? item.data.kedo_staff.id : undefined,\n                    work_type: item.data.work_type || \"\"\n                };\n            }\n            ;\n        }\n        ;\n        class SystemDataManager {\n        }\n        ;\n        function refreshContainers(containers, classToDelete) {\n            if (classToDelete) {\n                Array.from(containers).forEach((container) =\u003e {\n                    const nodesToDelete = container.querySelectorAll(`.${classToDelete}`);\n                    nodesToDelete.forEach((node) =\u003e {\n                        node.remove();\n                    });\n                });\n                return;\n            }\n            ;\n            containers.forEach((container) =\u003e {\n                container.innerHTML = \"\";\n            });\n        }\n        ;\n        async function getOrRefreshData(refresh = false) {\n            const defaultFilter = (f, g) =\u003e {\n                return g.and(f.__deletedAt.eq(null), f.staff.link(userDataManager.staff));\n            };\n            const allIssues = await Promise.all([\n                Context.fields.benefit_application_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.order_financial_assistance_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.certificate_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.category_assignment_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.employees_personal_data_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.free_from_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.application_for_the_transfer_of_salary_to_the_current_account_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.setlement_sheet_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.vacations_app.app.search().where((f, g) =\u003e g.and(f.__deletedAt.eq(null), f.kedo_staff.link(userDataManager.staff))).size(1000).all(),\n                Context.fields.business_trips_app.app.search().where((f, g) =\u003e g.and(f.__deletedAt.eq(null), f.kedo_staff.link(userDataManager.staff))).size(1000).all(),\n                Context.fields.medical_request_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.transfer_application_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.execution_duties_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.dismissal_app.app.search().where(defaultFilter).size(1000).all(),\n                Context.fields.employment_app.app.search().where(defaultFilter).size(1000).all()\n            ]);\n            const allIssuesObj = [].concat.apply([], allIssues).map((item) =\u003e serializer.serializeObjData(item)).sort((a, b) =\u003e {\n                if (!a.created_at || !b.created_at) {\n                    return 0;\n                }\n                ;\n                if (a.created_at.before(b.created_at)) {\n                    return -1;\n                }\n                ;\n                if (a.created_at.after(b.created_at)) {\n                    return 1;\n                }\n                ;\n                return 0;\n            });\n            userDataManager.issues = allIssuesObj;\n            userDataManager.lastDocsForRender = [\n                ...userDataManager.issues.filter(item =\u003e item.status_code !== \"cancelled\" \u0026\u0026 item.status_code !== \"staff_cancelled\" \u0026\u0026 item.status_code !== \"completed\").slice(0, 4)\n            ];\n            issues_manager.renderWidget(refresh);\n        }\n        ;\n        async function getAllData() {\n            const [allStatuses] = await Promise.all([\n                Context.fields.statuses_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(100).all()\n            ]);\n            systemDataManager.statuses = allStatuses;\n            serializer.setManagers(userDataManager, systemDataManager);\n        }\n        ;\n        async function onLoad() {\n            userDataManager = new UserDataManager();\n            issues_manager = new IssuesManager();\n            systemDataManager = new SystemDataManager();\n            serializer = new Serializer();\n            const [currentUser, allStaff] = await Promise.all([\n                System.users.getCurrentUser(),\n                Context.fields.staff_app.app.search().where(f =\u003e f.__deletedAt.eq(null)).size(10000).all(),\n                getAllData()\n            ]);\n            const currentStaff = allStaff.find(staff =\u003e staff.data.ext_user \u0026\u0026 staff.data.ext_user.id === currentUser.id);\n            userDataManager.staff = currentStaff;\n            Context.data.staff_app = currentStaff;\n            userDataManager.user = currentUser;\n            userDataManager.isInnerUser = currentStaff \u0026\u0026 !currentStaff.data.staff_access || false;\n            getOrRefreshData();\n            if (document.issuesWidgetInterval) {\n                console.log(\"IssuesWidget: interval clear\");\n                window.clearInterval(document.issuesWidgetInterval);\n            }\n            document.issuesWidgetInterval = window.setInterval(() =\u003e {\n                if (window.location.href.indexOf(current_url) === -1) {\n                    console.log(\"IssuesWidget: refresh, interval clear\");\n                    window.clearInterval(document.issuesWidgetInterval);\n                    return;\n                }\n                getOrRefreshData(true).then(_ =\u003e {\n                    console.log(\"IssuesWidget: refresh\");\n                });\n            }, 60000);\n        }\n        const svgToTypeReference = {\n            docs: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M3.33301 2.4999C3.33301 2.03966 3.7061 1.66656 4.16634 1.66656H12.4997L16.6663 5.83323V17.4999C16.6663 17.9601 16.2933 18.3332 15.833 18.3332H4.16634C3.7061 18.3332 3.33301 17.9601 3.33301 17.4999V2.4999Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 8.33356H13.3337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 11.6666H13.3337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e    \n    `,\n            profile: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M10.0003 8.33323C11.8413 8.33323 13.3337 6.84085 13.3337 4.9999C13.3337 3.15895 11.8413 1.66656 10.0003 1.66656C8.15938 1.66656 6.66699 3.15895 6.66699 4.9999C6.66699 6.84085 8.15938 8.33323 10.0003 8.33323Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M17.5 18.3334C17.5 14.1913 14.1421 10.8334 10 10.8334C5.85787 10.8334 2.5 14.1913 2.5 18.3334\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n            help: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cg clip-path=\"url(#clip0_2707_357)\"\u003e\n    \u003cpath d=\"M10 18.75C12.4162 18.75 14.6037 17.7706 16.1872 16.1872C17.7706 14.6037 18.75 12.4162 18.75 10C18.75 7.58378 17.7706 5.39627 16.1872 3.81281C14.6037 2.22938 12.4162 1.25 10 1.25C7.58378 1.25 5.39627 2.22938 3.81281 3.81281C2.22938 5.39627 1.25 7.58378 1.25 10C1.25 12.4162 2.22938 14.6037 3.81281 16.1872C5.39627 17.7706 7.58378 18.75 10 18.75Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M10 12.0235V10.2735C11.4497 10.2735 12.625 9.09824 12.625 7.6485C12.625 6.19875 11.4497 5.0235 10 5.0235C8.55026 5.0235 7.375 6.19875 7.375 7.6485\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M9.99902 15.961C10.6031 15.961 11.0928 15.4714 11.0928 14.8673C11.0928 14.2632 10.6031 13.7735 9.99902 13.7735C9.39497 13.7735 8.90527 14.2632 8.90527 14.8673C8.90527 15.4714 9.39497 15.961 9.99902 15.961Z\" fill=\"black\"/\u003e\n    \u003c/g\u003e\n    \u003cdefs\u003e\n    \u003cclipPath id=\"clip0_2707_357\"\u003e\n    \u003crect width=\"20\" height=\"20\" fill=\"white\"/\u003e\n    \u003c/clipPath\u003e\n    \u003c/defs\u003e\n    \u003c/svg\u003e\n    \n    `,\n            task: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M7.50033 3.33325H4.58366C4.35353 3.33325 4.16699 3.5198 4.16699 3.74992V17.9166C4.16699 18.1467 4.35353 18.3333 4.58366 18.3333H16.2503C16.4805 18.3333 16.667 18.1467 16.667 17.9166V3.74992C16.667 3.5198 16.4805 3.33325 16.2503 3.33325H13.3337\" stroke=\"black\" stroke-width=\"1.5\"/\u003e\n    \u003cpath d=\"M7.5 5.41667V3.33333H9.14604C9.15742 3.33333 9.16667 3.3241 9.16667 3.31271V2.5C9.16667 1.80965 9.72629 1.25 10.4167 1.25C11.107 1.25 11.6667 1.80965 11.6667 2.5V3.31271C11.6667 3.3241 11.6759 3.33333 11.6873 3.33333H13.3333V5.41667C13.3333 5.64679 13.1468 5.83333 12.9167 5.83333H7.91667C7.68654 5.83333 7.5 5.64679 7.5 5.41667Z\" stroke=\"black\" stroke-width=\"1.5\"/\u003e\n    \u003cpath d=\"M7.5 10H13.75\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.5 13.75H13.75\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n            main: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M3.75 7.5V17.5H16.25V7.5L10 2.5L3.75 7.5Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.91699 12.0833V17.4999H12.0837V12.0833H7.91699Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M3.75 17.5H16.25\" stroke=\"black\" stroke-linecap=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n            schedule: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M18.125 1.25H1.875C0.839453 1.25 0 2.08945 0 3.125V16.875C0 17.9105 0.839453 18.75 1.875 18.75H18.125C19.1605 18.75 20 17.9105 20 16.875V3.125C20 2.08945 19.1605 1.25 18.125 1.25ZM6.25 17.5H1.875C1.5298 17.5 1.25 17.2202 1.25 16.875V13.75H6.25V17.5ZM6.25 12.5H1.25V8.75H6.25V12.5ZM6.25 7.5H1.25V3.75H6.25V7.5ZM12.5 17.5H7.5V13.75H12.5V17.5ZM12.5 12.5H7.5V8.75H12.5V12.5ZM12.5 7.5H7.5V3.75H12.5V7.5ZM18.75 13.75V16.875C18.75 17.2202 18.4702 17.5 18.125 17.5H13.75V13.75H18.75ZM18.75 12.5H13.75V8.75H18.75V12.5ZM18.75 7.5H13.75V3.75H18.75V7.5Z\" fill=\"black\"/\u003e\n    \u003c/svg\u003e    \n    `,\n            business_trip: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cg clip-path=\"url(#clip0_2710_613)\"\u003e\n    \u003cmask id=\"mask0_2710_613\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"20\" height=\"20\"\u003e\n    \u003cpath d=\"M20 0H0V20H20V0Z\" fill=\"white\"/\u003e\n    \u003c/mask\u003e\n    \u003cg mask=\"url(#mask0_2710_613)\"\u003e\n    \u003cpath d=\"M2.08203 17.0783H17.9154\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M3.55003 13.0267L1.62793 9.69758C2.03222 9.46416 4.03276 10.1621 4.77749 10.5442L8.81999 9.0972L5.36362 3.11061L7.07803 3.00771L12.6616 8.19995L16.0993 7.11178C17.6217 6.67628 18.1018 7.50787 18.1977 7.67399C18.7738 8.67183 17.6097 9.34387 17.4434 9.43987C16.1131 10.208 3.55003 13.0267 3.55003 13.0267Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/g\u003e\n    \u003c/g\u003e\n    \u003cdefs\u003e\n    \u003cclipPath id=\"clip0_2710_613\"\u003e\n    \u003crect width=\"20\" height=\"20\" fill=\"white\"/\u003e\n    \u003c/clipPath\u003e\n    \u003c/defs\u003e\n    \u003c/svg\u003e\n    `,\n            vacation: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M14.9997 10.8334V5.83339C14.9997 5.37314 14.6266 5.00006 14.1663 5.00006H4.16634C3.7061 5.00006 3.33301 5.37314 3.33301 5.83339V15.8334C3.33301 16.2936 3.7061 16.6667 4.16634 16.6667H11.2497\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 5.00006V16.6667\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M11.667 5.00006V12.0834\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M11.667 4.9999V2.4999C11.667 2.03966 11.2939 1.66656 10.8337 1.66656H7.50033C7.04008 1.66656 6.66699 2.03966 6.66699 2.4999V4.9999\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M14.583 18.3336C16.6541 18.3336 18.333 16.6546 18.333 14.5836C18.333 12.5125 16.6541 10.8336 14.583 10.8336C12.5119 10.8336 10.833 12.5125 10.833 14.5836C10.833 16.6546 12.5119 18.3336 14.583 18.3336Z\" stroke=\"black\" stroke-width=\"1.5\"/\u003e\n    \u003cpath d=\"M14.167 13.3336V15.0002H15.8337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M5.41699 16.6666V18.3332\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\"/\u003e\n    \u003c/svg\u003e    \n    `,\n            finance: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M1.66699 5.4165H18.3337V15.4165H1.66699V5.4165Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M1.66699 8.74984C3.50794 8.74984 5.00033 7.25746 5.00033 5.4165H1.66699V8.74984Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M1.66699 12.0835C3.50794 12.0835 5.00033 13.5759 5.00033 15.4168H1.66699V12.0835Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M18.3333 12.0835V15.4168H15C15 13.5759 16.4924 12.0835 18.3333 12.0835Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M18.3333 8.74984C16.4924 8.74984 15 7.25746 15 5.4165H18.3333V8.74984Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M10.0003 12.9165C11.1509 12.9165 12.0837 11.7972 12.0837 10.4165C12.0837 9.0358 11.1509 7.9165 10.0003 7.9165C8.84974 7.9165 7.91699 9.0358 7.91699 10.4165C7.91699 11.7972 8.84974 12.9165 10.0003 12.9165Z\" stroke=\"#5082E6\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n            other: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M15.8335 1.6665H4.16683C3.70659 1.6665 3.3335 2.0396 3.3335 2.49984V17.4998C3.3335 17.9601 3.70659 18.3332 4.16683 18.3332H15.8335C16.2937 18.3332 16.6668 17.9601 16.6668 17.4998V2.49984C16.6668 2.0396 16.2937 1.6665 15.8335 1.6665Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 11.25H12.9168\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 8.75H12.9168\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 5.83301H12.9168\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.0835 14.1665H10.0002\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n            personal_data: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M17.5003 3.3335H2.50033C2.04009 3.3335 1.66699 3.70659 1.66699 4.16683V15.8335C1.66699 16.2937 2.04009 16.6668 2.50033 16.6668H17.5003C17.9606 16.6668 18.3337 16.2937 18.3337 15.8335V4.16683C18.3337 3.70659 17.9606 3.3335 17.5003 3.3335Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.08366 10.4168C8.00412 10.4168 8.75033 9.67062 8.75033 8.75016C8.75033 7.8297 8.00412 7.0835 7.08366 7.0835C6.1632 7.0835 5.41699 7.8297 5.41699 8.75016C5.41699 9.67062 6.1632 10.4168 7.08366 10.4168Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M9.5835 12.9165C9.5835 11.5358 8.4642 10.4165 7.0835 10.4165C5.70279 10.4165 4.5835 11.5358 4.5835 12.9165\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M11.667 8.3335H15.0003\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M12.5 11.6665H15\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e\n    `,\n            overtime: `\u003csvg width=\"14\" height=\"18\" viewBox=\"0 0 14 18\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cg clip-path=\"url(#clip0_2358_14813)\"\u003e\n    \u003cpath d=\"M10.2083 8.4375H6.125C5.96458 8.4375 5.83333 8.56406 5.83333 8.71875V9.28125C5.83333 9.43594 5.96458 9.5625 6.125 9.5625H10.2083C10.3687 9.5625 10.5 9.43594 10.5 9.28125V8.71875C10.5 8.56406 10.3687 8.4375 10.2083 8.4375ZM10.2083 11.8125H6.125C5.96458 11.8125 5.83333 11.9391 5.83333 12.0938V12.6562C5.83333 12.8109 5.96458 12.9375 6.125 12.9375H10.2083C10.3687 12.9375 10.5 12.8109 10.5 12.6562V12.0938C10.5 11.9391 10.3687 11.8125 10.2083 11.8125ZM4.08333 8.15625C3.59844 8.15625 3.20833 8.53242 3.20833 9C3.20833 9.46758 3.59844 9.84375 4.08333 9.84375C4.56823 9.84375 4.95833 9.46758 4.95833 9C4.95833 8.53242 4.56823 8.15625 4.08333 8.15625ZM4.08333 11.5312C3.59844 11.5312 3.20833 11.9074 3.20833 12.375C3.20833 12.8426 3.59844 13.2188 4.08333 13.2188C4.56823 13.2188 4.95833 12.8426 4.95833 12.375C4.95833 11.9074 4.56823 11.5312 4.08333 11.5312ZM12.25 2.25H9.33333C9.33333 1.00898 8.28698 0 7 0C5.71302 0 4.66667 1.00898 4.66667 2.25H1.75C0.783854 2.25 0 3.00586 0 3.9375V16.3125C0 17.2441 0.783854 18 1.75 18H12.25C13.2161 18 14 17.2441 14 16.3125V3.9375C14 3.00586 13.2161 2.25 12.25 2.25ZM7 1.6875C7.32083 1.6875 7.58333 1.94062 7.58333 2.25C7.58333 2.55938 7.32083 2.8125 7 2.8125C6.67917 2.8125 6.41667 2.55938 6.41667 2.25C6.41667 1.94062 6.67917 1.6875 7 1.6875ZM12.25 16.0312C12.25 16.1859 12.1187 16.3125 11.9583 16.3125H2.04167C1.88125 16.3125 1.75 16.1859 1.75 16.0312V4.21875C1.75 4.06406 1.88125 3.9375 2.04167 3.9375H3.5V5.0625C3.5 5.37187 3.7625 5.625 4.08333 5.625H9.91667C10.2375 5.625 10.5 5.37187 10.5 5.0625V3.9375H11.9583C12.1187 3.9375 12.25 4.06406 12.25 4.21875V16.0312Z\" fill=\"white\"/\u003e\n    \u003c/g\u003e\n    \u003cdefs\u003e\n    \u003cclipPath id=\"clip0_2358_14813\"\u003e\n    \u003crect width=\"14\" height=\"18\" fill=\"white\"/\u003e\n    \u003c/clipPath\u003e\n    \u003c/defs\u003e\n    \u003c/svg\u003e\n    `,\n            service: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M15.4167 3.33356H4.58333C4.1231 3.33356 3.75 3.70665 3.75 4.16689V17.5002C3.75 17.9605 4.1231 18.3336 4.58333 18.3336H15.4167C15.8769 18.3336 16.25 17.9605 16.25 17.5002V4.16689C16.25 3.70665 15.8769 3.33356 15.4167 3.33356Z\" stroke=\"black\" stroke-width=\"1.5\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.5 1.66656V4.16656\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M12.5 1.66656V4.16656\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 7.91656H13.3337\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 11.2501H11.667\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M6.66699 14.5836H10.0003\" stroke=\"black\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e    \n    `,\n            issue: `\u003csvg width=\"20\" height=\"20\" viewBox=\"0 0 20 20\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n    \u003cpath d=\"M16.25 1.6665H4.58333C4.1231 1.6665 3.75 2.0396 3.75 2.49984V17.4998C3.75 17.9601 4.1231 18.3332 4.58333 18.3332H16.25C16.7102 18.3332 17.0833 17.9601 17.0833 17.4998V2.49984C17.0833 2.0396 16.7102 1.6665 16.25 1.6665Z\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.08301 12.5H12.9163\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M7.08301 15H9.99967\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003cpath d=\"M12.9163 5H7.08301V9.16667H12.9163V5Z\" stroke=\"white\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/\u003e\n    \u003c/svg\u003e`\n        };\n        return {\n            refreshContainers,\n            getOrRefreshData,\n            getAllData,\n            onLoad\n        };\n    }\n    exports_1(\"default\", default_1);\n    return {\n        setters: [],\n        execute: function () {\n        }\n    };\n});\n",
+    "clientFnDeclarations": [
+      {
+        "name": "refreshContainers",
+        "parameters": [
+          {
+            "name": "[object Object]",
+            "type": "[object Object]"
+          },
+          {
+            "name": "[object Object]",
+            "type": "[object Object]"
+          }
+        ],
+        "type": "[object Object]"
+      },
+      {
+        "name": "getOrRefreshData",
+        "parameters": [
+          {
+            "name": "[object Object]",
+            "type": ""
+          }
+        ],
+        "type": "[object Object]"
+      },
+      {
+        "name": "getAllData",
+        "parameters": [],
+        "type": "[object Object]"
+      },
+      {
+        "name": "onLoad",
+        "parameters": [],
+        "type": "[object Object]"
+      }
+    ]
+  },
+  "__createdAt": "2024-06-04T12:06:12.225821438Z",
+  "__createdBy": "7e61e9a9-edda-49a3-baa2-87b36c4fbb6c",
+  "__updatedAt": "2024-06-04T13:48:13.583571548Z",
+  "__updatedBy": "7e61e9a9-edda-49a3-baa2-87b36c4fbb6c",
+  "__deletedAt": null
+}

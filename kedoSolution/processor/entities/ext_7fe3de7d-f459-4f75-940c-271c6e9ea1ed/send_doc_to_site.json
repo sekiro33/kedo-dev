@@ -1,0 +1,2065 @@
+{
+  "__id": "018c8757-193d-7f5c-b5c2-527fab250d98",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "code": "send_doc_to_site",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Отправить на подпись в Работу в России",
+  "type": "bpmn",
+  "draft": false,
+  "version": 4,
+  "context": [
+    {
+      "code": "doc_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Идентификатор документа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "signed_successfully",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ успешно отправлен",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "invite_link",
+      "type": "LINK",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ссылка для подписания",
+        "data": {}
+      }
+    },
+    {
+      "code": "responsible_comment",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Комментарий ответственного",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "api_token",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ключ доступа",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "time_limit",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Срок подписания",
+        "data": {
+          "additionalType": "datetime",
+          "defaultTimeType": "startOfDay"
+        }
+      }
+    },
+    {
+      "code": "responsible_user",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Ответственный сотрудник",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "zip_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Архив с подписями",
+        "data": {}
+      }
+    },
+    {
+      "code": "snils",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "СНИЛС",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "user_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Идентификатор пользователя",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "json_data_obj",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "JSON данные",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "doc",
+      "type": "REF_ITEM",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Документ",
+        "data": {}
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-03-22T08:31:58.035731004Z",
+  "__createdBy": "8b6393ab-540b-4559-8c18-7ef92a9cc24a",
+  "__updatedAt": "2024-03-11T12:39:59.975433895Z",
+  "__updatedBy": "d4c0aacb-19ed-44fa-b229-5f7ed736889c",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["9fa16dad-0c36-4efd-88f1-82b8fd64fb29"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            },
+            {
+              "code": "doc",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "user",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "responsible_user",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "snils",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Отправить на подпись в Работу в России - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0ffbe495-39fb-495e-9d3b-061cd6c423de": {
+        "x": 632,
+        "y": 160,
+        "id": "0ffbe495-39fb-495e-9d3b-061cd6c423de",
+        "icon": "system",
+        "lane": "348345d7-ca37-47bb-8b8e-f60e2421261d",
+        "name": "Документ подписан",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["d8b2400a-8906-4176-9e0e-cc63908d71fa"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "signed_successfully"
+              }
+            }
+          ]
+        }
+      },
+      "13353242-4f15-448b-a148-4ce722da7cc3": {
+        "x": 80,
+        "y": 120,
+        "id": "13353242-4f15-448b-a148-4ce722da7cc3",
+        "icon": "script",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "Сериализация данных",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "87dd094b-20aa-42a4-a2a3-656f1f861c6a",
+          "f55772cd-44be-46dc-b7bc-7a211fe7c3d6"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "serialize",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "87dd094b-20aa-42a4-a2a3-656f1f861c6a",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "1de7023c-c832-46c9-b837-2fa7fdf73a1a": {
+        "x": 200,
+        "y": 240,
+        "id": "1de7023c-c832-46c9-b837-2fa7fdf73a1a",
+        "icon": "notification",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "Оповещение 1",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["f0da8dfb-661c-4afb-9240-aef1a2d5581b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "current"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "kind": "current"
+            }
+          ],
+          "messageBody": "Ошибка {$error}",
+          "messageHeader": "Ошибка"
+        }
+      },
+      "23f48a2a-9a2a-422e-b606-718e5dfeda42": {
+        "x": 728,
+        "y": 168,
+        "id": "23f48a2a-9a2a-422e-b606-718e5dfeda42",
+        "icon": "end",
+        "lane": "348345d7-ca37-47bb-8b8e-f60e2421261d",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "46f7cd2e-1e92-470a-852e-7bd999a54e2d": {
+        "x": 80,
+        "y": 280,
+        "id": "46f7cd2e-1e92-470a-852e-7bd999a54e2d",
+        "icon": "script",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "Отправить подпись к документу",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "7b2f9fd8-3de6-4d5e-80f2-c186b9b247d8",
+          "0b459caf-7a06-44c1-b083-ab6f21df2667"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "storeSign",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "7b2f9fd8-3de6-4d5e-80f2-c186b9b247d8",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "47cd157b-5b65-4754-ac06-274a4b848c0d": {
+        "x": 80,
+        "y": 200,
+        "id": "47cd157b-5b65-4754-ac06-274a4b848c0d",
+        "icon": "script",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "Отправить документ на сайт Работы в России",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "459ea3c9-5e2b-4ebd-b8a5-fd8738818120",
+          "e0c43053-2483-44e5-a442-bbabfff49319"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "sendDoc",
+          "count": 4,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "459ea3c9-5e2b-4ebd-b8a5-fd8738818120",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "88b488c4-7dff-43bd-9835-b7f9fc6ba605": {
+        "x": 368,
+        "y": 360,
+        "id": "88b488c4-7dff-43bd-9835-b7f9fc6ba605",
+        "icon": "user",
+        "lane": "380669d8-7a69-4e11-a8ba-0a35199496d7",
+        "name": "Подписать документ на сайте Работы в России",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": ["a4691ab0-549a-454d-b899-eb295be4469d"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Подписать документ на портале Работа в России: {$doc}",
+          "notify": true,
+          "formCode": "form_5f7305a1-03da-4e1e-a566-3b6a7167c0f6",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "code": "time_limit",
+                "days": 0,
+                "kind": "variable",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": true,
+                "substraction": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "code": "user",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [
+            {
+              "code": "invite_link",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "a3e52b6a-e45b-4452-8e31-f207c1e7fec9": {
+        "x": 512,
+        "y": 160,
+        "id": "a3e52b6a-e45b-4452-8e31-f207c1e7fec9",
+        "icon": "user",
+        "lane": "348345d7-ca37-47bb-8b8e-f60e2421261d",
+        "name": "Проверить подпись к документу",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "3f4e7635-35fb-4157-88e3-4878fbc03d76",
+          "e8ce9d1e-0269-410a-b88b-eabc8cdf80f5"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Проверить подпись {$user} к документу {$doc}",
+          "notify": true,
+          "formCode": "form_804bc66a-e8f1-4aeb-9edb-44a35b8c045c",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 4,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [
+            {
+              "code": "doc",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "cd4f13de-5954-4158-8642-8f803da4fa6c": {
+        "x": 296,
+        "y": 256,
+        "id": "cd4f13de-5954-4158-8642-8f803da4fa6c",
+        "icon": "end",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "e17db59a-1caa-4421-b043-0c5957de2a22": {
+        "x": 80,
+        "y": 360,
+        "id": "e17db59a-1caa-4421-b043-0c5957de2a22",
+        "icon": "script",
+        "lane": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "Получить ссылку для подписания документа",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "1a5f5077-c267-4e8b-b502-b358febaaaf5",
+          "1f30c859-f237-4cba-8b8d-7bc869b7f575"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "sendDocForSigning",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "1a5f5077-c267-4e8b-b502-b358febaaaf5",
+              "notify": false,
+              "interrupt": true,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "348345d7-ca37-47bb-8b8e-f60e2421261d": {
+        "x": 352,
+        "y": 96,
+        "id": "348345d7-ca37-47bb-8b8e-f60e2421261d",
+        "name": "Ответственный сотрудник",
+        "color": "#d6f0cc",
+        "width": 436,
+        "height": 192,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "responsible_user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "380669d8-7a69-4e11-a8ba-0a35199496d7": {
+        "x": 352,
+        "y": 288,
+        "id": "380669d8-7a69-4e11-a8ba-0a35199496d7",
+        "name": "Сотрудник",
+        "color": "#d6f0cc",
+        "width": 440,
+        "height": 188,
+        "settings": {
+          "type": "dynamic",
+          "groups": [null],
+          "variable": "user",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "9f64aad0-a390-49e0-8022-5e491b76ab5a": {
+        "x": 8,
+        "y": 8,
+        "id": "9f64aad0-a390-49e0-8022-5e491b76ab5a",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 344,
+        "height": 468,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0b459caf-7a06-44c1-b083-ab6f21df2667": {
+        "id": "0b459caf-7a06-44c1-b083-ab6f21df2667",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 344
+          },
+          {
+            "x": 120,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "46f7cd2e-1e92-470a-852e-7bd999a54e2d",
+        "target": "e17db59a-1caa-4421-b043-0c5957de2a22",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1a5f5077-c267-4e8b-b502-b358febaaaf5": {
+        "id": "1a5f5077-c267-4e8b-b502-b358febaaaf5",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 392
+          },
+          {
+            "x": 240,
+            "y": 392
+          },
+          {
+            "x": 240,
+            "y": 304
+          }
+        ],
+        "type": "error",
+        "source": "e17db59a-1caa-4421-b043-0c5957de2a22",
+        "target": "1de7023c-c832-46c9-b837-2fa7fdf73a1a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "1f30c859-f237-4cba-8b8d-7bc869b7f575": {
+        "id": "1f30c859-f237-4cba-8b8d-7bc869b7f575",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 424
+          },
+          {
+            "x": 120,
+            "y": 432
+          },
+          {
+            "x": 408,
+            "y": 432
+          },
+          {
+            "x": 408,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "e17db59a-1caa-4421-b043-0c5957de2a22",
+        "target": "88b488c4-7dff-43bd-9835-b7f9fc6ba605",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3f4e7635-35fb-4157-88e3-4878fbc03d76": {
+        "id": "3f4e7635-35fb-4157-88e3-4878fbc03d76",
+        "name": "Подтвердить наличие подписи",
+        "path": [
+          {
+            "x": 592,
+            "y": 192
+          },
+          {
+            "x": 632,
+            "y": 192
+          }
+        ],
+        "type": "plain",
+        "source": "a3e52b6a-e45b-4452-8e31-f207c1e7fec9",
+        "target": "0ffbe495-39fb-495e-9d3b-061cd6c423de",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "459ea3c9-5e2b-4ebd-b8a5-fd8738818120": {
+        "id": "459ea3c9-5e2b-4ebd-b8a5-fd8738818120",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 232
+          },
+          {
+            "x": 220,
+            "y": 232
+          },
+          {
+            "x": 220,
+            "y": 240
+          }
+        ],
+        "type": "error",
+        "source": "47cd157b-5b65-4754-ac06-274a4b848c0d",
+        "target": "1de7023c-c832-46c9-b837-2fa7fdf73a1a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7b2f9fd8-3de6-4d5e-80f2-c186b9b247d8": {
+        "id": "7b2f9fd8-3de6-4d5e-80f2-c186b9b247d8",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 312
+          },
+          {
+            "x": 220,
+            "y": 312
+          },
+          {
+            "x": 220,
+            "y": 304
+          }
+        ],
+        "type": "error",
+        "source": "46f7cd2e-1e92-470a-852e-7bd999a54e2d",
+        "target": "1de7023c-c832-46c9-b837-2fa7fdf73a1a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "87dd094b-20aa-42a4-a2a3-656f1f861c6a": {
+        "id": "87dd094b-20aa-42a4-a2a3-656f1f861c6a",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 152
+          },
+          {
+            "x": 240,
+            "y": 152
+          },
+          {
+            "x": 240,
+            "y": 240
+          }
+        ],
+        "type": "error",
+        "source": "13353242-4f15-448b-a148-4ce722da7cc3",
+        "target": "1de7023c-c832-46c9-b837-2fa7fdf73a1a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9fa16dad-0c36-4efd-88f1-82b8fd64fb29": {
+        "id": "9fa16dad-0c36-4efd-88f1-82b8fd64fb29",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 120
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "13353242-4f15-448b-a148-4ce722da7cc3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a4691ab0-549a-454d-b899-eb295be4469d": {
+        "id": "a4691ab0-549a-454d-b899-eb295be4469d",
+        "name": "Подписал. Загрузить из Работа в России",
+        "path": [
+          {
+            "x": 448,
+            "y": 392
+          },
+          {
+            "x": 476,
+            "y": 392
+          },
+          {
+            "x": 476,
+            "y": 208
+          },
+          {
+            "x": 512,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "88b488c4-7dff-43bd-9835-b7f9fc6ba605",
+        "target": "a3e52b6a-e45b-4452-8e31-f207c1e7fec9",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d8b2400a-8906-4176-9e0e-cc63908d71fa": {
+        "id": "d8b2400a-8906-4176-9e0e-cc63908d71fa",
+        "name": "",
+        "path": [
+          {
+            "x": 712,
+            "y": 192
+          },
+          {
+            "x": 720,
+            "y": 192
+          },
+          {
+            "x": 720,
+            "y": 184
+          },
+          {
+            "x": 728,
+            "y": 184
+          }
+        ],
+        "type": "plain",
+        "source": "0ffbe495-39fb-495e-9d3b-061cd6c423de",
+        "target": "23f48a2a-9a2a-422e-b606-718e5dfeda42",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e0c43053-2483-44e5-a442-bbabfff49319": {
+        "id": "e0c43053-2483-44e5-a442-bbabfff49319",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 264
+          },
+          {
+            "x": 120,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "47cd157b-5b65-4754-ac06-274a4b848c0d",
+        "target": "46f7cd2e-1e92-470a-852e-7bd999a54e2d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e8ce9d1e-0269-410a-b88b-eabc8cdf80f5": {
+        "id": "e8ce9d1e-0269-410a-b88b-eabc8cdf80f5",
+        "name": "Отправить на подписание",
+        "path": [
+          {
+            "x": 512,
+            "y": 192
+          },
+          {
+            "x": 408,
+            "y": 192
+          },
+          {
+            "x": 408,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "a3e52b6a-e45b-4452-8e31-f207c1e7fec9",
+        "target": "88b488c4-7dff-43bd-9835-b7f9fc6ba605",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f0da8dfb-661c-4afb-9240-aef1a2d5581b": {
+        "id": "f0da8dfb-661c-4afb-9240-aef1a2d5581b",
+        "name": "",
+        "path": [
+          {
+            "x": 280,
+            "y": 272
+          },
+          {
+            "x": 296,
+            "y": 272
+          }
+        ],
+        "type": "plain",
+        "source": "1de7023c-c832-46c9-b837-2fa7fdf73a1a",
+        "target": "cd4f13de-5954-4158-8642-8f803da4fa6c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "f55772cd-44be-46dc-b7bc-7a211fe7c3d6": {
+        "id": "f55772cd-44be-46dc-b7bc-7a211fe7c3d6",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 184
+          },
+          {
+            "x": 120,
+            "y": 200
+          }
+        ],
+        "type": "plain",
+        "source": "13353242-4f15-448b-a148-4ce722da7cc3",
+        "target": "47cd157b-5b65-4754-ac06-274a4b848c0d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "const accessToken = Namespace.params.data.api_token;\nconst userId = Namespace.params.data.user_id;\nconst headers = \u003cRecord\u003cstring, string\u003e\u003e {\n    \"Content-Type\": \"application/json\",\n    \"Authorization\": `Basic ${accessToken}`\n};\nconst baseUrl = \"https://ekd-integration.trudvsem.ru\";\nconst invalidFieldsRegexp = /\\[(?\u003cvalue\u003e.*)\\]/\n\n\ntype docData = {\n    userId: string,\n    name: string,\n    fileName: string,\n    comment?: string,\n    docEffectiveDate?: string,\n    docNumber?: string,\n    groupId?: string,\n    docKindId?: string\n};\n\ntype signData = {\n    userId: string,\n    signatureFormat: string,\n    signature: string,\n    signatureFileName: string,\n    certificate?: string,\n    noVerify?: boolean\n};\n\ntype sendDocData = {\n    userId: string,\n    snils: string \n};\n\ntype jsonData = {\n    docData: docData,\n    signData: signData,\n    sendDocData: sendDocData\n};\n\n\nasync function logError(response?: FetchResponse, error?: string) {\n    const errorCode = response!.status;\n    let responseText = await response!.text();\n    Context.data.error = responseText;\n    if (!response) {\n        throw new Error(error)\n    };\n    switch (errorCode) {\n        case 400:\n            let errMessage: string = \"\"\n            if (response.url.includes(\"storeSign\")) {\n                errMessage = \"Неподдерживаемый формат подписи.\"\n                Context.data.error = errMessage;\n                throw new Error(\"Неподдерживаемый формат подписи.\")\n            }\n            const regMatch = responseText.match(invalidFieldsRegexp);\n\n            if (!!regMatch \u0026\u0026 regMatch.length \u003e 0) {\n                const invalidFields = regMatch[1];\n                errMessage = invalidFields\n                Context.data.error = `Не заданы обязательные поля: ${errMessage}.`;\n            };\n\n            throw new Error(Context.data.error);\n        case 401:\n            throw new Error(\"Неверный api-ключ.\");\n        case 403:\n            throw new Error(\"Отсутствуют права на создание или изменение документов.\");\n        case 404:\n            throw new Error(\"Не найден работодатель, соответствующий пользователю.\")\n        case 415:\n            throw new Error(\"Документ не соответствует формату PDF/A-1 или в запросе передан тип данных, отличающийся от 'application/json'\");\n    };\n};\n\nasync function serialize(): Promise\u003cvoid\u003e {\n    Context.data.api_token = accessToken\n    Context.data.user_id = userId\n    try {\n        const doc = await Context.data.doc!.fetch();\n        let snils = Context.data.snils!;\n        if (snils.includes(\"-\") || snils.includes(\" \")) {\n            snils = snils.replace(/-/g, \"\").replace(/\\s/g, \"\")\n        };\n        let signature: string = \"\";\n        let fetchedDoc: any;\n\n        if (!!doc.data.__sourceRef) {\n            fetchedDoc = await doc.data.__sourceRef.fetch();\n        } else {\n            fetchedDoc = doc;\n        };\n\n        const fileBuffer = await fetch(await fetchedDoc.data.__file.getDownloadUrl()).then(async resp =\u003e resp.arrayBuffer());\n        const file = arrayBufferToBase64(fileBuffer)\n        Context.data.debug = file\n        const fileName = await fetchedDoc.data.__file.fetch().then((r: any) =\u003e r.data.__name);\n        const name = fileName;\n\n        try {\n            const signHistory = await fetchedDoc.getSignHistory();\n            signature = signHistory[0].signs[0].sign;\n        } catch (err) {\n            throw new Error(`Ошибка ${err.message}: у документа отсутствуют подписи.`)\n        };\n\n        const docDataObj = \u003cdocData\u003e {\n            userId,\n            name,\n            fileName,\n            file\n        };\n\n        const signDataObj = \u003csignData\u003e {\n            userId,\n            signatureFormat: \"CADESBES\",\n            signature,\n            signatureFileName: `${fileName}.sig`\n        };\n\n        const sendDocDataObj = \u003csendDocData\u003e {\n            userId,\n            snils\n        };\n\n        let jsonData = \u003cjsonData\u003e {\n            docData: docDataObj,\n            signData: signDataObj,\n            sendDocData: sendDocDataObj\n        };\n        Context.data.json_data_obj = JSON.stringify(jsonData);\n    } catch (err) {\n        Context.data.error = err.message;\n        throw new Error(err.message)\n    };\n};\n\nasync function sendDoc(): Promise\u003cvoid\u003e {\n    try {\n        const body = JSON.stringify(JSON.parse(Context.data.json_data_obj!).docData);\n        const response = await fetch(`${baseUrl}/docs`, {\n            method: \"POST\",\n            headers,\n            body\n        });\n\n        if (!response.ok) {\n            await logError(response);\n        };\n        const responseText = await response.text();\n        const responseJson = JSON.parse(responseText);\n        Context.data.doc_id = responseJson.documentId;\n    } catch (err) {\n        throw new Error(err.message);\n    };\n};\n\nasync function storeSign(): Promise \u003cvoid\u003e {\n    try {\n        const body = JSON.stringify(JSON.parse(Context.data.json_data_obj!).signData);\n        const docId = Context.data.doc_id;\n        const response = await fetch(`${baseUrl}/docs/${docId}/storeSign`, {\n            method: \"POST\",\n            headers,\n            body\n        });\n\n        if (!response.ok) {\n            await logError(response);\n        };\n\n    } catch (err) {\n        throw new Error(err.message)\n    };\n};\n\nasync function sendDocForSigning(): Promise\u003cvoid\u003e {\n    try {\n        const body = JSON.stringify(JSON.parse(Context.data.json_data_obj!).sendDocData);\n        const docId = Context.data.doc_id;\n        const response = await fetch(`${baseUrl}/docs/${docId}/send`, {\n            method: \"POST\",\n            headers,\n            body\n        });\n\n        if (!response.ok) {\n            await logError(response);\n        };\n\n        const inviteLink = (await response.json()).inviteLink;\n        Context.data.invite_link = inviteLink;\n    } catch (err) {\n        throw new Error(err.message)\n    };\n};\n\nasync function getFileWithSigns(): Promise\u003cvoid\u003e {\n    try {\n        const docId = Context.data.doc_id;\n        const response = await fetch(`${baseUrl}/docs/${docId}/signedFile?userId=${userId}`, {\n            headers: {\n                \"Authorization\": `Basic ${accessToken}`\n            }\n        });\n\n        if (!response.ok) {\n            await logError(response);\n        };\n\n        const responseJson = await response.json();\n        const fileName = responseJson.fileName;\n        const zipFileBase64 = responseJson.file;\n        const zipFileBuffer = base64ToArrayBuffer(zipFileBase64);\n        const zipFile = await Context.fields.zip_file.create(fileName, zipFileBuffer);\n        Context.data.zip_file = zipFile;\n    } catch (err) {\n        throw new Error(err.message);\n    };\n};\n\nfunction base64ToArrayBuffer(base64: string): ArrayBuffer {\n    const binary_string = atob(base64);\n    const len = binary_string.length;\n    let bytes = new Uint8Array(len);\n\n    for (let i = 0; i \u003c len; i++) {\n        bytes[i] = binary_string.charCodeAt(i);\n    };\n\n    return bytes.buffer;\n}\n\n\nfunction arrayBufferToBase64(buffer: ArrayBuffer): string {\n    let binary = '';\n    let bytes = new Uint8Array( buffer );\n    let len = bytes.byteLength;\n    for (let i = 0; i \u003c len; i++) {\n        binary += String.fromCharCode( bytes[ i ] );\n    }\n    return btoa(binary);\n};\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_804bc66a-e8f1-4aeb-9edb-44a35b8c045c",
+      "name": "Проверить подпись к документу",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "80e99707-8703-4cd3-9aea-bce664a3715e",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_edda81f8-dc6a-408c-9a9a-9e86cfc43593",
+      "name": "Разбор zip-файла",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": 4
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "10c06d93-84bb-405a-8f8c-410882785959",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_5f7305a1-03da-4e1e-a566-3b6a7167c0f6",
+      "name": "Подписать документ на сайте Работы в России",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": 4
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "82adcb23-5bab-4495-85b4-5cfb1213461e",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "doc": {
+        "enabled": false,
+        "conditions": []
+      },
+      "user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "snils": {
+        "enabled": false,
+        "conditions": []
+      },
+      "doc_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "user_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "zip_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "api_token": {
+        "enabled": false,
+        "conditions": []
+      },
+      "time_limit": {
+        "enabled": false,
+        "conditions": []
+      },
+      "invite_link": {
+        "enabled": false,
+        "conditions": []
+      },
+      "json_data_obj": {
+        "enabled": false,
+        "conditions": []
+      },
+      "responsible_user": {
+        "enabled": false,
+        "conditions": []
+      },
+      "responsible_comment": {
+        "enabled": false,
+        "conditions": []
+      },
+      "signed_successfully": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

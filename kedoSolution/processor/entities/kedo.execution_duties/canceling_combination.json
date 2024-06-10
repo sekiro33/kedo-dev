@@ -1,0 +1,339 @@
+{
+  "__id": "018f0a73-f072-7808-8f5b-01252d474b2e",
+  "namespace": "kedo.execution_duties",
+  "code": "canceling_combination",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Отмена совмещения",
+  "type": "bpmn",
+  "draft": false,
+  "version": 1,
+  "context": [
+    {
+      "code": "execution_duties",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "execution_duties",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на совмещение"
+      }
+    },
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-04-01T19:42:49.614134207Z",
+  "__createdBy": "54584d91-0741-4200-a803-b00376614edb",
+  "__updatedAt": "2024-04-02T10:34:37.122440664Z",
+  "__updatedBy": "099fd2a1-8125-406b-aaff-0db06d81aa40",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "cad70f76-9f85-44d1-9644-c1a21a9fb856",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["72b797fa-01db-477c-b90a-32bd7893cd52"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true,
+              "hideEmpty": false
+            }
+          ],
+          "instruction": "Будет запущена процедура отмены документов в рамках которой потребуется согласование отмены и подписание ряда документов",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Отмена совмещения ({$execution_duties})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "2b5e36d0-55ba-4dc3-ad4b-13e00e743947": {
+        "x": 80,
+        "y": 232,
+        "id": "2b5e36d0-55ba-4dc3-ad4b-13e00e743947",
+        "lane": "cad70f76-9f85-44d1-9644-c1a21a9fb856",
+        "name": "Запуск процесса отмены документов",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["08ef9d4e-36b9-43ef-a531-a35f278f3497"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "cancel_documents_processes",
+          "async": true,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "execution_duties.initiator"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "execution_duties",
+          "namespace": "kedo",
+          "subProcessTargetFieldCode": ""
+        }
+      },
+      "5c90bc4a-a71b-4a1c-b5e6-df7f78da8262": {
+        "x": 80,
+        "y": 136,
+        "id": "5c90bc4a-a71b-4a1c-b5e6-df7f78da8262",
+        "icon": "script",
+        "lane": "cad70f76-9f85-44d1-9644-c1a21a9fb856",
+        "name": "Отмена замещения",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["33f2847e-f816-41ca-8f38-18dd6e215dd1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "cancellationSubstitution",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "eb31e593-b0ee-4bea-8ec2-1ee45f53eb07": {
+        "x": 104,
+        "y": 336,
+        "id": "eb31e593-b0ee-4bea-8ec2-1ee45f53eb07",
+        "icon": "end",
+        "lane": "cad70f76-9f85-44d1-9644-c1a21a9fb856",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "cad70f76-9f85-44d1-9644-c1a21a9fb856": {
+        "x": 8,
+        "y": 8,
+        "id": "cad70f76-9f85-44d1-9644-c1a21a9fb856",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 224,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "08ef9d4e-36b9-43ef-a531-a35f278f3497": {
+        "id": "08ef9d4e-36b9-43ef-a531-a35f278f3497",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 296
+          },
+          {
+            "x": 120,
+            "y": 336
+          }
+        ],
+        "type": "plain",
+        "source": "2b5e36d0-55ba-4dc3-ad4b-13e00e743947",
+        "target": "eb31e593-b0ee-4bea-8ec2-1ee45f53eb07",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "33f2847e-f816-41ca-8f38-18dd6e215dd1": {
+        "id": "33f2847e-f816-41ca-8f38-18dd6e215dd1",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 200
+          },
+          {
+            "x": 120,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "5c90bc4a-a71b-4a1c-b5e6-df7f78da8262",
+        "target": "2b5e36d0-55ba-4dc3-ad4b-13e00e743947",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "72b797fa-01db-477c-b90a-32bd7893cd52": {
+        "id": "72b797fa-01db-477c-b90a-32bd7893cd52",
+        "name": "Отменить совмещение",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 136
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "5c90bc4a-a71b-4a1c-b5e6-df7f78da8262",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function cancellationSubstitution(): Promise\u003cvoid\u003e {\n    const combitation = await Context.data.execution_duties!.fetch();\n    if (combitation.data.replacement_id \u0026\u0026 combitation.data.replacement_id.length \u003e 0) {\n        const susbtitution = await System.replacements.search().where((f,g) =\u003e g.and(f.__deletedAt.eq(null), f.__id.eq(combitation.data.replacement_id!))).first();\n        if (susbtitution) {\n            Context.data.debug = 'Нашли замещение'\n            const now = new Datetime\n            if (susbtitution.data.begin!.before(now)) {\n                await susbtitution.interrupt()\n            } else {\n                Context.data.debug += ', удалили неначатое замещение'\n                await susbtitution.delete()\n            }\n            \n        }   \n    }\n    \n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "execution_duties",
+          "data": {
+            "code": "execution_duties",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Заявка на совмещение"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "execution_duties"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

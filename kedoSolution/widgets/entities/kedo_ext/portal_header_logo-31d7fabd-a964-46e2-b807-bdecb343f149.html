@@ -1,0 +1,695 @@
+<style>
+    .portal-header__bar * {
+        margin: 0;
+        padding: 0;
+        font-family: 'SF Pro Display';
+        font-size: 16px;
+    }
+
+    app-page-wrapper {
+        overflow-y: hidden;
+    }
+
+    .dropdown-modal {
+        position: absolute;
+        width: 100%;
+        height: 100vh;
+        z-index: 9;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all .3s;
+        opacity: 1;
+    }
+
+    .dropdown-modal.hidden {
+        opacity: 0;
+        z-index: -1;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .portal-header__bar {
+        width: calc(100vw - 40px);
+        height: 60px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .portal-header__bar:before,
+    .portal-header__bar:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+
+    .portal-header__bar .portal-header__bar-item {
+        padding: 8px 16px 8px 0px;
+        float: left;
+        width: auto;
+        border: none;
+        display: block;
+        outline: 0;
+    }
+
+    .portal-header__bar .portal-header__bar-logo {
+        margin-left: 15px;
+        background-size: contain;
+        background-repeat: no-repeat;
+    }
+
+    .portal-header__bar .portal-header__user {
+        position: fixed;
+        right: 0;
+        margin-right: 0px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 60px;
+    }
+
+
+
+    .portal-header__bar .portal-header__partner-text {
+        font-style: normal;
+        font-weight: normal;
+        line-height: 32px;
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        text-transform: uppercase;
+        color: #062543;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .portal-header__bar .portal-mobile-menu {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        height: 60px;
+    }
+
+    .portal-header__user-name {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 22px;
+        color: #062543;
+        margin-left: 16px;
+    }
+
+    .portal-header__company {
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 20px;
+        color: #062543;
+        margin-left: 16px;
+    }
+
+    .portal-header__user_logout {
+        margin: 16px 0 20px 30px;
+        font-style: normal;
+        font-weight: normal;
+        font-size: 16px;
+        line-height: 24px;
+        color: #5082E6;
+    }
+
+    .portal-header__user_logout:hover {
+        cursor: pointer;
+    }
+
+    .portal-header__modal {
+        display: none;
+        position: absolute;
+        z-index: 9000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow-y: hidden;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .portal-header__modal-content {
+        background-color: #fefefe;
+        width: 100%;
+        height: 100%;
+        overflow-y: initial;
+    }
+
+    .portal-header__modal-content a {
+        text-decoration: none;
+    }
+
+    .portal-header__modal-close {
+        padding-right: 36px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #fff;
+        font-size: 24px;
+    }
+
+    .portal-header__mobile-menu {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #1e6599;
+    }
+
+    .portal-header__mobile-menu-item {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: stretch;
+        line-height: 20px;
+        padding: 20px 18px;
+    }
+
+    .portal-header__mobile-menu-item-logout i {
+        margin-left: 4px;
+        margin-right: 12px;
+        color: #595959;
+    }
+
+    .portal-header__mobile-menu-item-logout span {
+        color: #595959;
+    }
+
+    .portal-header__mobile-menu-item-new-issue {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .portal-header__mobile-menu-item-new-issue i {
+        margin-left: 4px;
+        margin-right: 12px;
+        color: var(--color-theme-button-and-links);
+    }
+
+    .portal-header__mobile-menu-item-new-issue span {
+        color: var(--color-theme-button-and-links);
+        font-weight: bold;
+    }
+
+    .portal-header__mobile-menu-item__wrap {
+        display: block;
+    }
+
+    .portal-header__mobile-menu-item-icon {
+        margin-right: 16px;
+        color: #1e6599;
+    }
+
+    .portal-header__mobile-menu-item-label {
+        color: #000;
+    }
+
+    .portal-header__mobile-menu-header {
+        display: flex;
+        flex-direction: row;
+        height: 60px;
+        justify-content: space-between;
+    }
+
+    .portal-header__mobile-menu-body {
+        background-color: #fefefe;
+        overflow-y: auto;
+        border-radius: 30px 30px 0px 0px;
+        height: calc(100vh - 60px - 60px); // mobile-menu-header height
+    }
+
+    .portal-header__mobile-menu-delimiter {
+        margin: 0px;
+    }
+
+    .portal-header__mobile-menu-footer {
+        background-color: #fefefe;
+    }
+
+    .portal-header__mobile-menu-title {
+        display: flex;
+        align-items: center;
+        color: #fff;
+        font-size: 21px;
+        font-weight: 400;
+        line-height: normal;
+        display: flex;
+        padding: 20px;
+    }
+
+
+    .portal_new-issue_button {
+        background-color: #0055FF;
+        margin-left: 9rem;
+    }
+
+    .portal_new-issue_container {
+        position: absolute;
+        background-color: #FFF;
+        z-index: 10;
+        min-width: 300px;
+        border-radius: 4px;
+        box-shadow: 0px 6px 28px 0px rgba(0, 0, 0, 0.16);
+        top: 5.5rem;
+        margin-left: 9rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .portal-button {
+        padding: 1rem;
+        border-radius: 8px;
+        border: none;
+        display: inline-flex;
+        padding: 5px 12px;
+        color: white;
+        font-size: 15px;
+        font-weight: 400;
+        line-height: 22px;
+        transition: all 0.3s;
+    }
+
+    .portal-header__bar .portal-header__logout {
+        position: fixed;
+        right: 0;
+        margin-right: 0px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        height: 60px;
+        padding: 8px 28px 8px 0px !important;
+    }
+
+    .portal_header-link {
+        text-decoration: none;
+        background-color: #E7EFFF;
+        color: #90A9DF;
+    }
+
+    .portal_header-link:hover {
+        background-color: #739AF0;
+        color: #FFF
+    }
+
+    a.portal_header-link {
+        text-decoration: none;
+    }
+
+    .portal_header-notifications_button {
+        position: relative;
+        background-color: #E7EFFF;
+        padding: 7.5px;
+        border-radius: 15px;
+        display: flex;
+    }
+
+    .portal_new-issue_container {
+        position: absolute;
+        background-color: #FFF;
+        z-index: 10;
+        min-width: 300px;
+        border-radius: 4px;
+        box-shadow: 0px 6px 28px 0px rgba(0, 0, 0, 0.16);
+        top: 3.5rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .portal-header__bar .new-issue_container_item {
+        padding: 1rem;
+        display: flex;
+        justify-content: start;
+        align-items: center;
+        position: relative;
+        transition: background-color .3s;
+    }
+
+    .portal-header__bar a.new-issue_container_item {
+        text-decoration: none;
+        color: black;
+    }
+
+    .portal-header__bar .new-issue_container_item:hover {
+        background-color: #f5f6fa;
+    }
+
+    .portal-header__bar .new-issue_container_item_label::after {
+        content: "";
+        position: absolute;
+        right: -.5rem;
+        top: 0;
+        width: 10px;
+        height: 100%;
+    }
+
+    .portal-header__bar .new-issue_container_item_label {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+    }
+
+    .portal-header__bar .new-issue_container_item_label-text {
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 600;
+        user-select: none;
+        margin-bottom: 0 !important;
+    }
+
+    .portal-header__bar .new-issue_container_item.expandable::after {
+        content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none"><path d="M15.8236 12.8986L10.3018 18.3361C10.0814 18.5564 9.7252 18.5564 9.50488 18.3361L9.17207 18.0033C8.95176 17.783 8.95176 17.4268 9.17207 17.2064L13.9674 12.5002L9.17676 7.79395C8.95645 7.57363 8.95645 7.21738 9.17676 6.99707L9.50957 6.66426C9.72988 6.44395 10.0861 6.44395 10.3064 6.66426L15.8283 12.1018C16.0439 12.3221 16.0439 12.6783 15.8236 12.8986Z" fill="black"/></svg>');
+        font-size: 27px;
+        position: absolute;
+        right: 0.5rem;
+    }
+
+    .portal-header__bar .new-issue_container_item-list {
+        background-color: #FFF;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        padding: 0.5rem 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        gap: .5rem;
+        transition: background-color 0.3s;
+    }
+
+    .portal-header__bar a.new-issue_container_item-list {
+        text-decoration: none;
+        color: black;
+    }
+
+    .portal-header__bar .new-issue_container_item-list {
+        text-decoration: none;
+    }
+
+    .portal-header__bar .new-issue_container_item-list:hover {
+        background-color: #f5f6fa;
+        cursor: pointer;
+        user-select: none;
+    }
+
+    .portal-header__bar .new-issue_container_item-list:hover .new-issue_container_item_list-icon {
+        background-color: #FFF !important;
+    }
+
+    .portal-header__bar .new-issue_container_item_list-icon path {
+        stroke: #0055FF;
+        stroke-width: 1.2px;
+        fill: none;
+    }
+
+    .portal-header__bar .new-issue_container_item_list-icon.path-svg path {
+        stroke: #0055FF;
+        stroke-width: 1.2px;
+        fill: none;
+    }
+
+    .portal-header__bar .new-issue_container_item_list-icon {
+        border-radius: 50%;
+        background-color: #CBDCFF;
+        width: 32px;
+        height: 32px;
+        min-width: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .portal-header__bar .new-issue_container_item_list-label-text {
+        white-space: nowrap;
+        margin-bottom: 0 !important;
+    }
+
+    .portal-new-issue_container_item-issues {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        min-width: 22rem;
+        border-radius: 4px;
+        top: 0;
+        box-shadow: 0px 6px 28px 0px rgba(0, 0, 0, 0.16);
+        left: 100%;
+        background-color: #FFF;
+    }
+
+    .mobile-menu_new-issue_container-section {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 0 1.25rem;
+        background-color: #FFF;
+        z-index: 2;
+    }
+
+    .mobile-menu_new-issue_container-item {
+        display: flex;
+        gap: .5rem;
+        align-items: center;
+        justify-content: start;
+    }
+
+    a.mobile-menu_new-issue_container-item {
+        color: black;
+    }
+
+    a.mobile-menu_new-issue_container-item:hover {
+        text-decoration: none;
+        color: black;
+    }
+
+    .mobile-menu_new-issue_container-item_icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #CBDCFF;
+        border-radius: 50%;
+    }
+
+    .mobile-menu_new-issue_container-item_icon path {
+        fill: #5082E6;
+    }
+
+    .mobile-menu_new-issue_container-item_icon.path-svg path {
+        stroke: #5082E6;
+        fill: none;
+    }
+
+    .mobile-menu_new-issue_container-section_label {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 2.4rem;
+        color: black;
+    }
+
+    .mobile-menu_new-issue_container-section.active .mobile-menu_new-issue_container-section_label {
+        color: #5082E6;
+    }
+
+    .main-page_mobile-footer_services {
+        width: 100%;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 2.5rem;
+        background-color: #FFF;
+        padding: 2.25rem 0;
+    }
+
+    @media screen and (max-width: 992px) {
+        .portal-header__user {
+            display: none !important;
+        }
+
+        .portal-header__logout {
+            display: none !important;
+        }
+
+        .portal_new-issue_button {
+            display: none !important;
+        }
+    }
+
+    @media screen and (min-width: 993px) {
+        .portal-mobile-menu {
+            display: none !important;
+        }
+    }
+
+    @media (max-width: 450px) {
+        .portal-header__bar .portal-header__bar-logo {
+            margin-left: 5px;
+        }
+
+        .portal-header__bar {
+            width: calc(100vw - 10px);
+        }
+    }
+</style>
+
+<template class="mobile-menu_new-issue_container-section_template">
+    <span class="mobile-menu_new-issue_container-section" onclick="<%- Scripts %>.onClickSectionIssue(this);">
+        <h3 class="mobile-menu_new-issue_container-section_label">
+
+        </h3>
+    </span>
+</template>
+
+<template class="mobile-menu_new-issue_container-item_template">
+    <a class="mobile-menu_new-issue_container-item hidden" onclick="<%- Scripts %>.closeMobileMenu(true);">
+        <div class="mobile-menu_new-issue_container-item_icon path-svg">
+
+        </div>
+        <div class="mobile-menu_new-issue_container-item_label">
+
+        </div>
+    </a>
+</template>
+
+<template class="new-issue_container_item-list-template">
+    <a class="new-issue_container_item-list">
+        <div class="new-issue_container_item_list-icon">
+
+        </div>
+        <div class="new-issue_container_item_list-label">
+            <p class="new-issue_container_item_list-label-text">
+
+            </p>
+        </div>
+    </a>
+</template>
+<template class="new-issue_container_item-template">
+    <a class="new-issue_container_item">
+        <div class="new-issue_container_item_label">
+            <p class="new-issue_container_item_label-text">
+
+            </p>
+        </div>
+    </a>
+</template>
+
+<div class="dropdown-modal hidden" onclick="<%= Scripts %>.handleIssueDropdownModal(this)">
+
+</div>
+
+<div class="portal-header__bar">
+    <div class="portal-header__bar-item">
+        <svg class="portal-header__bar-logo" width="201" height="22" viewbox="0 0 201 22" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path
+                d="M13.6993 18.5603H10.8789L14.2915 21.9762C18.4612 21.6706 21.7603 18.1803 21.7603 13.9301V11.1069H18.325V13.9301C18.325 16.4827 16.2494 18.5603 13.6993 18.5603Z"
+                fill="#5082E6" />
+            <path
+                d="M18.325 8.28478V11.1059L21.7376 7.68999C21.4322 3.51823 17.9454 0.213867 13.6993 0.213867H10.8789V3.65247H13.6993C16.2494 3.65247 18.325 5.73009 18.325 8.28478Z"
+                fill="#FABE00" />
+            <path
+                d="M8.06301 3.65113H10.8814L7.46881 0.237305C3.30113 0.540893 0 4.0332 0 8.28343V11.1066H3.43524V8.28343C3.43524 5.72875 5.51083 3.65113 8.06301 3.65113Z"
+                fill="#E62D32" />
+            <path
+                d="M3.43587 13.9301V11.1069L0.0253906 14.5228C0.330745 18.6966 3.81757 21.9989 8.06365 21.9989H10.8841V18.5603H8.06365C5.51146 18.5603 3.43587 16.4827 3.43587 13.9301Z"
+                fill="#5AD2FF" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M158.51 17.4959C159.269 17.8049 160.154 17.9595 161.165 17.9595C162.218 17.9595 163.202 17.7628 164.115 17.3695C165.042 16.9762 165.85 16.4354 166.538 15.747C167.226 15.0587 167.767 14.2581 168.16 13.345C168.554 12.4179 168.75 11.4276 168.75 10.374C168.75 9.32049 168.554 8.33719 168.16 7.42413C167.767 6.49701 167.226 5.68931 166.538 5.001C165.85 4.31269 165.042 3.77187 164.115 3.37855C163.202 2.98523 162.218 2.78857 161.165 2.78857C160.154 2.78857 159.269 2.95012 158.51 3.2732C157.766 3.59628 157.147 3.94746 156.656 4.32673C156.066 4.77624 155.567 5.28194 155.16 5.84382L156.213 6.792C156.55 6.3144 156.958 5.89299 157.435 5.52776C157.843 5.20468 158.355 4.91671 158.974 4.66386C159.592 4.39697 160.322 4.26352 161.165 4.26352C161.98 4.26352 162.731 4.40399 163.419 4.68494C164.108 4.95183 164.712 5.32408 165.232 5.80168C165.751 6.26524 166.173 6.8201 166.496 7.46627C166.833 8.11243 167.058 8.80074 167.17 9.53119H159.374V11.0061H167.17C167.086 11.7647 166.875 12.4811 166.538 13.1554C166.215 13.8156 165.786 14.3985 165.253 14.9042C164.733 15.3959 164.122 15.7822 163.419 16.0631C162.731 16.344 161.98 16.4845 161.165 16.4845C160.322 16.4845 159.585 16.3581 158.952 16.1052C158.32 15.8384 157.794 15.5434 157.372 15.2203C156.881 14.8551 156.459 14.4336 156.108 13.956L155.054 14.9042C155.49 15.4802 156.01 15.9929 156.614 16.4424C157.133 16.8217 157.766 17.1728 158.51 17.4959ZM144.405 2.99928H142.825V17.7488H144.405V13.4293L147.355 10.2687L152.623 17.7488H154.519L148.409 9.10978L153.993 2.99928H151.991L144.405 11.3222V2.99928ZM169.606 16.2738H170.448C170.94 15.7681 171.375 15.1079 171.755 14.2932C172.078 13.5908 172.38 12.6848 172.661 11.5751C172.942 10.4513 173.082 9.06764 173.082 7.42413V2.99928H182.143V16.2738H183.934V20.9094H182.353V17.7488H171.186V20.9094H169.606V16.2738ZM180.562 4.47423H174.663V7.42413C174.663 9.03954 174.529 10.4021 174.262 11.5118C174.009 12.6216 173.721 13.5346 173.398 14.251C173.033 15.0798 172.612 15.7541 172.134 16.2738H180.562V4.47423ZM190.444 17.3695C191.371 17.7628 192.361 17.9595 193.415 17.9595C194.468 17.9595 195.451 17.7628 196.364 17.3695C197.292 16.9762 198.099 16.4354 198.788 15.747C199.476 15.0587 200.017 14.2581 200.41 13.345C200.803 12.4179 201 11.4276 201 10.374C201 9.32049 200.803 8.33719 200.41 7.42413C200.017 6.49701 199.476 5.68931 198.788 5.001C198.099 4.31269 197.292 3.77187 196.364 3.37855C195.451 2.98523 194.468 2.78857 193.415 2.78857C192.361 2.78857 191.371 2.98523 190.444 3.37855C189.531 3.77187 188.73 4.31269 188.042 5.001C187.353 5.68931 186.812 6.49701 186.419 7.42413C186.026 8.33719 185.829 9.32049 185.829 10.374C185.829 11.4276 186.026 12.4179 186.419 13.345C186.812 14.2581 187.353 15.0587 188.042 15.747C188.73 16.4354 189.531 16.9762 190.444 17.3695ZM195.775 16.021C195.044 16.33 194.257 16.4845 193.415 16.4845C192.572 16.4845 191.785 16.33 191.055 16.021C190.324 15.7119 189.685 15.2835 189.137 14.7357C188.603 14.1878 188.182 13.5416 187.873 12.7971C187.564 12.0527 187.409 11.2449 187.409 10.374C187.409 9.5031 187.564 8.69539 187.873 7.95089C188.182 7.2064 188.603 6.56023 189.137 6.01239C189.685 5.46455 190.324 5.03611 191.055 4.72708C191.785 4.41804 192.572 4.26352 193.415 4.26352C194.257 4.26352 195.044 4.41804 195.775 4.72708C196.505 5.03611 197.137 5.46455 197.671 6.01239C198.219 6.56023 198.647 7.2064 198.956 7.95089C199.265 8.69539 199.42 9.5031 199.42 10.374C199.42 11.2449 199.265 12.0527 198.956 12.7971C198.647 13.5416 198.219 14.1878 197.671 14.7357C197.137 15.2835 196.505 15.7119 195.775 16.021ZM105.138 10.5594C105.011 10.5098 104.912 10.4779 104.841 10.4638L105.075 10.3788C105.238 10.3079 105.425 10.191 105.638 10.0281C105.858 9.85806 106.081 9.65262 106.307 9.41176C106.534 9.17089 106.725 8.84856 106.881 8.44476C107.044 8.04096 107.126 7.59111 107.126 7.09522C107.126 5.97591 106.697 5.02663 105.84 4.24736C104.983 3.46102 103.888 3.06784 102.556 3.06784C101.99 3.06784 101.441 3.14577 100.909 3.30162C100.378 3.45039 99.9493 3.61687 99.6234 3.80106C99.2975 3.97816 98.9929 4.18361 98.7096 4.41738C98.4262 4.65116 98.2455 4.8141 98.1676 4.9062C98.0897 4.99829 98.0295 5.07267 97.987 5.12935L99.0708 6.33012L99.2196 6.1601C99.3117 6.03967 99.4534 5.89444 99.6447 5.72442C99.843 5.54732 100.073 5.37375 100.335 5.20373C100.597 5.02663 100.927 4.8814 101.324 4.76805C101.727 4.64762 102.138 4.58741 102.556 4.58741C103.456 4.58741 104.168 4.82473 104.692 5.29937C105.223 5.77401 105.489 6.37263 105.489 7.09522C105.489 7.92407 105.227 8.58645 104.703 9.08234C104.186 9.57115 103.47 9.81556 102.556 9.81556H101.026V11.3351H102.556C103.626 11.3351 104.49 11.622 105.149 12.1959C105.815 12.7697 106.148 13.4639 106.148 14.2786C106.148 15.1145 105.826 15.8123 105.181 16.372C104.536 16.9317 103.661 17.2115 102.556 17.2115C102.046 17.2115 101.557 17.1477 101.09 17.0202C100.629 16.8856 100.254 16.7368 99.9635 16.5739C99.673 16.4039 99.4038 16.2161 99.1559 16.0107C98.9079 15.7982 98.7485 15.6494 98.6777 15.5644C98.6068 15.4723 98.5572 15.405 98.5289 15.3625L97.4344 16.4464L97.615 16.6908C97.7426 16.8466 97.9515 17.0379 98.242 17.2646C98.5324 17.4913 98.8654 17.7145 99.2409 17.9341C99.6234 18.1466 100.109 18.3343 100.697 18.4973C101.285 18.6531 101.905 18.731 102.556 18.731C104.079 18.731 105.312 18.2918 106.254 17.4134C107.196 16.5279 107.668 15.4829 107.668 14.2786C107.668 13.6835 107.565 13.1487 107.359 12.674C107.161 12.1923 106.938 11.8239 106.69 11.5689C106.442 11.3139 106.155 11.0943 105.829 10.9101C105.503 10.7188 105.273 10.6019 105.138 10.5594ZM119.144 10.1662C118.173 9.20277 116.955 8.72105 115.489 8.72105C114.823 8.72105 114.281 8.79543 113.863 8.9442L117.454 3.28037H115.818L111.249 10.4638L110.962 10.8569C110.792 11.1332 110.615 11.5441 110.43 12.0896C110.253 12.628 110.165 13.1735 110.165 13.726C110.165 15.15 110.657 16.3401 111.642 17.2965C112.626 18.2529 113.873 18.731 115.382 18.731C116.891 18.731 118.138 18.2529 119.123 17.2965C120.115 16.3401 120.61 15.1535 120.61 13.7367C120.61 12.3127 120.122 11.1226 119.144 10.1662ZM118.974 13.7367C118.974 14.778 118.648 15.6175 117.996 16.2551C117.345 16.8927 116.473 17.2115 115.382 17.2115C114.298 17.2115 113.427 16.8927 112.768 16.2551C112.116 15.6175 111.791 14.778 111.791 13.7367C111.791 12.6882 112.116 11.8452 112.768 11.2076C113.427 10.57 114.298 10.2512 115.382 10.2512C116.473 10.2512 117.345 10.57 117.996 11.2076C118.648 11.8452 118.974 12.6882 118.974 13.7367ZM128.548 8.72105C130.015 8.72105 131.233 9.20277 132.204 10.1662C133.174 11.1226 133.66 12.3092 133.66 13.726C133.66 15.2066 133.181 16.411 132.225 17.339C131.269 18.267 130.008 18.731 128.442 18.731C127.819 18.731 127.216 18.6531 126.636 18.4973C126.055 18.3343 125.576 18.1466 125.201 17.9341C124.833 17.7145 124.507 17.4913 124.223 17.2646C123.94 17.0379 123.742 16.8466 123.628 16.6908L123.437 16.4464L124.521 15.3625C124.549 15.405 124.599 15.4723 124.67 15.5644C124.748 15.6494 124.907 15.7982 125.148 16.0107C125.396 16.2161 125.658 16.4039 125.934 16.5739C126.21 16.7368 126.572 16.8856 127.018 17.0202C127.471 17.1477 127.946 17.2115 128.442 17.2115C129.533 17.2115 130.404 16.8927 131.056 16.2551C131.708 15.6175 132.034 14.7745 132.034 13.726C132.034 12.6988 131.708 11.8629 131.056 11.2182C130.411 10.5736 129.575 10.2512 128.548 10.2512C127.868 10.2512 127.245 10.3894 126.678 10.6657C126.111 10.9419 125.718 11.2076 125.499 11.4626L125.169 11.8771H123.979L124.521 3.28037H132.682V4.81056H125.934L125.605 9.5924C125.69 9.53573 125.81 9.4578 125.966 9.35863C126.122 9.25236 126.451 9.1213 126.954 8.96545C127.464 8.80251 127.996 8.72105 128.548 8.72105ZM43.9484 18.5621V15.6959H35.8782V12.3899H42.0028V9.52168H35.8782V6.53781H43.7271V3.6572H32.6426V18.5621H43.9484ZM47.5342 3.6572V18.56H57.7566V15.6918H50.7698V3.6572H47.5342ZM73.9845 3.6572H76.8423V18.5621H73.6171V8.62548L68.7742 14.7254L63.9416 8.66678V18.5621H60.7061V3.6572H63.616L68.7742 10.1536L73.9845 3.6572ZM82.6535 18.5621L83.9456 15.0496H89.7571L91.0493 18.5621H94.4957L88.5694 3.6572H85.1334L79.207 18.5621H82.6535ZM85.0186 12.2846L86.8576 7.38858L88.6863 12.2846H85.0186Z"
+                fill="#233255" />
+        </svg>
+    </div>
+    <div class="portal_new-issue">
+        <button class="portal-button portal_new-issue_button" onclick="<%= Scripts %>.handleIssueDropdownModal(this)">
+            + Создать заявку
+        </button>
+        <div class="portal_new-issue_container hidden">
+
+        </div>
+    </div>
+    <div class="portal-header__bar-item portal-header__logout">
+        <div class="chief-component">
+            <a href="" target="_blank" class="portal-button portal_header-link">
+                Перейти в ELMA365
+            </a>
+        </div>
+        <div class="portal_header-notifications_button hidden">
+            <svg class="portal_header-notifications_svg" width="31" height="31" viewbox="0 0 31 31" fill="none"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M13.1827 4.56039C13.3695 4.09878 13.6898 3.70347 14.1027 3.42511C14.5156 3.14675 15.0022 2.99805 15.5002 2.99805C15.9981 2.99805 16.4848 3.14675 16.8977 3.42511C17.3106 3.70347 17.6309 4.09878 17.8177 4.56039C19.6661 5.06875 21.2966 6.16984 22.4586 7.69456C23.6207 9.21929 24.2501 11.0833 24.2502 13.0004V18.8716L26.5402 22.3066C26.6658 22.4949 26.7379 22.7137 26.7489 22.9397C26.7599 23.1658 26.7093 23.3906 26.6025 23.5901C26.4958 23.7896 26.3368 23.9564 26.1427 24.0727C25.9486 24.189 25.7265 24.2504 25.5002 24.2504H19.8314C19.6809 25.2918 19.1603 26.2441 18.3648 26.9328C17.5694 27.6216 16.5524 28.0007 15.5002 28.0007C14.448 28.0007 13.431 27.6216 12.6356 26.9328C11.8401 26.2441 11.3194 25.2918 11.1689 24.2504H5.50019C5.27388 24.2504 5.05182 24.189 4.85768 24.0727C4.66354 23.9564 4.50461 23.7896 4.39784 23.5901C4.29108 23.3906 4.24049 23.1658 4.25147 22.9397C4.26245 22.7137 4.33459 22.4949 4.46019 22.3066L6.75019 18.8716V13.0004C6.75019 8.97039 9.47519 5.57539 13.1827 4.56039ZM13.7327 24.2504C13.8618 24.6162 14.1012 24.933 14.4178 25.157C14.7345 25.3811 15.1129 25.5014 15.5008 25.5014C15.8887 25.5014 16.2671 25.3811 16.5838 25.157C16.9005 24.933 17.1398 24.6162 17.2689 24.2504H13.7314H13.7327ZM15.5002 6.75039C13.8426 6.75039 12.2529 7.40887 11.0808 8.58098C9.90867 9.75308 9.25019 11.3428 9.25019 13.0004V19.2504C9.25024 19.4973 9.17717 19.7387 9.04019 19.9441L7.83644 21.7504H23.1627L21.9589 19.9441C21.8224 19.7386 21.7498 19.4972 21.7502 19.2504V13.0004C21.7502 11.3428 21.0917 9.75308 19.9196 8.58098C18.7475 7.40887 17.1578 6.75039 15.5002 6.75039Z"
+                    fill="#5082E6" />
+            </svg>
+        </div>
+    </div>
+    <div class="portal-header__bar-item portal-mobile-menu">
+        <a onclick="<%- Scripts %>.showMobileMenu();"><i class="elma-icons md-24">menu_burger</i></a>
+    </div>
+</div>
+
+<div id="d1c4a7fe-ba3d-4bdd-bfa7-93a58c4ec7ba">
+    <div id="df0aa1ba-23a2-4077-817d-2a12fe3aa049" class="portal-header__modal">
+        <div class="portal-header__modal-content">
+            <div class="portal-header__mobile-menu">
+                <div class="portal-header__mobile-menu-header">
+                    <div class="portal-header__mobile-menu-title">
+                        <%= getUserFIO() %>
+                    </div>
+                    <div class="portal-header__modal-close">
+                        <a onclick="<%- Scripts %>.closeMobileMenu();">
+                            <i class="elma-icons md-24">system_close</i>
+                        </a>
+                    </div>
+                </div>
+                <div class="portal-header__mobile-menu-body">
+                    <div class="main-page_mobile-footer_services hidden">
+
+                        <!-- mock -->
+
+                        <!-- mock end -->
+                    </div>
+                    <%for(var item of getNavigationItems()) {%>
+                        <div class="portal-header__mobile-menu-item__wrap nav_button_portal">
+                            <a class="portal-header__mobile-menu-item" onclick="<%- Scripts %>.closeMobileMenu();"
+                                href="<%= item.url %>">
+                                <i class="portal-header__mobile-menu-item-icon elma-icons md-24"
+                                >file_type_text</i><span class="portal-header__mobile-menu-item-label"><%= item.name %></span>
+                            </a>
+                        </div>
+                        <%}%>
+                </div>
+                <div class="portal-header__mobile-menu-footer">
+                    <hr class="portal-header__mobile-menu-delimiter">
+                    <div class="portal-header__mobile-menu-item__wrap portal_button_create_issue">
+                        <a class="portal-header__mobile-menu-item portal-header__mobile-menu-item-new-issue"
+                            onclick="<%- Scripts %>.handleMobileServices();">
+                            <i class="portal-header__mobile-menu-item-icon elma-icons md-24"
+                            >plus</i>
+                            <span class="portal-header__mobile-menu-item-label">Создать заявку</span>
+                        </a>
+                        <a class="portal-header__mobile-menu-item portal-header__mobile-menu-item-logout"
+                            onclick="<%- Scripts %>.logoutCurrentUser();">
+                            <i class="portal-header__mobile-menu-item-icon elma-icons md-24"
+                            >system_logout</i>
+                            <span class="portal-header__mobile-menu-item-label">Выход</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="fd164163-fdf1-4a56-bcb5-5d8bd1cdaeda" class="portal-header__modal">
+        CustomModalBody
+    </div>
+</div>

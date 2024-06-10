@@ -1,0 +1,4322 @@
+{
+  "__id": "018c8757-193c-7ef9-8cf6-28f726e96529",
+  "namespace": "kedo.staff",
+  "code": "get_print_forms_from_1c_dismissal",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "(1C) Получить печатные формы из 1С (Увольнение)",
+  "type": "bpmn",
+  "draft": false,
+  "version": 4,
+  "context": [
+    {
+      "code": "response",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "await_document_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID приложения интеграции",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "request_cancelled",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Запрос отменён?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "date_of_dismissal",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата увольнения",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "await_document",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "awaiting_documents_table_1c",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Ожидаемый документ",
+        "data": {}
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник (КЭДО)"
+      }
+    },
+    {
+      "code": "letter_of_resignation",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "letter_of_resignation",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявление на увольнение",
+        "data": {}
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "order_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Файл приказа",
+        "data": {}
+      }
+    },
+    {
+      "code": "document_id_1c",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID документа 1С",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "dismissal_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "dismissal_app",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на увольнение",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "hr_dep",
+      "type": "SYS_USER",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        }
+      },
+      "view": {
+        "name": "Отдел кадров",
+        "data": {}
+      }
+    },
+    {
+      "code": "alternative_integration",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": false,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Альтернативная интеграция?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2023-05-15T11:11:20.369545834Z",
+  "__createdBy": "6c362877-9ef9-45f4-aa6f-e5e126ee96c0",
+  "__updatedAt": "2024-01-24T08:10:32.169017063Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 104,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "1970ff5d-11d8-4996-b572-b62a32917167",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["077e813d-475f-4142-b224-84504c03b4d1"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "(1C) Получить печатные формы из 1С (Увольнение) ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0891cb76-79bf-474c-8bfb-12ea9ef8fa8b": {
+        "x": 664,
+        "y": 232,
+        "id": "0891cb76-79bf-474c-8bfb-12ea9ef8fa8b",
+        "icon": "script",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Получить ожидаемый документ",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "338722a6-bfc4-40d9-8403-f773c78c909a",
+          "6811edec-cc0d-4f36-8fdd-0fa1054289a6"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_await_document",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "6811edec-cc0d-4f36-8fdd-0fa1054289a6",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "1284d272-4906-4cb1-9865-a8aa927b5db2": {
+        "x": 1584,
+        "y": 248,
+        "id": "1284d272-4906-4cb1-9865-a8aa927b5db2",
+        "icon": "end",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "15420155-e2ed-4cc9-a5a4-7ee8ca47bb54": {
+        "x": 80,
+        "y": 328,
+        "id": "15420155-e2ed-4cc9-a5a4-7ee8ca47bb54",
+        "icon": "notification",
+        "lane": "1970ff5d-11d8-4996-b572-b62a32917167",
+        "name": "Не удалось получить участников групп",
+        "type": "notification",
+        "color": "#ffff66",
+        "exits": ["9b68e25c-d57c-4cf7-a274-b880f16b6ae0"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "author": {
+            "code": "",
+            "kind": "system"
+          },
+          "target": {
+            "kind": "process"
+          },
+          "receivers": [
+            {
+              "code": "administrators",
+              "kind": "group",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "messageBody": "{$error}",
+          "messageHeader": "Не удалось получить участников групп"
+        }
+      },
+      "28fab013-7014-405e-a606-2bfb7bd6e151": {
+        "x": 192,
+        "y": 232,
+        "id": "28fab013-7014-405e-a606-2bfb7bd6e151",
+        "icon": "script",
+        "lane": "1970ff5d-11d8-4996-b572-b62a32917167",
+        "name": "Получить настройки КЭДО",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["d2fd4196-87e3-4bdb-893b-d3c87a46424b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_kedo_settings",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "35110e55-7812-4aba-bce9-81ee6fba5212": {
+        "x": 344,
+        "y": 248,
+        "id": "35110e55-7812-4aba-bce9-81ee6fba5212",
+        "icon": "exclusive",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "d3270008-90f5-48b9-9ef8-538176b7e498",
+          "56e4af32-c853-484b-83d4-fec45061aa98"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "3cd14068-db89-4c70-baea-58c8f7454137": {
+        "x": 1240,
+        "y": 528,
+        "id": "3cd14068-db89-4c70-baea-58c8f7454137",
+        "icon": "end",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "4f51845e-5a51-4c6b-acda-608a853ca6af": {
+        "x": 1216,
+        "y": 424,
+        "id": "4f51845e-5a51-4c6b-acda-608a853ca6af",
+        "icon": "script",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Удалить приложение интеграции",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["773df5e1-9ff3-4552-9a50-9221a6b44bbe"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "delete_await_document",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "59bf2cbe-d9c4-425e-9923-28b7473f67b3": {
+        "x": 1472,
+        "y": 232,
+        "id": "59bf2cbe-d9c4-425e-9923-28b7473f67b3",
+        "icon": "system",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Получить ID документа 1С",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["fbacd08d-172a-4f32-b961-2d8da2d42fae"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "await_document.doc_id_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "document_id_1c"
+              }
+            }
+          ]
+        }
+      },
+      "5a0b158e-f02e-4abb-b0b9-933f3f942a55": {
+        "x": 560,
+        "y": 56,
+        "id": "5a0b158e-f02e-4abb-b0b9-933f3f942a55",
+        "icon": "user",
+        "lane": "37640f74-4b3a-4dae-be74-11c1a334c08a",
+        "name": "Ознакомитьcя с ошибкой",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "c335f17a-080e-475a-be2d-14739fecda4a",
+          "568a2d5b-e444-4b4d-b8fb-82ff8f5182c9"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "notify": true,
+          "formCode": "form_b06008bd-2694-4e96-ac43-cfee41cda9ea",
+          "authorType": 2,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 8,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "code": "administrators",
+                    "kind": "group",
+                    "multi": true,
+                    "namespace": "system"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [
+            {
+              "code": "staff",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "await_document_id",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "await_document",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "response",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "error",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "alternative_integration",
+              "tooltip": "",
+              "readonly": false,
+              "required": false,
+              "hideEmpty": false
+            },
+            {
+              "code": "letter_of_resignation",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "6044f646-651b-4b23-b915-95d806c3725c": {
+        "x": 1216,
+        "y": 336,
+        "id": "6044f646-651b-4b23-b915-95d806c3725c",
+        "icon": "system",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Конвертация файла в PDF",
+        "type": "ca",
+        "color": "#ffc107",
+        "exits": [
+          "3948bfeb-a4a2-406d-b51b-f2a92894ad35",
+          "dcf35c16-eacd-48e7-9fbf-a659afb32e76"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "pdf_converter",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "order_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "file_name"
+              }
+            },
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "translate_need"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "order_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "new_file"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "orignial_file_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "new_file_name"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "dcf35c16-eacd-48e7-9fbf-a659afb32e76",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "file": {
+                "kind": "Mapped",
+                "path": ["order_file"]
+              },
+              "new_file": {
+                "kind": "Mapped",
+                "path": ["order_file"]
+              },
+              "file_name": null,
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "order_file"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "file"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "file_name"
+                    }
+                  },
+                  {
+                    "source": {
+                      "kind": "manual",
+                      "value": true
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "translate_need"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "order_file"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "new_file"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "orignial_file_name"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "new_file_name"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "date_of_dismissal",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": false,
+                        "additionalType": "date",
+                        "defaultTimeType": "startOfDay"
+                      },
+                      "name": "Дата увольнения"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "await_document_id",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "ID приложения интеграции"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "await_document",
+                    "data": {
+                      "code": "awaiting_documents_table_1c",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Ожидаемый документ"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Ошибка"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "request_cancelled",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Запрос отменён?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "name": "Сотрудник (КЭДО)"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "order_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл приказа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "alternative_integration",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Альтернативная интеграция?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_id_1c",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "ID документа 1С"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "response",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Ответ"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "letter_of_resignation",
+                    "data": {
+                      "code": "letter_of_resignation",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявление на увольнение"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "dismissal_app",
+                    "data": {
+                      "code": "dismissal_app",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявка на увольнение",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл",
+                      "input": true,
+                      "tooltip": "Приложите файл в формате docx, xlsx или pdf"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название файла",
+                      "input": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "translate_need",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Требуется перевод названия файла?",
+                      "input": true,
+                      "tooltip": "Требуется перевод названия файла в латиницу"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "new_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Новый файл",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "orignial_file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Исходное название файла",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "new_file_name",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Новое название файла",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "new_file_name": null,
+              "translate_need": true,
+              "__dynamic_binding": {},
+              "orignial_file_name": null
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "6fed27fa-a5e5-4812-9261-751edf0facaf": {
+        "x": 960,
+        "y": 248,
+        "id": "6fed27fa-a5e5-4812-9261-751edf0facaf",
+        "icon": "event",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Ожидание получения документа",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["d428f264-c8f4-4cb6-aad1-2a7610fd54d0"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "app_await_status",
+          "app_await": {
+            "status": [3],
+            "variable": "await_document"
+          }
+        }
+      },
+      "7755915e-56a1-455d-9f19-98af5365b467": {
+        "x": 936,
+        "y": 424,
+        "id": "7755915e-56a1-455d-9f19-98af5365b467",
+        "icon": "change",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Ожидаемый документ -\u003e Документ получен",
+        "type": "status",
+        "color": "#fde9a0",
+        "exits": ["ee7e9057-4d8d-4b02-9dd5-c1a0b7c64709"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "status": 3,
+          "variable": "await_document",
+          "keepInCurrentGroup": false
+        }
+      },
+      "804817b6-21d0-4183-8c73-cc7c77722464": {
+        "x": 560,
+        "y": 232,
+        "id": "804817b6-21d0-4183-8c73-cc7c77722464",
+        "icon": "system",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Создать приостановление трудовых договоров",
+        "type": "ca",
+        "color": "#fde9a0",
+        "exits": [
+          "50d3eec2-bf80-4cbc-9e31-e3b96684da80",
+          "aa72c2ff-d500-44c3-b0ca-c20e9b327d36"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "create_work_relations_hold",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "dismissal_app.employment_placement.organization.ref_key"
+              },
+              "target": {
+                "kind": "context",
+                "value": "org_id"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.id_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "guid"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff.individual_id_1c"
+              },
+              "target": {
+                "kind": "context",
+                "value": "personal_id"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation.date_of_dismissal"
+              },
+              "target": {
+                "kind": "context",
+                "value": "dismissal_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation.__name"
+              },
+              "target": {
+                "kind": "context",
+                "value": "dismissal_base"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation.date_of_dismissal"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "end_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "alternative_integration"
+              },
+              "target": {
+                "kind": "context",
+                "value": "alternative_way"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "letter_of_resignation.reason_for_leaving"
+              },
+              "target": {
+                "kind": "context",
+                "value": "comment"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "base_1c_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "additional_info"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "response"
+              },
+              "target": {
+                "kind": "context",
+                "value": "response"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "error"
+              },
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "await_document_id"
+              },
+              "target": {
+                "kind": "context",
+                "value": "integration_app_id"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "aa72c2ff-d500-44c3-b0ca-c20e9b327d36",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "8800aa48-427e-4e7d-939e-2445b8de9564": {
+        "x": 776,
+        "y": 248,
+        "id": "8800aa48-427e-4e7d-939e-2445b8de9564",
+        "icon": "parallel",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "0633997c-ccaf-471a-91f0-2e8896b014a4",
+          "249b5804-0643-40fd-8b93-8498ca6993eb"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "parallel",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "9c6d6eb6-17eb-4f82-bc17-84c53faac927": {
+        "x": 936,
+        "y": 328,
+        "id": "9c6d6eb6-17eb-4f82-bc17-84c53faac927",
+        "icon": "user",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Подготовить документы в учётной системе ",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "3264fd65-c8ac-4e96-b6d5-fcf5759d9516",
+          "0efb1ecc-5ff8-47c4-a85f-694927b8e127"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "(Увольнение) Подготовить документы в учётной системе по {ToString({$letter_of_resignation.staff.full_name}, short, Д)}",
+          "notify": true,
+          "formCode": "form_d1b16277-ce78-421c-a541-1f26f5c403e9",
+          "authorType": 1,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 4,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "code": "hr_dep",
+                    "kind": "context"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [
+            {
+              "code": "staff",
+              "data": {
+                "createButtonId": "",
+                "showCreateItem": true,
+                "showSelectItem": true
+              },
+              "display": "Сотрудник",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false,
+              "subfields": [
+                {
+                  "code": "full_name",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "phone",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "email",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "ext_user",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "date_of_birth",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "organization",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "position",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                }
+              ]
+            },
+            {
+              "code": "letter_of_resignation",
+              "data": {
+                "createButtonId": "",
+                "showCreateItem": true,
+                "showSelectItem": true
+              },
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false,
+              "subfields": [
+                {
+                  "code": "staff",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "date_of_dismissal",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                },
+                {
+                  "code": "reason_for_leaving",
+                  "tooltip": "",
+                  "readonly": true,
+                  "required": false,
+                  "hideEmpty": false
+                }
+              ]
+            },
+            {
+              "code": "await_document",
+              "tooltip": "",
+              "readonly": true,
+              "required": false,
+              "hideEmpty": false
+            }
+          ],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "authorContextVar": "__createdBy",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "b89a8e4e-cf53-4cd5-a883-5e5a81b326b6": {
+        "x": 80,
+        "y": 232,
+        "id": "b89a8e4e-cf53-4cd5-a883-5e5a81b326b6",
+        "icon": "system",
+        "lane": "1970ff5d-11d8-4996-b572-b62a32917167",
+        "name": "Получаем участников групп (Отдел кадров)",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "3436b79c-0368-4fde-9fda-b3ef372f6c2e",
+          "b5a32456-2146-4ccf-ac11-cb08aa19f07a"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_users",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "dismissal_app.employment_placement.organization"
+              },
+              "target": {
+                "kind": "context",
+                "value": "organization"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "hr_dep"
+              },
+              "target": {
+                "kind": "context",
+                "value": "hr_dep"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "accounting"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "matching_finance"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "office_managers"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "signatories"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "boss_app"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "error"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "b5a32456-2146-4ccf-ac11-cb08aa19f07a",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {
+              "boss": null,
+              "error": null,
+              "groups": null,
+              "hr_dep": {
+                "kind": "Mapped",
+                "path": ["hr_dep"]
+              },
+              "boss_app": null,
+              "accounting": null,
+              "signatories": null,
+              "_bindingData": {
+                "inputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "dismissal_app.employment_placement.organization"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "organization"
+                    }
+                  }
+                ],
+                "outputs": [
+                  {
+                    "source": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    },
+                    "target": {
+                      "kind": "context",
+                      "value": "hr_dep"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "accounting"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "matching_finance"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "office_managers"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "signatories"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "boss_app"
+                    }
+                  },
+                  {
+                    "target": {
+                      "kind": "context",
+                      "value": "error"
+                    }
+                  }
+                ],
+                "sources": [
+                  {
+                    "code": "__createdBy",
+                    "type": "SYS_USER",
+                    "view": {
+                      "name": "Инициатор",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__name",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "Название",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "__comment",
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Комментарий",
+                      "system": true
+                    },
+                    "array": false,
+                    "single": true
+                  },
+                  {
+                    "code": "date_of_dismissal",
+                    "data": {},
+                    "type": "DATETIME",
+                    "view": {
+                      "data": {
+                        "timeOptional": false,
+                        "additionalType": "date",
+                        "defaultTimeType": "startOfDay"
+                      },
+                      "name": "Дата увольнения"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "await_document_id",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "ID приложения интеграции"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "await_document",
+                    "data": {
+                      "code": "awaiting_documents_table_1c",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Ожидаемый документ"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Ошибка"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "request_cancelled",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Запрос отменён?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "staff",
+                    "data": {
+                      "code": "staff",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "name": "Сотрудник (КЭДО)"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "order_file",
+                    "data": {},
+                    "type": "FILE",
+                    "view": {
+                      "data": {},
+                      "name": "Файл приказа"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров"
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "alternative_integration",
+                    "data": {},
+                    "type": "BOOLEAN",
+                    "view": {
+                      "data": {
+                        "noValue": "Нет",
+                        "yesValue": "Да",
+                        "additionalType": "radio"
+                      },
+                      "name": "Альтернативная интеграция?"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": false,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "document_id_1c",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "string"
+                      },
+                      "name": "ID документа 1С"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "response",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "Ответ"
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "letter_of_resignation",
+                    "data": {
+                      "code": "letter_of_resignation",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "bindings": null,
+                      "namespace": "kedo",
+                      "isDependent": false,
+                      "linkedFieldCode": ""
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявление на увольнение"
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "id": 13,
+                    "code": "dismissal_app",
+                    "data": {
+                      "code": "dismissal_app",
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      },
+                      "namespace": "kedo"
+                    },
+                    "type": "SYS_COLLECTION",
+                    "view": {
+                      "data": {},
+                      "name": "Заявка на увольнение",
+                      "input": true,
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "sortable": false,
+                    "isNewField": true,
+                    "searchable": false,
+                    "calcByFormula": false,
+                    "isNameChanged": true
+                  }
+                ],
+                "targets": [
+                  {
+                    "code": "organization",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Организация",
+                      "input": true,
+                      "output": false
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": true,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "hr_dep",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Отдел кадров",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "accounting",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Бухгалтерия",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "matching_finance",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Ответственные за финансы ",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "office_managers",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Офис менеджеры",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "signatories",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Подписанты",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": false,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss",
+                    "data": {
+                      "filter": {
+                        "value": {
+                          "tf": {}
+                        },
+                        "enabled": false
+                      }
+                    },
+                    "type": "SYS_USER",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании",
+                      "output": true
+                    },
+                    "array": true,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "boss_app",
+                    "data": {},
+                    "type": "REF_ITEM",
+                    "view": {
+                      "data": {},
+                      "name": "Руководитель компании (app)",
+                      "input": false,
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  },
+                  {
+                    "code": "error",
+                    "data": {},
+                    "type": "STRING",
+                    "view": {
+                      "data": {
+                        "additionalType": "text"
+                      },
+                      "name": "error",
+                      "output": true
+                    },
+                    "array": false,
+                    "single": true,
+                    "deleted": false,
+                    "formula": "",
+                    "indexed": false,
+                    "required": false,
+                    "searchable": false,
+                    "defaultValue": null,
+                    "calcByFormula": false
+                  }
+                ]
+              },
+              "organization": {
+                "kind": "Mapped",
+                "path": [
+                  "dismissal_app",
+                  "employment_placement",
+                  "organization"
+                ]
+              },
+              "office_managers": null,
+              "matching_finance": null,
+              "__dynamic_binding": {}
+            }
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "c4eaf86a-8157-4971-8964-1dd867ec80bd": {
+        "x": 1240,
+        "y": 248,
+        "id": "c4eaf86a-8157-4971-8964-1dd867ec80bd",
+        "icon": "exclusive",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Запрос отменён?",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "5b0a48f1-c82e-4d6e-bdc4-361b6c8149a4",
+          "cba5a0b1-91cc-478d-abdc-791fa177ae10"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "d9dbf874-e499-4554-84c2-46074ae0437d": {
+        "x": 1056,
+        "y": 424,
+        "id": "d9dbf874-e499-4554-84c2-46074ae0437d",
+        "icon": "system",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Запрос отменен = да",
+        "type": "assignment",
+        "color": "#fde9a0",
+        "exits": ["22682ebb-b684-44e3-b08d-19615a4df647"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "request_cancelled"
+              }
+            }
+          ]
+        }
+      },
+      "dd3b14b1-9e1e-4359-afd6-e5c0dd671ad4": {
+        "x": 1080,
+        "y": 248,
+        "id": "dd3b14b1-9e1e-4359-afd6-e5c0dd671ad4",
+        "icon": "parallel",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": ["62ef0e02-9595-4451-9dd4-77fd82b4c088"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "parallel",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "f3f9dcd1-4544-43e7-be6d-de5a2aaac41d": {
+        "x": 1368,
+        "y": 232,
+        "id": "f3f9dcd1-4544-43e7-be6d-de5a2aaac41d",
+        "icon": "script",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Получить печатные формы",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": [
+          "fdf1a17c-dcf3-4244-82b2-bdb34969421d",
+          "7660cb05-4f19-4a33-8150-7b77cfc6e249"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "get_print_forms",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "exit": "7660cb05-4f19-4a33-8150-7b77cfc6e249",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "f68ea4e9-f7d9-4b61-9ddc-dc09da726f29": {
+        "x": 784,
+        "y": 40,
+        "id": "f68ea4e9-f7d9-4b61-9ddc-dc09da726f29",
+        "icon": "end",
+        "lane": "37640f74-4b3a-4dae-be74-11c1a334c08a",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "fe7062e6-ed8c-49eb-a953-26db4f4ba80a": {
+        "x": 344,
+        "y": 336,
+        "id": "fe7062e6-ed8c-49eb-a953-26db4f4ba80a",
+        "icon": "end",
+        "lane": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      }
+    },
+    "lanes": {
+      "1970ff5d-11d8-4996-b572-b62a32917167": {
+        "x": 8,
+        "y": 8,
+        "id": "1970ff5d-11d8-4996-b572-b62a32917167",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 288,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      },
+      "37640f74-4b3a-4dae-be74-11c1a334c08a": {
+        "x": 296,
+        "y": 8,
+        "id": "37640f74-4b3a-4dae-be74-11c1a334c08a",
+        "name": "Администраторы",
+        "color": "#e8e4e8",
+        "width": 1396,
+        "height": 176,
+        "settings": {
+          "type": "static",
+          "group": {
+            "code": "administrators",
+            "kind": "common",
+            "multi": true,
+            "namespace": "system"
+          },
+          "groups": [
+            {
+              "code": "administrators",
+              "kind": "common",
+              "multi": true,
+              "namespace": "system"
+            }
+          ],
+          "variable": "",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      },
+      "3a2f19b8-9f81-410e-978d-51f8b93598c5": {
+        "x": 296,
+        "y": 184,
+        "id": "3a2f19b8-9f81-410e-978d-51f8b93598c5",
+        "name": "Отдел кадров",
+        "color": "#d6f0cc",
+        "width": 1396,
+        "height": 424,
+        "settings": {
+          "type": "dynamic",
+          "group": {
+            "code": "abdecf4b-b6ba-419f-bac7-c1455d2a6159",
+            "kind": "common",
+            "multi": true,
+            "namespace": "kedo"
+          },
+          "groups": [
+            {
+              "code": "abdecf4b-b6ba-419f-bac7-c1455d2a6159",
+              "kind": "common",
+              "multi": true,
+              "namespace": "kedo"
+            }
+          ],
+          "variable": "hr_dep",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": true
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0633997c-ccaf-471a-91f0-2e8896b014a4": {
+        "id": "0633997c-ccaf-471a-91f0-2e8896b014a4",
+        "name": "",
+        "path": [
+          {
+            "x": 792,
+            "y": 280
+          },
+          {
+            "x": 792,
+            "y": 360
+          },
+          {
+            "x": 936,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "8800aa48-427e-4e7d-939e-2445b8de9564",
+        "target": "9c6d6eb6-17eb-4f82-bc17-84c53faac927",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "077e813d-475f-4142-b224-84504c03b4d1": {
+        "id": "077e813d-475f-4142-b224-84504c03b4d1",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 104
+          },
+          {
+            "x": 120,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "b89a8e4e-cf53-4cd5-a883-5e5a81b326b6",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "0efb1ecc-5ff8-47c4-a85f-694927b8e127": {
+        "id": "0efb1ecc-5ff8-47c4-a85f-694927b8e127",
+        "name": "Отменить запрос и приложить файлы вручную",
+        "path": [
+          {
+            "x": 976,
+            "y": 392
+          },
+          {
+            "x": 976,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "9c6d6eb6-17eb-4f82-bc17-84c53faac927",
+        "target": "7755915e-56a1-455d-9f19-98af5365b467",
+        "settings": {
+          "exit": {
+            "confirm": "form",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [
+              {
+                "code": "order_file",
+                "tooltip": "Приложите файл в формате docx, xlsx или pdf. Далее будет выполнена конвертация файла в pdf.",
+                "readonly": false,
+                "required": true,
+                "hideEmpty": false
+              }
+            ],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": "Вы действительно хотите отменить запрос?\nВ таком случае приложите необходимые файлы вручную"
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "22682ebb-b684-44e3-b08d-19615a4df647": {
+        "id": "22682ebb-b684-44e3-b08d-19615a4df647",
+        "name": "",
+        "path": [
+          {
+            "x": 1096,
+            "y": 424
+          },
+          {
+            "x": 1096,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "d9dbf874-e499-4554-84c2-46074ae0437d",
+        "target": "dd3b14b1-9e1e-4359-afd6-e5c0dd671ad4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "249b5804-0643-40fd-8b93-8498ca6993eb": {
+        "id": "249b5804-0643-40fd-8b93-8498ca6993eb",
+        "name": "",
+        "path": [
+          {
+            "x": 808,
+            "y": 264
+          },
+          {
+            "x": 960,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "8800aa48-427e-4e7d-939e-2445b8de9564",
+        "target": "6fed27fa-a5e5-4812-9261-751edf0facaf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3264fd65-c8ac-4e96-b6d5-fcf5759d9516": {
+        "id": "3264fd65-c8ac-4e96-b6d5-fcf5759d9516",
+        "name": "Загрузить из учетной системы",
+        "path": [
+          {
+            "x": 1016,
+            "y": 360
+          },
+          {
+            "x": 1096,
+            "y": 360
+          },
+          {
+            "x": 1096,
+            "y": 280
+          }
+        ],
+        "type": "plain",
+        "source": "9c6d6eb6-17eb-4f82-bc17-84c53faac927",
+        "target": "dd3b14b1-9e1e-4359-afd6-e5c0dd671ad4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "338722a6-bfc4-40d9-8403-f773c78c909a": {
+        "id": "338722a6-bfc4-40d9-8403-f773c78c909a",
+        "name": "",
+        "path": [
+          {
+            "x": 744,
+            "y": 264
+          },
+          {
+            "x": 776,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "0891cb76-79bf-474c-8bfb-12ea9ef8fa8b",
+        "target": "8800aa48-427e-4e7d-939e-2445b8de9564",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3436b79c-0368-4fde-9fda-b3ef372f6c2e": {
+        "id": "3436b79c-0368-4fde-9fda-b3ef372f6c2e",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 264
+          },
+          {
+            "x": 192,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "b89a8e4e-cf53-4cd5-a883-5e5a81b326b6",
+        "target": "28fab013-7014-405e-a606-2bfb7bd6e151",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "3948bfeb-a4a2-406d-b51b-f2a92894ad35": {
+        "id": "3948bfeb-a4a2-406d-b51b-f2a92894ad35",
+        "name": "",
+        "path": [
+          {
+            "x": 1256,
+            "y": 400
+          },
+          {
+            "x": 1256,
+            "y": 424
+          }
+        ],
+        "type": "plain",
+        "source": "6044f646-651b-4b23-b915-95d806c3725c",
+        "target": "4f51845e-5a51-4c6b-acda-608a853ca6af",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "50d3eec2-bf80-4cbc-9e31-e3b96684da80": {
+        "id": "50d3eec2-bf80-4cbc-9e31-e3b96684da80",
+        "name": "",
+        "path": [
+          {
+            "x": 640,
+            "y": 264
+          },
+          {
+            "x": 664,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "804817b6-21d0-4183-8c73-cc7c77722464",
+        "target": "0891cb76-79bf-474c-8bfb-12ea9ef8fa8b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "568a2d5b-e444-4b4d-b8fb-82ff8f5182c9": {
+        "id": "568a2d5b-e444-4b4d-b8fb-82ff8f5182c9",
+        "name": "Отменить запрос",
+        "path": [
+          {
+            "x": 640,
+            "y": 72
+          },
+          {
+            "x": 776,
+            "y": 72
+          },
+          {
+            "x": 776,
+            "y": 56
+          },
+          {
+            "x": 784,
+            "y": 56
+          }
+        ],
+        "type": "plain",
+        "source": "5a0b158e-f02e-4abb-b0b9-933f3f942a55",
+        "target": "f68ea4e9-f7d9-4b61-9ddc-dc09da726f29",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "56e4af32-c853-484b-83d4-fec45061aa98": {
+        "id": "56e4af32-c853-484b-83d4-fec45061aa98",
+        "name": "Альтернативная интеграция",
+        "path": [
+          {
+            "x": 376,
+            "y": 264
+          },
+          {
+            "x": 560,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "35110e55-7812-4aba-bce9-81ee6fba5212",
+        "target": "804817b6-21d0-4183-8c73-cc7c77722464",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "alternative_integration"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5b0a48f1-c82e-4d6e-bdc4-361b6c8149a4": {
+        "id": "5b0a48f1-c82e-4d6e-bdc4-361b6c8149a4",
+        "name": "",
+        "path": [
+          {
+            "x": 1272,
+            "y": 264
+          },
+          {
+            "x": 1368,
+            "y": 264
+          }
+        ],
+        "type": "default",
+        "source": "c4eaf86a-8157-4971-8964-1dd867ec80bd",
+        "target": "f3f9dcd1-4544-43e7-be6d-de5a2aaac41d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "62ef0e02-9595-4451-9dd4-77fd82b4c088": {
+        "id": "62ef0e02-9595-4451-9dd4-77fd82b4c088",
+        "name": "",
+        "path": [
+          {
+            "x": 1112,
+            "y": 264
+          },
+          {
+            "x": 1240,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "dd3b14b1-9e1e-4359-afd6-e5c0dd671ad4",
+        "target": "c4eaf86a-8157-4971-8964-1dd867ec80bd",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6811edec-cc0d-4f36-8fdd-0fa1054289a6": {
+        "id": "6811edec-cc0d-4f36-8fdd-0fa1054289a6",
+        "name": "",
+        "path": [
+          {
+            "x": 704,
+            "y": 232
+          },
+          {
+            "x": 704,
+            "y": 104
+          },
+          {
+            "x": 640,
+            "y": 104
+          }
+        ],
+        "type": "error",
+        "source": "0891cb76-79bf-474c-8bfb-12ea9ef8fa8b",
+        "target": "5a0b158e-f02e-4abb-b0b9-933f3f942a55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "7660cb05-4f19-4a33-8150-7b77cfc6e249": {
+        "id": "7660cb05-4f19-4a33-8150-7b77cfc6e249",
+        "name": "",
+        "path": [
+          {
+            "x": 1408,
+            "y": 232
+          },
+          {
+            "x": 1408,
+            "y": 88
+          },
+          {
+            "x": 640,
+            "y": 88
+          }
+        ],
+        "type": "error",
+        "source": "f3f9dcd1-4544-43e7-be6d-de5a2aaac41d",
+        "target": "5a0b158e-f02e-4abb-b0b9-933f3f942a55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "773df5e1-9ff3-4552-9a50-9221a6b44bbe": {
+        "id": "773df5e1-9ff3-4552-9a50-9221a6b44bbe",
+        "name": "",
+        "path": [
+          {
+            "x": 1256,
+            "y": 488
+          },
+          {
+            "x": 1256,
+            "y": 528
+          }
+        ],
+        "type": "plain",
+        "source": "4f51845e-5a51-4c6b-acda-608a853ca6af",
+        "target": "3cd14068-db89-4c70-baea-58c8f7454137",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "9b68e25c-d57c-4cf7-a274-b880f16b6ae0": {
+        "id": "9b68e25c-d57c-4cf7-a274-b880f16b6ae0",
+        "name": "",
+        "path": [
+          {
+            "x": 160,
+            "y": 360
+          },
+          {
+            "x": 232,
+            "y": 360
+          },
+          {
+            "x": 232,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "15420155-e2ed-4cc9-a5a4-7ee8ca47bb54",
+        "target": "28fab013-7014-405e-a606-2bfb7bd6e151",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "aa72c2ff-d500-44c3-b0ca-c20e9b327d36": {
+        "id": "aa72c2ff-d500-44c3-b0ca-c20e9b327d36",
+        "name": "",
+        "path": [
+          {
+            "x": 620,
+            "y": 232
+          },
+          {
+            "x": 620,
+            "y": 120
+          }
+        ],
+        "type": "error",
+        "source": "804817b6-21d0-4183-8c73-cc7c77722464",
+        "target": "5a0b158e-f02e-4abb-b0b9-933f3f942a55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b5a32456-2146-4ccf-ac11-cb08aa19f07a": {
+        "id": "b5a32456-2146-4ccf-ac11-cb08aa19f07a",
+        "name": "",
+        "path": [
+          {
+            "x": 120,
+            "y": 296
+          },
+          {
+            "x": 120,
+            "y": 328
+          }
+        ],
+        "type": "error",
+        "source": "b89a8e4e-cf53-4cd5-a883-5e5a81b326b6",
+        "target": "15420155-e2ed-4cc9-a5a4-7ee8ca47bb54",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c335f17a-080e-475a-be2d-14739fecda4a": {
+        "id": "c335f17a-080e-475a-be2d-14739fecda4a",
+        "name": "Повторить запрос",
+        "path": [
+          {
+            "x": 580,
+            "y": 120
+          },
+          {
+            "x": 580,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "5a0b158e-f02e-4abb-b0b9-933f3f942a55",
+        "target": "804817b6-21d0-4183-8c73-cc7c77722464",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "cba5a0b1-91cc-478d-abdc-791fa177ae10": {
+        "id": "cba5a0b1-91cc-478d-abdc-791fa177ae10",
+        "name": "",
+        "path": [
+          {
+            "x": 1256,
+            "y": 280
+          },
+          {
+            "x": 1256,
+            "y": 336
+          }
+        ],
+        "type": "plain",
+        "source": "c4eaf86a-8157-4971-8964-1dd867ec80bd",
+        "target": "6044f646-651b-4b23-b915-95d806c3725c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "request_cancelled"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d2fd4196-87e3-4bdb-893b-d3c87a46424b": {
+        "id": "d2fd4196-87e3-4bdb-893b-d3c87a46424b",
+        "name": "",
+        "path": [
+          {
+            "x": 272,
+            "y": 264
+          },
+          {
+            "x": 344,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "28fab013-7014-405e-a606-2bfb7bd6e151",
+        "target": "35110e55-7812-4aba-bce9-81ee6fba5212",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d3270008-90f5-48b9-9ef8-538176b7e498": {
+        "id": "d3270008-90f5-48b9-9ef8-538176b7e498",
+        "name": "",
+        "path": [
+          {
+            "x": 360,
+            "y": 280
+          },
+          {
+            "x": 360,
+            "y": 336
+          }
+        ],
+        "type": "default",
+        "source": "35110e55-7812-4aba-bce9-81ee6fba5212",
+        "target": "fe7062e6-ed8c-49eb-a953-26db4f4ba80a",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d428f264-c8f4-4cb6-aad1-2a7610fd54d0": {
+        "id": "d428f264-c8f4-4cb6-aad1-2a7610fd54d0",
+        "name": "",
+        "path": [
+          {
+            "x": 992,
+            "y": 264
+          },
+          {
+            "x": 1080,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "6fed27fa-a5e5-4812-9261-751edf0facaf",
+        "target": "dd3b14b1-9e1e-4359-afd6-e5c0dd671ad4",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "dcf35c16-eacd-48e7-9fbf-a659afb32e76": {
+        "id": "dcf35c16-eacd-48e7-9fbf-a659afb32e76",
+        "name": "",
+        "path": [
+          {
+            "x": 1276,
+            "y": 400
+          },
+          {
+            "x": 1276,
+            "y": 424
+          }
+        ],
+        "type": "error",
+        "source": "6044f646-651b-4b23-b915-95d806c3725c",
+        "target": "4f51845e-5a51-4c6b-acda-608a853ca6af",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ee7e9057-4d8d-4b02-9dd5-c1a0b7c64709": {
+        "id": "ee7e9057-4d8d-4b02-9dd5-c1a0b7c64709",
+        "name": "",
+        "path": [
+          {
+            "x": 1016,
+            "y": 456
+          },
+          {
+            "x": 1056,
+            "y": 456
+          }
+        ],
+        "type": "plain",
+        "source": "7755915e-56a1-455d-9f19-98af5365b467",
+        "target": "d9dbf874-e499-4554-84c2-46074ae0437d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fbacd08d-172a-4f32-b961-2d8da2d42fae": {
+        "id": "fbacd08d-172a-4f32-b961-2d8da2d42fae",
+        "name": "",
+        "path": [
+          {
+            "x": 1552,
+            "y": 264
+          },
+          {
+            "x": 1584,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "59bf2cbe-d9c4-425e-9923-28b7473f67b3",
+        "target": "1284d272-4906-4cb1-9865-a8aa927b5db2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fdf1a17c-dcf3-4244-82b2-bdb34969421d": {
+        "id": "fdf1a17c-dcf3-4244-82b2-bdb34969421d",
+        "name": "",
+        "path": [
+          {
+            "x": 1448,
+            "y": 264
+          },
+          {
+            "x": 1472,
+            "y": 264
+          }
+        ],
+        "type": "plain",
+        "source": "f3f9dcd1-4544-43e7-be6d-de5a2aaac41d",
+        "target": "59bf2cbe-d9c4-425e-9923-28b7473f67b3",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\nasync function get_kedo_settings(): Promise\u003cvoid\u003e {\n    const alternative_integration = await Namespace.app.settings.search().where(f =\u003e f.code.eq('use_alternative_integration')).first();\n    Context.data.alternative_integration = alternative_integration ? alternative_integration.data.status : false;\n}\n\nasync function get_await_document(): Promise\u003cvoid\u003e {\n    if (Context.data.await_document_id) {\n        const id = Context.data.await_document_id;\n        Context.data.await_document = await Context.fields.await_document.app.search().where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.__id.eq(id)\n        ))\n        .first();\n    }\n}\n\nasync function get_print_forms(): Promise\u003cvoid\u003e {\n    if (Context.data.await_document) {\n        const await_document = await Context.data.await_document.fetch();\n        const print_forms = await_document.data.print_forms;\n\n        if (print_forms \u0026\u0026 print_forms.length \u003e 0) {\n            Context.data.order_file = print_forms[0];\n        }\n    }\n}\n\nasync function delete_await_document(): Promise\u003cvoid\u003e {\n    if (Context.data.await_document) {\n        await Context.data.await_document.delete();\n    }\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_d1b16277-ce78-421c-a541-1f26f5c403e9",
+      "name": "Подготовить документы в учётной системе",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "4e69ca5b-ffcb-46b8-9065-344a1620efcd",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    },
+    {
+      "id": "",
+      "code": "form_b06008bd-2694-4e96-ac43-cfee41cda9ea",
+      "name": "Ознакомитьcя с ошибкой",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": 4
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "d24e2dcd-7d45-4385-a530-909e36a9d58b",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "error": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staff": {
+        "enabled": false,
+        "conditions": []
+      },
+      "response": {
+        "enabled": false,
+        "conditions": []
+      },
+      "order_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "dismissal_app": {
+        "enabled": false,
+        "conditions": []
+      },
+      "await_document": {
+        "enabled": false,
+        "conditions": []
+      },
+      "document_id_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "await_document_id": {
+        "enabled": false,
+        "conditions": []
+      },
+      "date_of_dismissal": {
+        "enabled": false,
+        "conditions": []
+      },
+      "request_cancelled": {
+        "enabled": false,
+        "conditions": []
+      },
+      "letter_of_resignation": {
+        "enabled": false,
+        "conditions": []
+      },
+      "alternative_integration": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

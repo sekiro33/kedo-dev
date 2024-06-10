@@ -1,0 +1,729 @@
+{
+  "__id": "018c8757-193c-7eab-8bc1-f32ab6e6be25",
+  "namespace": "kedo",
+  "code": "transfer_app_integration_workflow",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "КЭДО: Интеграция с УС (Оформление перевода)",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "additional_transfer_agreement_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Доп. соглашение на перевод (файл)",
+        "data": {}
+      }
+    },
+    {
+      "code": "use_alternative_system",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Использовать альтернативную учетную систему",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "staffs_all",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": false,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Переводимые сотрудники",
+        "data": {}
+      }
+    },
+    {
+      "code": "use_alternative_integration",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Использовать 1С как мастер систему",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    },
+    {
+      "code": "transfer_application",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "transfer_application",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Заявка на перевод",
+        "data": {}
+      }
+    },
+    {
+      "code": "order_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата приказа и доп. соглашения",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "transfer_order_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Приказ на перевод (файл)",
+        "data": {}
+      }
+    },
+    {
+      "code": "settings_kedo",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Настройки КЭДО",
+        "data": {}
+      }
+    },
+    {
+      "code": "integration_1c",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Интеграция с учетной системой",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        }
+      }
+    }
+  ],
+  "manualRun": true,
+  "readonly": false,
+  "__createdAt": "2023-11-19T20:24:29.852025175Z",
+  "__createdBy": "3e35cf33-1cfb-4628-be0f-d94a4288dd2c",
+  "__updatedAt": "2023-11-27T22:01:44.208174232Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 96,
+        "y": 192,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["87484333-c180-4122-a1b0-9bd18e7633b7"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "КЭДО: Интеграция с УС (Оформление перевода) - {$__createdAt}",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "0e02f905-d314-4f9d-85ae-fa4d27757bb1": {
+        "x": 352,
+        "y": 192,
+        "id": "0e02f905-d314-4f9d-85ae-fa4d27757bb1",
+        "icon": "exclusive",
+        "lane": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "8a37e424-512c-4224-bba4-13b8cd5da041",
+          "89e25a7c-88fb-4329-86b1-1f011fa6a215"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "1138d501-67dc-454e-8197-bc2d0b52a9e8": {
+        "x": 512,
+        "y": 288,
+        "id": "1138d501-67dc-454e-8197-bc2d0b52a9e8",
+        "lane": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "name": "УС: Получение печатной формы (Оформление перевода)",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["78795497-dfc6-4c91-a777-a46af69ac8fa"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "transfer_app_integration_workflow",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "transfer_application"
+              },
+              "target": {
+                "kind": "context",
+                "value": "transfer_application"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "order_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "order_date"
+              }
+            }
+          ],
+          "output": [],
+          "linkCode": "staffs_all",
+          "namespace": "kedo_ext",
+          "subProcessTargetFieldCode": "staff"
+        }
+      },
+      "a3cbb66f-6ea6-4e44-9c1d-9a735f436f93": {
+        "x": 656,
+        "y": 192,
+        "id": "a3cbb66f-6ea6-4e44-9c1d-9a735f436f93",
+        "icon": "end",
+        "lane": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "be754b6a-1891-4cd9-8685-d373fcb1eee8": {
+        "x": 512,
+        "y": 176,
+        "id": "be754b6a-1891-4cd9-8685-d373fcb1eee8",
+        "lane": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "name": "1С) Получить печатные формы из 1С (Оформление перевода)",
+        "type": "call",
+        "color": "#ffffff",
+        "exits": ["ed1c7e39-c455-4341-9f98-cd785135697b"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "get_print_forms_from_1c",
+          "async": false,
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "transfer_application"
+              },
+              "target": {
+                "kind": "context",
+                "value": "transfer_application"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "additional_transfer_agreement_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "additional_transfer_agreement_file"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "transfer_order_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "transer_order_file"
+              }
+            }
+          ],
+          "linkCode": "transfer_application",
+          "namespace": "kedo.transfer_application",
+          "subProcessTargetFieldCode": "transfer_application"
+        }
+      },
+      "ce47b439-3e00-402d-abaa-c18f1bdff2b0": {
+        "x": 176,
+        "y": 176,
+        "id": "ce47b439-3e00-402d-abaa-c18f1bdff2b0",
+        "icon": "script",
+        "lane": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "name": "Какая УС?",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["0b2e4196-1bda-4131-bf6e-b2e1271e882f"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getSettings",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "e37155d8-2fac-4907-a5dc-6437ff54c1a5": {
+        "x": 8,
+        "y": 8,
+        "id": "e37155d8-2fac-4907-a5dc-6437ff54c1a5",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 704,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0b2e4196-1bda-4131-bf6e-b2e1271e882f": {
+        "id": "0b2e4196-1bda-4131-bf6e-b2e1271e882f",
+        "name": "",
+        "path": [
+          {
+            "x": 256,
+            "y": 208
+          },
+          {
+            "x": 352,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "ce47b439-3e00-402d-abaa-c18f1bdff2b0",
+        "target": "0e02f905-d314-4f9d-85ae-fa4d27757bb1",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "78795497-dfc6-4c91-a777-a46af69ac8fa": {
+        "id": "78795497-dfc6-4c91-a777-a46af69ac8fa",
+        "name": "",
+        "path": [
+          {
+            "x": 592,
+            "y": 320
+          },
+          {
+            "x": 672,
+            "y": 320
+          },
+          {
+            "x": 672,
+            "y": 224
+          }
+        ],
+        "type": "plain",
+        "source": "1138d501-67dc-454e-8197-bc2d0b52a9e8",
+        "target": "a3cbb66f-6ea6-4e44-9c1d-9a735f436f93",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "87484333-c180-4122-a1b0-9bd18e7633b7": {
+        "id": "87484333-c180-4122-a1b0-9bd18e7633b7",
+        "name": "",
+        "path": [
+          {
+            "x": 128,
+            "y": 208
+          },
+          {
+            "x": 176,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "ce47b439-3e00-402d-abaa-c18f1bdff2b0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "89e25a7c-88fb-4329-86b1-1f011fa6a215": {
+        "id": "89e25a7c-88fb-4329-86b1-1f011fa6a215",
+        "name": "ЗУП",
+        "path": [
+          {
+            "x": 384,
+            "y": 208
+          },
+          {
+            "x": 512,
+            "y": 208
+          }
+        ],
+        "type": "default",
+        "source": "0e02f905-d314-4f9d-85ae-fa4d27757bb1",
+        "target": "be754b6a-1891-4cd9-8685-d373fcb1eee8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8a37e424-512c-4224-bba4-13b8cd5da041": {
+        "id": "8a37e424-512c-4224-bba4-13b8cd5da041",
+        "name": "Не ЗУП",
+        "path": [
+          {
+            "x": 368,
+            "y": 224
+          },
+          {
+            "x": 368,
+            "y": 320
+          },
+          {
+            "x": 512,
+            "y": 320
+          }
+        ],
+        "type": "plain",
+        "source": "0e02f905-d314-4f9d-85ae-fa4d27757bb1",
+        "target": "1138d501-67dc-454e-8197-bc2d0b52a9e8",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "use_alternative_system"
+              },
+              "b": {
+                "kind": "manual",
+                "value": true
+              },
+              "type": "BOOLEAN",
+              "inversion": false,
+              "operation": {
+                "relation": "equal",
+                "inversion": false,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ed1c7e39-c455-4341-9f98-cd785135697b": {
+        "id": "ed1c7e39-c455-4341-9f98-cd785135697b",
+        "name": "",
+        "path": [
+          {
+            "x": 592,
+            "y": 208
+          },
+          {
+            "x": 656,
+            "y": 208
+          }
+        ],
+        "type": "plain",
+        "source": "be754b6a-1891-4cd9-8685-d373fcb1eee8",
+        "target": "a3cbb66f-6ea6-4e44-9c1d-9a735f436f93",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\nasync function getSettings(): Promise\u003cvoid\u003e {\n    //Интеграция с учетной системой\n    const integration_1c = await Context.fields.settings_kedo.app.search()\n        .size(10000)\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('integration_1c')\n        ))\n        .first();\n    Context.data.integration_1c = integration_1c ? integration_1c.data.status : false;\n    //Использовать 1С как мастер систему\n    const alternative_integration = await Context.fields.settings_kedo.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('use_alternative_integration')\n        ))\n        .first();\n    Context.data.use_alternative_integration = alternative_integration ? alternative_integration.data.status : false;\n    //Использовать альтернативную учетную систему\n    const alternative_system = await Context.fields.settings_kedo.app.search()\n        .where((f, g) =\u003e g.and(\n            f.__deletedAt.eq(null),\n            f.code.eq('use_alternative_system')\n        ))\n        .first();\n    Context.data.use_alternative_system = alternative_system ? alternative_system.data.status : false;\n}",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "instance",
+      "variable": ""
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "order_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "staffs_all": {
+        "enabled": false,
+        "conditions": []
+      },
+      "settings_kedo": {
+        "enabled": false,
+        "conditions": []
+      },
+      "integration_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_order_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_application": {
+        "enabled": false,
+        "conditions": []
+      },
+      "use_alternative_system": {
+        "enabled": false,
+        "conditions": []
+      },
+      "use_alternative_integration": {
+        "enabled": false,
+        "conditions": []
+      },
+      "additional_transfer_agreement_file": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

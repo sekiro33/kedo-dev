@@ -1,0 +1,79 @@
+<% if (Context.data.display_type.code == "table") { %>
+    <% if (Context.data.documents_list && Context.data.documents_list.length > 0) { %>
+        <div class="service-container">
+            <!-- Лоадер при подготовке файлов для скачивания -->
+            <% if (Context.data.loader == true) { %>
+                <div class="loader-container">
+                    <span class="loader"></span>
+                    <span>Идет подготовка файлов...</span>
+                </div>
+            <% } else { %>
+                <button class="btn btn-primary" onclick="<%-Scripts%>.downloadFiles()">
+                    <!-- Иконка для кнопки -->
+                    <i _ngcontent-wgq-c815="" class="elma-icons ng-star-inserted"> system_download </i>
+                    Скачать документы
+                </button>
+            <% } %>
+        </div>
+        <table class="table">
+            <thead>
+                <th>Название</th>
+                <th>Дата создания</th>
+            </thead>
+            <tbody>
+                <% for (const doc of Context.data.documents_list) { %>
+                    <tr>
+                        <td><a href="<%= doc.href %>"><%= doc.name%></a></td>
+                        <td><%= doc.__createdAt%></td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <span class="custom-title">Связанных документов нет</span>
+    <% } %>
+
+    <style>
+        .custom-title {
+            font-style: italic; 
+            color: #9b9b9b; 
+            padding: 7px;
+        }
+
+        .table tr {
+            padding : 10px;
+        }
+
+        .service-container {
+            display : flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+
+        .loader-container {
+            display: flex;
+            gap : 10px;
+            padding: 10px;
+        }
+
+        .loader {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #FFF;
+            border-bottom-color: #1e6599;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+            }
+
+            @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        } 
+    </style>
+<% } %>

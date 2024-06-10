@@ -1,0 +1,1253 @@
+{
+  "__id": "018c8757-193c-7edb-a1c0-d6fe3e5882f9",
+  "namespace": "kedo.staff",
+  "code": "re_invitation",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Генерация уведомлений о переходе на КЭДО",
+  "type": "bpmn",
+  "draft": false,
+  "version": 3,
+  "context": [
+    {
+      "code": "domen",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Домен",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "number",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Номер",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        }
+      }
+    },
+    {
+      "code": "start_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата перехода",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "kedo_file",
+      "type": "FILE",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Согласие на КЭДО",
+        "data": {}
+      }
+    },
+    {
+      "code": "alert_body",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "не исп",
+        "data": {
+          "additionalType": "text"
+        }
+      }
+    },
+    {
+      "code": "invitation_link_for_new_user",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "не исп",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
+    {
+      "code": "notification_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата уведомления",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        }
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2022-11-18T07:29:39.909905458Z",
+  "__createdBy": "b3904ee1-c631-4888-88ee-3922dc2fcbea",
+  "__updatedAt": "2023-07-04T14:01:00.95608011Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 120,
+        "y": 56,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["ce2de77f-10fa-473a-b85f-8af02c82bd5e"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Генерация уведомлений о переходе на КЭДО ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "00bd4950-ee72-4952-a588-a036290a8696": {
+        "x": 96,
+        "y": 216,
+        "id": "00bd4950-ee72-4952-a588-a036290a8696",
+        "icon": "approval_list",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Конвертация файла в PDF 1а",
+        "type": "pdf_convert",
+        "color": "#f0f4c3",
+        "exits": ["120e07e6-d193-4dd5-95a8-d22046a917e1"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "inputFileCode": "kedo_file",
+          "outputFileCode": "kedo_file",
+          "outputFileName": "Согласие на КЭДО {ToString({$staff.full_name}, short)} от {$start_date}.pdf"
+        }
+      },
+      "1a4ba8ca-92cf-42ab-a5f1-da6bafca2f7d": {
+        "x": 224,
+        "y": 400,
+        "id": "1a4ba8ca-92cf-42ab-a5f1-da6bafca2f7d",
+        "icon": "user",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Получить ответ на уведомления о переходе на КЭДО",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "8446d9dd-0ada-4640-bc70-c00ba9f74cd5",
+          "5274c88b-67e0-4d63-891c-98fd75a4109f"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Получить ответ на уведомление о переходе на КЭДО от {ToString({$staff.full_name}, short, Р)}",
+          "notify": true,
+          "formCode": "form_dee6e0d0-1e68-4250-9629-d8fb348ce4bb",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 3,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "kind": "current"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      },
+      "2a0f1aab-f559-4124-850e-4105a16b241e": {
+        "x": 504,
+        "y": 416,
+        "id": "2a0f1aab-f559-4124-850e-4105a16b241e",
+        "icon": "end",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "40f58d74-106d-4311-ad5e-e5a85fb81b55": {
+        "x": 96,
+        "y": 312,
+        "id": "40f58d74-106d-4311-ad5e-e5a85fb81b55",
+        "icon": "system",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Перевод названия файла",
+        "type": "ca",
+        "color": "#20c997",
+        "exits": [
+          "88c64b26-cb9e-413f-b26e-a40364925423",
+          "2b6a2093-d9eb-4ad2-93f5-bd4b52f13c39"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "translate",
+          "name": "",
+          "input": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "output": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "kedo_file"
+              },
+              "target": {
+                "kind": "context",
+                "value": "file"
+              }
+            }
+          ],
+          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 0,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": false,
+                "interrupt": false,
+                "receivers": []
+              },
+              "enabled": false
+            },
+            "byError": {
+              "exit": "2b6a2093-d9eb-4ad2-93f5-bd4b52f13c39",
+              "notify": true,
+              "interrupt": true,
+              "receivers": [
+                {
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
+                }
+              ]
+            }
+          },
+          "bindingForm": {
+            "fieldValues": {}
+          },
+          "targetAppCode": "",
+          "dynamicBinding": {}
+        }
+      },
+      "83ed62f5-a6bd-4f95-9a30-ace930a671bf": {
+        "x": 120,
+        "y": 544,
+        "id": "83ed62f5-a6bd-4f95-9a30-ace930a671bf",
+        "icon": "end",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "9c59da38-454d-44a8-bfcf-2c1208aaa7c2": {
+        "x": 96,
+        "y": 128,
+        "id": "9c59da38-454d-44a8-bfcf-2c1208aaa7c2",
+        "icon": "doctemplate",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Сгенерировать согласие на КЭДО",
+        "type": "doc_template",
+        "color": "#f0f4c3",
+        "exits": ["0fb10dc8-15f2-4f8a-a24e-8e8cb46cd3db"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "code": "24c07b9e-78b6-437f-9143-0bba4be3c878",
+          "toPDF": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "context",
+                "value": "number"
+              },
+              "target": {
+                "kind": "context",
+                "value": "number"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "target": {
+                "kind": "context",
+                "value": "staff"
+              },
+              "convert": "to_scalar"
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "start_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "start_date"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "domen"
+              },
+              "target": {
+                "kind": "context",
+                "value": "domen"
+              }
+            },
+            {
+              "source": {
+                "kind": "context",
+                "value": "notification_date"
+              },
+              "target": {
+                "kind": "context",
+                "value": "notification_date"
+              }
+            }
+          ],
+          "namespace": "kedo.staff",
+          "outputFileCode": "kedo_file",
+          "outputFileName": "Согласие на КЭДО {ToString({$staff.full_name}, short)} от {$start_date}.docx"
+        }
+      },
+      "b7fe62a0-a56f-4713-86c0-d26d4040c77c": {
+        "x": 408,
+        "y": 400,
+        "id": "b7fe62a0-a56f-4713-86c0-d26d4040c77c",
+        "icon": "system",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Согласие на КЭДО = да",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["d0bd0fb5-0367-49d5-a9ec-bee6174f97f9"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": true
+              },
+              "target": {
+                "kind": "context",
+                "value": "kedo_agreement"
+              }
+            }
+          ],
+          "variable": "staff"
+        }
+      },
+      "b81913b8-2991-41b6-a33d-9a90999d9f0b": {
+        "x": 224,
+        "y": 528,
+        "id": "b81913b8-2991-41b6-a33d-9a90999d9f0b",
+        "icon": "system",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Согласие на КЭДО = нет",
+        "type": "app_update",
+        "color": "#fde9a0",
+        "exits": ["56a55ab6-1038-4127-9222-61a2313ba849"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "",
+          "manual": false,
+          "bindings": [
+            {
+              "source": {
+                "kind": "manual",
+                "value": false
+              },
+              "target": {
+                "kind": "context",
+                "value": "kedo_agreement"
+              }
+            }
+          ],
+          "variable": "staff"
+        }
+      },
+      "e7dfc1d8-463a-4d8d-a863-ae52a80132ce": {
+        "x": 96,
+        "y": 400,
+        "id": "e7dfc1d8-463a-4d8d-a863-ae52a80132ce",
+        "icon": "user",
+        "lane": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Подтвердить передачу уведомления о переходе на КЭДО",
+        "type": "user",
+        "color": "#daeef7",
+        "exits": [
+          "922f2835-6b58-40c8-abd0-bb06110bb79e",
+          "a148a8db-b04d-424f-9763-41914b745a3d"
+        ],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "name": "Подтвердить передачу уведомления о переходе на КЭДО {ToString({$staff.full_name}, short, Д)}",
+          "notify": true,
+          "formCode": "form_dee6e0d0-1e68-4250-9629-d8fb348ce4bb",
+          "authorType": 0,
+          "escalation": {
+            "byTime": {
+              "limit": {
+                "days": 1,
+                "kind": "duration",
+                "hours": 0,
+                "minutes": 0,
+                "absolute": false
+              },
+              "action": {
+                "notify": true,
+                "interrupt": false,
+                "receivers": [
+                  {
+                    "kind": "current"
+                  }
+                ]
+              },
+              "enabled": true
+            }
+          },
+          "formFields": [],
+          "priorityType": "context_var",
+          "allowReassign": true,
+          "descriptionType": "context_var",
+          "placeContextVar": "",
+          "planDatesSettings": {
+            "enabled": false,
+            "planCodes": {
+              "endCode": "",
+              "startCode": ""
+            }
+          },
+          "disableEmailNotify": false,
+          "externalParticipantsContextVar": ""
+        }
+      }
+    },
+    "lanes": {
+      "599d4f74-4bb7-4770-9a88-1eb117d526ca": {
+        "x": 24,
+        "y": 8,
+        "id": "599d4f74-4bb7-4770-9a88-1eb117d526ca",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 568,
+        "height": 728,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "0fb10dc8-15f2-4f8a-a24e-8e8cb46cd3db": {
+        "id": "0fb10dc8-15f2-4f8a-a24e-8e8cb46cd3db",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 192
+          },
+          {
+            "x": 136,
+            "y": 216
+          }
+        ],
+        "type": "plain",
+        "source": "9c59da38-454d-44a8-bfcf-2c1208aaa7c2",
+        "target": "00bd4950-ee72-4952-a588-a036290a8696",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "120e07e6-d193-4dd5-95a8-d22046a917e1": {
+        "id": "120e07e6-d193-4dd5-95a8-d22046a917e1",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 280
+          },
+          {
+            "x": 136,
+            "y": 312
+          }
+        ],
+        "type": "plain",
+        "source": "00bd4950-ee72-4952-a588-a036290a8696",
+        "target": "40f58d74-106d-4311-ad5e-e5a85fb81b55",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "2b6a2093-d9eb-4ad2-93f5-bd4b52f13c39": {
+        "id": "2b6a2093-d9eb-4ad2-93f5-bd4b52f13c39",
+        "name": "",
+        "path": [
+          {
+            "x": 156,
+            "y": 376
+          },
+          {
+            "x": 156,
+            "y": 400
+          }
+        ],
+        "type": "error",
+        "source": "40f58d74-106d-4311-ad5e-e5a85fb81b55",
+        "target": "e7dfc1d8-463a-4d8d-a863-ae52a80132ce",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "5274c88b-67e0-4d63-891c-98fd75a4109f": {
+        "id": "5274c88b-67e0-4d63-891c-98fd75a4109f",
+        "name": "Отказ от КЭДО",
+        "path": [
+          {
+            "x": 264,
+            "y": 464
+          },
+          {
+            "x": 264,
+            "y": 528
+          }
+        ],
+        "type": "plain",
+        "source": "1a4ba8ca-92cf-42ab-a5f1-da6bafca2f7d",
+        "target": "b81913b8-2991-41b6-a33d-9a90999d9f0b",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "56a55ab6-1038-4127-9222-61a2313ba849": {
+        "id": "56a55ab6-1038-4127-9222-61a2313ba849",
+        "name": "",
+        "path": [
+          {
+            "x": 224,
+            "y": 560
+          },
+          {
+            "x": 152,
+            "y": 560
+          }
+        ],
+        "type": "plain",
+        "source": "b81913b8-2991-41b6-a33d-9a90999d9f0b",
+        "target": "83ed62f5-a6bd-4f95-9a30-ace930a671bf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "8446d9dd-0ada-4640-bc70-c00ba9f74cd5": {
+        "id": "8446d9dd-0ada-4640-bc70-c00ba9f74cd5",
+        "name": "Согласен на КЭДО",
+        "path": [
+          {
+            "x": 304,
+            "y": 432
+          },
+          {
+            "x": 408,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "1a4ba8ca-92cf-42ab-a5f1-da6bafca2f7d",
+        "target": "b7fe62a0-a56f-4713-86c0-d26d4040c77c",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "88c64b26-cb9e-413f-b26e-a40364925423": {
+        "id": "88c64b26-cb9e-413f-b26e-a40364925423",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 376
+          },
+          {
+            "x": 136,
+            "y": 400
+          }
+        ],
+        "type": "plain",
+        "source": "40f58d74-106d-4311-ad5e-e5a85fb81b55",
+        "target": "e7dfc1d8-463a-4d8d-a863-ae52a80132ce",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "922f2835-6b58-40c8-abd0-bb06110bb79e": {
+        "id": "922f2835-6b58-40c8-abd0-bb06110bb79e",
+        "name": "Передано",
+        "path": [
+          {
+            "x": 176,
+            "y": 432
+          },
+          {
+            "x": 224,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "e7dfc1d8-463a-4d8d-a863-ae52a80132ce",
+        "target": "1a4ba8ca-92cf-42ab-a5f1-da6bafca2f7d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "primary",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "a148a8db-b04d-424f-9763-41914b745a3d": {
+        "id": "a148a8db-b04d-424f-9763-41914b745a3d",
+        "name": "Отмена",
+        "path": [
+          {
+            "x": 136,
+            "y": 464
+          },
+          {
+            "x": 136,
+            "y": 544
+          }
+        ],
+        "type": "plain",
+        "source": "e7dfc1d8-463a-4d8d-a863-ae52a80132ce",
+        "target": "83ed62f5-a6bd-4f95-9a30-ace930a671bf",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "danger",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "ce2de77f-10fa-473a-b85f-8af02c82bd5e": {
+        "id": "ce2de77f-10fa-473a-b85f-8af02c82bd5e",
+        "name": "",
+        "path": [
+          {
+            "x": 136,
+            "y": 88
+          },
+          {
+            "x": 136,
+            "y": 128
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "9c59da38-454d-44a8-bfcf-2c1208aaa7c2",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "d0bd0fb5-0367-49d5-a9ec-bee6174f97f9": {
+        "id": "d0bd0fb5-0367-49d5-a9ec-bee6174f97f9",
+        "name": "",
+        "path": [
+          {
+            "x": 488,
+            "y": 432
+          },
+          {
+            "x": 504,
+            "y": 432
+          }
+        ],
+        "type": "plain",
+        "source": "b7fe62a0-a56f-4713-86c0-d26d4040c77c",
+        "target": "2a0f1aab-f559-4124-850e-4105a16b241e",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\nasync function refreshLink(): Promise\u003cvoid\u003e {\n    let external_user = (await Context.data.staff!.fetch()).data.external_user;\n    Context.data.invitation_link_for_new_user = await (Namespace as any).factory.Global.ns.kedo_ext.portal.signupUrl((await external_user![0].fetch()), { refresh: true });\n    /*Context.data.invitation_link_for_new_user = await Namespace.kedo_ext.signupUrl((await external_user![0].fetch()), {\n        refresh: true,\n    });*/\n    await interlal_user_link();\n}\nasync function ext_user_check(): Promise\u003cboolean\u003e {\n    let staff = await Context.data.staff!.fetch();\n    let ext_user = staff.data.ext_user;\n    if (!staff.data.external_user) return false;\n    let external_user = await staff.data.external_user[0].fetch();\n    if (ext_user \u0026\u0026 external_user.data.__user_status == external_user.fields.__user_status.variants.active) return true;\n    return false;\n}\n\n\nasync function interlal_user_link(): Promise\u003cvoid\u003e {\n    try {\n        let user = await Context.data.staff!.fetch();\n        let entity: ApplicationItem\u003cApplication$_system_catalogs$_my_companies$Data, Application$_system_catalogs$_my_companies$Params\u003e | undefined = undefined\n        if (user.data.entity)\n            entity = await user.data.entity.fetch();\n        Context.data.alert_body =\n            `Приглашаем вас на портал обмена кадровыми электронными документами ${entity?.data.__name}.\n    На портале вы сможете создавать и подписывать кадровые документы в электронном виде.\n    Перейдите по ссылке и пройдите процедуру трудоустройства на портале.`;\n    }\n    catch (e) {\n        Context.data.staff!.sendMessage('Ошибка при генерации приглашения', 'Ошибка ' + e.name + \":\" + e.message);\n        throw (e);\n    }\n\n}\nasync function user_check(): Promise\u003cboolean\u003e {\n    let staff = await Context.data.staff!.fetch();\n    if (!staff.data.staff_access) return false;\n    return true;\n}\n",
+  "forms": [
+    {
+      "id": "",
+      "code": "form_dee6e0d0-1e68-4250-9629-d8fb348ce4bb",
+      "name": "Задача 1",
+      "values": {
+        "formType": "task-form",
+        "formGroup": {
+          "path": ["context"]
+        }
+      },
+      "widget": {
+        "draft": false,
+        "deleted": false,
+        "version": 3
+      },
+      "content": {
+        "[footer]": [
+          {
+            "id": "31979bac-00bd-4123-a901-9d14190c8dde",
+            "values": {
+              "buttons": {
+                "path": ["actionButtons"]
+              }
+            },
+            "content": null,
+            "descriptor": "buttons-panel",
+            "descriptorVersion": null
+          }
+        ],
+        "[content]": [
+          {
+            "id": "c18e9118-cda2-49f4-ae50-5414c9b970b2",
+            "values": {
+              "shadow": true
+            },
+            "content": {
+              "": [
+                {
+                  "id": "dcdd3e4e-0c49-483b-87c2-8c782a8890f0",
+                  "values": {
+                    "form": {
+                      "path": ["context"]
+                    },
+                    "fields": {
+                      "path": ["fields"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "dynamic-form",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "modal-body",
+            "descriptorVersion": null
+          }
+        ],
+        "[sidebar]": [
+          {
+            "id": "39d7757a-529f-4526-98f3-fddc66becf85",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "abe4b782-6e2d-49cc-a57e-81b636422ee5",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "target-widget",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "231b371a-64ae-4b61-8014-cba6da318ac9",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "5e39b91d-aea4-467e-862f-0f8766eb44df",
+                  "values": {
+                    "context": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "linked-item",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "a4469de0-d7f3-11ec-9d64-0242ac120002",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "3ead7c41-6dfa-4144-80da-2bfb5f0ccf59",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-reminder",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "56d1d0e8-aa83-4cdd-ae43-294b26ad4d04",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e1525e34-14ba-456b-b703-f407945c01e0",
+                  "values": {
+                    "formGroup": {
+                      "path": ["context"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "item-tasks",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "eef018f2-1d3a-4600-a19d-791733b28b5e",
+            "values": null,
+            "content": {
+              "": [
+                {
+                  "id": "e0a17dec-603a-461a-becf-861637630584",
+                  "values": {
+                    "target": {
+                      "path": ["target"]
+                    }
+                  },
+                  "content": null,
+                  "descriptor": "messages-target",
+                  "descriptorVersion": null
+                }
+              ]
+            },
+            "descriptor": "sidebar-widget",
+            "descriptorVersion": null
+          }
+        ],
+        "[formInfoPanel]": [
+          {
+            "id": "24216001-b22e-41ae-a471-ec3f7487306e",
+            "values": {
+              "__validateResult": {
+                "path": ["context", "__validateResult"]
+              }
+            },
+            "content": null,
+            "descriptor": "validation-info-block",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerControls]": [
+          {
+            "id": "475aa008-aaff-402f-8de2-408bae1f1928",
+            "values": {
+              "task": {
+                "path": ["task"]
+              }
+            },
+            "content": null,
+            "descriptor": "task-percent-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "702d9c59-77ae-4dd5-b71a-a5fe7b58858f",
+            "values": {
+              "item": {
+                "path": ["__itemRef"]
+              }
+            },
+            "content": null,
+            "descriptor": "extension-zone-toolbar-widget",
+            "descriptorVersion": null
+          },
+          {
+            "id": "f7b11c79-4267-4f5b-a002-dd629d549682",
+            "values": {
+              "task": {
+                "path": ["task"]
+              },
+              "skipRulesCheck": true
+            },
+            "content": null,
+            "descriptor": "process-item-map",
+            "descriptorVersion": null
+          },
+          {
+            "id": "ff2500ee-6573-49cd-a9e8-2d5c93350f26",
+            "values": {
+              "icon": "menu_vertical",
+              "view": "icon",
+              "label": "bpm.tasks.item@menu",
+              "action": {
+                "path": ["menuAction"]
+              }
+            },
+            "content": null,
+            "descriptor": "button",
+            "descriptorVersion": null
+          }
+        ],
+        "[headerCustomization]": []
+      },
+      "descriptor": "item-form-complex-popup",
+      "descriptorVersion": 2
+    }
+  ],
+  "settings": {
+    "logged": true,
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": true,
+    "applicationContext": false,
+    "fieldVisibilityConditions": {
+      "domen": {
+        "enabled": false,
+        "conditions": []
+      },
+      "number": {
+        "enabled": false,
+        "conditions": []
+      },
+      "kedo_file": {
+        "enabled": false,
+        "conditions": []
+      },
+      "alert_body": {
+        "enabled": false,
+        "conditions": []
+      },
+      "start_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "notification_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "invitation_link_for_new_user": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

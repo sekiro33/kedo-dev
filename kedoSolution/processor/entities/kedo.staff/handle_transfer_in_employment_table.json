@@ -1,0 +1,827 @@
+{
+  "__id": "018e89f8-23b6-78fb-a59a-691c7da78639",
+  "namespace": "kedo.staff",
+  "code": "handle_transfer_in_employment_table",
+  "category": "00000000-0000-0000-0000-000000000000",
+  "__name": "Установка кадрового перевода в таблице трудоустройства",
+  "type": "bpmn",
+  "draft": false,
+  "version": 2,
+  "context": [
+    {
+      "code": "debug",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "debug",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "position",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "position",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Позиция",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "existing_positions",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Позиция существует?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "transfer_date",
+      "type": "DATETIME",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дата перевода",
+        "data": {
+          "additionalType": "date",
+          "defaultTimeType": "startOfDay",
+          "timeOptional": false
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "organization",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "organization",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Организация",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "subdivision",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "structural_subdivision",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Подразделение",
+        "data": {},
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "type_work_relation",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Тип трудоустройства",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "id_1c",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID сотрудника",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "staff",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "staff",
+        "filter": null,
+        "bindings": null,
+        "namespace": "kedo",
+        "isDependent": false,
+        "linkedFieldCode": ""
+      },
+      "view": {
+        "name": "Сотрудник"
+      }
+    },
+    {
+      "code": "transfer_row",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Строка с данными о переводе",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "error_stack",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "error_stack",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "rate",
+      "type": "FLOAT",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": 1,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ставка",
+        "data": {
+          "additionalType": "integer",
+          "showRowSeparator": true
+        },
+        "input": true,
+        "output": true
+      }
+    },
+    {
+      "code": "type_from_data",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": true,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Нашли данные о типе трудоустройства?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": true,
+        "output": true
+      }
+    }
+  ],
+  "manualRun": false,
+  "readonly": false,
+  "__createdAt": "2024-03-20T13:07:42.776375653Z",
+  "__createdBy": "b3f986a6-49d7-4dbb-b047-88cc4285f013",
+  "__updatedAt": "2024-04-01T14:03:21.619766394Z",
+  "__updatedBy": "b25a7cf7-ce56-4d22-b3c0-a7e160498088",
+  "process": {
+    "items": {
+      "00000000-0000-0000-0000-000000000000": {
+        "x": 184,
+        "y": 72,
+        "id": "00000000-0000-0000-0000-000000000000",
+        "lane": "e6075201-d2cf-4223-a747-254667e29523",
+        "type": "start",
+        "color": "#ffffff",
+        "exits": ["1c2d7019-c702-4e8b-a61c-e407ff91608a"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "formFields": [
+            {
+              "code": "__name",
+              "display": "Название",
+              "tooltip": "Название экземпляра процесса, будет показываться в задачах",
+              "readonly": false,
+              "required": true
+            }
+          ],
+          "instruction": "",
+          "notifyMessage": "Запущен процесс",
+          "titleTemplate": "Установка кадрового перевода в таблице трудоустройства ({$staff})",
+          "titleGenerateMethod": "template"
+        }
+      },
+      "02b0c7f0-6aca-4ec1-a5e8-8d1eeced9f8f": {
+        "x": 184,
+        "y": 232,
+        "id": "02b0c7f0-6aca-4ec1-a5e8-8d1eeced9f8f",
+        "icon": "exclusive",
+        "lane": "e6075201-d2cf-4223-a747-254667e29523",
+        "name": "",
+        "type": "gateway",
+        "color": "#ffffff",
+        "exits": [
+          "c6b3ff32-2a14-4ffe-a8ba-c034f86100b5",
+          "fc328c32-e9af-4dc2-ac71-dee2c4eb0622"
+        ],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "func": "",
+          "type": "exclusive",
+          "useFunc": false,
+          "funcType": "STRING",
+          "description": ""
+        }
+      },
+      "22345fd4-ae65-4b31-b261-533e5fd8593d": {
+        "x": 184,
+        "y": 464,
+        "id": "22345fd4-ae65-4b31-b261-533e5fd8593d",
+        "icon": "end",
+        "lane": "e6075201-d2cf-4223-a747-254667e29523",
+        "name": "",
+        "type": "end",
+        "color": "#ffffff",
+        "exits": [],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "actions": [],
+          "isModal": false,
+          "actionType": "nothing",
+          "messageText": "",
+          "redirectUrl": ""
+        }
+      },
+      "36dfef21-d613-4fae-b5a6-aba9f1c40eb7": {
+        "x": 184,
+        "y": 296,
+        "id": "36dfef21-d613-4fae-b5a6-aba9f1c40eb7",
+        "icon": "timer",
+        "lane": "e6075201-d2cf-4223-a747-254667e29523",
+        "name": "Таймер на ожидание даты перевода",
+        "type": "event",
+        "color": "#ffffff",
+        "exits": ["e7017c42-8e3e-4b55-a292-1c817fd8e2e8"],
+        "width": 32,
+        "height": 32,
+        "settings": {
+          "kind": "timer",
+          "timer": {
+            "code": "transfer_date",
+            "days": 0,
+            "kind": "variable",
+            "hours": 0,
+            "minutes": 0,
+            "absolute": false,
+            "substraction": false
+          }
+        }
+      },
+      "960c3331-91f8-49ba-9b59-1c08867aacf0": {
+        "x": 160,
+        "y": 136,
+        "id": "960c3331-91f8-49ba-9b59-1c08867aacf0",
+        "icon": "script",
+        "lane": "e6075201-d2cf-4223-a747-254667e29523",
+        "name": "Получить дату перевода",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["6d7c30ea-e316-4851-b1bf-351aafda7b37"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "getDate",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      },
+      "f9052fcb-b082-4c35-9960-b42932be950d": {
+        "x": 160,
+        "y": 360,
+        "id": "f9052fcb-b082-4c35-9960-b42932be950d",
+        "icon": "script",
+        "lane": "e6075201-d2cf-4223-a747-254667e29523",
+        "name": "Обработать полученные сырые данные",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["b2a8b8f6-f319-4d18-baa7-cfc8afc35060"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "handleData",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
+        }
+      }
+    },
+    "lanes": {
+      "e6075201-d2cf-4223-a747-254667e29523": {
+        "x": 8,
+        "y": 8,
+        "id": "e6075201-d2cf-4223-a747-254667e29523",
+        "name": "Инициатор",
+        "color": "#d6f0cc",
+        "width": 424,
+        "height": 600,
+        "settings": {
+          "type": "dynamic",
+          "variable": "__createdBy",
+          "permissionExtend": {
+            "kind": "simple"
+          }
+        },
+        "direction": "vertical",
+        "multiInstance": false
+      }
+    },
+    "paper": {
+      "format": "A4",
+      "orientation": "landscape"
+    },
+    "transitions": {
+      "1c2d7019-c702-4e8b-a61c-e407ff91608a": {
+        "id": "1c2d7019-c702-4e8b-a61c-e407ff91608a",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 104
+          },
+          {
+            "x": 200,
+            "y": 136
+          }
+        ],
+        "type": "plain",
+        "source": "00000000-0000-0000-0000-000000000000",
+        "target": "960c3331-91f8-49ba-9b59-1c08867aacf0",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "6d7c30ea-e316-4851-b1bf-351aafda7b37": {
+        "id": "6d7c30ea-e316-4851-b1bf-351aafda7b37",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 200
+          },
+          {
+            "x": 200,
+            "y": 232
+          }
+        ],
+        "type": "plain",
+        "source": "960c3331-91f8-49ba-9b59-1c08867aacf0",
+        "target": "02b0c7f0-6aca-4ec1-a5e8-8d1eeced9f8f",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "b2a8b8f6-f319-4d18-baa7-cfc8afc35060": {
+        "id": "b2a8b8f6-f319-4d18-baa7-cfc8afc35060",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 424
+          },
+          {
+            "x": 200,
+            "y": 464
+          }
+        ],
+        "type": "plain",
+        "source": "f9052fcb-b082-4c35-9960-b42932be950d",
+        "target": "22345fd4-ae65-4b31-b261-533e5fd8593d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "c6b3ff32-2a14-4ffe-a8ba-c034f86100b5": {
+        "id": "c6b3ff32-2a14-4ffe-a8ba-c034f86100b5",
+        "name": "Дата заполнена",
+        "path": [
+          {
+            "x": 200,
+            "y": 264
+          },
+          {
+            "x": 200,
+            "y": 296
+          }
+        ],
+        "type": "plain",
+        "source": "02b0c7f0-6aca-4ec1-a5e8-8d1eeced9f8f",
+        "target": "36dfef21-d613-4fae-b5a6-aba9f1c40eb7",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [
+            {
+              "a": {
+                "kind": "context",
+                "value": "transfer_date"
+              },
+              "type": "DATETIME",
+              "inversion": false,
+              "operation": {
+                "relation": "empty",
+                "inversion": true,
+                "caseInsensitive": false
+              },
+              "conjunction": false
+            }
+          ],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "e7017c42-8e3e-4b55-a292-1c817fd8e2e8": {
+        "id": "e7017c42-8e3e-4b55-a292-1c817fd8e2e8",
+        "name": "",
+        "path": [
+          {
+            "x": 200,
+            "y": 328
+          },
+          {
+            "x": 200,
+            "y": 360
+          }
+        ],
+        "type": "plain",
+        "source": "36dfef21-d613-4fae-b5a6-aba9f1c40eb7",
+        "target": "f9052fcb-b082-4c35-9960-b42932be950d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      },
+      "fc328c32-e9af-4dc2-ac71-dee2c4eb0622": {
+        "id": "fc328c32-e9af-4dc2-ac71-dee2c4eb0622",
+        "name": "",
+        "path": [
+          {
+            "x": 216,
+            "y": 248
+          },
+          {
+            "x": 320,
+            "y": 248
+          },
+          {
+            "x": 320,
+            "y": 480
+          },
+          {
+            "x": 216,
+            "y": 480
+          }
+        ],
+        "type": "default",
+        "source": "02b0c7f0-6aca-4ec1-a5e8-8d1eeced9f8f",
+        "target": "22345fd4-ae65-4b31-b261-533e5fd8593d",
+        "settings": {
+          "exit": {
+            "confirm": "none",
+            "interrupt": false,
+            "skipCheck": false,
+            "formFields": [],
+            "buttonClass": "default",
+            "confirmText": "",
+            "popoverSize": "md",
+            "formDescription": ""
+          },
+          "conditions": [],
+          "descritpion": ""
+        },
+        "nameShift": 0
+      }
+    }
+  },
+  "scripts": "/**\nHere you can write scripts for complex server processing of the context during process execution.\nTo write scripts, use TypeScript (https://www.typescriptlang.org).\nELMA365 SDK documentation available on https://tssdk.elma365.com.\n**/\n\ninterface TransferData {\n    employee_individual_id: string;\n    type_work_relation: any;\n    subdivision_id: string;\n    org_id: string;\n    id_1c: string;\n    type_from_data: any;\n    transfer_date: TDate;\n    rate: number;\n    pos_id: string;\n    existing_positions: any;\n}\n\n//проверка на актуальные данные\nfunction isActualData(employee: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e,\n    employeeId: string,\n    position: ApplicationItem\u003cApplication$kedo$position$Data, Application$kedo$position$Params\u003e,\n    transferDate: TDate): boolean {\n\n    if (employee \u0026\u0026 employee.data.employment_table) {\n            //ищем строку в таблице занятости\n            const row = employee.data.employment_table.find((item: any) =\u003e item.id_1c \u0026\u0026 item.id_1c === employeeId);\n\n            if (row \u0026\u0026 row.admission_date_position) {\n\n                 //если пришедшие данные не актуальные, не загружаем их   \n                if (row.admission_date_position.after(transferDate)) {\n\n                    Context.data.error_stack += ` ${employee.data.__name} ${position.data.__name} ${transferDate.format()} в строчке ${row.admission_date_position.format()} - устаревшая информация `;\n                    Context.data.debug += ` ${employee.data.__name} ${position.data.__name} ${transferDate.format()} в строчке ${row.admission_date_position.format()} устаревшая информация `;\n                    return false;\n                }\n            }\n    }\n    return true;\n}\n\n//метод для ситуации, если мы уволили сотрудника, а потом приняли снова. При таком подходе у нас будет несколько строк с типом устройства \"Основное место работы\". Неактуальную информацию (строку занятости) нужно удалить\nfunction deletePreviousPosition(employee: ApplicationItem\u003cApplication$kedo$staff$Data, Application$kedo$staff$Params\u003e,\n    employmentRow: Table$kedo$staff$employment_table$Row,\n    typeFromData: any,\n    employeeId: string): void {\n    \n    //проверка на основное место работы\n    if (typeFromData \u0026\u0026 employee.data.employment_table \u0026\u0026 employmentRow.type_employment.name === 'Основное место работы') {\n        //проверяем, есть ли ещё строки с основным местом работы\n        let mainWorkTypes = employee.data.employment_table.filter((item: any) =\u003e item.type_employment.name === 'Основное место работы');\n        if (mainWorkTypes \u0026\u0026 mainWorkTypes.length \u003e 1) {\n            //если нашли несколько основных мест, удаляем первое (т.к. мы только что добавили новую строчку, и она, очевидно, не первая)\n            let rowToDelete = mainWorkTypes.find((item: any) =\u003e item.id_1c !== employeeId);\n            if (rowToDelete) {\n                try {\n                    employee.data.employment_table.delete(employee.data.employment_table.indexOf(rowToDelete));\n                    employee.data.id_1c = employmentRow.id_1c;\n                } catch (e) {\n                    Context.data.error_stack += ` Не удалось удалить предыдущее основное место работы `;\n                }\n            }\n        }\n    }\n}\n\n//основная процедура обработки пришедших данных по переводу\nasync function handleData(): Promise\u003cvoid\u003e {\n\n    //небольшая валидация\n    if (!Context.data.staff || !Context.data.position) {\n        return;\n    }\n\n    let employee = await Context.data.staff.fetch();\n    let pos = Context.data.position;\n    let posApp = await pos.fetch();\n    let org = Context.data.organization;\n    let subdivision = Context.data.subdivision;\n    let typeWorkRelation = Context.data.type_work_relation as string;\n    let transferDate = Context.data.transfer_date as TDate;\n    let id_1c = Context.data.id_1c as string;\n    let rate = Context.data.rate as number;\n    let typeFromData = Context.data.type_from_data;\n    let existingPositions = Context.data.existing_positions;\n    let mainWorkCategory = Context.fields.staff.app.fields.employment_table.fields.type_employment.variants.main_workplace;\n    let externalWorkCategory = Context.fields.staff.app.fields.employment_table.fields.type_employment.variants.external_combination;\n    let internalWorkCategory = Context.fields.staff.app.fields.employment_table.fields.type_employment.variants.internal_combination;\n\n    //проверка на актуальные данные\n    if (!isActualData(employee, id_1c, posApp, transferDate)) {\n        //не актуальная информация, не загружаем её\n        return;\n    }\n\n    //заполняем поля в карточке, которые заполняются только для основного места работы\n    if (typeWorkRelation \u0026\u0026 (typeWorkRelation === mainWorkCategory.name)) {\n        employee.data.employment_type = mainWorkCategory;\n        employee.data.id_1c = id_1c;\n    }\n\n    //строка таблицы занятости\n    let employment_row: Table$kedo$staff$employment_table$Row | undefined\n\n    //проверка и поиск нужной строки в таблице занятости (чтобы обновить данные). Либо же создание новой строки\n    if (existingPositions) {\n        Context.data.debug += ` существует позиция `;\n\n        employment_row = employee.data.employment_table!.find((item: any) =\u003e id_1c \u0026\u0026 item.id_1c \u0026\u0026 item.id_1c === id_1c);\n\n        if (!employment_row) {\n            Context.data.debug += ` не нашли строку в таблице  `;\n            employment_row = employee.data.employment_table!.insert();\n        }\n    } else {\n        employment_row = employee.data.employment_table!.insert()\n    }\n    if (!employment_row \u0026\u0026 pos \u0026\u0026 pos.id) {\n        Context.data.error_stack += \" Не нашли строку с позицией \" + posApp.data.__name;\n        return;\n    }\n\n    //заполняем айди сотрудника в строке, этот айди является уникальным полем строки и по нему мы ищем соответствие при загрузке\n    employment_row.id_1c = id_1c;\n\n    if (org) {\n        employment_row.organization = org;\n    }\n    if (pos) {\n        employment_row.position = pos;\n    }\n    if (subdivision) {\n        employment_row.subdivision = subdivision;\n    }\n\n    //заполняем тип трудоустройства только при условии, что у нас есть данные и он ещё не заполнен\n    if (typeFromData \u0026\u0026 typeWorkRelation !== undefined) {\n        if (typeWorkRelation === mainWorkCategory.name) {\n            employment_row.type_employment = mainWorkCategory;\n        } else if (typeWorkRelation === externalWorkCategory.name) {\n            employment_row.type_employment = externalWorkCategory;\n        } else if (typeWorkRelation === internalWorkCategory.name) {\n            employment_row.type_employment = internalWorkCategory;\n        }\n    }\n\n    Context.data.debug += ` employmentRow.type_employment ${!!employment_row.type_employment} `;\n\n    //добавили заполнение для проверки на старую информацию\n    employment_row.admission_date_position = transferDate;\n\n    //заполняем ставку\n    try {\n        employment_row.rate = rate;\n    } catch (e) {\n        employment_row.rate = 1;\n    }\n\n    //заполняем данные о позиции в самом сотруднике, если приём/перевод был по основному месту работы\n    if (employment_row \u0026\u0026 employment_row.type_employment \u0026\u0026 employment_row.type_employment.name === mainWorkCategory.name) {\n        if (!!pos) {\n            employee.data.position = pos;\n        }\n        if (!!subdivision) {\n            employee.data.structural_subdivision = subdivision;\n        }\n        if (!!org) {\n            employee.data.organization = org;\n            const orgApp = await org.fetch();\n            employee.data.entity = orgApp.data.entity;\n        }\n\n        employee.data.employment_type = mainWorkCategory;\n        employee.data.id_1c = id_1c;\n    }\n\n    //если мы уволили сотрудника, а потом приняли снова. При таком подходе у нас будет несколько строк с типом устройства \"Основное место работы\"\n    deletePreviousPosition(employee, employment_row, typeFromData, id_1c);\n\n    await employee.save();\n}\n\n//получаем дату перевода\nasync function getDate(): Promise\u003cvoid\u003e {\n    if (!Context.data.transfer_row) {\n        return;\n    }\n\n    let data: any = JSON.parse(Context.data.transfer_row);\n\n    if (data.transfer_date) {\n        Context.data.transfer_date = data.transfer_date;\n    }\n}\n",
+  "forms": [],
+  "settings": {
+    "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": [
+        {
+          "code": "staff",
+          "data": {
+            "code": "staff",
+            "namespace": "kedo"
+          },
+          "type": "SYS_COLLECTION",
+          "view": {
+            "name": "Сотрудник"
+          },
+          "array": true,
+          "single": true
+        }
+      ]
+    },
+    "targetFeed": {
+      "type": "object",
+      "variable": "staff"
+    },
+    "allowGlobal": false,
+    "instanceCard": {
+      "allFields": true,
+      "formFields": []
+    },
+    "notifyOnStart": true,
+    "allowNamespace": false,
+    "applicationContext": false,
+    "importsDependencies": [],
+    "fieldVisibilityConditions": {
+      "cont": {
+        "enabled": false,
+        "conditions": []
+      },
+      "rate": {
+        "enabled": false,
+        "conditions": []
+      },
+      "debug": {
+        "enabled": false,
+        "conditions": []
+      },
+      "id_1c": {
+        "enabled": false,
+        "conditions": []
+      },
+      "position": {
+        "enabled": false,
+        "conditions": []
+      },
+      "error_stack": {
+        "enabled": false,
+        "conditions": []
+      },
+      "subdivision": {
+        "enabled": false,
+        "conditions": []
+      },
+      "organization": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_row": {
+        "enabled": false,
+        "conditions": []
+      },
+      "transfer_date": {
+        "enabled": false,
+        "conditions": []
+      },
+      "type_from_data": {
+        "enabled": false,
+        "conditions": []
+      },
+      "existing_positions": {
+        "enabled": false,
+        "conditions": []
+      },
+      "type_work_relation": {
+        "enabled": false,
+        "conditions": []
+      }
+    }
+  },
+  "hideInList": false,
+  "applicationLink": false,
+  "__deletedAt": null
+}

@@ -1,0 +1,92 @@
+{
+  "__id": "18970b77-c01d-41ed-b812-69c40c246317",
+  "__name": "Проверка доступности модулей ЭП",
+  "code": "check_modules",
+  "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "enabled_module_code",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Код подключенного модуля",
+        "tooltip": "Может иметь значения: 'goskey', 'common_integration', 'all', 'null'",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "settings_app",
+      "type": "SYS_COLLECTION",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": true,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {
+        "code": "settings",
+        "filter": {
+          "value": {
+            "tf": {}
+          },
+          "enabled": false
+        },
+        "namespace": "kedo"
+      },
+      "view": {
+        "name": "Приложение Настройки",
+        "data": {},
+        "input": false,
+        "output": false
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "async function action(): Promise\u003cvoid\u003e{\n\tconst baseUrl = System.getBaseUrl();\n    const tokenSetting = await Context.fields.settings_app.app.search().where(f =\u003e f.code.eq(\"api_key\")).first();\n\n    if (!tokenSetting || !tokenSetting.data.value) {\n        Context.data.enabled_module_code = \"null\";\n        return;\n    };\n\n    let goskeyEnabled = false;\n    let commonIntegrationEnabled = false\n\n    const goskeyResponse = await fetch(`${baseUrl}/pub/v1/scheme/modules/7fb0a0d0-fc8d-452e-843f-6a7f2f28a8bf`, {\n        headers: {\n            Authorization: `Bearer ${tokenSetting.data.value}`\n        }\n    });\n\n    if (goskeyResponse.ok) {\n        const responseJson = await goskeyResponse.json();\n        goskeyEnabled = responseJson.module.enabled;\n    };\n\n    const commonIntegrationResponse = await fetch(`${baseUrl}/pub/v1/scheme/modules/27c1fb4a-e011-47a6-aa26-cf0fc42c39cd`, {\n        headers: {\n            Authorization: `Bearer ${tokenSetting.data.value}`\n        }\n    });\n\n    if (commonIntegrationResponse.ok) {\n        const responseJson = await commonIntegrationResponse.json();\n        commonIntegrationEnabled = responseJson.module.enabled;\n    };\n\n    Context.data.enabled_module_code = [goskeyEnabled, commonIntegrationEnabled].every(item =\u003e item) ? \"all\" :\n        goskeyEnabled ? \"goskey\" :\n        commonIntegrationEnabled ? \"common_integration\" : \"null\"\n};",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2023-12-22T10:05:12.04263633Z",
+  "__createdBy": "6163c306-9e58-491d-b0e4-407d6cc24727",
+  "__updatedAt": "2024-02-14T11:09:55.567611553Z",
+  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__deletedAt": null
+}

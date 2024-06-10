@@ -1,0 +1,11 @@
+{
+  "scripts": "async function action() {\n    var _a;\n    if (!Context.data.vacation_data) {\n        throw new Error(\"Context.data.vacation_data is undefined\");\n    }\n    const current_date = new Datetime();\n    const vacation_data = JSON.parse(Context.data.vacation_data);\n    const body = {\n        \"Date\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n        \"ПериодРегистрации\": current_date.format(\"YYYY-MM-01T00:00:00\"),\n        \"Организация_Key\": vacation_data.staff.organization_id,\n        \"Сотрудник_Key\": vacation_data.staff.id_1c,\n        \"ФизическоеЛицо_Key\": vacation_data.staff.individual_id_1c,\n        \"ДатаНачала\": vacation_data.start_date,\n        \"ДатаОкончания\": vacation_data.end_date,\n        \"КодПричиныНетрудоспособности\": \"05\",\n        \"НазначитьПособие\": true,\n        \"РассчитатьЗарплату\": true,\n        \"ПорядокВыплаты\": \"Межрасчет\",\n        \"Комментарий\": vacation_data.comment,\n    };\n    const accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n    const integration_app = Namespace.params.fields.integration_app.app.create();\n    integration_app.data.__name = `Больничный по беременности и родам (${vacation_data.staff.name})`;\n    integration_app.data.document_odata_name = \"Document_БольничныйЛист\";\n    integration_app.data.accounting_systems = accounting1c;\n    integration_app.data.personal_guid_1c = JSON.stringify([vacation_data.staff.individual_id_1c]);\n    integration_app.data.document_creation_data = JSON.stringify(body);\n    integration_app.data.additional_info = (_a = Context.data.additional_info) !== null && _a !== void 0 ? _a : \"\";\n    integration_app.data.base_1c_name = Context.data.connection_name;\n    integration_app.data.related_element = Context.data.app;\n    await integration_app.save();\n    Context.data.integration_app_id = integration_app.data.__id;\n}\n(async function () {\n    action();\n});\n",
+  "execution": [
+    {
+      "code": "sync",
+      "name": "Синхронное"
+    }
+  ],
+  "allowGlobal": false,
+  "checkInterval": ""
+}
