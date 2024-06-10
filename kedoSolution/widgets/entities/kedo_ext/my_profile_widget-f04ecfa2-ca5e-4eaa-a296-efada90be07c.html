@@ -1,0 +1,956 @@
+<style>
+    * {
+        font-family: SF Pro Display,Helvetica,Arial,sans-serif;
+    }
+
+    g {
+        fill: transparent;
+    }
+
+    .certificate-modal {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+    }
+
+    .loader-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.4);
+    }
+
+    .main-loader {
+        width: 200px;
+        height: 200px;
+        background: url(data:image/svg+xml;charset=utf-8,%3Csvg%20version%3D%221.1%22%20id%3D%22L9%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Axlink%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2Fxlink%22%20x%3D%220px%22%20y%3D%220px%22%0A%20%20viewBox%3D%220%200%20100%20100%22%20enable-background%3D%22new%200%200%200%200%22%20xml%3Aspace%3D%22preserve%22%3E%0A%20%20%20%20%3Cpath%20fill%3D%22%23fff%22%20d%3D%22M73%2C50c0-12.7-10.3-23-23-23S27%2C37.3%2C27%2C50%20M30.9%2C50c0-10.5%2C8.5-19.1%2C19.1-19.1S69.1%2C39.5%2C69.1%2C50%22%3E%0A%20%20%20%20%20%20%3CanimateTransform%20%0A%20%20%20%20%20%20%20%20%20attributeName%3D%22transform%22%20%0A%20%20%20%20%20%20%20%20%20attributeType%3D%22XML%22%20%0A%20%20%20%20%20%20%20%20%20type%3D%22rotate%22%0A%20%20%20%20%20%20%20%20%20dur%3D%221s%22%20%0A%20%20%20%20%20%20%20%20%20from%3D%220%2050%2050%22%0A%20%20%20%20%20%20%20%20%20to%3D%22360%2050%2050%22%20%0A%20%20%20%20%20%20%20%20%20repeatCount%3D%22indefinite%22%20%2F%3E%0A%20%20%3C%2Fpath%3E%0A%3C%2Fsvg%3E) no-repeat center / contain;
+    }
+
+    .kedo__my-profile_cotent{
+        display: flex;
+    }
+    .mock-left-menu{
+        width: 400px;
+        background-color: #F2F8FC;
+    }
+    .kedo_my-profile_wrapper{
+        padding: 2rem;
+        gap: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .kedo__my-profile_header{
+        text-align: left;
+    }
+    /* .kedo__my-profle_header-title{
+
+    } */
+    .title-text{
+        font-size: 2.4rem;
+    }
+    .kedo__my-profle_header-content{
+        gap: 1rem;
+        display: flex;
+    }
+    .kedo__my-profle_header-user-content{
+        background-color: #5082E6;
+        border-radius: 1rem;
+        display: flex;
+        flex-grow: 2;
+    }
+    .kedo__my-profle_header-user-info{
+        flex-shrink: 0;
+        padding: 3.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        max-width: 40%;
+        flex-grow: 2;
+    }
+    .kedo__my-profle_header-user-avatar{
+        border-radius: 50%;
+        background-color: black;
+        min-width: 144px;
+        height: 144px;
+        position: relative;
+        display: none;
+        align-items: center;
+        justify-content: center;
+    }
+    .kedo__my-profle_header-user-image{
+        border-radius: 50%;
+        min-width: 144px;
+        height: 144px;
+        display: none;
+        object-fit: cover;
+    }
+    .avatar-change {
+        position: absolute;
+        left: 3rem;
+        top: 7rem;
+    }
+    .avatar-change app-dynamic-form-row {
+        min-width: 4rem;
+        width: 4rem;
+    }
+    .avatar-change .drop-area {
+        border-radius: 50%;
+        width: 3rem;
+        height: 3rem;
+    }
+    .avatar-change .btn {
+        display: none;
+        border-radius: 50%;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+    }
+    .avatar-change .elma-form-label {
+        display: none;
+    }
+    .avatar-change .elma-form-text {
+        position: absolute;
+        top: 0.2rem;
+        left: 12%;
+    }
+    elma-image-view {
+        display: none !important;
+    }
+    
+
+    .kedo__my-profile_header-user-initials {
+        top: 3rem;
+        left: 3rem;
+        font-size: 6rem;
+    }
+    .kedo__my-profle_header-user-work-info{
+        display: flex;
+        flex-direction: column;
+    }
+    .user-name{
+        color: white;
+        font-weight: 500;
+        font-size: 24px;
+    }
+    .user-position{
+        color: #FFFFFF;
+        font-weight: 400;
+        font-size: small;
+    }
+    .kedo__my-profle_header-user-work-content{
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+        padding: 0rem 2rem;
+        border-left: 1px solid white;
+        flex-grow: 3;
+        align-items: center;
+        display: flex;
+        justify-content: space-around;
+    }
+    .work-content-item{
+        display: flex;
+        min-width: 25rem;
+        align-items: center;
+        gap: 1rem;
+        height: 3rem;
+    }
+
+    .work-content-item_img_wrapper {
+        flex-shrink: 0;
+        border-radius: 5px;
+        background-color: transparent;
+        width: 4rem;
+        height: 4rem;
+        border: 1px solid white;
+        position: relative;
+    }
+
+    .work-content-item_img {
+        position: absolute;
+        top: 0.8rem;
+        left: 1rem;
+    }
+
+    .work-content-item_info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .work-content-item_info-title {
+        color: #FFFFFFB2;
+    }
+
+    .work-content-item_info-value {
+        color: white;
+    }
+
+    /* .email{
+
+    }
+    .organization{
+
+    }
+    .phone{
+
+    }
+    .subdivision{
+    ;
+    } */
+
+    .kedo__my-profle_header-notifications{
+        background-color: #ffe5914d;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        border-radius: 1rem;
+        width: 20rem;
+        flex-shrink: 0;
+    }
+
+    .notifications-title {
+        display: flex;
+        gap: 1rem
+    }
+
+    .notifications-text {
+        font-weight: 600;
+    }
+
+    .notifications-img-wrapper {
+        background-color: #FABE00;
+        border-radius: 1rem;
+        min-width: 42px;
+        height: 42px;
+        position: relative;
+    }
+
+    .notifications-img {
+        position: absolute;
+        top: 1rem;
+        left: 1.2rem;
+    }
+
+    .notification-item {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        font-size: 300;
+    }
+
+    .kedo__my-profle_header-notifications input[type="radio"] {
+        appearance: none;
+        background-color: #fff;
+        padding: 0;
+        margin: 0;
+        font: inherit;
+        color: currentColor;
+        width: 1.5rem;
+        height: 1.5rem;
+        border: 1px solid rgb(130, 130, 130);
+        border-radius: 50%;
+        transform: translateY(-0.075em);
+        display: grid;
+        place-content: center;
+    }
+
+    .kedo__my-profle_header-notifications input[type="radio"]::before {
+        content: "";
+        width: 0.8rem;
+        height: 0.8rem;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em var(--form-control-color);
+        background-color: #FABE00;
+    }
+
+    .kedo__my-profle_header-notifications input[type="radio"]:checked::before {
+        transform: scale(1);
+    }
+
+    .kedo__my-profile_header-notification-label{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .digital-signs-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+    }
+    .digital-sign-item-container {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 2rem;
+        background-color: #ECF3FF;
+        border-radius: 1rem;
+        justify-content: space-between;
+        position: relative;
+    }
+
+    .digital-sign-item-title {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        gap: 25px;
+        max-width: 52rem;
+    }
+
+    .digital-sign-item-status {
+        max-width: 25rem;
+    }
+
+    .digital-sign-info-element {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+
+    .digital-sign-info-element::before {
+        content: "";
+        height: 37px;
+        width: 2px;
+        position: absolute;
+        background-color: #5082E6;
+        left: -8px;
+    }
+    
+    .digital-sign-item-title-text {
+        font-weight: 600;
+        font-size: 20px;
+        font-family: 'Helvetica';
+        margin: 0;
+    }
+    
+
+    .digital-sign-item-picture {
+        background: #5082E6;
+        width: 42px;
+        height: 42px;
+        min-width: 2.8rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background-image: url("data:image/svg+xml,%3csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3e%3cg clip-path='url(%23clip0_983_9065)'%3e%3cmask id='mask0_983_9065' style='mask-type:luminance' maskUnits='userSpaceOnUse' x='0' y='0' width='24' height='24'%3e%3cpath d='M24 0H0V24H24V0Z' fill='white'/%3e%3c/mask%3e%3cg mask='url(%23mask0_983_9065)'%3e%3cpath d='M19.7176 9.02509C20.8892 7.85352 20.8892 5.95403 19.7176 4.78245C18.5461 3.61088 16.6466 3.61088 15.475 4.78245L6.28261 13.9748C5.11103 15.1464 5.11103 17.0459 6.28261 18.2175C7.45418 19.3891 9.35367 19.3891 10.5252 18.2175L19.7176 9.02509Z' stroke='white' stroke-width='1.5'/%3e%3cpath d='M9 11.5L13 15.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3cpath d='M3 21.5L6 18.5' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3e%3cpath d='M17.8661 8.03583C18.1422 7.55753 17.9784 6.94594 17.5001 6.6698C17.0218 6.39366 16.4102 6.55753 16.134 7.03583C15.8579 7.51412 16.0218 8.12571 16.5001 8.40185C16.9784 8.67799 17.5899 8.51412 17.8661 8.03583Z' fill='white'/%3e%3c/g%3e%3c/g%3e%3cdefs%3e%3cclipPath id='clip0_983_9065'%3e%3crect width='24' height='24' fill='white'/%3e%3c/clipPath%3e%3c/defs%3e%3c/svg%3e");
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+    .digital-sign-item-info_title {
+        font-weight: 400;
+        font-size: 12px;
+        color: #979797;
+        margin: 0;
+    }
+
+    .digital-sign-item-info_value {
+        font-weight: 400;
+        font-size: 16px;
+        overflow-wrap: break-word; 
+    }
+
+    .digital-sign-item_buttons {
+        display: flex;
+        gap: 2rem;
+    }
+
+    .download-certificate {
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 10.0035V17.5H17.5V10' stroke='%235082E6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M13.75 9.58337L10 13.3334L6.25 9.58337' stroke='%235082E6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M9.99658 2.5V13.3333' stroke='%235082E6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A");
+    }
+
+    .sign-button {
+        background-position: center;
+        background-repeat: no-repeat;
+        width: 2rem;
+        height: 2rem;
+        border: none;
+        background-color: transparent;
+        cursor: pointer;
+    }
+
+    .sign-button:hover {
+        fill: #75a3ff;
+    }
+
+    .sign-info-button {
+        background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18.3334 3.33337H1.66675V15.8334H7.91675L10.0001 17.9167L12.0834 15.8334H18.3334V3.33337Z' stroke='%235082E6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M10 9.58337V13.3334' stroke='%235082E6' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M10 6.66663V7.08329' stroke='%235082E6' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E%0A");
+    }
+
+    .certificate-information-container {
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0px 0px 21px -4px rgba(34, 60, 80, 0.2);
+        gap: 24px;
+        max-width: 700px;
+        padding: 32px;
+        z-index: -1;
+        position: absolute;
+        top: -155%;
+        left: 0;
+        background-color: white;
+        opacity: 0;
+        transition: all 0.5s;
+        flex: 1 0 auto;
+    }
+
+    .certificate-information-container.active {
+        z-index: 99;
+        opacity: 1;
+        top: -160%;
+        background-color: #ffffff59;
+    }
+
+    .certificate-modal.active {
+        z-index: 98;
+    }
+
+    .certificate-information-container_title {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+    }
+
+    .certificate-information-container_title-text {
+        font-size: 24px;
+        font-weight: 600;
+        font-family: 'Helvetica';
+        color: #323232;
+    }
+    
+    .user-info-title {
+        font-family: 'Helvetica';
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .certificate-info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        max-width: 300px;
+    }
+
+    .certificate-information-container_user-info {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .certificate-information-container_common {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
+    .kedo__my-profle_docs{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .kedo__my-profle_docs-all-info  {
+        display: flex;
+        gap: 1rem;
+        min-height: 24rem;
+        justify-content: flex-start;
+    }
+
+    .kedo__my-profle_docs-title{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* .kedo__my-profle_docs-title-text{
+
+    } */
+
+    .kedo__my-profile_docs-copy-all {
+        display: flex;
+        color: #5082E6;
+        gap: 1rem;
+        align-items: center;
+        align-items: flex-start;
+    }
+
+    .kedo__my-profile_docs-copy-all svg {
+        fill: #5082E6;
+    }
+
+    .kedo__my-profile_docs-copy-all:hover {
+        color: #759eef;
+        cursor: pointer;
+    }
+
+    .kedo__my-profile_docs-copy-all:active {
+        color: black;
+    }
+
+    .kedo__my-profile_docs-copy-all:hover svg{
+        fill: #759eef;
+    }
+
+    .kedo__my-profile_docs-copy-all:active svg{
+        fill: black;
+    }
+
+    .copy-documents{
+        font-weight: 400;
+    }
+
+    .kedo__my-profle_docs-passport-content{
+        background-color: #ECF3FF;
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        padding: 1rem 0 2rem 2rem;
+        justify-content: flex-start;
+    }
+
+    .kedo__my-profle_docs-passport-info{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 3.2rem;
+    }
+
+    .kedo__my-profle_docs-passport-info_img-wrapper{
+        border-radius: 5px;
+        background-color: white;
+        width: 4rem;
+        height: 4rem;
+        position: relative;
+    }
+
+    .kedo__my-profle_docs-passport-info_img{
+       position: absolute;
+       top: 0.8rem;
+       left: 1rem;
+    }
+    /* .kedo__my-profle_docs-passport-info-title{
+
+    } */
+
+    /* .passport-title{
+
+    } */
+
+    .kedo__my-profle_docs-passport-info-copy{
+        display: flex;
+        justify-content: flex-end;
+        padding-right: 2rem;
+    }
+
+    .passport-info-copy_button:hover {
+        cursor: pointer;
+    }
+
+    .passport-info-copy_button svg {
+        fill: #5082E6;
+    }
+
+    .passport-info-copy_button:hover svg {
+        fill: #759eef;
+    }
+
+    .passport-info-copy_button:active svg {
+        fill: black;
+    }
+
+    .kedo__my-profle_docs-passport-info_content{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        padding: 1rem 0;
+    }
+
+    .kedo__my-profle_docs-misc-info_content{
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5rem;
+    }
+
+    .misc-info-item{
+        width: 20rem;
+        padding-left: 0.5rem;
+        position: relative;
+    }
+
+    .misc-info-item::before{
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 3rem;
+        background-color: #5082E6;
+        left: -0.2rem;
+    }
+    .passport-info-item{
+        width: 25rem;
+        padding-left: 0.5rem;
+        position: relative;
+    }
+
+    .passport-info-item::before{
+        content: "";
+        position: absolute;
+        width: 2px;
+        height: 3rem;
+        background-color: #5082E6;
+        left: -8px;
+    }
+    .misc-info-item_label{
+        color: #979797;
+        font-size: small;
+    }
+    .misc-info-item_value{
+        font-weight: 400;
+        font-size: 15px;
+    }
+    .passport-info-item_label{
+        color: #979797;
+        font-size: small;
+    }
+    .passport-info-item_value{
+        font-weight: 400;
+        font-size: 15px;
+    }
+    .kedo__my-profle_docs-other-info{
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        flex-shrink: 0;
+        width: 20rem;
+    }
+    .kedo__my-profle_docs-other-info_item{
+        border-radius: 1rem;
+        padding: 1rem;
+        padding-left: 2.4rem;
+        background-color: #ECF3FF;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .kedo__my-profle_docs-other-info_item-title{
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        font-weight: 400;
+        font-size: 15px;
+        margin-bottom: 1rem;
+    }
+
+    .other-info_img-wrapper {
+        background-color: white;
+        border-radius: 5px;
+        width: 4rem;
+        height: 4rem;
+        position: relative;
+    }
+
+    .other-info_img{
+        position: absolute;
+        left: 1.4rem;
+        top: 0.8rem;
+    }
+    /* .other-info_text{
+        
+    } */
+    .other-info-copy{
+        border-radius: 5px;
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .other-info-copy_button:hover {
+        cursor: pointer;
+    }
+
+    .other-info-copy_button svg{
+        fill: #5082E6
+    }
+
+    .other-info-copy_button:hover svg{
+        fill: #759eef;
+    }
+
+    .other-info-copy_button:active svg{
+        fill: black;
+    }
+
+    .kedo__my-profle_misc-copy:hover {
+        cursor: pointer
+    }
+
+    .kedo__my-profle_misc-copy:hover svg{
+        fill: #759eef;
+    }
+
+    .kedo__my-profle_misc-copy:active svg{
+        fill: black;
+    }
+
+    .kedo__my-profle_misc{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .kedo__my-profle_misc-buttons{
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem
+    }
+    .misc-button{
+        border-radius: 2rem;
+        color: #5082E6;
+        border: 1px solid #5082E6;
+        display: flex;
+        gap: 1rem;
+        padding: 0.5rem 1rem;
+        align-items: center;
+    }
+
+    .misc-button:hover {
+        cursor: pointer;
+        background-color: #ECF3FF;
+
+    }
+
+    .misc-button-title{
+        cursor: pointer;
+    }
+    .kedo__my-profle_misc_content{
+        border-radius: 1rem;
+        background-color: #ECF3FF;
+        padding: 1rem 2rem 2rem;
+        margin-top: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    .kedo__my-profle_misc_content-info{
+    }
+
+    .kedo__my-profle_misc-header {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    .kedo__my-profle_misc-copy svg{
+        fill: #5082E6;
+    }
+
+    .kedo__my-profle_docs {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .kedo__my-profle_docs-header {
+        display:flex;
+        justify-content: end;
+    }
+
+    .kedo__my-profle_docs-download-info {
+        color: #5082E6;
+        display: flex;
+    }
+
+    .download-svg path {
+        fill: #5082E6;
+    }
+
+    .kedo__my-profle_docs-download-info:hover {
+        cursor: pointer;
+        color: #8eb3fd;
+    }
+
+    .kedo__my-profle_docs-download-info:hover .download-svg path {
+        fill: #8eb3fd;
+    }
+
+    .button-pressed {
+        cursor: default;
+        background-color: #ECF3FF;
+    }
+
+    .misc-info-item-category {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+    }
+
+    .misc-info-category_label {
+        width: 0.5rem;
+        height: 0.5rem;
+        background-color: black;
+        border-radius: 50%;
+    }
+
+    .loader-spinner {
+        width: 2.5rem;
+        height: 2.5rem;
+        animation: spinner-rotation .7s linear infinite;
+    }
+
+    .invisible-block {
+        display: none;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        gap: 5rem;
+    }
+
+    @keyframes spinner-rotation {
+        from {
+            transform: rotate(0);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @media (max-width: 1360px) {
+        .kedo__my-profle_header-user-work-content {
+            align-items: start;
+            flex-grow: 0;
+            gap: 2rem;
+            flex-direction: column;
+            font-size: 14px;
+        }
+
+        .column {
+            gap: 2rem;
+        }
+
+        .kedo__my-profle_header-user-avatar, .kedo__my-profle_header-user-image {
+            min-width: 100px;
+            height: 100px;
+        }
+
+        .user-name {
+            font-size: 14px;
+        }
+
+        .user-position {
+            font-size: 12px;
+        }
+    }
+
+    @media (max-width: 1120px) {
+        .kedo__my-profle_header-user-info {
+            flex-direction: column;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .kedo__my-profle_header-user-work-content {
+            font-size: 12px;
+        }
+
+        .passport-info-item {
+            width: 20rem;
+            word-break: break-word;
+        }
+    }
+
+    @media (max-width: 930px) {
+        .kedo__my-profile_cotent {
+            margin-bottom: 5rem;
+        }
+    }
+
+    @media (max-width: 700px) {
+        .kedo__my-profle_docs-all-info {
+            flex-direction: column;
+        }
+
+        .digital-sign-item-container {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .digital-sign-info-element {
+            margin-left: 8px;
+        }
+
+        .kedo__my-profle_docs-other-info {
+            flex-direction: row;
+        }
+
+        .kedo__my-profle_docs-other-info {
+            width: 100%
+        }
+
+        .kedo__my-profle_header-notifications {
+            width: 100%;
+        }
+
+        .kedo__my-profle_header-content {
+            flex-direction: column;
+        }
+
+        .kedo__my-profle_docs-other-info_item {
+            width: 100%;
+        }
+
+        .copy-documents, kedo__my-profle_docs-download-info {
+            font-size: 12px;
+        }
+
+        .kedo__my-profile_docs-copy-all {
+            align-items: center;
+        }
+    }
+
+    @media (max-width: 500px) {
+        .kedo__my-profle_header-user-work-content {
+            border-left: 0;
+            border-top: 1px solid white;
+            margin: 2rem;
+            padding: 2rem 0 0 0;
+        }
+
+        .kedo__my-profle_header-user-content {
+            flex-direction: column;
+        }
+
+        .kedo__my-profle_header-user-info {
+            flex-direction: row;
+            max-width: 100%;
+            padding-bottom: 0;
+        }
+
+        .user-name {
+            font-size: 20px;
+        }
+
+        .user-position {
+            font-size: 14 px;
+        }
+
+        .kedo__my-profle_docs-header {
+            justify-content: start;
+        }
+
+        .kedo__my-profle_misc-buttons {
+            font-size: 14px;
+            justify-content: space-between;
+        }
+
+        .kedo__my-profle_misc_content {
+            padding: 1rem 1rem 1rem;
+            font-size: 14px;
+        }
+    }
+</style>

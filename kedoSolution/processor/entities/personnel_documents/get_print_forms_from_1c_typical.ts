@@ -4,14 +4,22 @@ To write scripts, use TypeScript (https://www.typescriptlang.org).
 ELMA365 SDK documentation available on https://tssdk.elma365.com.
 **/
 
+type StaffEmployment = ApplicationItem<Application$kedo$employment_directory$Data, Application$kedo$employment_directory$Params>;
+
+interface IStaffData {
+	name: string,
+	id_1c: string,
+	individual_id_1c: string,
+	organization_id: string,
+	position_id: string,
+	structural_subdivision_id: string,
+}
+
 interface IFinancialAssistanceData {
-    creationAt: string,
-    organizationId: string,
-    subdivisionId: string,
-    staffId: string,
-    individualId: string
-    money: number,
-    comment?: string,
+	staff : IStaffData,
+	creationAt : string,
+	money: number,
+	comment? : string,
 }
 
 async function get_kedo_settings(): Promise<void> {
@@ -19,6 +27,44 @@ async function get_kedo_settings(): Promise<void> {
 
     const use_alternative_integration = settings.find(f => f.data.code == 'use_alternative_integration');
     Context.data.alternative_integration = use_alternative_integration ? use_alternative_integration.data.status : false;
+}
+
+/** Получить данные о сотруднике. */
+async function getStaffData(employment: StaffEmployment): Promise<IStaffData> {
+    if (!employment.data.staff) {
+        throw new Error("employment_place.data.staff is undefined");
+    }
+
+    const staff = await employment.data.staff.fetch();
+
+    if (!employment.data.organization) {
+        throw new Error("employment.data.organization is undefined");
+    }
+
+    if (!employment.data.position) {
+        throw new Error("employment.data.position is undefined");
+    }
+
+    if (!employment.data.subdivision) {
+        throw new Error("employment.data.structural_subdivision is undefined");
+    }
+
+    const [position, organization, structural_subdivision] = await Promise.all([
+        employment.data.position.fetch(),
+        employment.data.organization.fetch(),
+        employment.data.subdivision.fetch(),
+    ]);
+
+    const staff_data: IStaffData = {
+        name: staff.data.__name,
+        id_1c: employment.data.id_1c ?? "",
+        individual_id_1c: staff.data.individual_id_1c ?? "",
+        position_id: position.data.ref_key ?? "",
+        organization_id: organization.data.ref_key ?? "",
+        structural_subdivision_id: structural_subdivision.data.ref_key ?? "",
+    }
+
+    return staff_data;
 }
 
 async function prepare_data_1c(): Promise<void> {
@@ -36,34 +82,20 @@ async function prepare_data_1c(): Promise<void> {
         throw new Error("Не указано место занятости сотрудника. financial_assistance_application.data.employment_placement is undefined");
     }
 
-    const employment_place = await financial_assistance_application.data.employment_placement.fetch();
-    const staff = await Context.data.staff_kedo.fetch();
+    const employment_placement = await financial_assistance_application.data.employment_placement.fetch();
 
-    if (!employment_place.data.organization) {
-        throw new Error("По указаному месту занятости сотрудника не указана организация. employment_place.data.organization is undefined");
-    }
-
-    if (!employment_place.data.subdivision) {
-        throw new Error("По указаному месту занятости сотрудника не указано подразделение. employment_place.data.structural_subdivision is undefined");
-    }
+    const staff_data = await getStaffData(employment_placement);
 
     if (!financial_assistance_application.data.type_of_financial_assistance) {
         throw new Error("Не указан вид материальной помощи; financial_assistance_application.data.type_of_financial_assistnace is undefined");
     }
 
-    const [organization, subdivision, type_of_financial_assistance] = await Promise.all([
-        await employment_place.data.organization.fetch(),
-        await employment_place.data.subdivision.fetch(),
-        await financial_assistance_application.data.type_of_financial_assistance.fetch(),
-    ]);
+    const type_of_financial_assistance = await financial_assistance_application.data.type_of_financial_assistance.fetch();
 
     const data_obj: IFinancialAssistanceData = {
+        staff : staff_data,
         creationAt: financial_assistance_application.data.__createdAt.format("YYYY-MM-DDT00:00:00"),
-        organizationId: organization.data.ref_key ?? "",
-        subdivisionId: subdivision.data.ref_key ?? "",
-        staffId: employment_place.data.id_1c ?? "",
-        individualId: staff.data.individual_id_1c ?? "",
-        money: Context.data.money ? Context.data.money.asFloat() : 0,
+        money: Context.data.money?.asFloat() ?? 0,
         comment: `Вид мат. помощи: ${type_of_financial_assistance.data.__name}; ${financial_assistance_application.data.reason ? `Комментарий сотрудника: ${financial_assistance_application.data.reason}` : ""}`,
     }
 

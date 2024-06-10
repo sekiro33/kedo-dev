@@ -44,7 +44,6 @@ let subdivisions: ApplicationItem<Application$kedo$structural_subdivision$Data, 
 let userCategories: ApplicationItem<Application$kedo$employees_categories$Data, any>[] = [];
 let vacationsListMain: ItemData[] = [];
 let businessTripsMain: ItemData[] = [];
-let overtimeWorkMain: ItemData[] = [];
 let allAbsences: absense[] = [];
 let vacationsSearch: any;
 let businessTripsSearch: any;
@@ -55,6 +54,7 @@ let absenseUsers: ApplicationItem<Application$kedo$staff$Data, any>[] = [];
 let dateRange: DateRange;
 let absenseFromDateLimit = new TDate();
 let absenseToDateLimit = new TDate();
+let overtimeWorkJson: overtimeWorkItem[] = [];
 const weekDayReferences = [
     "вс",
     "пн",
@@ -114,12 +114,32 @@ type absense = {
     vacation_type_name: string
 };
 
+type overtimeWorkItem = {
+    id: string,
+    name: string,
+    userName: string,
+    duration: number,
+    startDate: string,
+    staffId: string
+};
+
 type colorKey = keyof typeof colorReferences;
 
 function setFieldReference() {
     businessTripsFieldFilters = Context.data.business_trips_exists ? fieldReferences.additionalBusinessTrips : fieldReferences.baseBusinessTrips;
     vacationFieldFilters = Context.data.vacations_exists ? fieldReferences.additionalVacations : fieldReferences.baseVacations;
 };
+
+function handleLoader() {
+    const loader = document.querySelector(".my-spinner").content.cloneNode(true);
+    const searchButton = document.querySelector(".find-absences-btn");
+    const svgSpinner = searchButton.querySelector("svg");
+    if (svgSpinner) {
+        svgSpinner.remove();
+    } else {
+        searchButton.append(loader);
+    };
+}
 
 function addVacationType(event: any) {
     let vacationCode = event.target.dataset.variant;
@@ -132,8 +152,61 @@ function addVacationType(event: any) {
     };
 };
 
+function handleSearch() {
+    let searchButton = document.querySelector(".find-absences-btn");
+    searchButton.disabled? searchButton.disabled = false : searchButton.disabled = true;
+};
+
 async function handleVariantsDisplay(): Promise<void> {
     Context.data.show_vacation_variants = ["all", "vacations"].indexOf(Context.data.absence_type!.code) != -1; 
+};
+
+async function restrictEmptyFilter(): Promise<void> {
+    if (Context.data.user_is_admin) {
+        return;
+    };
+    handleSearch();
+    let user = await System.users.getCurrentUser();
+    let staff = users.find(kedoUser => kedoUser.data.ext_user?.id === user.id);
+    if (!user || !staff) {
+        return;
+    };
+    if (!Context.data.organization) {
+        Context.data.organization = staff.data.organization;
+    };
+    if (!Context.data.subdivision) {
+        Context.data.subdivision = staff.data.structural_subdivision;
+    };
+    handleSearch();
+};
+
+async function checkUserPosition(): Promise<void> {
+    await Server.rpc.checkUserIsAdmin();
+    if (Context.data.user_is_admin) {
+        return;
+    };
+    const user = await System.users.getCurrentUser();
+    const staff = users.find(staffUser => staffUser.data.ext_user?.id === user.id);
+    if (!staff) {
+        return;
+    };
+    if (staff.data.position) {
+        const controlledSubdivisionsIds = subdivisions.filter(sub => sub.data.position?.id === staff.data.position?.id).map(sub => sub.id);
+
+        if (controlledSubdivisionsIds && controlledSubdivisionsIds.length > 0) {
+            Context.fields.subdivision.data.setFilter(sub => sub.__id.in(controlledSubdivisionsIds));
+        } else if (staff.data.structural_subdivision) {
+            Context.fields.subdivision.data.setFilter(sub => sub.__id.eq(staff.data.structural_subdivision!.id));
+        };
+    };
+    Context.data.subdivision = staff.data.structural_subdivision;
+    Context.data.organization = staff.data.organization;
+    if (staff.data.structural_subdivision) {
+        Context.fields.staff.data.setFilter(kedoStaff => kedoStaff.structural_subdivision.link(staff.data.structural_subdivision!));
+    };
+    if (staff.data.organization) {
+        Context.fields.organization.data.setFilter(f => f.__id.eq(staff.data.organization?.id!));
+    }
 };
 
 async function getAndSetDateRange() {
@@ -142,7 +215,7 @@ async function getAndSetDateRange() {
     let toDate = fromDate.addDate(0, 1, -1);
     Context.data.from_date = fromDate;
     Context.data.to_date = toDate;
-}
+};
 
 async function getOptions(): Promise<void> {
     const kedoOptions = Context.fields.kedo_options.app;
@@ -152,11 +225,12 @@ async function getOptions(): Promise<void> {
     Context.data.business_trips_exists = businessTripsIncluded;
 };
 
-async function onInit(): Promise<void> {
-    Context.fields.subdivision.data.setFilter((appFields, context, globalFilters) => globalFilters.and(
-        appFields.is_closed.eq(false)
-    ));
+async function loadMonitor(): Promise<void> {
+    init()
+}
 
+async function init(): Promise<void> {
+    const start = Date.now()
     Context.data.vacation_types_ids = [];
     await getOptions();
     setFieldReference();
@@ -164,26 +238,33 @@ async function onInit(): Promise<void> {
     [users, subdivisions, userCategories] = await Promise.all([
         await Context.fields.staff.app.search().where(f => f.__deletedAt.eq(null)).size(10000).all(),
         await Context.fields.subdivision.app.search().where(f => f.__deletedAt.eq(null)).size(10000).all(),
-        await Namespace.app.employees_categories.search().where(f => f.__deletedAt.eq(null)).size(10000).all()
+        await Context.fields.category_app.app.search().where(f => f.__deletedAt.eq(null)).size(10000).all()
     ]);
+    await checkUserPosition();
+    console.log(`Absense monitor time: ${(Date.now() - start) / 1000}`)
 };
 
 async function getAbsences(): Promise<void> {
+    handleLoader();
     clearCalendar();
     allAbsences = [];
+    users = await Context.fields.staff.app.search().where(f => f.__deletedAt.eq(null)).size(10000).all();
+    let dismissedUsersIds: string[];
+    users = await Context.fields.staff.app.search().where(f => f.__deletedAt.eq(null)).size(10000).all();
+    if (Context.data.staff_types && Context.data.staff_types.code == "in_work") {
+        dismissedUsersIds = users.filter(user => user.data.__status!.code == "dismissed").map(user => user.id);
+        users = users.filter(user => user.data.__status!.code != "dismissed");
+    };
     let fromDate = Context.data.from_date!;
     let toDate = Context.data.to_date!;
     const vacationSearchExists = ["all", "vacations"].indexOf(Context.data.absence_type!.code) != -1;
     const businesstripSearchExists = ["all", "business_trips"].indexOf(Context.data.absence_type!.code) != -1;
     const overtimeWorkExists = Context.data.show_overwork;
+    //убрать отменённые
 
     if (overtimeWorkExists) {
-        overworkSearch = Context.fields.staff_docs_new.app.search().where((f, g) => g.and(
-            f.__deletedAt.eq(null),
-            f.line_status.neq(null),
-            f.start_date.neq(null),
-            f.__name.like("сверхуроч")
-        ));
+        await Server.rpc.getOvertimeWork();
+        overtimeWorkJson = JSON.parse(Context.data.overtime_work_json!);
     };
 
     if (vacationSearchExists) {
@@ -192,7 +273,6 @@ async function getAbsences(): Promise<void> {
             f.__deletedAt.eq(null),
             f[vacationFieldFilters.start_date].neq(null),
             f[vacationFieldFilters.end_date].neq(null),
-            // f[vacationFieldFilters.status].neq(null),
             f[vacationFieldFilters.staff].neq(null)
         ));
     };
@@ -203,7 +283,6 @@ async function getAbsences(): Promise<void> {
             f.__deletedAt.eq(null),
             f[businessTripsFieldFilters.start_date].neq(null),
             f[businessTripsFieldFilters.end_date].neq(null),
-            // f[businessTripsFieldFilters.status].neq(null),
             f[businessTripsFieldFilters.staff].neq(null)
         ));
     };
@@ -233,14 +312,8 @@ async function getAbsences(): Promise<void> {
                 f[businessTripsFieldFilters.end_date].gte(fromDate.asDatetime(new TTime))
             ));
         };
-        if (overtimeWorkExists) {
-            overworkSearch.where((f: any) => f.start_date.gte(Context.data.from_date));
-        };
     };
     if (Context.data.to_date) {
-        if (overtimeWorkExists) {
-            overworkSearch.where((f: any) => f.start_date.lte(Context.data.to_date));
-        };
         if (vacationSearchExists) {
             vacationsSearch.where((f: any, g: any) => g.and(
                 f[vacationFieldFilters.start_date].lte(toDate)
@@ -252,11 +325,12 @@ async function getAbsences(): Promise<void> {
             ));
         };
     };
+    if (vacationSearchExists) {
+        vacationsListMain = await vacationsSearch.all();
+    };
     
-    vacationsListMain = await vacationsSearch.all();
-    businessTripsMain = await businessTripsSearch.all();
-    if (overtimeWorkExists) {
-        overtimeWorkMain = await overworkSearch.all();
+    if (businesstripSearchExists) {
+        businessTripsMain = await businessTripsSearch.all();
     };
 
     if (Context.data.vacation_types_ids && Context.data.vacation_types_ids.length > 0 && vacationSearchExists) {
@@ -274,17 +348,19 @@ async function getAbsences(): Promise<void> {
         businessTripsMain = businessTripsMain.filter(trip => !trip.data[businessTripsFieldFilters.start_date].after(trip.data[businessTripsFieldFilters.end_date]));
     };
 
+    if (vacationSearchExists) {
+        vacationsListMain = vacationsListMain.filter(vacation => vacation.data.status != undefined);
+        vacationsListMain = vacationsListMain.filter(vacation => !vacation.data.status.includes("cancelled"));
+    };
+
+    if (businesstripSearchExists) {
+        businessTripsMain = businessTripsMain.filter(trip => trip.data.status != undefined);
+        businessTripsMain = businessTripsMain.filter(trip => !trip.data.status.includes("canceled"));
+    };
+
     if (!!Context.data.staff && Context.data.staff?.length > 0) {
         let staffUsers = await Promise.all([...Context.data.staff!.map(async user => await user.fetch())]).then(users => users.map(u => u.id))
         
-        if (overtimeWorkExists) {
-            overtimeWorkMain = overtimeWorkMain.filter((work) => {
-                if (!work.data.staff) {
-                    return;
-                };
-                return staffUsers.indexOf(work.data.staff.id) != -1;
-            });
-        };
         if (vacationSearchExists) {
             vacationsListMain = vacationsListMain.filter((vacation) => {
                 if (!vacation.data[vacationFieldFilters.staff]) {
@@ -304,20 +380,12 @@ async function getAbsences(): Promise<void> {
     };
     if (!!Context.data.organization) {
         let organizationId = Context.data.organization!.id;
-        if (overtimeWorkExists) {
-            overtimeWorkMain = overtimeWorkMain.filter(work => {
-                let staffUser = users.find(user => user.id == work.data.staff?.id);
-                if (!staffUser) {
-                    return;
-                };
-                return staffUser.data.organization?.id == organizationId;
-            });
-        }
+
         if (vacationSearchExists) {
             vacationsListMain = vacationsListMain.filter((v) => {
                 let staffUser = users.find(user => user.id == v.data[vacationFieldFilters.staff].id);
 
-                if(!staffUser) {
+                if(!staffUser || !staffUser.data.organization) {
                     return false;
                 };
 
@@ -328,7 +396,7 @@ async function getAbsences(): Promise<void> {
             businessTripsMain = businessTripsMain.filter((trip) => {
                 let travelingUser = users.find(user => user.id == trip.data[businessTripsFieldFilters.staff].id);
 
-                if(!travelingUser) {
+                if(!travelingUser || !travelingUser.data.organization) {
                     return false;
                 };
 
@@ -339,20 +407,12 @@ async function getAbsences(): Promise<void> {
 
     if (!!Context.data.subdivision) {
         let subdivisionId = Context.data.subdivision!.id;
-        if (overtimeWorkExists) {
-            overtimeWorkMain = overtimeWorkMain.filter((work) => {
-                let staffUser = users.find(user => user.id == work.data.staff?.id);
-                if (!staffUser) {
-                    return;
-                };
-                return staffUser.data.structural_subdivision?.id == subdivisionId;
-            });
-        }
+
         if (vacationSearchExists) {
             vacationsListMain = vacationsListMain.filter((vacation) => {
                 let user = users.find(u => u.id == vacation.data[vacationFieldFilters.staff].id);
 
-                if (!user) {
+                if (!user || !user.data.structural_subdivision) {
                     return false;
                 };
 
@@ -363,12 +423,20 @@ async function getAbsences(): Promise<void> {
             businessTripsMain = businessTripsMain.filter((trip) => {
                 let travellingUser = users.find(u => u.id == trip.data[businessTripsFieldFilters.staff].id);
 
-                if (!travellingUser) {
+                if (!travellingUser || !travellingUser.data.structural_subdivision) {
                     return false;
                 };
 
                 return travellingUser.data.structural_subdivision?.id == subdivisionId;
             });
+        };
+    };
+    if (Context.data.staff_types && Context.data.staff_types.code == "in_work") {
+        if (vacationSearchExists) {
+            vacationsListMain = vacationsListMain.filter(vacation => dismissedUsersIds.indexOf(vacation.data[vacationFieldFilters.staff].id) == -1);
+        };
+        if (businesstripSearchExists) {
+            businessTripsMain = businessTripsMain.filter(trip => dismissedUsersIds.indexOf(trip.data[businessTripsFieldFilters.staff].id) == -1);
         };
     };
     if (vacationSearchExists) {
@@ -380,20 +448,19 @@ async function getAbsences(): Promise<void> {
 
     if (vacationsListMain.length < 1 && businessTripsMain.length < 1) {
         Context.data.absences_empty = true;
+        handleLoader();
         return;
     };
-    console.log(allAbsences)
     await renderGantt();
 };
 
-async function serializeData(absence: any) {
+function serializeData(absence: any) {
     let absenseObj: absense;
     let id: string = "";
     let staff_id: string = "";
     let days_amount: number = 0;
     let from_date: TDate;
     let to_date: TDate;
-    let comment: string = "";
     let absence_type: string = "";
     let absence_link: string = "";
     let absenseIsBusinessTrip = ["business_trips", "memo_business_trip"].indexOf(absence.code) != -1;
@@ -401,10 +468,20 @@ async function serializeData(absence: any) {
     let userIdMock = "123456"
     let restrict_cancel: boolean = false;
     let vacation_type: string = "";
+    let userCategoryIds: string[] = [];
     let user = users.find(u => u.id == absence.data[serializeFieldsReference.staff].id);
-    let userCategoryIds = user!.data.staff_categories?.map(category => category.id) || [];
+    try {
+        userCategoryIds = user!.data.staff_categories?.map(category => category.id) || [];
+    } catch {
+        console.log("error:", user);
+        return;
+    }
     let fetchedCategories = userCategories.filter(category => userCategoryIds.indexOf(category.id) != -1);
     let vacation_type_name: string = "";
+    let fromDateString: string = "";
+    let toDateString: string = "";
+    let absenceNamespace = "";
+    let absenceCode = "";
 
     if (fetchedCategories.some(category => !category.data.possibility_recall_from_vacation)) {
         restrict_cancel = true;
@@ -416,17 +493,35 @@ async function serializeData(absence: any) {
 
     if (absenseIsBusinessTrip) {
         let tripFromDate = absence.data[serializeFieldsReference.start_date];
-        let tripToDate = absence.data[serializeFieldsReference.start_date];
-        from_date = new TDate(tripFromDate.year, tripFromDate.month, tripFromDate.day);
-        to_date = new TDate(tripToDate.year, tripToDate.month, tripToDate.day);
+        let tripToDate = absence.data[serializeFieldsReference.end_date];
+        from_date = tripFromDate
+        to_date = tripToDate;
+        if (Context.data.business_trips_exists) {
+            absenceNamespace = "business_trips";
+            absenceCode = "businesstrip_requests";
+            fromDateString = absence.data.start_date_string;
+            toDateString = absence.data.end_date_string;
+        } else {
+            absenceNamespace = "kedo";
+            absenceCode = "business_trips"
+        }
     } else {
         from_date = absence.data[serializeFieldsReference.start_date];
-        to_date = absence.data[serializeFieldsReference.end_date]
+        to_date = absence.data[serializeFieldsReference.end_date];
+
+        if (Context.data.vacations_exists) {
+            absenceNamespace = "absences";
+            absenceCode = "vacations"
+            fromDateString = absence.data.start_string;
+            toDateString = absence.data.end_string;
+        } else {
+            absenceNamespace = "kedo";
+            absenceCode = "holidays"
+        }
     };
 
-    comment = "Тестовый комментарий"
     absence_type = absenseIsBusinessTrip ? "business_trips" : "vacations";
-    absence_link = `./(p:item/${absence.namespace}/${absence.code}/${id})`;
+    absence_link = `./(p:item/${absenceNamespace}/${absenceCode}/${id})`;
     restrict_cancel = false;
     vacation_type = absence.data.type_of?.code || undefined;
     
@@ -448,11 +543,10 @@ async function serializeData(absence: any) {
         to_date,
         absence_type,
         absence_link,
-        comment,
         restrict_cancel,
         vacation_type,
-        to_date_for_render: to_date.format("DD.MM.YY"),
-        from_date_for_render: from_date.format("DD.MM.YY"),
+        to_date_for_render: toDateString,
+        from_date_for_render: fromDateString,
         vacation_type_name
     };
 
@@ -609,10 +703,10 @@ async function renderUsers() {
         root.appendChild(element);
     };
 
-    if (Context.data.show_all_staff) {
-        let staffAtWork = users.filter(user => vacationData.map(data => data.id).indexOf(user.id) == -1);
-        addStaffAtWork(staffAtWork)
-    }
+    if (Context.data.staff_types && Context.data.staff_types.code !== "missing") {
+        const staffAtWork = users.filter(user => vacationData.map(data => data.id).indexOf(user.id) == -1);
+        addStaffAtWork(staffAtWork);
+    };
 
 }
 
@@ -644,19 +738,6 @@ const renderCalendar = async () => {
             let dayText = dayElements[i].querySelector("p");
             dayText.innerText = dayNumber;
             dayNumber = dateRange.startDate.addDate(0, 0, i + 1).day;
-            // if (dateRange.startDate.addDate(0, 0, i + 1).after(dateRange.endDate)) {
-                // let weekDaysWrapper = element.querySelector(".calendar__days-wrapper");
-                // let weekDays = weekDaysWrapper.querySelectorAll(".calendar__day");
-
-                // for (let j = 0; j <= 6; j++) {
-                //     if (j >= i + 1) {
-                //         let nodeToDelete = weekDays[j];
-                //         weekDaysWrapper.removeChild(nodeToDelete);
-                //     };
-                // };
-
-                
-            // };
         };
 
         const weekText = element.querySelector(".calendar__week-header-text");
@@ -718,26 +799,6 @@ const renderCalendar = async () => {
 function setTooltipOffset(tooltip: any) {
     let offsetX = Math.ceil(tooltip.previousSibling.offsetWidth / 2) + Math.ceil(tooltip.offsetWidth / 2);
     tooltip.style.transform = `translateX(${offsetX}px)`;
-
-    // let root = document.querySelector(".calendar-schedule__calendar-wrapper");
-    // let rootX = Math.floor(root.getBoundingClientRect().x);
-    // let tooltipX = Math.floor(tooltip.getBoundingClientRect().x);
-    // console.log(rootX, tooltipX);
-    // let rootRightBorder = Math.floor(root.getBoundingClientRect().x + root.getBoundingClientRect().width); 
-
-    // if (rootX > tooltipX) {
-    //     tooltip.style.transform = `translateX(0px)`;
-    //     tooltipX = Math.floor(tooltip.getBoundingClientRect().x);
-    //     let tooltipOffset = rootX - tooltipX;
-    //     tooltip.style.transform = `translateX(${tooltipOffset + 10}px)`;
-    // };
-
-    // if ((tooltip.getBoundingClientRect().width + tooltipX) > rootRightBorder) {
-    //     tooltip.style.transform = `translateX(0px)`;
-    //     tooltipX = Math.floor(tooltip.getBoundingClientRect().x);
-    //     let tooltipOffset = rootRightBorder - (tooltipX + tooltip.getBoundingClientRect().width);
-    //     tooltip.style.transform = `translateX(${tooltipOffset}px)`;
-    // };
 };
 
 const renderVacations = () => {
@@ -762,13 +823,16 @@ const renderVacations = () => {
             
             let vacationFromDate = vacation.from_date_for_render;
             let vacationToDate = vacation.to_date_for_render;
-            let correspondingCell = document.querySelector(`[data-day='${vacation.from_date.format("DD.MM.YYYY")}'][data-userid='${personVacations.id}']`)
+            let correspondingCell = document.querySelector(`[data-day='${vacation.from_date_for_render}'][data-userid='${personVacations.id}']`)
+            if (!correspondingCell) {
+                correspondingCell = document.querySelector(`[data-day='${vacation.from_date.format("DD.MM.YYYY")}'][data-userid='${personVacations.id}']`)
+            }
             // correspondingCell.style.zIndex = i + 1;
 
             const newElement = document.createElement('a');
             let tooltipBackgroundColor = "";
 
-            const vacationRenderParts: VacationParts[] = getRenderParts(allRanges, { startDate: vacation.from_date, endDate: vacation.to_date }, counterHelper)
+            const vacationRenderParts: VacationParts[] = getRenderParts(allRanges, { startDate: vacation.from_date, endDate: vacation.to_date }, counterHelper, vacation.id);
 
             for (let k = 0; k < vacationRenderParts.length; k++) {
                 const barPartElement = document.createElement("div");
@@ -794,16 +858,11 @@ const renderVacations = () => {
                     };
                 };
 
-                //barPartElement.style.width = k === vacationRenderParts.length - 1 ? `${vacationRenderParts[k].daysAmount * 19.1}px` : `${vacationRenderParts[k].daysAmount * 18.8}px`;
                 barPartElement.style.width = `${vacationRenderParts[k].daysAmount * 18.2}px`;
                 newElement.append(barPartElement)
             };
 
             newElement.classList.add('vacation-bar');
-            // newElement.style.width = `${vacation.daysAmount * 19}px`;
-            // if (vacationData[i].vacations[j].correction) {
-            //     newElement.classList.add('vacation-bar--correction')
-            // }
 
             //tooltip
             const tooltip = document.createElement('div');
@@ -845,9 +904,10 @@ const renderVacations = () => {
             counterHelper++
         };
     };
-    if (!!overtimeWorkMain && overtimeWorkMain.length > 0) {
+    if (overtimeWorkJson.length > 0) {
         setTimeTrackingDots();
     };
+    handleLoader();
 };
 
 async function setTimeTrackingDots() {
@@ -857,13 +917,13 @@ async function setTimeTrackingDots() {
         let cellDay = cell.getAttribute("data-day");
         let cellUserId = cell.getAttribute("data-userid");
 
-        let trackingDot = overtimeWorkMain.find((item) => {
-            return item.data.staff.id == cellUserId && item.data.start_date.format("DD.MM.YYYY") == cellDay;
+        let trackingDot = overtimeWorkJson.find((item) => {
+            return item.staffId == cellUserId && item.startDate === cellDay;
         });
 
-        if (!!trackingDot) {
+        if (trackingDot) {
             const tooltip = document.createElement('div')
-            let user = users.find(u => u.id == trackingDot!.staff_id)
+            let user = users.find(u => u.id == trackingDot!.staffId)
             let newDot = document.createElement("div");
             let hours = trackingDot.duration;
             let hoursSpelling: string = "";
@@ -887,7 +947,7 @@ async function setTimeTrackingDots() {
 
             tooltip.classList.add('vacation-bar__tooltip');
             tooltip.style.backgroundColor = "#5eafd8";
-            tooltip.innerHTML = `${user!.data.__name}<br>${trackingDot.data.__name}<br>${trackingDot.start_date.format("DD.MM.YY")} (${hours} ${hoursSpelling})`
+            tooltip.innerHTML = `${user!.data.__name}<br>${trackingDot.name}<br>${trackingDot.startDate} (${hours} ${hoursSpelling})`
             newDot.className = "time-tracking-dot";
             cell.appendChild(newDot);
             cell.appendChild(tooltip);
@@ -907,17 +967,17 @@ function clearCalendar() {
 function setMinMaxDates() {
     vacationData.forEach((data) => {
         data.vacations.forEach((vacation) => {
-            if (vacation.from_date.before(absenseFromDateLimit)) {
+            if (vacation.from_date.before(absenseFromDateLimit.asDatetime(new TTime))) {
                 vacation.from_date = absenseFromDateLimit;
             };
-            if (vacation.to_date.after(absenseToDateLimit)) {
+            if (vacation.to_date.after(absenseToDateLimit.asDatetime(new TTime))) {
                 vacation.to_date = absenseToDateLimit;
             };
         });
     });
 };
 
-function getRenderParts(ranges: DateRange[], itemRange: DateRange, skipIndex?: number): VacationParts[] {
+function getRenderParts(ranges: DateRange[], itemRange: DateRange, skipIndex?: number, id?: string): VacationParts[] {
     const parts: VacationParts[] = [];
     const isStartDateCrossed = !!ranges.find((item, index) => {
         if (index !== skipIndex) {
@@ -942,7 +1002,7 @@ function getRenderParts(ranges: DateRange[], itemRange: DateRange, skipIndex?: n
     let currentIndex = 0;
     itemRange.startDate = itemRange.startDate.addDate(0, 0, 1);
 
-    while (!itemRange.startDate.after(itemRange.endDate.addDate(0, 0, 1))) {
+    while (!itemRange.startDate.after(itemRange.endDate) && !itemRange.startDate.equal(itemRange.endDate)) {
         const isCurrentDayCrossed = !!ranges.find((item, index) => {
             if (index !== skipIndex) {
                 if (

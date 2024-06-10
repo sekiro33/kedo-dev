@@ -1,0 +1,86 @@
+{
+  "__id": "62cda1fc-534d-45af-8729-2b1a27c48d50",
+  "__name": "Получить доступные подключения 1С",
+  "code": "get_available_connections",
+  "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "connection_list",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Список подключений",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "connection_list_exist",
+      "type": "BOOLEAN",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Есть подключения?",
+        "data": {
+          "additionalType": "radio",
+          "noValue": "Нет",
+          "yesValue": "Да"
+        },
+        "input": false,
+        "output": true
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\ninterface ConnectionData {\n    name: string,\n    url: string,\n    password: string,\n    login: string,\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tconst connection_list : ConnectionData[] = Namespace.params.data.connection_list_1c ? JSON.parse(Namespace.params.data.connection_list_1c) : [];\n\tContext.data.connection_list = JSON.stringify(connection_list);\n\tContext.data.connection_list_exist = connection_list \u0026\u0026 connection_list.length \u003e 0;\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-05-30T21:45:10.648468919Z",
+  "__createdBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__updatedAt": "2024-05-30T21:47:36.467886546Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__deletedAt": null
+}

@@ -1,0 +1,172 @@
+{
+  "__id": "821affe3-1bb4-4aff-beef-66c83262323f",
+  "__name": "Запрос данных в 1С",
+  "code": "request_1c_data",
+  "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "icon": "system",
+  "color": "#20c997",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "request_params",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Параметры запроса",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "method",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Тип запроса",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "response_1c_json",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ответ 1С (JSON)",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название базы 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "body",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Тело запроса",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\ninterface ConnectionData {\n\tname: string,\n\turl: string,\n\tpassword: string,\n\tlogin: string,\n}\n\nfunction getConnectionList(): ConnectionData[] {\n\tconst connection_list = Namespace.params.data.connection_list_1c;\n\tconst connections: ConnectionData[] = connection_list ? JSON.parse(connection_list) : [];\n\n\treturn connections;\n}\n\nfunction getConnection(connection_name: string | undefined): ConnectionData {\n\tif (!connection_name) {\n\t\tthrow new Error(\"Отсутствует название подключения\");\n\t}\n\n\tconst connection_list = getConnectionList();\n\n\tif (!connection_list || connection_list.length == 0) {\n\t\tthrow new Error(\"Не найдены записи подключений\")\n\t}\n\n\tconst connection = connection_list.find(f =\u003e f.name === connection_name);\n\n\tif (!connection) {\n\t\tthrow new Error(`Подключение \"${connection_name}\" не найдено`);\n\t}\n\n\treturn connection;\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tconst connection = getConnection(Context.data.connection_name);\n\n\tconst request_options: FetchRequest = {\n\t\tmethod: Context.data.method ? Context.data.method : \"GET\",\n\t\theaders: {\n\t\t\tAuthorization: `Basic ${btoa(`${connection.login}:${connection.password}`)}`,\n\t\t},\n\t\tbody: Context.data.request_body,\n\t};\n\n\tconst url = `${connection.url}/${Context.data.request_params}`;\n\n\ttry {\n\t\tconst response = await fetch(`${encodeURI(url)}`, request_options);\n\n\t\tif (!response.ok) {\n\t\t\tthrow new Error(JSON.stringify(response));\n\t\t}\n\n\t\tconst result = await response.json();\n\n\t\tContext.data.response_1c_json = JSON.stringify(result);\n\t} catch (error) {\n\t\tContext.data.error = JSON.stringify({\n\t\t\tname: error.name,\n\t\t\tmessage: error.message,\n\t\t\tstack: error.stack,\n\t\t});\n\n\t\tthrow new Error(error);\n\t}\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-05-30T20:34:13.301633815Z",
+  "__createdBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__updatedAt": "2024-05-30T22:05:19.86018015Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__deletedAt": null
+}

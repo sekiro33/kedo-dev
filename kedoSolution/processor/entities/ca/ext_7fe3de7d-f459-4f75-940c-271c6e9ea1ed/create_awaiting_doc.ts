@@ -110,13 +110,13 @@ async function changeStatus(docData: any): Promise<void> {
 }
 
 async function writeToDocApp(): Promise<void> {
-   const serverApp = await Namespace.params.fields.additional_app.app.search().first();
-   if (!!serverApp) {
-      const knownDocuments = serverApp.data.massiv_izvestnykh_dokumentov ? JSON.parse(serverApp.data.massiv_izvestnykh_dokumentov) : [];
-      knownDocuments.push(Context.data.document_id);
-      serverApp.data.massiv_izvestnykh_dokumentov = JSON.stringify(knownDocuments);
-      await serverApp.save();
-   }
+//    const serverApp = await Namespace.params.fields.additional_app.app.search().first();
+//    if (!!serverApp) {
+//       const knownDocuments = serverApp.data.massiv_izvestnykh_dokumentov ? JSON.parse(serverApp.data.massiv_izvestnykh_dokumentov) : [];
+//       knownDocuments.push(Context.data.document_id);
+//       serverApp.data.massiv_izvestnykh_dokumentov = JSON.stringify(knownDocuments);
+//       await serverApp.save();
+//    }
 } 
 
 async function parseFiles(): Promise<void> {

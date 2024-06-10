@@ -16,23 +16,11 @@ async function getKedoSettings(): Promise<void> {
 }
 
 /** Найти приложение интеграции. */
-async function getIntegrationApp(): Promise<void> {
-    if (!Context.data.integration_app_id) {
-        Context.data.error = `Отсутствует идентификатор приложения интеграции. Context.data.integration_app_id is undefined`;
+async function checkIntegrationApp(): Promise<void> {
+    if (!Context.data.integration_app) {
+        Context.data.error = `Отсутствует приложениt интеграции. Context.data.integration_app is undefined`;
         throw new Error(Context.data.error);
     }
-
-    const integration_app = await Context.fields.integration_app.app.search().where((f, g) => g.and(
-        f.__deletedAt.eq(null),
-        f.__id.eq(Context.data.integration_app_id!)
-    )).first();
-
-    if (!integration_app) {
-        Context.data.error = `Не найдено приложение интеграции. ID приложения интеграции: ${Context.data.integration_app_id}`;
-        throw new Error(Context.data.error);
-    }
-
-    Context.data.integration_app = integration_app;
 }
 
 /** Проверка таблицы полученных печатных форм. */
@@ -182,4 +170,27 @@ async function getAdmissionOrderNumber(): Promise<void> {
 async function clearTables(): Promise<void> {
     Context.data.additional_agreement_table = Context.fields.additional_agreement_table.create();
     Context.data.other_docs_table = Context.fields.other_docs_table.create();
+}
+
+/** Получить место занятости сотрудника */
+async function getStaffEmploymentPlacement(): Promise<void> {
+    if (!Context.data.staff) {
+        throw new Error("Сотрудник не указан");
+    }
+
+    const staff = await Context.data.staff.fetch();
+
+    const employment_table = staff.data.employment_table;
+
+    if (!employment_table || employment_table.length == 0) {
+        throw new Error("У сотрудника не заполнена таблица занятости");
+    }
+
+    const employment_placement = employment_table[0].employment_placement_app;
+
+    if (!employment_placement) {
+        throw new Error("В таблице занятости отсуствует ссылка на элемент справочника занятости");
+    }
+
+    Context.data.employment_placement = employment_placement;
 }

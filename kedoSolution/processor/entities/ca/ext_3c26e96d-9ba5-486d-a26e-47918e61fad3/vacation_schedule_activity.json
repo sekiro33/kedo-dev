@@ -1,0 +1,150 @@
+{
+  "__id": "dc093b11-be77-4eae-abfc-1cc2cf3acc6c",
+  "__name": "График отпусков",
+  "code": "vacation_schedule",
+  "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "type": [
+    {
+      "code": "script",
+      "name": "Скрипт"
+    }
+  ],
+  "group": "3c26e96d-9ba5-486d-a26e-47918e61fad3",
+  "icon": "system",
+  "color": "#fde9a0",
+  "itemName": "",
+  "description": "",
+  "retryCount": 0,
+  "retryDelay": 5,
+  "context": [
+    {
+      "code": "vacation_schedule_data",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Данные графика отпусков",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "connection_name",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Название подключения 1С",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "integration_app_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "ID приложения интеграции",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": false,
+        "output": true
+      }
+    },
+    {
+      "code": "additional_info",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Дополнительная информация",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    },
+    {
+      "code": "organization_id",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": true,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "1С ID организации",
+        "data": {
+          "additionalType": "string"
+        },
+        "input": true,
+        "output": false
+      }
+    }
+  ],
+  "draft": false,
+  "published": true,
+  "data": {
+    "scripts": "/**\nЗдесь вы можете написать скрипты для сложной серверной обработки контекста во время выполнения процесса.\nДля написания скриптов используйте TypeScript (https://www.typescriptlang.org).\nДокументация TS SDK доступна на сайте https://tssdk.elma365.com.\n\nСигнатуры функций\n\nДля синхронного взаимодействия:\n\tasync function action(): Promise\u003cvoid\u003e;\n\nДля модели проверки результата:\n\tasync function action(): Promise\u003cvoid\u003e;\n\tasync function check(): Promise\u003cboolean\u003e;\n\nДля модели обратного вызова:\n\tasync function action(url: string): Promise\u003cvoid\u003e;\n\tasync function callback(req: HTTPRequest): Promise\u003cvoid\u003e;\n\n**/\n\ninterface IScheduleDocument {\n\t\"Date\": string,\n\t\"Организация_Key\": string,\n\t\"ДатаСобытия\": string,\n\t\"Сотрудники\": IScheduleLine[],\n\t\"Комментарий\"?: string,\n}\n\ninterface IVacationElement {\n\tstaffId: string,\n\tstaffPersonalId: string,\n\tstartDate: string,\n\tendDate: string,\n\tduration: number,\n\tvacationType: string,\n\tcomment?: string,\n}\n\ninterface IScheduleLine {\n\t\"Сотрудник_Key\": string,\n\t\"ФизическоеЛицо_Key\": string,\n\t\"ВидОтпуска_Key\": string,\n\t\"ДатаНачала\": string,\n\t\"ДатаОкончания\": string,\n\t\"КоличествоДней\": number,\n\t\"Примечание\": string,\n}\n\nasync function action(): Promise\u003cvoid\u003e {\n\tif (!Context.data.vacation_schedule_data) {\n\t\tthrow new Error(\"Context.data.vacation_schedule_data is undefined\");\n\t}\n\n\tconst vacation_data: IVacationElement[] = JSON.parse(Context.data.vacation_data);\n\n\tconst current_date = new Datetime();\n\n\tconst schedule_table: IScheduleLine[] = vacation_data.map((line) =\u003e {\n\t\treturn {\n\t\t\t\"Сотрудник_Key\": line.staffId,\n\t\t\t\"ФизическоеЛицо_Key\": line.staffPersonalId,\n\t\t\t\"ВидОтпуска_Key\": line.vacationType,\n\t\t\t\"ДатаНачала\": `${line.startDate}T00:00:00`,\n\t\t\t\"ДатаОкончания\": `${line.endDate}T00:00:00`,\n\t\t\t\"КоличествоДней\": line.duration,\n\t\t\t\"Примечание\": line.comment ?? \"\",\n\t\t}\n\t});\n\n\tconst body: IScheduleDocument = {\n\t\t\"Date\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n\t\t\"Организация_Key\": Context.data.organization_id ?? \"\",\n\t\t\"ДатаСобытия\": current_date.format(\"YYYY-MM-DDT00:00:00\"),\n\t\t\"Сотрудники\": schedule_table,\n\t\t\"Комментарий\": Context.data.comment ?? \"\",\n\t};\n\n\tconst accounting1c = Namespace.params.fields.integration_app.app.fields.accounting_systems.variants.zup_1c;\n\tconst integration_app = Namespace.params.fields.integration_app.app.create();\n\n\tintegration_app.data.__name = \"График отпусков\";\n\tintegration_app.data.document_odata_name = \"Document_ГрафикОтпусков\";\n\tintegration_app.data.accounting_systems = accounting1c;\n\tintegration_app.data.document_creation_data = JSON.stringify(body);\n\tintegration_app.data.additional_info = Context.data.additional_info ?? \"\";\n\tintegration_app.data.base_1c_name = Context.data.connection_name;\n\n\tawait integration_app.save();\n\n\tContext.data.integration_app_id = integration_app.data.__id;\n}",
+    "execution": [
+      {
+        "code": "sync",
+        "name": "Синхронное"
+      }
+    ],
+    "allowGlobal": false,
+    "checkInterval": ""
+  },
+  "async": false,
+  "__createdAt": "2024-05-30T22:06:19.801194716Z",
+  "__createdBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__updatedAt": "2024-05-30T22:10:58.421849178Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
+  "__deletedAt": null
+}

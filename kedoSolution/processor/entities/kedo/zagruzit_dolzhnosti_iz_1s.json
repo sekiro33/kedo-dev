@@ -1,13 +1,33 @@
 {
-  "__id": "018c8757-193c-7eb5-a493-a8437ee5c218",
+  "__id": "018fb8c1-cf14-7d27-8658-2ac77cc61a2d",
   "namespace": "kedo",
   "code": "zagruzit_dolzhnosti_iz_1s",
   "category": "00000000-0000-0000-0000-000000000000",
   "__name": "Интеграция с учётной системой",
   "type": "bpmn",
   "draft": false,
-  "version": 3,
+  "version": 5,
   "context": [
+    {
+      "code": "error",
+      "type": "STRING",
+      "searchable": false,
+      "indexed": false,
+      "deleted": false,
+      "array": false,
+      "required": false,
+      "single": true,
+      "defaultValue": null,
+      "calcByFormula": false,
+      "formula": "",
+      "data": {},
+      "view": {
+        "name": "Ошибка",
+        "data": {
+          "additionalType": "string"
+        }
+      }
+    },
     {
       "code": "end_iteration",
       "type": "BOOLEAN",
@@ -90,34 +110,14 @@
           "additionalType": "string"
         }
       }
-    },
-    {
-      "code": "error",
-      "type": "STRING",
-      "searchable": false,
-      "indexed": false,
-      "deleted": false,
-      "array": false,
-      "required": false,
-      "single": true,
-      "defaultValue": null,
-      "calcByFormula": false,
-      "formula": "",
-      "data": {},
-      "view": {
-        "name": "Ошибка",
-        "data": {
-          "additionalType": "string"
-        }
-      }
     }
   ],
   "manualRun": true,
   "readonly": false,
   "__createdAt": "2022-11-15T11:40:41.2988496Z",
   "__createdBy": "b3904ee1-c631-4888-88ee-3922dc2fcbea",
-  "__updatedAt": "2022-11-15T11:48:44.128518265Z",
-  "__updatedBy": "7303b866-4220-4086-a09e-348a76b12c73",
+  "__updatedAt": "2024-06-04T23:17:14.11569651Z",
+  "__updatedBy": "59e0911f-230a-4b6d-becf-6b302a91977a",
   "process": {
     "items": {
       "00000000-0000-0000-0000-000000000000": {
@@ -146,41 +146,15 @@
           "titleGenerateMethod": "template"
         }
       },
-      "0c26fc9f-cb32-487a-b6f1-dd60166c3d62": {
+      "08f4ec81-2c5c-4d19-a35f-fed31b25d50b": {
         "x": 80,
-        "y": 160,
-        "id": "0c26fc9f-cb32-487a-b6f1-dd60166c3d62",
-        "icon": "script",
-        "lane": "1320b1b7-35c9-4cc9-b683-3ba040786295",
-        "name": "Заполнить контекст",
-        "type": "script",
-        "color": "#fde9a0",
-        "exits": ["33afb58d-7b89-4585-b4bb-cc61db7455fb"],
-        "width": 80,
-        "height": 64,
-        "settings": {
-          "func": "fillContext",
-          "count": 1,
-          "delay": 5,
-          "retry": true,
-          "escalation": {
-            "byError": {
-              "notify": false,
-              "interrupt": false,
-              "receivers": []
-            }
-          }
-        }
-      },
-      "4adc83d9-1652-46e1-88b2-13398f161b6e": {
-        "x": 80,
-        "y": 280,
-        "id": "4adc83d9-1652-46e1-88b2-13398f161b6e",
+        "y": 288,
+        "id": "08f4ec81-2c5c-4d19-a35f-fed31b25d50b",
         "icon": "system",
         "lane": "1320b1b7-35c9-4cc9-b683-3ba040786295",
         "name": "Запрос в 1С Должности",
         "type": "ca",
-        "color": "#fde9a0",
+        "color": "#20c997",
         "exits": [
           "0ce3d891-f98d-4bea-8374-6487906b293d",
           "49c75cd9-bab1-4993-a73c-c413056ff417"
@@ -188,7 +162,7 @@
         "width": 80,
         "height": 64,
         "settings": {
-          "code": "request_in_1c",
+          "code": "request_1c_data",
           "name": "",
           "input": [
             {
@@ -198,19 +172,25 @@
               },
               "target": {
                 "kind": "context",
-                "value": "request_parameters"
+                "value": "request_params"
               }
             },
             {
               "target": {
                 "kind": "context",
-                "value": "request_body"
+                "value": "method"
               }
             },
             {
               "target": {
                 "kind": "context",
-                "value": "request_type_string"
+                "value": "connection_name"
+              }
+            },
+            {
+              "target": {
+                "kind": "context",
+                "value": "body"
               }
             }
           ],
@@ -236,7 +216,7 @@
               }
             }
           ],
-          "namespace": "ext_7fe3de7d-f459-4f75-940c-271c6e9ea1ed",
+          "namespace": "ext_3c26e96d-9ba5-486d-a26e-47918e61fad3",
           "escalation": {
             "byTime": {
               "limit": {
@@ -259,7 +239,10 @@
               "interrupt": true,
               "receivers": [
                 {
-                  "kind": "current"
+                  "code": "administrators",
+                  "kind": "group",
+                  "multi": true,
+                  "namespace": "system"
                 }
               ]
             }
@@ -269,6 +252,32 @@
           },
           "targetAppCode": "",
           "dynamicBinding": {}
+        }
+      },
+      "0c26fc9f-cb32-487a-b6f1-dd60166c3d62": {
+        "x": 80,
+        "y": 160,
+        "id": "0c26fc9f-cb32-487a-b6f1-dd60166c3d62",
+        "icon": "script",
+        "lane": "1320b1b7-35c9-4cc9-b683-3ba040786295",
+        "name": "Заполнить контекст",
+        "type": "script",
+        "color": "#fde9a0",
+        "exits": ["33afb58d-7b89-4585-b4bb-cc61db7455fb"],
+        "width": 80,
+        "height": 64,
+        "settings": {
+          "func": "fillContext",
+          "count": 1,
+          "delay": 5,
+          "retry": true,
+          "escalation": {
+            "byError": {
+              "notify": false,
+              "interrupt": false,
+              "receivers": []
+            }
+          }
         }
       },
       "5e1d9ca2-aee9-404d-9b86-e09db9e53d11": {
@@ -445,7 +454,7 @@
         "path": [
           {
             "x": 120,
-            "y": 344
+            "y": 352
           },
           {
             "x": 120,
@@ -453,7 +462,7 @@
           }
         ],
         "type": "plain",
-        "source": "4adc83d9-1652-46e1-88b2-13398f161b6e",
+        "source": "08f4ec81-2c5c-4d19-a35f-fed31b25d50b",
         "target": "c336e09e-d7bb-4d8e-9350-785e2bcf501c",
         "settings": {
           "exit": {
@@ -600,12 +609,12 @@
           },
           {
             "x": 120,
-            "y": 280
+            "y": 288
           }
         ],
         "type": "plain",
         "source": "0c26fc9f-cb32-487a-b6f1-dd60166c3d62",
-        "target": "4adc83d9-1652-46e1-88b2-13398f161b6e",
+        "target": "08f4ec81-2c5c-4d19-a35f-fed31b25d50b",
         "settings": {
           "exit": {
             "confirm": "none",
@@ -628,14 +637,14 @@
         "path": [
           {
             "x": 80,
-            "y": 312
+            "y": 320
           },
           {
-            "x": 40,
-            "y": 312
+            "x": 72,
+            "y": 320
           },
           {
-            "x": 40,
+            "x": 72,
             "y": 544
           },
           {
@@ -644,7 +653,7 @@
           }
         ],
         "type": "error",
-        "source": "4adc83d9-1652-46e1-88b2-13398f161b6e",
+        "source": "08f4ec81-2c5c-4d19-a35f-fed31b25d50b",
         "target": "cf25c335-f83f-4031-b59e-7f4fc6b93c82",
         "settings": {
           "exit": {
@@ -736,6 +745,10 @@
   "forms": [],
   "settings": {
     "logged": true,
+    "debugForm": {
+      "allFields": false,
+      "formFields": []
+    },
     "targetFeed": {
       "type": "instance",
       "variable": ""
@@ -748,6 +761,8 @@
     "notifyOnStart": true,
     "allowNamespace": false,
     "applicationContext": false,
+    "importsDependencies": [],
+    "useStartFormInDebug": true,
     "fieldVisibilityConditions": {
       "error": {
         "enabled": false,
